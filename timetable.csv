@@ -1,0 +1,1269 @@
+1,K66E-RE,RBE4001 69,Đồ án tốt nghiệp,ONL,Khoa ĐTVT,10,300,CL,6,3,,
+2,K66E-RE,RBE3051 69,Thực tập ngành Kỹ thuật Robot,ONL,Khoa ĐTVT,3,300,CL,6,1,,
+3,K66G-AT,AGT4000 23,Đồ án tốt nghiệp,ONL,Khoa CNNN,10,300,CL,CN,1,,
+4,K66S-AE,AER4002 21,Thực tập tốt nghiệp,ONL,Nguyễn Văn Thương,3,300,CL,CN,3,,
+5,K66S-AE,AER4050 21,Đồ án tốt nghiệp,ONL,Nguyễn Văn Thương,10,300,CL,CN,2,,
+6,K67A-AI,AIT3017 1,Thiết kế phần cứng cho học sâu,LT,Nguyễn Kiêm Hùng,3,85,CL,2,2,105-GĐ3,Học 1-15
+7,K67A-AI,AIT3018 2,"Nhận thức, ngôn ngữ và tư duy",LT,Nguyễn Thị Thùy Linh,3,90,CL,2,3,105-GĐ3,Học 1-15
+9,K67C-CE1,CTE3028 32,Kiến trúc trong xây dựng,LT,Trần Tuấn Linh,2,50,CL,3,1,405-GĐ4-A,Học tuần 1-10
+10,K67C-CE1,CTE3056 32,BIM trong Xây dựng – Giao thông,LT,Ngô Đình Đạt,2,50,CL,3,2,405-GĐ4-A,Học tuần 1-15
+11,K67C-CE1,CTE3058 32,Tin học ứng dụng trong Xây dựng,LT,Ngô Đình Đạt,2,50,CL,2,1,405-GĐ4-A,Học tuần 1-15
+12,K67C-CE1,CTE3059 32,Đồ án 2A: Nền và móng,LT,Nguyễn Văn Bắc+Nguyễn Hữu Hùng,2,50,CL,3,4,405-GĐ4-A,Học tuần 1-10
+13,K67C-CE1,CTE3060 32,Đồ án 3A: Kết cấu bê tông cốt thép,LT,Nguyễn Ngọc Vinh+Phạm Hồng Ngọc,2,50,CL,2,2,405-GĐ4-A,Học tuần 1-10
+14,K67C-CE1,CTE3061 32,Đồ án 4A: Kết cấu thép,LT,Nguyễn Văn Hùng+Bùi Văn Trường,2,50,CL,6,1,405-GĐ4-A,Học tuần 1-10
+15,K67C-CE1,CTE3062 32,Thiết kế nhà bê tông cốt thép,LT,Nguyễn Thị Thanh Thúy+Phạm Hồng Ngọc,3,50,CL,5,1,405-GĐ4-A,Học tuần 1-10
+16,K67C-CE1,CTE3062 32,Thiết kế nhà bê tông cốt thép,TH,Nguyễn Thị Thanh Thúy+Phạm Hồng Ngọc,3,50,CL,3,3,405-GĐ4-A,Học tuần 2-11
+17,K67C-CE1,CTE3064 32,Kỹ thuật thi công,LT,Nguyễn Ngọc Thắng,2,50,CL,2,3,405-GĐ4-A,Học tuần 1-10
+18,K67C-CE1+K67C-CE2,PEC1008 32,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,50,CL,5,2,205-GĐ4-A,Học tuần 1-10
+19,K67C-CE2,CTE3028 32,Kiến trúc trong xây dựng,LT,Trần Tuấn Linh,2,50,CL,4,2,205-GĐ4-A,Học tuần 1-10
+20,K67C-CE2,CTE3056 32,BIM trong Xây dựng – Giao thông,LT,Ngô Đình Đạt,2,50,CL,2,3,406-GĐ4-A,Học tuần 1-15
+21,K67C-CE2,CTE3075 32,Thiết kế đường ô tô,LT,Vũ Văn Huy,3,50,CL,4,1,406-GĐ4-A,Học tuần 1-10
+22,K67C-CE2,CTE3075 32,Thiết kế đường ô tô,TH,Vũ Văn Huy,3,50,CL,2,1,406-GĐ4-A,Học tuần 2-11
+23,K67C-CE2,CTE3069 32,Đồ án 2B: Nền và móng,LT,Nguyễn Văn Hùng+Trần Đức Tâm,2,50,CL,2,2,406-GĐ4-A,Học tuần 1-10
+24,K67C-CE2,CTE3070 32,Đồ án 3B: Kết cấu bê tông cốt thép,LT,Nguyễn Ngọc Vinh+Phạm Hồng Ngọc,2,50,CL,5,1,406-GĐ4-A,Học tuần 1-10
+25,K67C-CE2,CTE3071 32,Đồ án 4B: Kết cấu thép,LT,Nguyễn Văn Hùng+Bùi Văn Trường,2,50,CL,6,1,307-GĐ4-A,Học tuần 1-10
+26,K67C-CE2,CTE3073 32,Cơ sở công trình cầu,LT,Phạm Văn Phê,2,50,CL,5,3,406-GĐ4-A,Học tuần 1-10
+27,K67C-CE2,CTE3074 32,Thiết kế cầu,LT,Nguyễn Đắc Đức,3,50,CL,6,2,406-GĐ4-A,Học tuần 1-10
+28,K67C-CE2,CTE3074 32,Thiết kế cầu,TH,Nguyễn Đắc Đức,3,50,CL,6,3,406-GĐ4-A,Học tuần 2-11
+29,K67E-CE1,ELT3203 65,Thiết kế mạch tích hợp tương tự,LT,Chử Đức Trình+Đỗ Quang Lộc,3,40,CL,3,2,104-GĐ3,Học tuần 1-10
+30,K67E-CE1,ELT3203 65,Thiết kế mạch tích hợp tương tự,TH,Đỗ Quang Lộc,3,40,CL,4,3,104-GĐ3,Học tuần 2-11
+31,K67E-CE1,ELT3293 65,Công nghệ vi cơ điện tử,LT,Nguyễn Xuân Dương,3,40,CL,3,3,213-GĐ3,Học tuần 1-15
+32,K67E-CE1,ELT3246 65,Lập trình DSP,LT,Nguyễn Hồng Thịnh,3,40,CL,6,4,104-GĐ3,Học tuần 1-5
+33,K67E-CE1,ELT3246 65,Lập trình DSP,TH,Lê Quốc Anh,3,40,CL,2,3,104-GĐ3,Học tuần 2-11
+34,K67E-CE1,ELT3246 65,Lập trình DSP,TH,Lê Quốc Anh,3,40,CL,6,3,203-GĐ3,Học tuần 2-11
+35,K67E-CE1,ELT3299 65,Công nghệ máy tính quang học,LT,Phạm Đức Quang,3,40,CL,3,4,104-GĐ3,Học tuần 1-10
+36,K67E-CE1,ELT3299 65,Công nghệ máy tính quang học,LT,Phạm Đức Quang,3,40,CL,6,2,104-GĐ3,Học tuần 2-11
+37,"K67E-CE1+K67E-CE2+K67E-CE3",ELT3297 65,Lập trình điều khiển thiết bị,LT,Hoàng Gia Hưng,3,60,CL,2,2,509-GĐ4-B,,Học tuần 1-10
+38,"K67E-CE1+K67E-CE2+K67E-CE3",ELT3297 65,Lập trình điều khiển thiết bị,TH,Dương Minh Ngọc,3,60,CL,2,1,503-GĐ4-A,,Học tuần 2-10
+39,"K67E-CE1+K67E-CE2+K67E-CE3",INE1051 65,Kinh tế vĩ mô,LT,Trần Thị Lan Hương,3,80,CL,5,3,102-GĐ3,,Học tuần 1-15
+40,"K67E-CE1+K67E-CE2+K67E-CE3",ELT3297 66,Lập trình điều khiển thiết bị,LT,Hoàng Gia Hưng,3,60,CL,2,1,509-GĐ4-B,,Học tuần 1-10
+41,"K67E-CE1+K67E-CE2+K67E-CE3",ELT3297 66,Lập trình điều khiển thiết bị,TH,Đỗ Đình Minh,3,60,CL,2,2,509-GĐ4-B,,Học tuần 2-11
+42,"K67E-CE1+K67E-CE2+K67E-CE3",INE1051 66,Kinh tế vĩ mô,LT,Trần Thị Lan Hương,3,60,CL,4,1,509-GĐ4-B,,Học tuần 1-15
+43,"K67E-CE1+K67E-CE2+K67E-CE3",ELT3298 65,Đồ án ngành Kỹ thuật máy tính,ONL,Khoa ĐTVT,3,300,CL,7,2,,,
+44,"K67E-CE1+K67E-CE2+K67E-CE3",ELT4068 65,Đồ án tốt nghiệp,ONL,Khoa ĐTVT,10,300,CL,7,1,,,
+45,"K67E-CE1+K67E-CE2+K67E-CE3",ELT4001 65,Thực tập ngành Kỹ thuật máy tính,ONL,Khoa ĐTVT,3,300,CL,7,3,,,
+46,K67E-CE2,ELT3244 65,IoT và ứng dụng,LT,Đinh Thị Thái Mai,3,60,CL,3,3,510-GĐ4-B,,Học tuần 1-12
+47,K67E-CE2,ELT3244 65,IoT và ứng dụng,TH,Lưu Bách Hưng,3,20,CL,6,1,202-G2,,Học tuần 2-8
+48,K67E-CE2,ELT3244 65,IoT và ứng dụng,TH,Lưu Bách Hưng,3,20,CL,6,2,202-G2,,Học tuần 2-8
+49,K67E-CE2,ELT3244 65,IoT và ứng dụng,TH,Lưu Bách Hưng,3,20,CL,6,3,202-G2,,Học tuần 2-8
+50,K67E-CE2,INT3405 65,Học máy,LT,Mẫn Đức Chức,3,40,CL,3,2,215-GĐ3,,Học tuần 1-15
+51,K67E-CE2,ELT3231 65,"Kỹ thuật xử lý và truyền thông đa phương tiện",LT,Đinh Triều Dương,3,40,CL,2,3,215-GĐ3,,Học tuần 1-15
+52,K67E-CE3,ELT3300 65,Nguyên lý truyền thông và mã hóa,LT,Lê Trần Mạnh+Nguyễn Minh Trần,3,40,CL,5,2,216-GĐ3,,Học tuần 1-15
+53,K67E-CE3,ELT3295 65,Mạng không dây,LT,Lâm Sinh Công,3,40,CL,4,3,216-GĐ3,,Học tuần 1-12
+54,K67E-CE3,ELT3295 65,Mạng không dây,TH,Cấn Quang Trường,3,20,CL,3,1,202-G2,,Học tuần 2-8
+55,K67E-CE3,ELT3295 65,Mạng không dây,TH,Cấn Quang Trường,3,20,CL,6,2,202-G2,,Học tuần 2-8
+56,K67E-CE3,INT3319 65,Điện toán đám mây,LT,Phạm Mạnh Linh,3,40,CL,2,3,216-GĐ3,,Học tuần 1-10
+57,K67E-CE3,INT3319 65,Điện toán đám mây,TH,Đào Minh Thư,3,40,CL,5,1,216-GĐ3,,Học tuần 3-12
+58,K67E-EC1,ELT3086 1,Thực tập chuyên đề,TH,Phạm Duy Hưng+Phạm Đình Tuân,3,20,CL,7,3,705-E3,,Học tuần 1-15
+59,K67E-EC1,ELT3086 1,Thực tập chuyên đề,TH,Phạm Duy Hưng+Phạm Đình Tuân,3,20,CL,7,4,705-E3,,Học tuần 1-15
+60,K67E-EC1,ELT3164 56,Mạng điều khiển mềm,LT,Đinh Thị Thái Mai+Cấn Quang Trường,3,40,CL,4,4,203-GĐ3,,Học tuần 1-12
+61,K67E-EC1,ELT3164 56,Mạng điều khiển mềm,TH,Đinh Thị Thái Mai+Cấn Quang Trường,3,20,1,7,2,202-G2,,Học tuần 10-15
+62,K67E-EC1,ELT3164 56,Mạng điều khiển mềm,TH,Đinh Thị Thái Mai+Cấn Quang Trường,3,20,2,2,1,202-G2,,Học tuần 10-15
+63,K67E-EC1,ELT3247 56,Truyền thông di động,LT,Nguyễn Minh Trần,3,40,CL,4,3,214-GĐ3,,Học tuần 1-15
+64,K67E-EC1,ELT3098 56,Truyền thông vệ tinh,LT,Trần Cao Quyền,3,40,CL,4,2,203-GĐ4,,Học tuần 1-15
+65,K67E-EC1,ELT3231 56,"Kỹ thuật xử lý và truyền thông đa phương tiện",LT,Đinh Triều Dương,3,40,CL,6,2,216-GĐ3,,Học tuần 1-15
+66,"K67E-EC1+K67E-EC2+K67E-EC3+K67E-EC4",ELT4005 56,Thực tập ngành Điện tử Viễn thông,ONL,Khoa ĐTVT,3,300,CL,CN,1,,,
+67,"K67E-EC1+K67E-EC2+K67E-EC3+K67E-EC4",ELT4005 56,Thực tập ngành Điện tử Viễn thông,ONL,Khoa ĐTVT,3,300,CL,CN,2,,,
+68,K67E-EC2,ELT3086 2,Thực tập chuyên đề,TH,Phạm Duy Hưng+Chu Thị Phương Dung,3,20,CL,3,1,705-E3,,Học tuần 1-15
+69,K67E-EC2,ELT3086 2,Thực tập chuyên đề,TH,Phạm Duy Hưng+Chu Thị Phương Dung,3,20,CL,3,2,705-E3,,Học tuần 1-15
+70,K67E-EC2,ELT3099 56,Các phương pháp xử lý tín hiệu,LT,Nguyễn Linh Trung+Lê Vũ Hà,3,40,CL,4,3,215-GĐ3,,Học tuần 1-15
+71,K67E-EC2,ELT3087 56,Thiết bị và phân tích tín hiệu y sinh,LT,Lưu Mạnh Hà,3,40,CL,2,1,214-GĐ3,,Học tuần 1-15
+72,K67E-EC2,ELT3246 56,Lập trình DSP,LT,Nguyễn Hồng Thịnh,3,40,CL,2,3,217-GĐ3,,Học tuần 1-5
+73,K67E-EC2,ELT3246 56,Lập trình DSP,TH,Lê Quốc Anh,3,40,CL,5,1,104-GĐ3,,Học tuần 2-11
+74,K67E-EC2,ELT3246 56,Lập trình DSP,TH,Lê Quốc Anh,3,40,CL,4,2,215-GĐ3,,Học tuần 2-11
+75,K67E-EC2,ELT3207 56,Cơ sở đo lường và điều khiển số,LT,Phạm Duy Hưng,3,40,CL,6,1,214-GĐ3,,Học tuần 1-10
+76,K67E-EC2,ELT3207 56,Cơ sở đo lường và điều khiển số,TH,Nguyễn Thu Hằng+Lê Thành Trung,3,20,1,2,2,701-E3,,Học tuần 11-16
+77,K67E-EC2,ELT3207 56,Cơ sở đo lường và điều khiển số,TH,Phạm Quang Hùng+Lê Thành Trung,3,20,2,6,3,701-E3,,Học tuần 11-16
+78,K67E-EC3,ELT3086 3,Thực tập chuyên đề,TH,"Trần Thị Thúy Quỳnh+Chu Thị Phương Dung",3,20,CL,5,1,705-E3,,Học tuần 1-15
+79,K67E-EC3,ELT3086 3,Thực tập chuyên đề,TH,"Trần Thị Thúy Quỳnh+Chu Thị Phương Dung",3,20,CL,5,2,705-E3,,Học tuần 1-15
+80,K67E-EC3,ELT3202 56,Thiết kế mạch tích hợp số,LT,Nguyễn Kiêm Hùng,3,40,CL,2,3,201-GĐ4-A,,Học tuần 1-10
+81,K67E-EC3,ELT3202 56,Thiết kế mạch tích hợp số,LT,Nguyễn Kiêm Hùng,3,40,CL,4,3,217-GĐ3,,Học tuần 2-11
+82,K67E-EC3,ELT3291 56,Thiết kế hệ thống nhúng trên chip,LT,Nguyễn Kiêm Hùng,3,35,CL,4,4,104-GĐ3,,Học tuần 1-10
+83,K67E-EC3,ELT3291 56,Thiết kế hệ thống nhúng trên chip,TH,Nguyễn Kiêm Hùng,3,35,CL,3,2,402-GĐ4-A,,Học tuần 2-11
+84,K67E-EC3,ELT3294 56,"Cơ sở chế tạo, đóng gói linh kiện vi điện tử",LT,Bùi Thanh Tùng+Lê Xuân Lực,3,40,CL,3,1,401-GĐ4-A,,Học tuần 1-15
+86,K67E-EC3,AIT3017 56,Thiết kế phần cứng cho học sâu,LT,Nguyễn Kiêm Hùng,3,40,CL,3,3,216-GĐ3,,Học tuần 1-15
+88,K67E-EC4,ELT3086 4,Thực tập chuyên đề,TH,Nguyễn Minh Trần+Lưu Mạnh Hà,3,20,CL,7,1,705-E3,,Học tuần 1-15
+89,K67E-EC4,ELT3086 4,Thực tập chuyên đề,TH,Nguyễn Minh Trần+Lưu Mạnh Hà,3,20,CL,7,2,705-E3,,Học tuần 1-15
+90,K67E-EC4,ELT3077 56,Hệ thống robot thông minh,LT,Nguyễn Thị Thanh Vân+Phạm Duy Hưng,3,40,CL,2,4,301-GĐ4-A,,Học tuần 1-12
+91,K67E-EC4,ELT3077 56,Hệ thống robot thông minh,TH,Phạm Quang Hùng,3,40,CL,2,1,201-GĐ4-A,,Học tuần 2-8
+92,K67E-EC4,ELT3047 56,Kiến trúc máy tính,LT,Hoàng Gia Hưng,3,40,CL,4,1,202-GĐ4-A,,Học tuần 1-15
+93,K67E-EC4,ELT3292 56,Điều khiển logic và PLC,LT,Phan Hoàng Anh,3,40,CL,2,2,201-GĐ4-A,,Học tuần 1-10
+94,K67E-EC4,ELT3292 56,Điều khiển logic và PLC,TH,Đặng Văn Hiếu,3,20,CL,5,1,101-GĐ3,,Học tuần 11-16
+95,K67E-EC4,ELT3292 56,Điều khiển logic và PLC,TH,Đặng Văn Hiếu,3,20,CL,5,2,101-GĐ3,,Học tuần 11-16
+96,K67E-EC4,ELT3292 56,Điều khiển logic và PLC,TH,Đặng Văn Hiếu,3,20,CL,7,3,101-GĐ3,,Học tuần 11-16
+97,K67E-EC4,ELT3292 56,Điều khiển logic và PLC,TH,Đặng Văn Hiếu,3,20,CL,7,4,101-GĐ3,,Học tuần 11-16
+98,K67E-EC4,AIT3003 56,Khai phá và phân tích dữ liệu,LT,Ngô Minh Hương,3,40,CL,2,3,202-GĐ4-A,,Học tuần 1-15
+99,K67E-EC4,ELT3086 5,Thực tập chuyên đề,TH,Trần Cao Quyền+Phạm Đình Tuân,3,20,CL,5,3,705-E3,,Học tuần 1-15
+100,K67E-EC4,ELT3086 5,Thực tập chuyên đề,TH,Trần Cao Quyền+Phạm Đình Tuân,3,20,CL,5,4,705-E3,,Học tuần 1-15
+101,K67E-RE,RBE3015 69,Xử lý ảnh và thị giác robot,LT,Hoàng Văn Xiêm,3,60,CL,3,4,210-GĐ4-B,,Học tuần 1-10
+102,K67E-RE,RBE3015 69,Xử lý ảnh và thị giác robot,TH,Đỗ Ngọc Minh,3,60,CL,6,2,507-GĐ4-B,,Học tuần 2-11
+103,K67E-RE,RBE3030 69,"An toàn lao động và môi trường công nghiệp",LT,Huỳnh Bá Phúc,2,60,CL,4,4,210-GĐ4-B,,Học tuần 1-10
+104,K67E-RE,ELT3996 69,Điện tử công suất và điều khiển,LT,Đặng Anh Việt,3,60,CL,3,2,210-GĐ4-B,,Học tuần 1-10
+105,K67E-RE,ELT3996 69,Điện tử công suất và điều khiển,TH,Đặng Anh Việt,3,60,CL,4,2,211-GĐ3,,Học tuần 2-11
+106,K67E-RE,RBE3057 69,"Các vấn dề hiện đại của kỹ thuật robot",LT,Hoàng Văn Xiêm+Trương Xuân Tùng,3,60,CL,4,3,210-GĐ4-B,,Học tuần 1-5
+107,K67E-RE,RBE3053 69,Tương tác người - robot,LT,Hoàng Văn Xiêm,3,60,CL,5,1,210-GĐ3,,Học tuần 1-10
+108,K67E-RE,RBE3053 69,Tương tác người - robot,TH,Đỗ Ngọc Minh,3,60,CL,3,1,210-GĐ4-B,,Học tuần 2-11
+109,K67E-RE,RBE3056 69,Học máy ứng dụng,LT,Hoàng Văn Xiêm+Đỗ Ngọc Minh,3,60,CL,6,1,508-GĐ4-B,,Học tuần 1-15
+110,K67E-RE,RBE3046 69,Khoa học nhận thức,LT,Nguyễn Thế Hoàng Anh,3,60,CL,3,3,105-GĐ4-B,,Học tuần 1-15
+111,K67G-AT1,AGT3016 23,Công nghệ sau thu hoạch,LT,Trần Đăng Khoa,3,20,CL,6,4,501-GĐ4-A,,Học tuần 1-10
+112,K67G-AT1,AGT3016 23,Công nghệ sau thu hoạch,PTNNN2,Chu Đức Hà,3,20,CL,7,2,PTNNN1,,Học tuần 2-11
+113,K67G-AT1,AGT3117 23,"Quản lý và kiểm nghiệm chất lượng an toàn nông sản và thực phẩm.",LT,Lê Thị Hồng Hảo+Vũ Thị Huyền,3,20,CL,5,2,"Viện kiểm nghiệm an toàn vệ sinh thực phẩm quốc gia",,Học tuần 1-10
+114,K67G-AT1,AGT3117 23,"Quản lý và kiểm nghiệm chất lượng an toàn nông sản và thực phẩm.",PTNNN2,Vũ Thị Huyền,3,20,CL,5,1,"Viện kiểm nghiệm an toàn vệ sinh thực phẩm quốc gia",,Học tuần 11-15
+115,K67G-AT1,AGT3117 23,"Quản lý và kiểm nghiệm chất lượng an toàn nông sản và thực phẩm.",PTNNN2,Vũ Thị Huyền,3,20,CL,5,2,"Viện kiểm nghiệm an toàn vệ sinh thực phẩm quốc gia",,Học tuần 11-15
+116,K67G-AT1,AGT3025 23,"Thiết kế, quản lý và vận hành các hệ thống thiết bị nông nghiệp",LT,"Nguyễn Thị Ngọc Ánh+Vũ Thị Huyền+Vũ Minh Trung",3,20,CL,5,1,501-GĐ4-A,,Học tuần 1-10
+117,K67G-AT1,AGT3025 23,"Thiết kế, quản lý và vận hành các hệ thống thiết bị nông nghiệp",PTNNN2,"Nguyễn Thị Ngọc Ánh+Vũ Thị Huyền+Vũ Minh Trung",3,20,CL,4,3,PTNNN1,,Học tuần 11-15
+118,K67G-AT1,AGT3025 23,"Thiết kế, quản lý và vận hành các hệ thống thiết bị nông nghiệp",PTNNN2,"Nguyễn Thị Ngọc Ánh+Vũ Thị Huyền+Vũ Minh Trung",3,20,CL,4,4,PTNNN1,,Học tuần 11-15
+119,K67G-AT1,AGT3026 23,Marketing trong nông nghiệp,LT,Lý Thu Cúc,3,20,CL,5,4,203-GĐ3,,Học tuần 1-15
+120,"K67G-AT1+K67G-AT2",AGT4001 23,Dự án Công nghệ nông nghiệp,LT,Phạm Châu Thùy+Nguyễn Thị Ngọc Ánh,2,40,CL,3,3,306-GĐ4-A,,Học tuần 1-10
+121,"K67G-AT1+K67G-AT2",AGT4003 23,Rèn nghề công nghệ nông nghiệp,TH,Nguyễn Lê Khanh+Trần Đăng Khoa,3,40,CL,6,2,"Phòng PTN Hòa Lạc",,Học tuần 1-15
+122,"K67G-AT1+K67G-AT2",AGT4003 23,Rèn nghề công nghệ nông nghiệp,TH,Nguyễn Lê Khanh+Trần Đăng Khoa,3,40,CL,6,1,"Phòng PTN Hòa Lạc",,Học tuần 1-15
+123,K67G-AT2,AGT3128 23,Tiếng Anh chuyên ngành,LT,Nguyễn Lê Khanh+Trần Đăng Khoa,3,20,CL,2,2,506-GĐ4-A,,Học tuần 1-10
+124,K67G-AT2,AGT3128 23,Tiếng Anh chuyên ngành,TH,Nguyễn Lê Khanh+Trần Đăng Khoa,3,20,CL,4,3,501-GĐ4-A,,Học tuần 2-11
+125,K67G-AT2,AGT3129 23,"Các vấn đề hiện đại trong công nghệ nông nghiệp",PTNNN2,Phạm Châu Thùy+Chu Đức Hà,3,20,CL,3,2,202-GĐ4-A,,Học tuần 1-10
+126,K67G-AT2,AGT3032 23,"Kiểm soát ô nhiễm trong sản xuất nông nghiệp",LT,Phạm Châu Thùy,3,20,CL,2,1,505-GĐ4-A,,Học tuần 1-15
+127,K67G-AT2,AGT3109 23,"Quản lý quy trình sản xuất nông nghiệp",LT,Nguyễn Thị Ngọc Ánh,3,20,CL,4,2,505-GĐ4-A,,Học tuần 1-15
+128,K67I-CN,INT3309E 1,Phân tích và thiết kế mạng máy,LT,Nguyễn Ngọc Tân,3,50,CL,3,3,501-GĐ4-A,,Học tuần 1-10
+129,K67I-CN,INT3317 2,Thực hành an ninh mạng,LT,Lê Thị Hợi,3,50,CL,2,3,506-GĐ4-A,,"Học 2 ca/tuần, nếu kết thúc muộn hơn tuần 10 thì thi vào đợt 2"
+130,K67I-CN,INT3317 2,Thực hành an ninh mạng,TH,Lê Thị Hợi,3,50,CL,6,4,103-GĐ4-A,,Học từ tuần 2
+131,K67I-CN,INT3324 2,An ninh di động **,LT,Lê Thị Hợi,3,50,CL,2,1,402-GĐ4-A,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+132,K67I-CN,INT3324 2,An ninh di động **,TH,Lê Thị Hợi,3,50,CL,3,2,503-GĐ4-A,"Ca 2, học tuần 11-15",Học từ tuần 2
+133,K67I-CN,INT3313E 1,"Các vấn đề hiện đại của Truyền thông và Mạng máy tính",LT,Trần Trúc Mai,3,50,CL,6,1,206-GĐ4-A,,Học tuần 1-15
+134,K67I-CN,INT3319 1,Điện toán đám mây,LT,Nguyễn Ngọc Tân,3,50,CL,3,4,206-GĐ4-A,,Học tuần 1-10
+135,K67I-CN,INT3319 1,Điện toán đám mây,TH,Đào Minh Thư,3,50,CL,2,2,206-GĐ4-A,,Học từ tuần 2
+136,K67I-CN,INT3022 1,"Phát triển ứng dụng Internet of Things",LT,Nguyễn Ngọc Tân,3,40,CL,2,3,202-GĐ4-B,,Học tuần 1-10
+137,K67I-CN,INT3022 1,"Phát triển ứng dụng Internet of Things",TH,Nguyễn Thái Dương,3,40,CL,3,2,204-GĐ4-A,,Học từ tuần 2
+138,K67I-CN,INT3305 2,Truyền thông đa phương tiện,LT,Lê Thanh Hà,3,50,CL,5,1,206-GĐ4-A,,Học tuần 1-15
+141,K67I-CS1,INT3120 4,Phát triển ứng dụng di động,LT,Nguyễn Đức Anh,3,80,CL,2,2,207-GĐ3,,Học tuần 1-10
+142,K67I-CS1,INT3120 4,Phát triển ứng dụng di động,TH,Trần Mạnh Cường,3,80,CL,2,1,205-GĐ3,,Học từ tuần 2
+143,K67I-CS1,INT3105 3,Kiến trúc phần mềm,LT,Võ Đình Hiếu,3,80,CL,2,3,205-GĐ3,,Học tuần 1-15
+144,K67I-CS1,INT3102 1,Phương pháp tính,LT,Đặng Thanh Hải,3,80,CL,5,2,102-GĐ3,,Học tuần 1-15
+145,"K67I-CS1+K67I-CS2",INT3131 2,Dự án khoa học,ONL,Nguyễn Thị Nhật Thanh,3,330,CL,6,1,,,
+146,K67I-CS2,INT3231 2,Công nghệ Blockchain,LT,Lê Hồng Hải,4,80,CL,2,1,208-GĐ3,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+147,K67I-CS2,INT3231 2,Công nghệ Blockchain,LT,Lê Hồng Hải,4,80,CL,6,3,208-GĐ3,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+148,K67I-CS2,INT3121 2,Các chuyên đề trong KHMT,LT,Mẫn Đức Chức,3,80,CL,6,2,208-GĐ3,,Học tuần 1-15
+149,K67I-CS2,INT3102 2,Phương pháp tính,LT,Lê Phê Đô,3,90,CL,4,1,105-GĐ3,,Học tuần 1-15
+150,K67I-CS3,INT3423E 1,Tin sinh học ứng dụng,LT,Lê Sỹ Vinh,3,80,CL,5,2,207-GĐ3,,Học tuần 1-15
+151,K67I-CS3,INT2044E 2,Lý thuyết thông tin,LT,Lê Nguyên Khôi,3,80,CL,6,1,207-GĐ3,,Học tuần 1-15
+152,K67I-CS3,INT3103 2,Tối ưu hóa,LT,Nghiêm Nguyễn Việt Dũng,3,80,CL,5,1,207-GĐ3,,Học tuần 1-15
+153,"K67I-CS3+K67I-CS4",INT3132 2,Dự án công nghệ,ONL,Nguyễn Thị Nhật Thanh,3,330,CL,CN,1,,,
+154,K67I-CS4,INT3412E 2,Thị giác máy,LT,Lê Thanh Hà,3,80,CL,5,2,206-GĐ3,,Học tuần 1-15
+155,K67I-CS4,INT2041 2,Tương tác người-máy,LT,Ngô Thị Duyên,3,80,CL,2,3,102-GĐ3,,Học tuần 1-15
+156,K67I-CS4,INT3103 3,Tối ưu hóa,LT,Đỗ Đức Đông,3,80,CL,2,2,106-GĐ3,,Học tuần 1-15
+157,K67I-IS1,INT2045E 1,Quản lý dự án HTTT,LT,Nguyễn Thị Hậu,4,40,CL,4,1,214-GĐ3,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+158,K67I-IS1,INT2045E 1,Quản lý dự án HTTT,LT,Nguyễn Thị Hậu,4,40,CL,5,2,214-GĐ3,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+159,K67I-IS1+K67I-IS2,INT3220E 1,Các chủ đề hiện đại của HTTT,LT,Nguyễn Ngọc Hoá,3,80,CL,3,2,205-GĐ3,,Học tuần 1-15
+160,K67I-IS1+K67I-IS2,INT4002 1,Thực tập doanh nghiệp,ONL,Khoa CNTT,3,80,CL,7,1,,,
+161,K67I-IS2,INT3235E 1,"Phân tích mạng phương tiện xã hội trong kinh doanh",LT,Trần Mai Vũ,4,40,CL,6,2,213-GĐ3,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+162,K67I-IS2,INT3235E 1,"Phân tích mạng phương tiện xã hội trong kinh doanh",LT,Trần Mai Vũ,4,40,CL,3,3,214-GĐ3,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+163,K67I-IS2,INT3233 1,Khai phá dữ liệu hướng lĩnh vực,LT,Trần Mai Vũ,3,40,CL,2,1,104-GĐ3,,Học tuần 1-15
+164,K67I-IT CLC,INT3143 1,Phát triển các hệ thống thông minh,LT,Nguyễn Văn Sơn,3,40,CL,4,1,405-GĐ4-A,,Học tuần 1-15
+165,K67I-IT CLC,INT3117 4,"Kiểm thử và đảm bảo chất lượng phần mềm",LT,Phạm Ngọc Hùng,3,40,CL,4,3,405-GĐ4-A,,Học tuần 1-15
+166,K67I-IT CLC,INT3109 2,Thu thập và phân tích yêu cầu,LT,Đặng Đức Hạnh,3,40,CL,4,2,501-GĐ4-A,,Học tuần 1-15
+168,K67I-IT CLC,THL1057 1,Nhà nước và Pháp luật Đại cương,ONL,Viện Khảo thí,2,300,CL,5,3,,,"Học 1 ca trong 10 tuần đầu, thi theo lịch của Viện Khảo thí"
+169,K67I-IT CLC,INT3507 3,"Các vấn đề hiện đại Công nghệ thông tin",LT,Lê Sỹ Vinh,3,40,CL,2,2,402-GĐ4-A,,Học tuần 1-15
+175,K67I-IT1,INT3111 2,Quản lý dự án phần mềm,LT,Trần Hoàng Việt,3,40,CL,5,2,402-GĐ4-A,,Học tuần 1-15
+176,K67I-IT1,INT3117 3,"Kiểm thử và đảm bảo chất lượng phần mềm",LT,Nguyễn Thu Trang,3,40,CL,2,1,401-GĐ4-A,,Học tuần 1-15
+177,K67I-IT1,INT3110 4,"Phân tích và thiết kế hướng đối tượng",LT,Trương Ninh Thuận,3,40,CL,5,1,402-GĐ4-A,,Học tuần 1-15
+178,K67I-IT1+K67I-IT2,INT3131 1,Dự án khoa học,ONL,Mẫn Đức Chức,3,55,CL,CN,1,,,
+179,K67I-IT1+K67I-IT2,INT3507 1,"Các vấn đề hiện đại Công nghệ thông tin",LT,Nguyễn Đức Anh,3,55,CL,4,1,106-GĐ4-A,,Học tuần 1-15
+180,K67I-IT1+K67I-IT2,BSA2002 3,Nguyên lý marketing,LT,Lê Thị Hải Hà,3,55,CL,4,4,106-GĐ3,,Học tuần 1-15
+181,"K67I-IT1+K67I-IT CLC",INT3209 3,Khai phá dữ liệu,LT,Lê Hoàng Quỳnh,3,40,CL,6,1,302-GĐ4-A,,Học tuần 1-15
+182,"K67I-IT1+K67I-IT CLC",INT3506 2,Các hệ thống thương mại điện tử,LT,Bùi Quang Hưng,3,40,CL,6,3,213-GĐ3,,Học tuần 1-15
+183,"K67I-IT1+K67I-IT CLC",INT3230 1,Mật mã và an toàn thông tin,LT,Lê Phê Đô,4,40,CL,3,1,305-GĐ4-A,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+184,"K67I-IT1+K67I-IT CLC",INT3230 1,Mật mã và an toàn thông tin,LT,Lê Phê Đô,4,40,CL,4,3,211-GĐ3,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+185,K67I-IT2,INT3132 1,Dự án công nghệ,ONL,Mẫn Đức Chức,3,60,CL,6,1,,,
+186,K67I-IT2,INT3507 2,"Các vấn đề hiện đại Công nghệ thông tin",LT,Lê Khánh Trình,3,60,CL,2,2,209-GĐ4-B,,Học tuần 1-15
+187,K67I-IT2,BSA2002 4,Nguyên lý marketing,LT,Lê Thị Hải Hà,3,60,CL,5,2,109-GĐ4-B,,Học tuần 1-15
+188,"K67I-IT2+K67I-IT CLC",INT3404 2,Xử lý ảnh,LT,Lê Thanh Hà,3,60,CL,2,4,201-GĐ4-B,,Học tuần 1-15
+189,"K67I-IT2+K67I-IT CLC",INT3405 5,Học máy,LT,Tạ Việt Cường,3,60,CL,2,1,204-GĐ4-A,,Học tuần 1-15
+190,"K67I-IT2+K67I-IT CLC",INT3406 4,Xử lý ngôn ngữ tự nhiên,LT,Nguyễn Văn Vinh,3,60,CL,2,3,204-GĐ4-A,,Học tuần 1-15
+193,K67I-IT20,INT3510 1,Chuẩn kỹ năng của CNTT,LT,Dương Lê Minh+Lê Minh Đức,2,66,CL,4,2,106-GĐ4-A,"KS. Lê Minh Đức (Rikkei)",Học tuần 1-10
+194,K67I-IT20,INT3138 1,Chuyên đề Công nghệ Nhật Bản (*),LT,Ngô Thị Duyên,3,66,CL,4,4,106-GĐ4-A,,Học tuần 1-15
+195,K67I-IT20,INT3141 2,"Tiếng Nhật trong Công nghệ thông tin 2 (*)",LT,Framgia,3,33,CL,5,2,509-GĐ4-B,"Giảng viên công ty Sun*",Học tuần 1-15
+196,K67I-IT20,INT3141 1,"Tiếng Nhật trong Công nghệ thông tin 2 (*)",LT,Framgia,3,33,CL,5,3,509-GĐ4-B,"Giảng viên công ty Sun*",Học tuần 1-15
+197,K67M-AT-TĐH,EMA3017 39,Cảm biến và cơ cấu chấp hành,LT,Trương Xuân Hùng,2,40,CL,6,2,305-GĐ4-A,,Học tuần 1-10
+198,K67M-AT-ĐL,EMA3021 39,"Các phương pháp điều khiển tiên tiến",LT,Phạm Quốc Tuấn,2,20,CL,4,1,506-GĐ4-A,,Học tuần 1-10
+199,K67M-AT,EMA3062 39,Điều khiển PLC,LT,Hoàng Văn Mạnh,3,80,CL,2,2,205-GĐ3,,Học 1-8
+200,K67M-AT-TĐH,EMA3062 39,Điều khiển PLC,TH,Nguyễn Quốc Trưởng,3,20,1,7,1,502-E5,,Học tuần 5-15
+201,K67M-AT-TĐH,EMA3062 39,Điều khiển PLC,TH,Nguyễn Quốc Trưởng,3,20,2,3,3,502-E5,,Học tuần 5-15
+202,K67M-AT-ĐL,EMA3062 39,Điều khiển PLC,TH,Nguyễn Quốc Trưởng,3,20,3,7,2,502-E5,,Học tuần 5-15
+203,K67M-AT-ĐL,EMA3062 39,Điều khiển PLC,TH,Nguyễn Quốc Trưởng,3,20,4,5,3,502-E5,,Học tuần 5-15
+204,K67M-AT,EMA3062 40,Điều khiển PLC,LT,Hoàng Văn Mạnh,3,40,CL,2,3,106-GĐ3,,Học 1-8
+205,K67M-AT-ĐL,EMA3062 40,Điều khiển PLC,TH,Nguyễn Quốc Trưởng,3,20,1,5,1,502-E5,,Học tuần 5-15
+206,K67M-AT-TĐH,EMA3062 40,Điều khiển PLC,TH,Nguyễn Quốc Trưởng,3,20,2,7,3,502-E5,,Học tuần 5-15
+207,K67M-AT-TĐH,EMA3068 39,Động cơ và cơ sở truyền động điện,LT,Nguyễn Thị Hồng Hạnh,2,40,CL,4,2,216-GĐ3,,Học tuần 1-10
+208,K67M-AT,EMA3084 39,Vi xử lý và vi điều khiển,LT,Phạm Mạnh Thắng+Vũ Đình Nam,3,90,CL,2,4,106-GĐ3,,Học 1-8
+209,K67M-AT-TĐH,EMA3084 39,Vi xử lý và vi điều khiển,TH,Vũ Đình Nam,3,22,1,3,2,502-E5,,Học tuần 5-15
+210,K67M-AT-TĐH,EMA3084 39,Vi xử lý và vi điều khiển,TH,Vũ Đình Nam,3,22,2,3,1,502-E5,,Học tuần 5-15
+211,K67M-AT-ĐL,EMA3084 39,Vi xử lý và vi điều khiển,TH,Vũ Đình Nam,3,23,3,6,1,502-E5,,Học tuần 5-15
+212,K67M-AT-ĐL,EMA3084 39,Vi xử lý và vi điều khiển,TH,Vũ Đình Nam,3,23,4,5,2,502-E5,,Học tuần 5-15
+213,K67M-AT,EMA3085 39,Robot công nghiệp,LT,Đặng Anh Việt,2,90,CL,4,3,107-GĐ3,,Học tuần 1-15
+214,K67M-AT-TĐH,EMA3108 39,Tự động hóa quá trình sản xuất,LT,Phạm Văn Bạch Ngọc,3,45,CL,2,1,217-GĐ3,,Học tuần 1-10
+215,K67M-AT-TĐH,EMA3108 39,Tự động hóa quá trình sản xuất,TH,Phạm Văn Bạch Ngọc,3,45,CL,6,3,217-GĐ3,,Học tuần 2-11
+216,K67M-AT-ĐL,EMA3136 39,Đo lường nâng cao,LT,Trương Xuân Hùng,3,40,CL,3,2,503-GĐ4-A,,Học tuần 1-10
+217,K67M-AT-ĐL,EMA3136 39,Đo lường nâng cao,LT,Trương Xuân Hùng,3,40,CL,4,2,502-GĐ4-A,,Học tuần 2-11
+218,K67M-AT-ĐL,EMA3149 39,Xử lý và nhận dạng ảnh,LT,Đinh Trần Hiệp,2,40,CL,3,1,506-GĐ4-A,,Học tuần 1-10
+219,K67M-AT-ĐL,EMA3149 39,Xử lý và nhận dạng ảnh,TH,Lê Công Hiếu,2,40,CL,2,1,203-GĐ3,,Học tuần 2-11
+220,K67M-EM-B,EMA3094 34,"Thủy động lực học - môi trường biển",LT,Đinh Văn Mạnh,4,40,CL,4,2,203-GĐ3,,Học tuần 1-15
+221,K67M-EM-B,EMA3094 34,"Thủy động lực học - môi trường biển",LT,Đinh Văn Mạnh,4,40,CL,3,2,301-GĐ4-A,,Học tuần 11-15
+222,K67M-EM-B,EMA3105 34,"Đồ án thủy động lực học - môi trường biển",LT,Đặng Song Hà,3,40,CL,6,1,202-GĐ4-A,,Học tuần 1-10
+223,K67M-EM-B,EMA3096 34,"Công trình biển ngoài khơi, độ tin cậy và đồ án",LT,Đào Như Mai,4,40,CL,2,4,202-GĐ4-A,,Học tuần 1-10
+224,K67M-EM-B,EMA3096 34,"Công trình biển ngoài khơi, độ tin cậy và đồ án",TH,Nguyễn Việt Khoa,4,40,CL,5,2,104-GĐ3,,
+225,K67M-EM-B,EMA3097 34,"Công trình biển ven bờ (đê, cản, đường ống, bể chứa) và đồ án",LT,Nguyễn Trường Giang,4,40,CL,2,3,401-GĐ4-A,,Học tuần 1-10
+226,K67M-EM-B,EMA3097 34,"Công trình biển ven bờ (đê, cản, đường ống, bể chứa) và đồ án",TH,Nguyễn Trường Giang,4,40,CL,4,3,202-GĐ4-A,,Học tuần 2-11
+227,K67M-EM-B,EMA3097 34,"Công trình biển ven bờ (đê, cản, đường ống, bể chứa) và đồ án",TH,Nguyễn Trường Giang,4,40,CL,3,1,202-GĐ4-A,,Học tuần 2-11
+228,K67M-EM-B,EMA3146 34,Kỹ thuật đo đạc môi trường biển,LT,Nguyễn Tiến Hùng,3,40,CL,2,1,Viện cơ,,
+229,K67M-EM-B,EMA3146 34,Kỹ thuật đo đạc môi trường biển,TH,Nguyễn Tiến Hùng,3,40,CL,5,3,Viện cơ,,Học tuần 2-11
+230,K67M-EM-B,EMA3146 34,Kỹ thuật đo đạc môi trường biển,TH,Nguyễn Tiến Hùng,3,40,CL,5,4,Viện cơ,,Học tuần 2-11
+231,K67M-EM-TK,EMA3147 34,"Động lực học - môi trường nước và đồ án",LT,Trần Thu Hà,4,40,CL,2,1,216-GĐ3,,Học tuần 1-10
+232,K67M-EM-TK,EMA3147 34,"Động lực học - môi trường nước và đồ án",TH,Trần Thu Hà,4,40,CL,3,1,504-GĐ4-A,,Học tuần 2-11
+233,K67M-EM-TK,EMA3147 34,"Động lực học - môi trường nước và đồ án",TH,Trần Thu Hà,4,40,CL,3,2,504-GĐ4-A,,Học tuần 2-11
+234,K67M-EM-TK,EMA3092 34,"Động lực học - môi trường không khí và đồ án",LT,Dương Ngọc Hải,4,40,CL,4,3,301-GĐ4-A,,Học tuần 1-12
+235,K67M-EM-TK,EMA3092 34,"Động lực học - môi trường không khí và đồ án",TH,Đặng Thế Ba+Dương Ngọc Hải,4,40,CL,4,2,217-GĐ3,,Học tuần 7-15
+236,K67M-EM-TK,EMA3092 34,"Động lực học - môi trường không khí và đồ án",TH,Đặng Thế Ba+Dương Ngọc Hải,4,40,CL,6,1,216-GĐ3,,Học tuần 7-15
+237,K67M-EM-TK,EMA3093 34,Máy - thiết bị thủy khí và đồ án,LT,Đỗ Huy Điệp,4,40,CL,2,2,217-GĐ3,,Học tuần 1-15
+238,K67M-EM-TK,EMA3093 34,Máy - thiết bị thủy khí và đồ án,TH,Đỗ Huy Điệp,4,40,CL,4,4,301-GĐ4-A,,Học tuần 2-13
+239,K67M-EM-TK,EMA3104 34,Cơ học chất lỏng thực nghiệm,LT,Bùi Đình Trí,3,40,CL,5,3,Viện cơ,,Học tuần 1-5
+240,K67M-EM-TK,EMA3104 34,Cơ học chất lỏng thực nghiệm,TH,Bùi Đình Trí,3,40,CL,5,4,Viện cơ,,Học tuần 2-11
+241,K67M-EM-TK,EMA3110 34,Kỹ thuật đường ống,LT,Vũ Lâm Đông,3,40,CL,6,3,Viện cơ,,Học tuần 1-10
+242,K67M-EM-VL,EMA3117 34,Vật liệu tiên tiến và composite,LT,Nguyễn Đình Đức,3,40,CL,3,4,301-GĐ4-A,,Học tuần 1-10
+243,K67M-EM-VL,EMA3117 34,Vật liệu tiên tiến và composite,TH,Vũ Thị Thùy Anh,3,40,CL,6,3,301-GĐ4-A,,Học tuần 2-11
+244,K67M-EM-VL,EMA3118 34,Lý thuyết tấm và vỏ,LT,Nguyễn Đình Đức+Phạm Hồng Công,4,40,CL,3,3,301-GĐ4-A,,Học tuần 1-10
+245,K67M-EM-VL,EMA3118 34,Lý thuyết tấm và vỏ,TH,Phạm Hồng Công,4,40,CL,6,2,301-GĐ4-A,,Học tuần 2-11
+246,K67M-EM-VL,EMA3119 34,"Các phương pháp số trong cơ học vật liệu và kết cấu",LT,Nguyễn Đình Đức+Phạm Đình Nguyện,4,40,CL,6,1,301-GĐ4-A,,Học tuần 1-10
+247,K67M-EM-VL,EMA3119 34,"Các phương pháp số trong cơ học vật liệu và kết cấu",TH,Phạm Đình Nguyện,4,40,CL,2,4,401-GĐ4-A,,Học tuần 2-11
+248,K67M-EM-VL,EMA3120 34,Động lực học trong công trình,LT,Trần Quốc Quân,4,40,CL,2,3,502-GĐ4-A,,Học tuần 1-10
+249,K67M-EM-VL,EMA3120 34,Động lực học trong công trình,TH,Trần Quốc Quân,4,40,CL,2,4,502-GĐ4-A,,Học tuần 2-11
+250,K67M-EM-VL,EMA3121 34,Lý thuyết dẻo,LT,Nguyễn Đình Đức+Trần Quốc Quân,3,40,CL,3,1,301-GĐ4-A,,Học tuần 1-10
+251,K67M-EM-VL,EMA3121 34,Lý thuyết dẻo,TH,Trần Quốc Quân,3,40,CL,3,2,302-GĐ4-A,,Học tuần 2-11
+252,K67M-EM-VT,EMA3106 34,Nhập môn công nghệ vũ trụ,LT,Lê Xuân Huy,3,40,CL,4,1,301-GĐ4-A,,
+253,K67M-EM-VT,EMA3106 34,Nhập môn công nghệ vũ trụ,TH,Lê Tiến Dung,3,40,CL,3,1,216-GĐ3,,
+254,K67M-EM-VT,EMA3101 34,Kết cấu thiết bị bay và đồ án,LT,Nguyễn Lương Thiện,4,40,CL,6,2,203-GĐ3,,Học tuần 1-10
+255,K67M-EM-VT,EMA3101 34,Kết cấu thiết bị bay và đồ án,TH,Nguyễn Lương Thiện,4,40,CL,6,1,217-GĐ3,,Học tuần 2-11
+256,K67M-EM-VT,EMA3102 34,"Cảm biến, điều khiển vệ tinh và đồ án",LT,Ngô Duy Tân,4,40,CL,6,3,216-GĐ3,,Học tuần 1-10
+257,K67M-EM-VT,EMA3102 34,"Cảm biến, điều khiển vệ tinh và đồ án",TH,Trương Tuấn Anh,4,40,CL,3,2,216-GĐ3,,Học tuần 2-11
+258,K67M-EM-VT,EMA3102 34,"Cảm biến, điều khiển vệ tinh và đồ án",TH,Trương Tuấn Anh,4,40,CL,5,2,202-GĐ4-A,,Học tuần 2-11
+259,K67M-EM-VT,EMA3103 34,"Thiết kế, tích hợp vệ tinh nhỏ và đồ án",LT,Tô Vũ Thanh,4,40,CL,5,1,301-GĐ4-A,,Học tuần 1-10
+260,K67M-EM-VT,EMA3103 34,"Thiết kế, tích hợp vệ tinh nhỏ và đồ án",TH,Huỳnh Xuân Quang,4,40,CL,4,3,302-GĐ4-A,,Học tuần 2-11
+261,K67M-EM-VT,EMA3103 34,"Thiết kế, tích hợp vệ tinh nhỏ và đồ án",TH,Huỳnh Xuân Quang,4,40,CL,4,4,305-GĐ4-A,,Học tuần 2-11
+262,K67M-EM-VT,EMA3109 34,Nhập môn khí động học thiết bị,LT,Thái Doãn Tường,3,40,CL,2,1,Viện cơ,,Học tuần 1-10
+263,K67M-EM-VT,EMA3109 34,Nhập môn khí động học thiết bị,TH,Thái Doãn Tường,3,40,CL,2,2,Viện cơ,,Học tuần 2-11
+264,K67M-MT1,UET1002 44,Kỹ năng khởi nghiệp,LT,Hoàng Thị Hải Yến,2,40,CL,2,2,302-GĐ4-A,,Học tuần 1-10
+265,K67M-MT1,EMA3135 46,SCADA,LT,Hoàng Văn Mạnh,3,40,CL,3,4,302-GĐ4-A,,Học tuần 1-10
+266,K67M-MT1,EMA3135 46,SCADA,TH,Nguyễn Quang Nhã,3,20,1,5,3,310-G2,,Học tuần 2-11
+267,K67M-MT1,EMA3135 46,SCADA,TH,Nguyễn Quang Nhã,3,20,2,6,1,310-G2,,Học tuần 2-11
+268,K67M-MT1,EMA3148 46,Đồ án chuyên ngành Cơ điện tử,LT,Phạm Mạnh Thắng+Nguyễn Quốc Trưởng,2,40,CL,3,3,302-GĐ4-A,,Học tuần 1-6
+269,K67M-MT1,EMA3148 46,Đồ án chuyên ngành Cơ điện tử,TH,Nguyễn Quốc Trưởng,2,40,CL,3,1,302-GĐ4-A,,Học tuần 2-11
+270,K67M-MT1,EMA3071E 46,"Ứng dụng máy tính trong đo lường và điều khiển",LT,Hoàng Văn Mạnh,3,40,CL,3,2,401-GĐ4-A,,Học tuần 1-10
+271,K67M-MT1,EMA3071E 46,"Ứng dụng máy tính trong đo lường và điều khiển",TH,Hồ Quang Trường,3,20,1,5,2,310-G2,,Học tuần 2-11
+272,K67M-MT1,EMA3071E 46,"Ứng dụng máy tính trong đo lường và điều khiển",TH,Hồ Quang Trường,3,20,2,7,1,310-G2,,Học tuần 2-11
+273,K67M-MT1,EMA3116 46,Kỹ thuật thuỷ khí,LT,Đặng Thế Ba,3,40,CL,4,1,302-GĐ4-A,,Học tuần 1-10
+274,K67M-MT1,EMA3116 46,Kỹ thuật thuỷ khí,LT,Đỗ Huy Điệp,3,40,CL,2,3,302-GĐ4-A,,Học tuần 2-11
+275,"K67M-MT1+K67M-MT2+K67M-MT3",EMA4002 46,Thực tập xưởng,ONL,"Phạm Mạnh Thắng+Hoàng Văn Mạnh+Trần Dương Trí",2,300,CL,6,2,,,
+276,K67M-MT2,UET1002 45,Kỹ năng khởi nghiệp,LT,Hoàng Thị Hải Yến,2,40,CL,4,3,401-GĐ4-A,,Học tuần 1-10
+277,K67M-MT2,EMA3135 47,SCADA,LT,Hoàng Văn Mạnh,3,40,CL,4,4,202-GĐ4-A,,Học tuần 1-10
+278,K67M-MT2,EMA3135 47,SCADA,TH,Nguyễn Quang Nhã,3,20,1,6,3,310-G2,,Học tuần 2-11
+279,K67M-MT2,EMA3135 47,SCADA,TH,Nguyễn Quang Nhã,3,20,2,6,4,310-G2,,Học tuần 2-11
+280,K67M-MT2,EMA3148 47,Đồ án chuyên ngành Cơ điện tử,LT,Phạm Mạnh Thắng+Nguyễn Quốc Trưởng,2,40,CL,3,1,217-GĐ3,,Học tuần 1-6
+281,K67M-MT2,EMA3148 47,Đồ án chuyên ngành Cơ điện tử,TH,Nguyễn Quốc Trưởng,2,40,CL,4,2,301-GĐ4-A,,Học tuần 2-11
+282,K67M-MT2,EMA3006E 47,"Công nghệ gia công phi truyền thống và tạo mẫu nhanh",LT,Trần Ngọc Hưng,3,40,CL,4,1,203-GĐ4-A,,Học tuần 1-10
+283,K67M-MT2,EMA3006E 47,"Công nghệ gia công phi truyền thống và tạo mẫu nhanh",LT,Trần Ngọc Hưng,3,40,CL,5,2,301-GĐ4-A,,Học tuần 2-11
+284,K67M-MT2,EMA3116 47,Kỹ thuật thuỷ khí,LT,Đặng Thế Ba,3,40,CL,5,1,302-GĐ4-A,,Học tuần 1-10
+285,K67M-MT2,EMA3116 47,Kỹ thuật thuỷ khí,TH,Đỗ Huy Điệp,3,40,CL,3,2,208-GĐ3,,Học tuần 2-11
+286,K67M-MT3,UET1002 46,Kỹ năng khởi nghiệp,LT,Hoàng Thị Hải Yến,2,40,CL,4,1,201-GĐ4-A,,Học tuần 1-10
+287,K67M-MT3,EMA3148 48,Đồ án chuyên ngành Cơ điện tử,LT,Phạm Mạnh Thắng+Nguyễn Quốc Trưởng,2,40,CL,2,3,213-GĐ3,,Học tuần 1-6
+288,K67M-MT3,EMA3148 48,Đồ án chuyên ngành Cơ điện tử,TH,Nguyễn Quốc Trưởng,2,40,CL,2,4,213-GĐ3,,Học tuần 2-11
+289,K67M-MT3,EMA3071E 48,"Ứng dụng máy tính trong đo lường và điều khiển",LT,Hoàng Văn Mạnh,3,40,CL,2,1,213-GĐ3,,Học tuần 1-10
+290,K67M-MT3,EMA3071E 48,"Ứng dụng máy tính trong đo lường và điều khiển",TH,Hồ Quang Trường,3,20,1,5,1,310-G2,,Học tuần 2-11
+291,K67M-MT3,EMA3071E 48,"Ứng dụng máy tính trong đo lường và điều khiển",TH,Hồ Quang Trường,3,20,2,7,2,310-G2,,Học tuần 2-11
+292,K67M-MT3,EMA3116 48,Kỹ thuật thuỷ khí,LT,Đặng Thế Ba,3,40,CL,2,2,213-GĐ3,,Học tuần 1-10
+293,K67M-MT3,EMA3116 48,Kỹ thuật thuỷ khí,LT,Đỗ Huy Điệp,3,40,CL,5,3,104-GĐ3,,Học tuần 2-11
+294,K67P-EE,EET2022 1,Thực tập kỹ thuật năng lượng 2,LT,Khoa VLKT,3,12,CL,3,1,207-E4,,Học tuần 1-10
+295,K67P-EE,EET3013 1,"Công nghệ năng lượng Hydro và pin nhiên liệu",LT,Nguyễn Thị Minh Hồng,2,50,CL,5,3,204-GĐ4-A,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+296,K67P-EE,EET3013 1,"Công nghệ năng lượng Hydro và pin nhiên liệu",LT,Nguyễn Thị Minh Hồng,2,50,CL,4,2,407-GĐ4-A,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+297,K67P-EE,EET3017 1,"Tích trữ và biến đổi các nguồn năng lượng mới",LT,Bùi Đình Tú,2,50,CL,4,1,208H2-GĐ4,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+298,K67P-EE,EET3017 1,"Tích trữ và biến đổi các nguồn năng lượng mới",LT,Bùi Đình Tú,2,50,CL,6,3,107-GĐ3,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+299,K67P-EE,EET3024 1,Điện gió,LT,Nguyễn Thanh Tùng,2,50,CL,6,1,407-GĐ4-A,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+300,K67P-EE,EET3024 1,Điện gió,LT,Nguyễn Thanh Tùng,2,50,CL,5,1,407-GĐ4-A,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+301,K67P-EE,EET3020 1,Thủy điện và năng lượng biển,LT,Nguyễn Thanh Tùng+Lê Việt Cường,3,50,CL,6,4,107-GĐ3,,Học tuần 1-15
+302,K67P-EE,EET3021 1,Năng lượng địa nhiệt,LT,Vũ Ngọc Linh+Lê Việt Cường,3,50,CL,6,2,405-GĐ4-A,,Học tuần 1-15
+303,K67P-EE,PHY1105 1,Vật lý hiện đại,LT,Nguyễn Thị Minh Hồng+Đồng Quốc Việt,2,50,CL,5,2,204-GĐ4-A,,Học tuần 1-10
+304,K67P-EP1,EPN3031 1,Công nghệ và kỹ thuật laser,LT,Phạm Hồng Minh+Hồ Anh Tâm,3,42,CL,4,1,213-GĐ3,,Học tuần 1-15
+305,K67P-EP1,EPN3032 1,"Quang phổ chất rắn và các vật liệu cấu trúc nano",LT,Nguyễn Kiên Cường+Nguyễn Đình Lãm,3,42,CL,3,1,203-GĐ3,,Học tuần 1-15
+306,K67P-EP1,EPN3029 1,"Thực tập chuyên đề Công nghệ quang tử","PTN VLKT",Nghiêm Thị Hà Liên+Phạm Văn Vĩnh,3,42,CL,6,1,PTN VLKT,"Phòng thí nghiệm tầng 5- E3 và Viện Vật lý, Viện Hàn lâm KH&CN Việt",Học tuần 1-15
+307,K67P-EP1,EPN3024 1,Thiết bị quang tử,LT,Vũ Dương+Nguyễn Thị Yến Mai,2,42,CL,5,1,213-GĐ3,,Học tuần 1-10
+308,K67P-EP1,EPN3016 1,Quang phi tuyến,LT,Ngô Quang Minh+Nguyễn Đình Lãm,2,42,CL,3,4,203-GĐ3,,Học tuần 1-10
+309,K67P-EP1,EPN3020 1,Quang tử nano,LT,"Nguyễn Trọng Nghĩa+Nguyễn Thị Yến Mai",2,42,CL,3,3,203-GĐ3,,Học tuần 1-10
+310,K67P-EP1,EPN3038 1,Vật liệu quang tử hữu cơ nano,LT,Nguyễn Kiên Cường+Phạm Văn Vĩnh,2,42,CL,3,2,203-GĐ3,,Học tuần 1-10
+311,K67P-EP2,EPN3065 1,Vật lý cho kỹ thuật y-sinh,LT,Hồ Thị Anh,3,42,CL,2,3,203-GĐ3,,Học tuần 1-15
+312,K67P-EP2,EPN3030 1,"Thực tập chuyên đề Công nghệ nano",LT,Nguyễn Tuấn Cảnh,3,42,CL,7,2,PTN VLKT,"Phòng thí nghiệm tầng 5, 6-E3, tầng 1-E4",Học tuần 1-15
+313,K67P-EP2,EPN3072 1,Các hệ vi cơ điện tử và ứng dụng,LT,Đỗ Thị Hương Giang,3,42,CL,3,1,213-GĐ3,,Học tuần 1-15
+314,K67P-EP2,EPN3009 1,"Các vật liệu polymer chức năng cấu trúc nano",LT,Nguyễn Phương Hoài Nam,2,42,CL,6,2,217-GĐ3,,Học tuần 1-10
+315,K67P-EP2,EPN3052 1,Vật liệu gốm kỹ thuật,LT,Hồ Thị Anh,2,42,CL,5,3,203-GĐ3,,Học tuần 1-10
+316,K67P-EP2,EPN3034 1,Chiếu sáng rắn,LT,Nguyễn Tuấn Cảnh,2,42,CL,5,2,203-GĐ3,,Học tuần 1-10
+317,K67P-EP2,EPN3055 1,Công nghệ chế tạo pin mặt trời,LT,Nguyễn Đức Cường,2,42,CL,6,1,203-GĐ3,,Học tuần 1-10
+318,K67S-AE-CNTT,INT3108 21,Lập trình nhúng và thời gian thực,LT,Nguyễn Kiêm Hùng,3,50,CL,6,3,306-GĐ4-A,,Học tuần 1-10
+319,K67S-AE-CNTT,INT3108 21,Lập trình nhúng và thời gian thực,TH,Nguyễn Kiêm Hùng,3,25,1,5,1,503-GĐ4-A,,Học tuần 2-11
+320,K67S-AE-CNTT,INT3108 21,Lập trình nhúng và thời gian thực,TH,Nguyễn Kiêm Hùng,3,25,2,5,2,503-GĐ4-A,,Học tuần 2-11
+321,K67S-AE-CNTT,AER3017 21,Phát triển hệ thống nhúng bảo mật,LT,Trần Xuân Tú+Bùi Duy Hiếu,3,50,CL,6,1,305-GĐ4-A,,Học tuần 1-10
+322,K67S-AE-CNTT,AER3020 21,Mạng truyền dữ liệu,LT,Nguyễn Xuân Trường,3,50,CL,2,1,306-GĐ4-A,,Học tuần 1-15
+323,K67S-AE-CNTT,ELT3057 21,Kỹ thuật điện từ,LT,Phùng Đức Thuận,3,50,CL,3,4,306-GĐ4-A,,Học tuần 1-15
+324,K67S-AE-CNTT,AER3019 21,Nguyên lý Radar,LT,Bạch Gia Dương,3,50,CL,3,2,306-GĐ4-A,,Học tuần 1-15
+325,K67S-AE-DLH,AER3023 21,Động lực học bay và điều khiển,LT,Trần Thế Hùng,3,50,CL,6,4,306-GĐ4-A,,Học tuần 1-10
+326,K67S-AE-DLH,AER3023 21,Động lực học bay và điều khiển,TH,Lê Vũ Đan Thanh,3,50,CL,7,1,306-GĐ4-A,,Học tuần 2-11
+327,K67S-AE-DLH,AER3026 21,Kiểm tra và bảo dưỡng máy bay,LT,Nguyễn Văn Thương,3,50,CL,5,2,405-GĐ4-A,,Học tuần 1-10
+328,K67S-AE-DLH,AER3026 21,Kiểm tra và bảo dưỡng máy bay,TH,Nguyễn Tiến Cường (VJ Air),3,50,CL,5,3,205-GĐ4-A,,Học tuần 2-11
+329,K67S-AE-DLH,AER3035 21,"Nguyên lý định vị và dẫn đường thiết bị hàng không",LT,Vũ Nghĩa Bắc,3,50,CL,7,2,306-GĐ4-A,,Học tuần 1-15
+330,K67S-AE-DLH,AER3041 21,Hệ thống điều khiển điện thủy khí,LT,Nguyễn Hoàng Quân+Trần Đăng Huy,3,50,CL,4,1,205-GĐ4-A,,Học tuần 1-15
+331,K67S-AE-DLH,AER3025 21,"Kỹ thuật mô hình và mô phỏng thiết bị bay",LT,Dương Việt Dũng,3,50,CL,2,3,205-GĐ4-A,,Học tuần 1-10
+332,K67S-AE-DLH,AER3025 21,"Kỹ thuật mô hình và mô phỏng thiết bị bay",TH,Dương Việt Dũng,3,50,CL,6,1,205-GĐ4-A,,Học tuần 2-11
+333,K67S-AE-VT,AER3015 21,Nhạp môn viễn thám,LT,Hà Minh Cường,3,50,CL,6,1,501-GĐ4-A,,Học tuần 1-10
+334,K67S-AE-VT,AER3015 21,Nhạp môn viễn thám,TH,Hà Minh Cường,3,50,CL,6,3,501-GĐ4-A,,Học tuần 2-11
+335,K67S-AE-VT,AER3006 21,Nhập môn hệ thống thông tin địa lý,LT,Hà Minh Cường,3,50,CL,2,4,501-GĐ4-A,,Học tuần 1-10
+336,K67S-AE-VT,AER3006 21,Nhập môn hệ thống thông tin địa lý,TH,Hà Minh Cường,3,50,CL,4,1,501-GĐ4-A,,Học tuần 2-11
+337,K67S-AE-VT,AER3007 21,Xử lý ảnh viễn thám,LT,Hà Minh Cường,3,50,CL,6,2,501-GĐ4-A,,Học tuần 1-10
+338,K67S-AE-VT,AER3007 21,Xử lý ảnh viễn thám,TH,Hoàng Tích Phúc,3,50,CL,2,2,501-GĐ4-A,,Học tuần 2-11
+340,K67S-AE-VT,AER3028 21,"Thiết kế, tích hợp vệ tinh nhỏ và đồ án",LT,Nguyễn Văn Thương+Trần Đăng Huy,,50,CL,2,3,501-GĐ4-A,HP thay thế,
+341,K67S-AE-VT,AER3013 21,Hạ tầng thông tin không gian,LT,Bùi Quang Hưng,3,50,CL,3,1,501-GĐ4-A,,Học tuần 1-15
+342,K68A-AI1,PHI1002 10,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,50,CL,3,2,305-GĐ4-A,,Học tuần 1-10
+343,K68A-AI1,HIS1001 11,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,50,CL,3,3,305-GĐ4-A,,Học tuần 1-10
+344,K68A-AI1,AIT3001# 1,Học sâu,LT,Nguyễn Việt Hà+Nguyễn Thị Thùy Linh,3,50,CL,4,1,305-GĐ4-A,,Học tuần 1-15
+345,K68A-AI1,AIT3003# 1,Khai phá và phân tích dữ liệu,LT,Ngô Minh Hương,3,50,CL,6,4,209-GĐ4-B,,Học tuần 1-15
+346,K68A-AI1,INT3229 1,Kỹ thuật và công nghệ dữ liệu lớn,LT,Trần Hồng Việt,3,50,CL,6,2,105-GĐ3,,Học tuần 1-10
+347,K68A-AI1,INT3229 1,Kỹ thuật và công nghệ dữ liệu lớn,TH,Ngô Minh Hương,3,50,CL,6,3,305-GĐ4-A,,Học tuần 1-10
+349,"K68A-AI1+K68A-AI-TC1",AIT3009** 1,"Ứng dụng trí tuệ nhân tạo cho ngôn ngữ",LT,Trần Hồng Việt+Ngô Minh Hương,3,60,CL,3,1,209-GĐ4-B,,Học tuần 1-15
+350,"K68A-AI1+K68A-AI-TC1",AIT3008 1,Lập trình song song với GPU,LT,Đào Thanh Tuấn,3,60,CL,3,4,507-GĐ4-B,,Học tuần 1-15
+351,K68A-AI2,PHI1002 11,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,50,CL,4,3,205-GĐ4-A,,Học tuần 1-10
+352,K68A-AI2,HIS1001 12,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,50,CL,4,2,305-GĐ4-A,,Học tuần 1-10
+353,K68A-AI2,AIT3001# 2,Học sâu,LT,Trần Quốc Long+Đào Việt Anh,3,50,CL,5,1,205-GĐ4-A,,Học tuần 1-15
+354,K68A-AI2,AIT3003# 2,Khai phá và phân tích dữ liệu,LT,Nguyễn Phương Thái,3,50,CL,5,2,306-GĐ4-A,,Học tuần 1-15
+355,K68A-AI2,INT3229 2,Kỹ thuật và công nghệ dữ liệu lớn,LT,Trần Hồng Việt,3,50,CL,6,1,404-GĐ4-A,,Học tuần 1-10
+356,K68A-AI2,INT3229 2,Kỹ thuật và công nghệ dữ liệu lớn,TH,Ngô Minh Hương,3,50,CL,2,2,404-GĐ4-A,,Học tuần 1-10
+357,"K68A-AI2+K68A-AI-TC2",AIT3012 1,"Tính toán khoa học thần kinh và ứng dụng",LT,"Nguyễn Linh Trung+Guy Nagels+Nguyễn Thế Hoàng Anh",3,60,CL,3,3,206-GĐ3,,Học tuần 1-15
+358,"K68A-AI-TC1+K68A-AI-TC2",AIT3040 1,Dự án,ONL,Nguyễn Thị Thùy Linh,3,30,CL,6,3,,,
+359,"K68A-AI-TC1+K68A-AI-TC2",POL1001 41,Tư tưởng Hồ Chí Minh,LT,ĐHKHXHNV,2,40,CL,6,2,302-GĐ4-A,,Học tuần 1-10
+360,"K68A-AI-TC1+K68A-AI-TC2",AIT4002 1,Thực tập doanh nghiệp,ONL,Nguyễn Thị Thùy Linh,3,30,CL,7,1,,,
+361,K68C-CE1,CTE2026 29,Cơ học kết cấu,TH,Lê Thùy Dương,3,35,1,2,1,301-GĐ4-A,,Học tuần 2-11
+362,K68C-CE1,CTE2010 29,Cơ học đất,TH,Nguyễn Tiến Dũng,3,35,1,3,3,204-GĐ3,,Học tuần 2-7
+363,"K68C-CE1+K68C-CE2",CTE2026 29,Cơ học kết cấu,LT,Lê Thùy Dương,3,70,CL,2,4,203-GĐ4-A,,Học tuần 1-10
+364,"K68C-CE1+K68C-CE2",CTE2028 29,Thủy lực công trình,LT,Nguyễn Văn Yên,2,70,CL,3,1,203-GĐ4-A,,Học tuần 1-13
+365,"K68C-CE1+K68C-CE2",CTE2010 29,Cơ học đất,LT,Nguyễn Tiến Dũng,3,70,CL,2,3,203-GĐ4-A,,Học tuần 1-11
+366,"K68C-CE1+K68C-CE2",CTE3014 29,"Vật liệu tiên tiến trong Xây dựng – Giao thông",LT,Nguyễn Đình Đức+Vũ Đức Thắng,2,70,CL,5,2,203-GĐ4-A,,Học tuần 1-10
+367,"K68C-CE1+K68C-CE2",CTE3002 29,Thủy văn,LT,Dương Tuấn Mạnh,2,70,CL,3,2,203-GĐ4-A,,Học tuần 1-10
+368,"K68C-CE1+K68C-CE2",CTE3054 29,Máy xây dựng,LT,Lê Văn Tuân,2,70,CL,5,1,203-GĐ4-A,,Học tuần 1-10
+369,"K68C-CE1+K68C-CE2",CTE3047 29,Quản lý dự án và rủi ro,LT,Lê Văn Tuân,2,70,CL,2,2,203-GĐ4-A,,Học tuần 1-10
+370,"K68C-CE1+K68C-CE2",CTE4012 29,Thực tập kỹ thuật 1,LT,Nguyễn Tiến Dũng+Vũ Minh Anh,2,70,CL,3,4,203-GĐ4-A,,Học tuần 1-10
+371,K68C-CE2,CTE2026 29,Cơ học kết cấu,TH,Lê Thùy Dương,3,35,2,3,3,402-GĐ4-A,,Học tuần 2-11
+372,K68C-CE2,CTE2010 29,Cơ học đất,TH,Nguyễn Tiến Dũng,3,35,2,6,1,402-GĐ4-A,,Học tuần 2-7
+373,K68C-CE3,CTE2026 30,Cơ học kết cấu,TH,Lê Thùy Dương,3,35,1,4,3,204-GĐ3,,Học tuần 2-11
+374,K68C-CE3,CTE2010 30,Cơ học đất,TH,Nguyễn Văn Bắc+Nguyễn Hữu Hùng,3,35,1,4,2,204-GĐ3,,Học tuần 2-7
+375,"K68C-CE3+K68C-CE4",CTE2026 30,Cơ học kết cấu,LT,Lê Thùy Dương,3,70,CL,2,3,103-GĐ4-A,,Học tuần 1-10
+376,"K68C-CE3+K68C-CE4",CTE2028 30,Thủy lực công trình,LT,Nguyễn Văn Yên,2,70,CL,6,2,103-GĐ4-A,,Học tuần 1-13
+377,"K68C-CE3+K68C-CE4",CTE2010 30,Cơ học đất,LT,Nguyễn Văn Bắc+Nguyễn Hữu Hùng,3,70,CL,2,2,103-GĐ4-A,,Học tuần 1-11
+378,"K68C-CE3+K68C-CE4",CTE3014 30,"Vật liệu tiên tiến trong Xây dựng – Giao thông",LT,Nguyễn Đình Đức+Vũ Đức Thắng,2,70,CL,6,3,103-GĐ4-A,,Học tuần 1-10
+379,"K68C-CE3+K68C-CE4",CTE3002 30,Thủy văn,LT,Dương Tuấn Mạnh,2,70,CL,3,1,103-GĐ4-A,,Học tuần 1-10
+380,"K68C-CE3+K68C-CE4",CTE3054 30,Máy xây dựng,LT,Lê Văn Tuân,2,70,CL,6,1,103-GĐ4-A,,Học tuần 1-10
+381,"K68C-CE3+K68C-CE4",CTE3047 30,Quản lý dự án và rủi ro,LT,Nguyễn Văn Yên,2,70,CL,5,2,103-GĐ4-A,,Học tuần 1-10
+382,"K68C-CE3+K68C-CE4",CTE4012 30,Thực tập kỹ thuật 1,LT,Nguyễn Tiến Dũng+Vũ Minh Anh,2,70,CL,5,1,103-GĐ4-A,,Học tuần 1-10
+383,K68C-CE4,CTE2026 30,Cơ học kết cấu,TH,Lê Thùy Dương,3,35,2,6,4,204-GĐ3,,Học tuần 2-11
+384,K68C-CE4,CTE2010 30,Cơ học đất,TH,Nguyễn Văn Bắc+Nguyễn Hữu Hùng,3,35,2,4,1,204-GĐ3,,Học tuần 2-7
+385,K68E-CE1,AIT2004 63,Cơ sở trí tuệ nhân tạo,LT,Huỳnh Bá Phúc,3,60,CL,3,1,207-GĐ4-B,,Học tuần 1-15
+387,K68E-CE2,AIT2004 64,Cơ sở trí tuệ nhân tạo,LT,Nguyễn Hồng Thịnh,3,60,CL,4,4,205-GĐ4-B,,Học tuần 1-15
+389,K68E-CE1,ELT3051 63,Kỹ thuật điều khiển,LT,Nguyễn Thị Thanh Vân,3,60,CL,3,3,507-GĐ4-B,,Học tuần 1-15
+390,K68E-CE2,ELT3051 64,Kỹ thuật điều khiển,LT,Nguyễn Thu Hằng,3,60,CL,6,2,503-GĐ4-A,,Học tuần 1-15
+391,K68E-CE1,ELT3290 63,Thiết kế số và vi xử lý,LT,Nguyễn Ngọc An,3,60,CL,2,2,202-GĐ4-B,,Học tuần 1-10
+392,"K68E-CE1 (Nhóm 1)",ELT3290 63,Thiết kế số và vi xử lý,TH,Nguyễn Ngọc An+Dương Minh Ngọc,3,30,1,2,1,302-GĐ4-A,,Học tuần 11-15
+393,"K68E-CE1 (Nhóm 1)",ELT3290 63,Thiết kế số và vi xử lý,TH,Nguyễn Ngọc An+Dương Minh Ngọc,3,30,1,2,2,202-GĐ4-B,,Học tuần 11-15
+394,"K68E-CE1 (Nhóm 2)",ELT3290 63,Thiết kế số và vi xử lý,TH,Nguyễn Ngọc An+Dương Minh Ngọc,3,30,2,6,2,204-GĐ3,,Học tuần 11-15
+395,"K68E-CE1 (Nhóm 2)",ELT3290 63,Thiết kế số và vi xử lý,TH,Nguyễn Ngọc An+Dương Minh Ngọc,3,30,2,2,4,202-GĐ4-B,,Học tuần 11-15
+396,K68E-CE2,ELT3290 64,Thiết kế số và vi xử lý,LT,Vũ Quốc Tuấn,3,60,CL,4,3,205-GĐ4-B,,Học tuần 1-10
+397,"K68E-CE2 (Nhóm 1)",ELT3290 64,Thiết kế số và vi xử lý,TH,Vũ Quốc Tuấn+Đỗ Đình Minh,3,30,1,3,2,406-GĐ4-A,,Học tuần 11-15
+398,"K68E-CE2 (Nhóm 1)",ELT3290 64,Thiết kế số và vi xử lý,TH,Vũ Quốc Tuấn+Đỗ Đình Minh,3,30,1,7,3,205-GĐ4-A,,Học tuần 11-15
+399,"K68E-CE2 (Nhóm 2)",ELT3290 64,Thiết kế số và vi xử lý,TH,Vũ Quốc Tuấn+Đỗ Đình Minh,3,30,2,3,1,306-GĐ4-A,,Học tuần 11-15
+400,"K68E-CE2 (Nhóm 2)",ELT3290 64,Thiết kế số và vi xử lý,TH,Vũ Quốc Tuấn+Đỗ Đình Minh,3,30,2,7,4,205-GĐ4-A,,Học tuần 11-15
+401,K68E-CE1,INT2204 63,Lập trình hướng đối tượng,LT,Trần Mạnh Cường,3,60,CL,3,2,209-GĐ4-B,,Học tuần 1-10
+402,K68E-CE1,INT2204 63,Lập trình hướng đối tượng,TH,Trần Mạnh Cường,3,60,CL,4,2,508-GĐ4-B,,Học tuần 2-11
+403,K68E-CE2,INT2204 64,Lập trình hướng đối tượng,LT,Nguyễn Vũ Bình Dương,3,60,CL,6,3,204-GĐ4-A,,Học tuần 1-10
+404,K68E-CE2,INT2204 64,Lập trình hướng đối tượng,TH,Nguyễn Vũ Bình Dương,3,60,CL,4,2,509-GĐ4-B,,Học tuần 2-11
+405,K68E-CE1,INT2214 63,Nguyên lý hệ điều hành,LT,Phan Xuân Hiếu,4,60,CL,5,2,210-GĐ4-B,,Học tuần 1-15
+406,K68E-CE1,INT2214 63,Nguyên lý hệ điều hành,LT,Phan Xuân Hiếu,4,60,CL,4,1,103-GĐ4-A,,Học tuần 11-15
+407,K68E-CE2,INT2214 64,Nguyên lý hệ điều hành,LT,Trần Mai Vũ+Đoàn Thanh Tám,4,60,CL,5,1,209-GĐ4-B,,Học tuần 1-15
+408,K68E-CE2,INT2214 64,Nguyên lý hệ điều hành,LT,Trần Mai Vũ+Đoàn Thanh Tám,4,60,CL,6,4,205-GĐ4-B,,Học tuần 11-15
+409,K68E-CE1,MAT1101 63,Xác suất thống kê,LT,Lê Phê Đô,3,60,CL,5,1,307-GĐ4-A,,Học tuần 1-15
+410,K68E-CE2,MAT1101 64,Xác suất thống kê,LT,Phan Hải Đăng,3,60,CL,2,1,102-GĐ3,,Học tuần 1-15
+411,K68E-EC1,AIT2004 53,Cơ sở trí tuệ nhân tạo,LT,Huỳnh Bá Phúc,3,60,CL,3,4,206-GĐ4-B,,Học tuần 1-15
+413,K68E-EC2,AIT2004 54,Cơ sở trí tuệ nhân tạo,LT,Lê Quốc Anh,3,60,CL,2,1,210-GĐ3,,Học tuần 1-15
+415,K68E-EC3,AIT2004 55,Cơ sở trí tuệ nhân tạo,LT,Hoàng Văn Xiêm+Lê Quốc Anh,3,60,CL,3,2,202-GDD4-B,,Học tuần 1-15
+417,K68E-EC1,ELT3051 53,Kỹ thuật điều khiển,LT,Nguyễn Thu Hằng,3,60,CL,3,1,206-GĐ4-B,,Học tuần 1-15
+418,K68E-EC2,ELT3051 54,Kỹ thuật điều khiển,LT,Nguyễn Thị Thanh Vân,3,60,CL,3,4,106-GĐ3,,Học tuần 1-15
+419,K68E-EC3,ELT3051 55,Kỹ thuật điều khiển,LT,Nguyễn Thị Thanh Vân,3,60,CL,4,3,202-GĐ4-B,,Học tuần 1-15
+420,K68E-EC1,ELT3057 53,Truyền thông số và mã hóa,LT,Lê Trần Mạnh,3,60,CL,3,3,206-GĐ4-B,,Học tuần 1-15
+421,K68E-EC2,ELT3057 54,Truyền thông số và mã hóa,LT,Lê Trần Mạnh,3,60,CL,4,2,510-GĐ4-B,,Học tuần 1-15
+422,K68E-EC3,ELT3057 55,Truyền thông số và mã hóa,LT,Nguyễn Minh Trần,3,60,CL,3,1,202-GĐ4-B,,Học tuần 1-15
+423,"K68E-EC1 (Nhóm 1)",ELT3102 53,Thực tập điện tử tương tự,TH,Nguyễn Đăng Phú+Lưu Bách Hưng,2,20,CL,4,1,209-G2,,Học tuần 1-10
+424,"K68E-EC1 (Nhóm 1)",ELT3102 53,Thực tập điện tử tương tự,TH,Nguyễn Đăng Phú+Lưu Bách Hưng,2,20,CL,4,2,209-G2,,Học tuần 1-10
+425,"K68E-EC1 (Nhóm 2)",ELT3102 54,Thực tập điện tử tương tự,TH,Hoàng Bảo Anh+Chu Thị Phương Dung,2,20,CL,4,3,209-G2,,Học tuần 1-10
+426,"K68E-EC1 (Nhóm 2)",ELT3102 54,Thực tập điện tử tương tự,TH,Hoàng Bảo Anh+Chu Thị Phương Dung,2,20,CL,4,4,209-G2,,Học tuần 1-10
+427,"K68E-EC1 (Nhóm 3)",ELT3102 55,Thực tập điện tử tương tự,TH,Phạm Đình Tuân+Trần Như Chí,2,20,CL,2,1,209-G2,,Học tuần 1-10
+428,"K68E-EC1 (Nhóm 3)",ELT3102 56,Thực tập điện tử tương tự,TH,Phạm Đình Tuân+Trần Như Chí,2,20,CL,2,2,209-G2,,Học tuần 1-10
+429,"K68E-EC2 (Nhóm 1)",ELT3102 57,Thực tập điện tử tương tự,TH,Nguyễn Đăng Phú+Lưu Bách Hưng,2,20,CL,6,3,209-G2,,Học tuần 1-10
+430,"K68E-EC2 (Nhóm 1)",ELT3102 57,Thực tập điện tử tương tự,TH,Nguyễn Đăng Phú+Lưu Bách Hưng,2,20,CL,6,4,209-G2,,Học tuần 1-10
+431,"K68E-EC2 (Nhóm 2)",ELT3102 58,Thực tập điện tử tương tự,TH,Mai Linh+Lê Thành Trung,2,20,CL,6,1,209-G2,,Học tuần 1-10
+432,"K68E-EC2 (Nhóm 2)",ELT3102 58,Thực tập điện tử tương tự,TH,Mai Linh+Lê Thành Trung,2,20,CL,6,2,209-G2,,Học tuần 1-10
+433,"K68E-EC2 (Nhóm 3)",ELT3102 59,Thực tập điện tử tương tự,TH,Trần Như Chí+Chu Thị Phương Dung,2,20,CL,5,3,209-G2,,Học tuần 1-10
+434,"K68E-EC2 (Nhóm 3)",ELT3102 59,Thực tập điện tử tương tự,TH,Trần Như Chí+Chu Thị Phương Dung,2,20,CL,5,4,209-G2,,Học tuần 1-10
+435,"K68E-EC3 (Nhóm 1)",ELT3102 60,Thực tập điện tử tương tự,TH,Nguyễn Đăng Phú+Lưu Bách Hưng,2,20,CL,7,3,209-G2,,Học tuần 1-10
+436,"K68E-EC3 (Nhóm 1)",ELT3102 60,Thực tập điện tử tương tự,TH,Nguyễn Đăng Phú+Lưu Bách Hưng,2,20,CL,7,4,209-G2,,Học tuần 1-10
+437,"K68E-EC3 (Nhóm 2)",ELT3102 61,Thực tập điện tử tương tự,TH,Mai Linh+Hoàng Bảo Anh,2,20,CL,2,3,209-G2,,Học tuần 1-10
+438,"K68E-EC3 (Nhóm 2)",ELT3102 61,Thực tập điện tử tương tự,TH,Mai Linh+Hoàng Bảo Anh,2,20,CL,2,4,209-G2,,Học tuần 1-10
+439,"K68E-EC3 (Nhóm 3)",ELT3102 62,Thực tập điện tử tương tự,TH,Phạm Đình Tuân+Lê Thành Trung,2,20,CL,5,1,209-G2,,Học tuần 1-10
+440,"K68E-EC3 (Nhóm 3)",ELT3102 62,Thực tập điện tử tương tự,TH,Phạm Đình Tuân+Lê Thành Trung,2,20,CL,5,2,209-G2,,Học tuần 1-10
+441,"K68E-EC1 (Nhóm 1)",ELT3103 53,Thực tập điện tử số,TH,Nguyễn Thu Hằng+Phạm Quang Hùng,2,20,CL,4,3,210-G2,,Học tuần 1-10
+442,"K68E-EC1 (Nhóm 1)",ELT3103 53,Thực tập điện tử số,TH,Nguyễn Thu Hằng+Phạm Quang Hùng,2,20,CL,4,4,210-G2,,Học tuần 1-10
+443,"K68E-EC1 (Nhóm 2)",ELT3103 54,Thực tập điện tử số,TH,"Nguyễn Xuân Dương+Chu Thị Phương Dung",2,20,CL,4,1,210-G2,,Học tuần 1-10
+444,"K68E-EC1 (Nhóm 2)",ELT3103 54,Thực tập điện tử số,TH,"Nguyễn Xuân Dương+Chu Thị Phương Dung",2,20,CL,4,2,210-G2,,Học tuần 1-10
+445,"K68E-EC1 (Nhóm 3)",ELT3103 55,Thực tập điện tử số,TH,Phạm Ngọc Thảo+Lê Thành Trung,2,20,CL,2,3,210-G2,,Học tuần 1-10
+446,"K68E-EC1 (Nhóm 3)",ELT3103 55,Thực tập điện tử số,TH,Phạm Ngọc Thảo+Lê Thành Trung,2,20,CL,2,4,210-G2,,Học tuần 1-10
+447,"K68E-EC2 (Nhóm 1)",ELT3103 56,Thực tập điện tử số,TH,Phạm Ngọc Thảo+Chu Thị Phương Dung,2,20,CL,6,1,210-G2,,Học tuần 1-10
+448,"K68E-EC2 (Nhóm 1)",ELT3103 56,Thực tập điện tử số,TH,Phạm Ngọc Thảo+Chu Thị Phương Dung,2,20,CL,6,2,210-G2,,Học tuần 1-10
+449,"K68E-EC2 (Nhóm 2)",ELT3103 57,Thực tập điện tử số,TH,Phạm Ngọc Thảo+Đặng Văn Hiếu,2,20,CL,6,3,210-G2,,Học tuần 1-10
+450,"K68E-EC2 (Nhóm 2)",ELT3103 57,Thực tập điện tử số,TH,Phạm Ngọc Thảo+Đặng Văn Hiếu,2,20,CL,6,4,210-G2,,Học tuần 1-10
+451,"K68E-EC2 (Nhóm 3)",ELT3103 58,Thực tập điện tử số,TH,Nguyễn Xuân Dương+Đỗ Đình Minh,2,20,CL,5,1,210-G2,,Học tuần 1-10
+452,"K68E-EC2 (Nhóm 3)",ELT3103 58,Thực tập điện tử số,TH,Nguyễn Xuân Dương+Đỗ Đình Minh,2,20,CL,5,2,210-G2,,Học tuần 1-10
+453,"K68E-EC3 (Nhóm 1)",ELT3103 59,Thực tập điện tử số,TH,Phạm Đức Quang+Lê Thành Trung,2,20,CL,7,1,210-G2,,Học tuần 1-10
+454,"K68E-EC3 (Nhóm 1)",ELT3103 59,Thực tập điện tử số,TH,Phạm Đức Quang+Lê Thành Trung,2,20,CL,7,2,210-G2,,Học tuần 1-10
+455,"K68E-EC3 (Nhóm 2)",ELT3103 60,Thực tập điện tử số,TH,Phạm Quang Hùng+Lê Thành Trung,2,20,CL,2,1,210-G2,,Học tuần 1-10
+456,"K68E-EC3 (Nhóm 2)",ELT3103 60,Thực tập điện tử số,TH,Phạm Quang Hùng+Lê Thành Trung,2,20,CL,2,2,210-G2,,Học tuần 1-10
+457,"K68E-EC3 (Nhóm 3)",ELT3103 61,Thực tập điện tử số,TH,Nguyễn Thu Hằng+Đinh Bảo Minh,2,20,CL,5,3,210-G2,,Học tuần 1-10
+458,"K68E-EC3 (Nhóm 3)",ELT3103 61,Thực tập điện tử số,TH,Nguyễn Thu Hằng+Đinh Bảo Minh,2,20,CL,5,4,210-G2,,Học tuần 1-10
+459,K68E-EC1,ELT3290 53,Thiết kế số và vi xử lý,TH,Phạm Đức Quang+Dương Minh Ngọc,3,30,1,7,1,204-GĐ4-A,,Học tuần 11-15
+460,K68E-EC1,ELT3290 53,Thiết kế số và vi xử lý,TH,Phạm Đức Quang+Dương Minh Ngọc,3,30,1,7,2,204-GĐ4-A,,Học tuần 11-15
+461,K68E-EC1,ELT3290 53,Thiết kế số và vi xử lý,LT,Phạm Đức Quang,3,60,CL,5,2,206-GĐ4-B,,Học tuần 1-10
+462,K68E-EC1,ELT3290 53,Thiết kế số và vi xử lý,TH,Phạm Đức Quang+Dương Minh Ngọc,3,30,2,7,3,204-GĐ4-A,,Học tuần 11-15
+463,K68E-EC1,ELT3290 53,Thiết kế số và vi xử lý,TH,Phạm Đức Quang+Dương Minh Ngọc,3,30,2,7,4,204-GĐ4-A,,Học tuần 11-15
+464,K68E-EC2,ELT3290 54,Thiết kế số và vi xử lý,TH,Nguyễn Ngọc An+Dương Minh Ngọc,3,30,1,4,3,206-GĐ3,,Học tuần 11-15
+465,K68E-EC2,ELT3290 54,Thiết kế số và vi xử lý,TH,Nguyễn Ngọc An+Dương Minh Ngọc,3,30,1,4,4,204-GĐ3,,Học tuần 11-15
+466,K68E-EC2,ELT3290 54,Thiết kế số và vi xử lý,LT,Nguyễn Ngọc An,3,60,CL,3,3,106-GĐ3,,Học tuần 1-10
+467,K68E-EC2,ELT3290 54,Thiết kế số và vi xử lý,TH,Nguyễn Ngọc An+Dương Minh Ngọc,3,30,2,3,1,506-GĐ4-A,,Học tuần 11-15
+468,K68E-EC2,ELT3290 54,Thiết kế số và vi xử lý,TH,Nguyễn Ngọc An+Dương Minh Ngọc,3,30,2,3,2,506-GĐ4-A,,Học tuần 11-15
+469,K68E-EC3,ELT3290 55,Thiết kế số và vi xử lý,TH,Vũ Quốc Tuấn+Đỗ Đình Minh,3,30,1,7,1,205-GĐ4-A,,Học tuần 11-15
+470,K68E-EC3,ELT3290 55,Thiết kế số và vi xử lý,TH,Vũ Quốc Tuấn+Đỗ Đình Minh,3,30,1,4,1,306-GĐ4-A,,Học tuần 11-15
+471,K68E-EC3,ELT3290 55,Thiết kế số và vi xử lý,LT,Vũ Quốc Tuấn,3,60,CL,4,4,202-GĐ4-B,,Học tuần 1-10
+472,K68E-EC3,ELT3290 55,Thiết kế số và vi xử lý,TH,Vũ Quốc Tuấn+Đỗ Đình Minh,3,30,2,6,1,401-GĐ4-A,,Học tuần 11-16
+473,K68E-EC3,ELT3290 55,Thiết kế số và vi xử lý,TH,Vũ Quốc Tuấn+Đỗ Đình Minh,3,30,2,7,2,205-GĐ4-A,,Học tuần 11-15
+474,K68E-EC1,ELT3296 53,Kỹ thuật lập trình nâng cao,LT,Hoàng Gia Hưng,3,60,CL,6,4,102-GĐ3,,Học tuần 1-10
+475,K68E-EC1,ELT3296 53,Kỹ thuật lập trình nâng cao,TH,Đỗ Đình Minh+Dương Minh Ngọc,3,60,CL,6,1,209-GĐ3,,Học tuần 2-11
+476,K68E-EC2,ELT3296 54,Kỹ thuật lập trình nâng cao,LT,Phan Hoàng Anh,3,60,CL,2,4,210-GĐ3,,Học tuần 1-10
+477,K68E-EC2,ELT3296 54,Kỹ thuật lập trình nâng cao,TH,Phan Hoàng Anh,3,60,CL,2,3,210-GĐ3,,Học tuần 2-11
+478,K68E-EC3,ELT3296 55,Kỹ thuật lập trình nâng cao,LT,Đỗ Ngọc Minh,3,60,CL,6,3,503-GĐ4-A,,Học tuần 1-10
+479,K68E-EC3,ELT3296 55,Kỹ thuật lập trình nâng cao,TH,Đỗ Ngọc Minh,3,60,CL,6,4,503-GĐ4-A,,Học tuần 2-11
+480,"K68E-RE1+K68E-RE2+K68E-RE3",ELT3144 68,Xử lý tín hiệu số,LT,Nguyễn Linh Trung,4,60,CL,6,4,210-GĐ3,,Học tuần 1-15
+481,"K68E-RE1+K68E-RE2+K68E-RE3",ELT3144 68,Xử lý tín hiệu số,TH,Lê Quốc Anh,4,60,CL,3,3,203-GĐ4-B,,Học tuần 2-11
+482,"K68E-RE1+K68E-RE2+K68E-RE3",ELT3290 68,Thiết kế số và vi xử lý,LT,Phạm Đức Quang,3,60,CL,6,1,210-GĐ3,,Học tuần 1-10
+483,K68E-RE1,ELT3290 68,Thiết kế số và vi xử lý,TH,Phạm Đức Quang+Dương Minh Ngọc,3,20,1,5,2,215-GĐ3,,Học tuần 11-15
+484,K68E-RE1,ELT3290 68,Thiết kế số và vi xử lý,TH,Phạm Đức Quang+Dương Minh Ngọc,3,20,1,6,1,210-GĐ3,,Học tuần 11-15
+485,K68E-RE2,ELT3290 68,Thiết kế số và vi xử lý,TH,Phạm Đức Quang+Dương Minh Ngọc,3,20,2,5,1,306-GĐ4-A,,Học tuần 11-15
+486,K68E-RE2,ELT3290 68,Thiết kế số và vi xử lý,TH,Phạm Đức Quang+Dương Minh Ngọc,3,20,2,2,2,202-GĐ4-A,,Học tuần 11-15
+487,K68E-RE3,ELT3290 68,Thiết kế số và vi xử lý,TH,Phạm Đức Quang+Dương Minh Ngọc,3,20,3,4,1,505-GĐ4-A,,Học tuần 11-15
+488,K68E-RE3,ELT3290 68,Thiết kế số và vi xử lý,TH,Phạm Đức Quang+Dương Minh Ngọc,3,20,3,4,2,306-GĐ4-A,,Học tuần 11-15
+489,"K68E-RE1+K68E-RE2+K68E-RE3",ELT3292 68,Điều khiển logic và PLC,LT,Lê Xuân Lực,3,60,CL,3,4,110-GĐ4-B,,Học tuần 1-10
+490,K68E-RE1,ELT3292 68,Điều khiển logic và PLC,TH,Đặng Văn Hiếu,3,20,1,2,3,101-GĐ3,,Học tuần 11-16
+491,K68E-RE1,ELT3292 68,Điều khiển logic và PLC,TH,Đặng Văn Hiếu,3,20,1,2,4,101-GĐ3,,Học tuần 11-16
+492,K68E-RE2,ELT3292 68,Điều khiển logic và PLC,TH,Đặng Văn Hiếu,3,20,2,4,1,101-GĐ3,,Học tuần 11-16
+493,K68E-RE2,ELT3292 68,Điều khiển logic và PLC,TH,Đặng Văn Hiếu,3,20,2,4,2,101-GĐ3,,Học tuần 11-16
+494,K68E-RE3,ELT3292 68,Điều khiển logic và PLC,TH,Đặng Văn Hiếu,3,20,3,5,3,101-GĐ3,,Học tuần 11-16
+495,K68E-RE3,ELT3292 68,Điều khiển logic và PLC,TH,Đặng Văn Hiếu,3,20,3,5,4,101-GĐ3,,Học tuần 11-16
+496,"K68E-RE1+K68E-RE2+K68E-RE3",ELT3295 68,Mạng không dây,LT,Lâm Sinh Công,3,60,CL,3,1,105-GĐ4-B,,Học tuần 1-12
+497,K68E-RE1,ELT3295 68,Mạng không dây,TH,Lâm Sinh Công+Cấn Quang Trường,3,20,1,2,2,202-G2,,Học tuần 2-8
+498,K68E-RE2,ELT3295 68,Mạng không dây,TH,Lâm Sinh Công+Cấn Quang Trường,3,20,2,7,1,202-G2,,Học tuần 2-8
+499,K68E-RE3,ELT3295 68,Mạng không dây,TH,Lâm Sinh Công+Cấn Quang Trường,3,20,3,5,2,202-G2,,Học tuần 2-8
+500,"K68E-RE1+K68E-RE2+K68E-RE3",PHI1002 68,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,60,CL,4,3,504-GĐ4-A,,Học tuần 1-10
+501,"K68E-RE1+K68E-RE2+K68E-RE3",RBE3012 68,Các cơ cấu chấp hành Robot,LT,Huỳnh Bá Phúc,3,60,CL,6,3,102-GĐ3,,Học tuần 1-10
+502,"K68E-RE1+K68E-RE2+K68E-RE3",RBE3012 68,Các cơ cấu chấp hành Robot,TH,Huỳnh Bá Phúc,3,60,CL,6,2,106-GĐ3,,Học tuần 2-11
+503,K68G-AT1,AGT3101 23,Lập trình Python cho nông nghiệp,LT,Vũ Minh Trung,3,25,CL,7,4,501-GĐ4-A,,Học tuần 1-15
+504,K68G-AT1,AGT3102 23,Lập trình trực quan hóa dữ liệu,LT,Nguyễn Ngọc Ánh,3,25,CL,7,3,501-GĐ4-A,,Học tuần 1-15
+505,K68G-AT1,AGT3103 23,Phân tích dữ liệu nông nghiệp,LT,Nguyễn Thị Ngọc Ánh,3,25,CL,2,1,501-GĐ4-A,,Học tuần 1-15
+506,K68G-AT1,AGT3018 23,"Kỹ thuật đo lường và cảm biến ứng dụng trong nông nghiệp",LT,Phạm Minh Triển,3,25,CL,6,3,302-GĐ4-A,,Học tuần 1-10
+507,K68G-AT1,AGT3018 23,"Kỹ thuật đo lường và cảm biến ứng dụng trong nông nghiệp",TH,Vũ Minh Trung,3,25,CL,6,2,205-GĐ4-A,,Học tuần 2-11
+508,"K68G-AT1+K68G-AT2",AGT2008 23,"Khí tượng nông nghiệp và biến đổi khí hậu",LT,Phạm Châu Thùy+Nguyễn Thị Ngọc Ánh,3,50,CL,2,4,205-GĐ4-A,,Học tuần 1-15
+509,"K68G-AT1+K68G-AT2",AGT3115 23,Bảo vệ thực vật,LT,Lê Xuân Vị+Lê Thị Hiên+Chu Đức Hà,4,50,CL,2,3,306-GĐ4-A,,Học tuần 1-15
+510,K68G-AT1,AGT3115 23,Bảo vệ thực vật,PTNNN2,Lê Thị Hiên+Chu Đức Hà,4,25,1,4,1,"Viện Bảo vệ thực vật",,Học tuần 11-15
+511,K68G-AT1,AGT3115 23,Bảo vệ thực vật,PTNNN2,Lê Thị Hiên+Chu Đức Hà,4,25,2,4,2,"Viện Bảo vệ thực vật",,Học tuần 11-15
+512,K68G-AT2,AGT3115 23,Bảo vệ thực vật,PTNNN2,Lê Thị Hiên+Chu Đức Hà,4,25,1,4,1,"Viện Bảo vệ thực vật",,Học tuần 11-15
+513,K68G-AT2,AGT3115 23,Bảo vệ thực vật,PTNNN2,Lê Thị Hiên+Chu Đức Hà,4,25,2,4,2,"Viện Bảo vệ thực vật",,Học tuần 11-15
+514,K68G-AT2,AGT3120 23,Công nghệ sinh học phân tử,LT,Lê Thị Hiên+Chu Đức Hà,4,25,CL,5,2,502-GĐ4-A,,Học tuần 1-15
+515,K68G-AT2,AGT3120 23,Công nghệ sinh học phân tử,TH,Lê Thị Hiên+Chu Đức Hà,4,25,CL,5,3,PTNNN1,,Học tuần 11-15
+516,K68G-AT2,AGT3120 23,Công nghệ sinh học phân tử,TH,Lê Thị Hiên+Chu Đức Hà,4,25,CL,5,4,PTNNN1,,Học tuần 11-15
+517,K68G-AT2,AGT3121 23,Công nghệ vi sinh nông nghiệp,LT,Hà Thị Quyến,4,25,CL,2,1,502-GĐ4-A,,Học tuần 1-15
+518,K68G-AT2,AGT3121 23,Công nghệ vi sinh nông nghiệp,TH,Hà Thị Quyến,4,25,CL,3,1,PTNNN1,,Học tuần 9-13
+519,K68G-AT2,AGT3121 23,Công nghệ vi sinh nông nghiệp,TH,Hà Thị Quyến,4,25,CL,3,2,PTNNN1,,Học tuần 9-13
+520,K68G-AT2,AGT3122 23,Công nghệ tế bào động và thực vật,LT,Vũ Thị Huyền+Nguyễn Khánh Vân,4,25,CL,2,2,502-GĐ4-A,,Học tuần 1-10
+521,K68G-AT2,AGT3122 23,Công nghệ tế bào động và thực vật,TH,Vũ Thị Huyền,4,25,CL,3,3,405-E5,,Học tuần 11-15
+522,K68G-AT2,AGT3122 23,Công nghệ tế bào động và thực vật,TH,Vũ Thị Huyền,4,25,CL,3,4,405-E5,,Học tuần 11-15
+523,K68I-CN,HIS1001 3,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,70,CL,2,2,106-GĐ4-A,,Học tuần 1-10
+524,K68I-CN,INT3303 1,Mạng không dây,LT,Nguyễn Hoài Sơn,3,70,CL,2,3,106-GĐ4-A,,Học tuần 1-15
+525,K68I-CN,INT3307E 1,An toàn và an ninh mạng,LT,Nguyễn Đại Thọ,3,70,CL,2,4,106-GĐ4-A,,Học tuần 1-15
+526,K68I-CN,INT3310 1,Quản trị mạng,LT,Dương Lê Minh,3,70,CL,6,4,106-GĐ4-A,,Học tuần 1-15
+527,K68I-CN,POL1001 44,Tư tưởng Hồ Chí Minh,LT,ĐHKHXHNV,2,70,CL,6,1,106-GĐ4-A,,Học tuần 1-10
+528,K68I-CN,INT3125 1,Các chuyên đề trong TT&MMT,LT,Dương Lê Minh,3,40,CL,6,3,402-GĐ4-A,,Học tuần 1-15
+529,K68I-CN,INT3301 1,Thực hành hệ điều hành mạng,LT,Lê Thị Hợi,3,40,CL,6,2,402-GĐ4-A,,Học tuần 1-15
+530,K68I-CN,INT3301 1,Thực hành hệ điều hành mạng,TH,Lê Thị Hợi,3,40,CL,3,3,201-GĐ4-A,,Học tuần 1-15
+531,K68I-CN,INT3304 1,Lập trình mạng,LT,Hồ Đắc Phương,3,40,CL,6,2,401-GĐ4-A,,Học tuần 1-15
+532,K68I-CN,INT3319E 1,Điện toán đám mây,LT,Phạm Mạnh Linh,3,40,CL,6,3,404-GĐ4-A,,Học tuần 1-10
+533,K68I-CN,INT3319E 1,Điện toán đám mây,TH,Nguyễn Xuân Trường,3,40,CL,3,2,404-GĐ4-A,,Học tuần 1-10
+535,K68I-CS1,INT3405E 1,Học máy,LT,Tạ Việt Cường,3,80,CL,2,2,209-GĐ3,,Học tuần 1-15
+536,K68I-CS1,PHI1002 6,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,80,CL,2,1,209-GĐ3,,Học tuần 1-10
+537,K68I-CS1,HIS1001 7,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,80,CL,2,3,209-GĐ3,,Học tuần 1-10
+538,K68I-CS1,INT3105 2,Kiến trúc phần mềm,LT,Trần Mạnh Cường,3,80,CL,2,4,209-GĐ3,,Học tuần 1-15
+539,K68I-CS1,INT3111 1,Quản lý dự án phần mềm,LT,Phạm Ngọc Hùng,3,80,CL,3,2,209-GĐ3,,Học tuần 1-15
+541,K68I-CS2,INT3405E 2,Học máy,LT,Tạ Việt Cường,3,80,CL,3,1,211-GĐ3,,Học tuần 1-15
+542,K68I-CS2,PHI1002 7,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,80,CL,3,3,211-GĐ3,,Học tuần 1-10
+543,K68I-CS2,HIS1001 8,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,80,CL,3,2,211-GĐ3,,Học tuần 1-10
+544,K68I-CS2,INT3231 1,Công nghệ Blockchain,LT,Lê Hồng Hải,3,80,CL,3,4,211-GĐ3,,Học tuần 1-15
+545,K68I-CS2,INT3505E 1,Kiến trúc hướng dịch vụ,LT,Lê Khánh Trình,3,80,CL,2,1,211-GĐ3,,Học tuần 1-15
+546,K68I-CS2,INT3319 2,Điện toán đám mây,LT,Nguyễn Ngọc Tân,3,80,CL,5,2,106-GĐ3,,Học tuần 1-10
+547,K68I-CS2,INT3319 2,Điện toán đám mây,TH,Nguyễn Xuân Trường,3,80,CL,5,1,211-GĐ3,,Học tuần 1-10
+548,K68I-CS3,INT3405E 3,Học máy,LT,Lê Đức Trọng,3,80,CL,5,2,211-GĐ3,,Học tuần 1-15
+549,K68I-CS3,PHI1002 8,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,80,CL,6,3,207-GĐ3,,Học tuần 1-10
+550,K68I-CS3,HIS1001 9,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,80,CL,6,4,207-GĐ3,,Học tuần 1-10
+551,K68I-CS3,INT3406 3,Xử lý ngôn ngữ tự nhiên,LT,Nguyễn Văn Vinh,3,80,CL,6,2,209-GĐ3,,Học tuần 1-15
+552,K68I-CS3,INT2044E 1,Lý thuyết thông tin,LT,Nguyễn Phương Thái,3,80,CL,3,1,207-GĐ3,,Học tuần 1-15
+553,K68I-CS3,INT3505E 2,Kiến trúc hướng dịch vụ,LT,Lê Khánh Trình,3,80,CL,6,1,205-GĐ3,,Học tuần 1-15
+554,K68I-CS4,INT3405E 4,Học máy,LT,Lê Đức Trọng,3,80,CL,4,2,207-GĐ3,,Học tuần 1-15
+555,K68I-CS4,PHI1002 9,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,80,CL,4,1,205-GĐ3,,Học tuần 1-10
+556,K68I-CS4,HIS1001 10,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,80,CL,6,2,207-GĐ3,,Học tuần 1-10
+557,K68I-CS4,INT2041 1,Tương tác người-máy,LT,Ngô Thị Duyên,3,50,CL,5,2,107-GĐ3,,Học tuần 1-15
+558,K68I-CS4,INT3421 1,Khoa học thần kinh,LT,Nguyễn Thế Hoàng Anh,3,80,CL,4,3,209-GĐ3,,Học tuần 1-15
+559,K68I-CS4,INT3404E 1,Xử lý ảnh,LT,Lê Thanh Hà,3,80,CL,6,3,205-GĐ3,,Học tuần 1-15
+560,K68I-IS1,INT3230E 2,Mật mã và An toàn thông tin,LT,Lê Phê Đô,4,35,CL,2,1,204-GĐ3,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+561,K68I-IS1,INT3230E 2,Mật mã và An toàn thông tin,LT,Lê Phê Đô,4,35,CL,4,2,402-GĐ4-A,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+562,K68I-IS1,INT3306 3,Phát triển ứng dụng Web,LT,Lê Đình Thanh,3,35,CL,3,1,204-GĐ3,,Học tuần 1-15
+563,K68I-IS1,INT3306 3,Phát triển ứng dụng Web,TH,Đào Minh Thư,3,35,CL,4,4,307-GĐ4-A,,Học tuần 1-15
+564,K68I-IS1,INT3231E 1,Công nghệ Blockchain,LT,Lê Hồng Hải,4,35,CL,4,3,305-GĐ4-A,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+565,K68I-IS1,INT3231E 1,Công nghệ Blockchain,LT,Lê Hồng Hải,4,35,CL,5,2,204-GĐ3,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+566,K68I-IS1+K68I-IS2,INT3209E 1,Khai phá dữ liệu,LT,Phan Xuân Hiếu,3,72,CL,3,2,207-GĐ3,,Học tuần 1-15
+567,K68I-IS1+K68I-IS2,INT3201 1,Cơ sở các hệ thống thông tin,LT,Hà Quang Thuỵ,4,72,CL,3,3,207-GĐ3,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+568,K68I-IS1+K68I-IS2,INT3201 1,Cơ sở các hệ thống thông tin,LT,Hà Quang Thuỵ,4,72,CL,6,1,206-GĐ3,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+569,K68I-IS1+K68I-IS2,PEC1008 7,Kinh tế chính trị Mác – Lênin,LT,ĐHKHXHNV,2,72,CL,3,4,207-GĐ3,,Học tuần 1-10
+570,K68I-IS2,INT3236E 1,Phát triển ứng dụng doanh nghiệp,LT,Lê Hồng Hải,4,35,CL,2,2,204-GĐ3,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+571,K68I-IS2,INT3236E 1,Phát triển ứng dụng doanh nghiệp,LT,Lê Hồng Hải,4,35,CL,4,1,206-GĐ4-A,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+572,K68I-IS2,INT3501E 1,Khoa học dịch vụ,LT,Hà Quang Thuỵ,3,35,CL,3,1,402-GĐ4-A,,Học tuần 1-15
+573,K68I-IT1,INT3120 1,Phát triển ứng dụng di động,LT,Lê Khánh Trình,3,40,CL,5,1,214-GĐ3,,Học tuần 1-15
+574,K68I-IT1,INT3110 1,"Phân tích và thiết kế hướng đối tượng",LT,Đặng Đức Hạnh,3,40,CL,2,3,214-GĐ3,,Học tuần 1-15
+575,K68I-IT1,INT3109 1,Thu thập và phân tích yêu cầu,LT,Đặng Đức Hạnh,3,40,CL,2,2,214-GĐ3,,Học tuần 1-15
+577,K68I-IT1,INT3401 1,Trí tuệ nhân tạo,LT,Nguyễn Thanh Thủy,3,60,CL,3,1,104-GĐ4-B,,Học tuần 1-15
+578,K68I-IT1,HIS1001 4,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,60,CL,3,2,104-GĐ4-B,,Học tuần 1-10
+579,K68I-IT2,INT3401 2,Trí tuệ nhân tạo,LT,Nguyễn Thanh Thủy,3,60,CL,6,4,201-GĐ4-B,,Học tuần 1-15
+580,K68I-IT2,HIS1001 5,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,60,CL,6,3,106-GĐ4-A,,Học tuần 1-10
+581,K68I-IT2,INT3209 1,Khai phá dữ liệu,LT,Lê Hoàng Quỳnh,3,60,CL,3,2,102-GĐ4-B,,Học tuần 1-15
+582,K68I-IT2,INT3506 1,Các hệ thống thương mại điện tử,LT,Bùi Quang Hưng,3,60,CL,3,3,110-GĐ4-B,,Học tuần 1-15
+583,K68I-IT2,INT3501 1,Khoa học dịch vụ,LT,Hà Quang Thuỵ,3,60,CL,3,4,109-GĐ4-B,,Học tuần 1-15
+584,K68I-IT2,INT3209 2,Khai phá dữ liệu,LT,Phan Xuân Hiếu,3,60,CL,6,2,211-GĐ3,,Học tuần 1-15
+585,K68I-IT3,INT3401 3,Trí tuệ nhân tạo,LT,Nguyễn Thị Nhật Thanh,3,60,CL,5,1,207-GĐ4-A,,Học tuần 1-15
+586,K68I-IT3,HIS1001 6,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,60,CL,6,2,204-GĐ4-A,,Học tuần 1-10
+587,K68I-IT3,INT3306 2,Phát triển ứng dụng Web,LT,Lê Đình Thanh,3,60,CL,5,2,207-GĐ4-A,,Học tuần 1-10
+588,K68I-IT3,INT3306 2,Phát triển ứng dụng Web,TH,Vũ Đức Trung,3,60,CL,3,2,207-GĐ4-A,,Học tuần 1-10
+589,K68I-IT3,INT3303 2,Mạng không dây,LT,Nguyễn Hoài Sơn+Nguyễn Ngọc Tân,3,60,CL,5,3,209-GĐ4-B,,Học tuần 1-15
+590,K68I-IT3,INT3305 1,Truyền thông đa phương tiện,LT,Hoàng Xuân Tùng,3,60,CL,3,3,109-GĐ4-B,,Học tuần 1-15
+591,K68I-IT3,INT3319 3,Điện toán đám mây,LT,Phạm Mạnh Linh,3,60,CL,3,4,207-GĐ4-A,,Học tuần 1-10
+592,K68I-IT3,INT3319 3,Điện toán đám mây,TH,Nguyễn Xuân Trường,3,60,CL,3,1,207-GĐ4-A,,Học tuần 1-10
+593,K68I-IT1,INT3406 1,Xử lý ngôn ngữ tự nhiên,LT,Nguyễn Văn Vinh,3,20,CL,3,3,506-GĐ4-A,,Học tuần 1-15
+594,K68I-IT1,INT3405 7,Học máy,LT,Tạ Việt Cường,3,20,CL,5,2,210-GĐ3,,Học tuần 1-15
+595,K68I-IT1,INT3402 1,Chương trình dịch,LT,Nguyễn Văn Vinh,3,20,CL,3,4,506-GĐ4-A,,Học tuần 1-15
+596,K68I-IT20,PHI1002 5,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,70,CL,4,3,103-GĐ4-A,,Học tuần 1-10
+597,K68I-IT20,HIS1001 1,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,70,CL,4,4,103-GĐ4-A,,Học tuần 1-10
+598,K68I-IT20,INT2214 1,Nguyên lý hệ điều hành,LT,Lê Hoàng Quỳnh,4,70,CL,6,3,105-GĐ3,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+599,K68I-IT20,INT2214 1,Nguyên lý hệ điều hành,LT,Lê Hoàng Quỳnh,4,70,CL,3,4,103-GĐ4-A,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+600,K68I-IT20,JAP2084 1,Tiếng Nhật 3A,LT,Framgia,3,20,CL,3,2,103-GĐ4-A,,"Học 2 ca/tuần, nếu kết thúc muộn hơn tuần 10 thì thi vào đợt 2"
+601,K68I-IT20,JAP2084 1,Tiếng Nhật 3A,LT,Framgia,3,20,CL,2,1,103-GĐ4-A,,"Học 2 ca/tuần, nếu kết thúc muộn hơn tuần 10 thì thi vào đợt 2"
+602,K68I-IT20,JAP2084 2,Tiếng Nhật 3A,LT,Framgia,3,20,CL,3,3,103-GĐ4-A,,"Học 2 ca/tuần, nếu kết thúc muộn hơn tuần 10 thì thi vào đợt 2"
+603,K68I-IT20,JAP2084 2,Tiếng Nhật 3A,LT,Framgia,3,20,CL,2,2,210-GĐ4-B,,"Học 2 ca/tuần, nếu kết thúc muộn hơn tuần 10 thì thi vào đợt 2"
+604,K68I-IT20,JAP2084 3,Tiếng Nhật 3A,LT,Framgia,3,20,CL,4,2,103-GĐ4-A,,
+605,K68I-IT20,JAP2084 3,Tiếng Nhật 3A,LT,Framgia,3,20,CL,2,4,103-GĐ4-A,,
+606,K68I-IT20,INT3110 2,Phân tích thiết kế hướng đối tượng,LT,Tô Văn Khánh,3,35,CL,5,2,217-GĐ3,,Học tuần 1-15
+607,K68I-IT20,INT3117 1,"Kiểm thử và đảm bảo chất lượng phần mềm",LT,Nguyễn Thu Trang,3,35,CL,6,2,210-GĐ3,,Học tuần 1-15
+600,K68M-AT,EMA2022 38,Cơ sở công nghệ chế tạo máy,LT,Trần Anh Quân,3,80,CL,3,2,102-GĐ3,,Học tuần 1-10
+601,K68M-AT,EMA2022 38,Cơ sở công nghệ chế tạo máy,TH,Trần Anh Quân,3,40,1,3,3,217-GĐ3,,Học tuần 2-11
+602,K68M-AT,EMA2022 38,Cơ sở công nghệ chế tạo máy,TH,Trần Anh Quân,3,40,2,3,1,214-GĐ3,,Học tuần 2-11
+603,K68M-AT,EMA2024 38,Kỹ thuật đo lường và cảm biến,LT,Đinh Trần Hiệp+Ngô Tiến Sáng,3,80,CL,5,1,206-GĐ3,,Học tuần 1-10
+604,K68M-AT,EMA2024 38,Kỹ thuật đo lường và cảm biến,TH,Đinh Trần Hiệp+Ngô Tiến Sáng,3,40,1,4,2,213-GĐ3,,Học tuần 2-11
+605,K68M-AT,EMA2024 38,Kỹ thuật đo lường và cảm biến,TH,Đinh Trần Hiệp+Ngô Tiến Sáng,3,40,2,6,3,214-GĐ3,,Học tuần 2-11
+606,K68M-AT,EMA2040 38,Máy CNC và CAD/CAM,LT,Trần Thanh Tùng,2,80,CL,3,4,102-GĐ3,,Học tuần 1-6
+607,K68M-AT,EMA2040 38,Máy CNC và CAD/CAM,TH,Bùi Huy Hoàng,2,20,1,2,1,Xưởng cơ,,Học tuần 2-9
+608,K68M-AT,EMA2040 38,Máy CNC và CAD/CAM,TH,Bùi Huy Hoàng,2,20,2,7,2,Xưởng cơ,,Học tuần 2-9
+609,K68M-AT,EMA2040 38,Máy CNC và CAD/CAM,TH,Bùi Huy Hoàng,2,20,3,7,1,Xưởng cơ,,Học tuần 2-9
+610,K68M-AT,EMA2040 38,Máy CNC và CAD/CAM,TH,Bùi Huy Hoàng,2,20,4,2,2,Xưởng cơ,,Học tuần 2-9
+611,K68M-AT,EMA2044 38,Nhập môn Tự động hóa,LT,Nguyễn Thị Hồng Hạnh,3,80,CL,6,1,102-GĐ3,,Học tuần 1-10
+612,K68M-AT,EMA2044 38,Nhập môn Tự động hóa,TH,Nguyễn Thị Hồng Hạnh,3,40,1,4,3,402-GĐ4-A,,Học tuần 2-11
+613,K68M-AT,EMA2044 38,Nhập môn Tự động hóa,TH,Nguyễn Thị Hồng Hạnh,3,40,2,3,3,210-GĐ3,,Học tuần 2-11
+615,K68M-AT,INT2013 38,"Kiến trúc máy tính và mạng truyền thông công nghiệp",LT,Đặng Anh Việt,3,80,CL,4,1,102-GĐ3,,Học tuần 1-10
+616,K68M-AT,INT2013 38,"Kiến trúc máy tính và mạng truyền thông công nghiệp",TH,Đặng Anh Việt,3,40,1,4,4,107-GĐ3,,Học tuần 2-11
+617,K68M-AT,INT2013 38,"Kiến trúc máy tính và mạng truyền thông công nghiệp",TH,Đặng Anh Việt,3,40,2,6,2,214-GĐ3,,Học tuần 2-11
+618,"K68M-EM1+K68M-EM2",EMA2005 33,Kỹ thuật điện và điện tử,LT,Phạm Minh Triển,3,70,CL,2,4,204-GĐ4-A,,Học tuần 1-11
+619,K68M-EM1,EMA2005 33,Kỹ thuật điện và điện tử,TH,Vũ Minh Trung,3,35,1,2,3,505-GĐ4-A,,
+620,K68M-EM2,EMA2005 33,Kỹ thuật điện và điện tử,TH,Vũ Minh Trung,3,35,2,3,2,204-GĐ3,,
+621,"K68M-EM1+K68M-EM2",EMA2008 33,Cơ học chất lỏng,LT,Trần Thu Hà,3,70,CL,4,4,204-GĐ4-A,,Học tuần 1-10
+622,K68M-EM1,EMA2008 33,Cơ học chất lỏng,TH,Trần Thu Hà,3,35,1,6,3,205-GĐ4-A,,Học tuần 2-11
+623,K68M-EM2,EMA2008 33,Cơ học chất lỏng,TH,Trần Thu Hà,3,35,2,6,4,205-GĐ4-A,,Học tuần 2-11
+624,"K68M-EM1+K68M-EM2",EMA2012 33,Sức bền vật liệu và cơ học kết cấu,LT,Nguyễn Cao Sơn,4,70,CL,5,3,105-GĐ3,,Học tuần 1-15
+625,K68M-EM1,EMA2012 33,Sức bền vật liệu và cơ học kết cấu,TH,Nguyễn Cao Sơn,4,35,1,3,2,505-GĐ4-A,,Học tuần 2-11
+626,K68M-EM2,EMA2012 33,Sức bền vật liệu và cơ học kết cấu,TH,Nguyễn Cao Sơn,4,35,2,5,1,204-GĐ3,,Học tuần 2-11
+627,"K68M-EM1+K68M-EM2",EMA2013 33,Lý thuyết điều khiển tự động,LT,Trần Cường Hưng,3,70,CL,3,3,204-GĐ4-A,,Học tuần 1-10
+628,K68M-EM1,EMA2013 33,Lý thuyết điều khiển tự động,TH,Nguyễn Quang Nhã,3,35,1,4,2,405-GĐ4-A,,Học tuần 2-11
+629,K68M-EM2,EMA2013 33,Lý thuyết điều khiển tự động,TH,Nguyễn Quang Nhã,3,35,2,4,3,306-GĐ4-A,,Học tuần 2-11
+630,"K68M-EM1+K68M-EM2",EMA2035 33,Kỹ thuật mô hình - mô phỏng,LT,Đinh Văn Mạnh,3,70,CL,4,1,204-GĐ4-A,,Học tuần 1-10
+631,K68M-EM1,EMA2035 33,Kỹ thuật mô hình - mô phỏng,TH,Nguyễn Đình Kiên,3,35,1,4,3,505-GĐ4-A,,Học tuần 2-11
+632,K68M-EM2,EMA2035 33,Kỹ thuật mô hình - mô phỏng,TH,Nguyễn Đình Kiên,3,35,2,2,3,204-GĐ3,,Học tuần 2-11
+633,"K68M-EM1+K68M-EM2",EMA2045 33,Lý thuyết cắt gọt kim loại,LT,Bùi Huy Hoàng,2,70,CL,3,1,105-GĐ3,,Học tuần 1-10
+634,"K68M-EM1+K68M-EM2",HIS1001 33,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,70,CL,2,2,204-GĐ4-A,,Học tuần 1-10
+635,K68M-MT1,HIS1001 43,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,60,CL,6,2,509-GĐ4-B,,Học tuần 1-10
+636,K68M-MT1,EMA2022E 43,Cơ sở công nghệ chế tạo máy,LT,Trần Anh Quân,3,60,CL,5,1,204-GĐ4-A,,Học tuần 1-10
+637,K68M-MT1,EMA2022E 43,Cơ sở công nghệ chế tạo máy,TH,Trần Anh Quân,3,60,CL,5,3,208-GĐ4-B,,Học tuần 2-11
+638,K68M-MT1,INT2013 43,"Kiến trúc máy tính và mạng truyền thông công nghiệp",LT,Đặng Anh Việt,3,60,CL,6,3,509-GĐ4-B,,Học tuần 1-10
+639,K68M-MT1,INT2013 43,"Kiến trúc máy tính và mạng truyền thông công nghiệp",TH,Đặng Anh Việt,3,60,CL,5,2,207-GĐ4-B,,Học tuần 2-11
+640,K68M-MT1,EMA2027 43,Nhập môn cơ điện tử,LT,Đỗ Trần Thắng,3,60,CL,2,3,207-GĐ4-B,,Học tuần 1-10
+641,K68M-MT1,EMA2027 43,Nhập môn cơ điện tử,TH,Đỗ Trần Thắng,3,60,CL,2,4,109-GĐ4-B,,Học tuần 2-11
+642,K68M-MT1,POL1001 50,Tư tưởng Hồ Chí Minh,LT,ĐHKHXHNV,2,60,CL,6,1,509-GĐ4-B,,Học tuần 1-10
+643,K68M-MT1,EMA2024E 43,Kỹ thuật đo lường và cảm biến,LT,Đinh Trần Hiệp+Lê Công Hiếu,3,60,CL,3,2,207-GĐ4-B,,Học tuần 1-10
+644,K68M-MT1,EMA2024E 43,Kỹ thuật đo lường và cảm biến,TH,Lê Công Hiếu,3,60,CL,2,2,207-GĐ4-B,,Học tuần 2-11
+645,K68M-MT1,ELT2028 43,"Chuyên nghiệp trong công nghệ (môn bổ trợ)",LT,Đặng Thế Ba,2,60,CL,3,3,207-GĐ4-B,,Học tuần 1-10
+646,K68M-MT2,HIS1001 44,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,60,CL,2,1,203-GĐ4-A,,Học tuần 1-10
+647,K68M-MT2,EMA2022E 44,Cơ sở công nghệ chế tạo máy,LT,Trần Anh Quân,3,60,CL,5,2,102-GĐ4-B,,Học tuần 1-10
+648,K68M-MT2,EMA2022E 44,Cơ sở công nghệ chế tạo máy,TH,Trần Anh Quân,3,60,CL,2,2,110-GĐ4-B,,Học tuần 2-11
+649,K68M-MT2,INT2013 44,"Kiến trúc máy tính và mạng truyền thông công nghiệp",LT,Đặng Anh Việt,3,60,CL,5,1,106-GĐ4-A,,Học tuần 1-10
+650,K68M-MT2,INT2013 44,"Kiến trúc máy tính và mạng truyền thông công nghiệp",TH,Đặng Anh Việt,3,60,CL,3,4,105-GĐ4-B,,Học tuần 2-11
+651,K68M-MT2,EMA2027 44,Nhập môn cơ điện tử,LT,Đỗ Trần Thắng,3,60,CL,5,3,102-GĐ4-B,,Học tuần 1-10
+652,K68M-MT2,EMA2027 44,Nhập môn cơ điện tử,TH,Đỗ Trần Thắng,3,60,CL,5,4,102-GĐ4-B,,Học tuần 2-11
+653,K68M-MT2,POL1001 51,Tư tưởng Hồ Chí Minh,LT,ĐHKHXHNV,2,60,CL,6,4,203-GĐ4-A,,Học tuần 1-10
+654,K68M-MT2,EMA2024E 44,Kỹ thuật đo lường và cảm biến,LT,Đinh Trần Hiệp+Lê Công Hiếu,3,60,CL,6,1,103-GĐ4-B,,Học tuần 1-10
+655,K68M-MT2,EMA2024E 44,Kỹ thuật đo lường và cảm biến,TH,Lê Công Hiếu,3,60,CL,3,3,203-GĐ4-A,,Học tuần 2-11
+657,K68M-MT3,HIS1001 45,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,60,CL,4,1,510-GĐ4-B,,Học tuần 1-10
+658,K68M-MT3,EMA2022E 45,Cơ sở công nghệ chế tạo máy,LT,Trần Anh Quân,3,60,CL,2,3,510-GĐ4-B,,Học tuần 1-10
+659,K68M-MT3,EMA2022E 45,Cơ sở công nghệ chế tạo máy,TH,Trần Anh Quân,3,60,CL,2,1,510-GĐ4-B,,Học tuần 2-11
+660,K68M-MT3,INT2013 45,"Kiến trúc máy tính và mạng truyền thông công nghiệp",LT,Đặng Anh Việt,3,60,CL,6,4,510-GĐ4-B,,Học tuần 1-10
+661,K68M-MT3,INT2013 45,"Kiến trúc máy tính và mạng truyền thông công nghiệp",TH,Đặng Anh Việt,3,60,CL,3,1,510-GĐ4-B,,Học tuần 2-11
+662,K68M-MT3,EMA2027 45,Nhập môn cơ điện tử,LT,Đỗ Trần Thắng,3,60,CL,6,1,510-GĐ4-B,,Học tuần 1-10
+663,K68M-MT3,EMA2027 45,Nhập môn cơ điện tử,TH,Đỗ Trần Thắng,3,60,CL,2,2,510-GĐ4-B,,Học tuần 2-11
+664,K68M-MT3,POL1001 52,Tư tưởng Hồ Chí Minh,LT,ĐHKHXHNV,2,60,CL,5,1,510-GĐ4-B,,Học tuần 1-10
+665,K68M-MT3,EMA2024E 45,Kỹ thuật đo lường và cảm biến,LT,Đinh Trần Hiệp+Lê Công Hiếu,3,60,CL,6,2,510-GĐ4-B,,Học tuần 1-10
+666,K68M-MT3,EMA2024E 45,Kỹ thuật đo lường và cảm biến,TH,Lê Công Hiếu,3,60,CL,2,4,510-GĐ4-B,,Học tuần 2-11
+668,K68P-EE,POL1001 42,Tư tưởng Hồ Chí Minh,LT,ĐHKHXHNV,2,60,CL,5,1,201-GĐ4-B,,Học tuần 1-10
+669,K68P-EE,EPN2066 1,Vật lý thiết bị và linh kiện,LT,Nguyễn Đức Cường,2,60,CL,5,2,107-GĐ4-B,,Học tuần 1-10
+670,K68P-EE,EET2025 1,Cơ sở hóa học và nhiên liệu 2,LT,Nguyễn Phương Hoài Nam,4,60,CL,4,3,107-GĐ4-B,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+671,K68P-EE,EET2025 1,Cơ sở hóa học và nhiên liệu 2,LT,Nguyễn Phương Hoài Nam,4,60,CL,3,4,509-GĐ4-B,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+672,K68P-EE,EET2027 1,"Cơ sở, kỹ thuật và hệ thống năng lượng 2",LT,Đồng Quốc Việt,4,60,CL,3,3,107-GĐ4-B,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+673,K68P-EE,EET2027 1,"Cơ sở, kỹ thuật và hệ thống năng lượng 2",LT,Đồng Quốc Việt,4,60,CL,4,4,203-GĐ4-B,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+674,K68P-EE,EET2006 1,Truyền nhiệt và truyền khối,LT,Lê Việt Cường,3,60,CL,4,2,204-GĐ4-B,,Học tuần 1-15
+675,K68P-EE,EET2010 1,Kỹ thuật lạnh và điều hòa không,LT,Phạm Đức Hạnh,3,60,CL,3,2,107-GĐ4-B,,Học tuần 1-15
+676,K68P-EP,POL1001 43,Tư tưởng Hồ Chí Minh,LT,ĐHKHXHNV,2,80,CL,2,1,206-GĐ3,,Học tuần 1-10
+677,K68P-EP,EPN2001 1,Các phương pháp phân tích vật liệu,LT,Nguyễn Phương Hoài Nam,3,80,CL,6,4,206-GĐ3,,Học tuần 1-15
+678,K68P-EP,EPN2061 1,Tin học tích hợp vi mạch,LT,Bùi Đình Tú,3,80,CL,6,2,206-GĐ3,,Học tuần 1-15
+679,K68P-EP,EPN2025 1,"Kỹ thuật màng mỏng và công nghệ nano",LT,Nguyễn Thị Minh Hồng,3,80,CL,2,2,206-GĐ3,,Học tuần 1-15
+680,K68P-EP,EPN2063 1,Vật lý bán dẫn và linh kiện,LT,Nguyễn Đức Cường,3,80,CL,6,3,206-GĐ3,,Học tuần 1-15
+681,K68P-EP,EPN2064 1,Từ học và siêu dẫn,LT,"Đỗ Thị Hương Giang+Nguyễn Thị Minh Hồng",3,80,CL,2,3,206-GĐ3,,Học tuần 1-15
+682,"K68S-AE1+K68S-AE2",AER2003 22,"Kỹ thuật Điện - Điện tử Hàng không",LT,Nguyễn Đình Dũng+Dương Mạnh Hùng,3,80,2,4,3,205-GĐ3,,Học tuần 1-15
+686,"K68S-AE1+K68S-AE2",AER2038 22,Nhiệt động lực học,LT,Nguyễn Hoàng Quân,3,80,CL,4,2,205-GĐ3,,Học tuần 1-15
+687,"K68S-AE1+K68S-AE2",AER3001 22,Kết cấu hàng không,LT,Nguyễn Hoàng Quân,3,80,CL,5,1,102-GĐ3,,Học tuần 1-15
+688,"K68S-AE1+K68S-AE2",AER3051 22,Lý thuyết điều khiển tự động,LT,Nguyễn Duy Trung,3,80,CL,5,4,102-GĐ3,,Học tuần 1-15
+689,"K68S-AE1+K68S-AE2",PHI1006 22,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,80,CL,3,1,102-GĐ3,,Học tuần 1-15
+690,"K68S-AE1+K68S-AE2",POL1001 45,Tư tưởng Hồ Chí Minh,LT,ĐHKHXHNV,2,80,CL,5,2,208-GĐ3,,Học tuần 1-10
+691,"K68S-AE1+K68S-AE2",ELT2035 22,Tín hiệu và hệ thống,LT,Lê Trần Mạnh,3,80,CL,4,4,102-GĐ3,,Học tuần 1-15
+692,K69A-AI1,MAT1101 16,Xác suất thống kê,LT,Nguyễn Bích Vân,3,53,CL,6,1,211-GĐ3,,Học tuần 1-15
+693,K69A-AI1,AIT2006 1,Lập trình xử lý dữ liệu,LT,Đào Việt Anh,3,53,CL,2,4,202-GĐ4-B,,Học tuần 1-10
+694,K69A-AI1,AIT2006 1,Lập trình xử lý dữ liệu,TH,Trịnh Ngọc Huỳnh,3,53,CL,4,3,404-GĐ4-A,,Học tuần 1-10
+695,K69A-AI1,AIT2005 1,Cơ sở toán học của trí tuệ nhân tạo,LT,Nguyễn Bích Vân,3,53,CL,4,2,106-GĐ3,,Học tuần 1-15
+696,"K69A-AI1+K69A-AI-TC1",PHI1006 9,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,60,CL,2,3,109-GĐ4-B,,Học tuần 1-15
+697,"K69A-AI1+K69A-AI-TC1",ELT2035 1,Tín hiệu và hệ thống,LT,Lê Vũ Hà,3,60,CL,2,1,109-GĐ4-B,,Học tuần 1-15
+698,"K69A-AI1+K69A-AI-TC1",AIT2002 1,Cơ sở hệ thống máy tính,LT,Đỗ Thu Uyên,3,60,CL,2,2,109-GĐ4-B,,Học tuần 1-10
+699,"K69A-AI1+K69A-AI-TC1",AIT2002 1,Cơ sở hệ thống máy tính,TH,Nguyễn Hải Toàn,3,60,CL,4,4,109-GĐ4-B,,Học tuần 1-10
+700,K69A-AI2,MAT1101 17,Xác suất thống kê,LT,Nguyễn Bích Vân,3,53,CL,6,2,407-GĐ4-A,,Học tuần 1-15
+701,K69A-AI2,AIT2006 2,Lập trình xử lý dữ liệu,LT,Nguyễn Tuấn Phong,3,53,CL,5,2,203-GĐ4-B,,Học tuần 1-10
+702,K69A-AI2,AIT2006 2,Lập trình xử lý dữ liệu,TH,Trịnh Ngọc Huỳnh,3,53,CL,2,1,403-GĐ4-A,,Học tuần 1-10
+703,K69A-AI2,AIT2005 2,Cơ sở toán học của trí tuệ nhân tạo,LT,Bùi Văn Vượng,3,53,CL,2,4,403-GĐ4-A,,Học tuần 1-15
+704,"K69A-AI2+K69A-AI-TC2",PHI1006 10,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,60,CL,4,1,104-GĐ4-B,,Học tuần 1-15
+705,"K69A-AI2+K69A-AI-TC2",ELT2035 2,Tín hiệu và hệ thống,LT,Lê Vũ Hà,3,60,CL,2,2,102-GĐ4-B,,Học tuần 1-15
+706,"K69A-AI2+K69A-AI-TC2",AIT2002 2,Cơ sở hệ thống máy tính,LT,Đỗ Thu Uyên,3,60,CL,5,1,508-GĐ4-B,,Học tuần 1-10
+707,"K69A-AI2+K69A-AI-TC2",AIT2002 2,Cơ sở hệ thống máy tính,TH,Nguyễn Hải Toàn,3,60,CL,2,3,102-GĐ4-B,,Học tuần 1-10
+708,K69A-AI3,MAT1101 18,Xác suất thống kê,LT,Đỗ Thái Dương,3,53,CL,4,4,510-GĐ4-B,,Học tuần 1-15
+709,K69A-AI3,AIT2006 3,Lập trình xử lý dữ liệu,LT,Nguyễn Tuấn Phong,3,53,CL,4,2,101-GĐ4-B,,Học tuần 1-10
+710,K69A-AI3,AIT2006 3,Lập trình xử lý dữ liệu,TH,Phạm Tiến Du,3,53,CL,4,3,307-GĐ4-A,,Học tuần 1-10
+711,K69A-AI3,AIT2005 3,Cơ sở toán học của trí tuệ nhân tạo,LT,Đỗ Thái Dương,3,53,CL,4,1,207-GĐ3,,Học tuần 1-15
+712,"K69A-AI3+K69A-AI-TC3",PHI1006 11,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,60,CL,3,3,303-GĐ4-A,,Học tuần 1-15
+713,"K69A-AI3+K69A-AI-TC3",ELT2035 3,Tín hiệu và hệ thống,LT,Lê Trung Thành,3,60,CL,5,1,303-GĐ4-A,,Học tuần 1-15
+714,"K69A-AI3+K69A-AI-TC3",AIT2002 3,Cơ sở hệ thống máy tính,LT,Đỗ Thu Uyên,3,60,CL,3,4,303-GĐ4-A,,Học tuần 1-10
+715,"K69A-AI3+K69A-AI-TC3",AIT2002 3,Cơ sở hệ thống máy tính,TH,Lương Sơn Bá,3,60,CL,3,2,303-GĐ4-A,,Học tuần 1-10
+716,K69A-AI4,MAT1101 19,Xác suất thống kê,LT,Đỗ Thái Dương,3,53,CL,5,2,404-GĐ4-A,,Học tuần 1-15
+717,K69A-AI4,AIT2006 4,Lập trình xử lý dữ liệu,LT,Đào Việt Anh,3,53,CL,4,3,510-GĐ4-B,,Học tuần 1-10
+718,K69A-AI4,AIT2006 4,Lập trình xử lý dữ liệu,TH,Phạm Tiến Du,3,53,CL,2,1,404-GĐ4-A,,Học tuần 1-10
+719,K69A-AI4,AIT2005 4,Cơ sở toán học của trí tuệ nhân tạo,LT,Bùi Văn Vượng,3,53,CL,4,2,107-GĐ3,,Học tuần 1-15
+720,"K69A-AI4+K69A-AI-TC4",PHI1006 12,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,60,CL,2,4,207-GĐ4-A,,Học tuần 1-15
+721,"K69A-AI4+K69A-AI-TC4",ELT2035 4,Tín hiệu và hệ thống,LT,Lê Trung Thành,3,60,CL,4,1,207-GĐ4-A,,Học tuần 1-15
+722,"K69A-AI4+K69A-AI-TC4",AIT2002 4,Cơ sở hệ thống máy tính,LT,Đỗ Thu Uyên,3,60,CL,2,3,207-GĐ4-A,,Học tuần 1-10
+723,"K69A-AI4+K69A-AI-TC4",AIT2002 4,Cơ sở hệ thống máy tính,TH,Lương Sơn Bá,3,60,CL,2,2,207-GĐ4-A,,Học tuần 1-10
+724,"K69A-AI-TC1+K69A-AI-TC2+K69A-AI-TC3+K69A-AI-TC4",AIT2004# 5,Cơ sở trí tuệ nhân tạo,LT,Nguyễn Việt Hà,3,30,CL,4,2,406-GĐ4-A,"Tiến trình tích cực, học trong 8 tuần đầu",Học tuần 1-8
+725,"K69A-AI-TC1+K69A-AI-TC2+K69A-AI-TC3+K69A-AI-TC4",AIT2004# 5,Cơ sở trí tuệ nhân tạo,LT,Nguyễn Việt Hà,3,30,CL,5,2,406-GĐ4-A,"Tiến trình tích cực, học trong 8 tuần đầu",Học tuần 1-8
+726,"K69A-AI-TC1+K69A-AI-TC2+K69A-AI-TC3+K69A-AI-TC4",INT3405# 5,Học máy,LT,Trần Quốc Long,3,30,CL,4,3,406-GĐ4-A,"Tiến trình tích cực, học trong 8 tuần sau",Học tuần 9-16
+727,"K69A-AI-TC1+K69A-AI-TC2+K69A-AI-TC3+K69A-AI-TC4",INT3405# 5,Học máy,LT,Trần Quốc Long,3,30,CL,6,2,202-GĐ4-A,"Tiến trình tích cực, học trong 8 tuần sau",Học tuần 9-16
+728,"K69A-AI-TC1+K69A-AI-TC2+K69A-AI-TC3+K69A-AI-TC4",AIT2005 5,Cơ sở toán học của trí tuệ nhân tạo,LT,Bùi Văn Vượng,3,30,CL,3,1,406-GĐ4-A,"Tiến trình tích cực, học trong 8 tuần đầu",Học tuần 1-8
+729,"K69A-AI-TC1+K69A-AI-TC2+K69A-AI-TC3+K69A-AI-TC4",AIT2005 5,Cơ sở toán học của trí tuệ nhân tạo,LT,Bùi Văn Vượng,3,30,CL,6,1,406-GĐ4-A,"Tiến trình tích cực, học trong 8 tuần đầu",Học tuần 1-8
+730,K69C-CE1,CTE2022 27,"Cơ học môi trường liên tục trong kỹ thuật",LT,Nguyễn Đình Đức+Trần Quốc Quân,3,60,CL,6,4,105-GĐ4-B,,Học tuần 1-10
+732,K69C-CE1,CTE2022 27,"Cơ học môi trường liên tục trong kỹ thuật",TH,Trần Quốc Quân,3,60,CL,5,2,110-GĐ4-B,,Học tuần 2-11
+733,K69C-CE2,CTE2022 28,"Cơ học môi trường liên tục trong kỹ thuật",LT,Nguyễn Đình Đức+Vũ Đức Thắng,3,77,CL,4,4,206-GĐ3,,Học tuần 1-10
+734,K69C-CE2,CTE2022 28,"Cơ học môi trường liên tục trong kỹ thuật",TH,Vũ Đức Thắng,3,38,1,4,2,302-GĐ4-A,,Học tuần 2-11
+735,K69C-CE2,CTE2022 28,"Cơ học môi trường liên tục trong kỹ thuật",TH,Vũ Đức Thắng,3,39,2,6,2,215-GĐ3,"Đổi thời gian, Giảng đường",Học tuần 2-11
+736,K69C-CE1,CTE2023 27,Cơ học kỹ thuật,LT,Phan Hải Đăng,3,60,CL,2,3,503-GĐ4-A,"Đổi thời gian, Giảng đường",Học tuần 1-10
+738,K69C-CE1,CTE2023 27,Cơ học kỹ thuật,TH,Phan Hải Đăng,3,60,CL,3,1,204-GĐ4-B,"Đổi thời gian, Giảng đường",Học tuần 2-11
+739,K69C-CE2,CTE2023 28,Cơ học kỹ thuật,LT,Phạm Đình Nguyện+Nguyễn Văn Duy,3,77,CL,5,1,208-GĐ3,,Học tuần 1-10
+740,K69C-CE2,CTE2023 28,Cơ học kỹ thuật,TH,Phạm Đình Nguyện+Nguyễn Văn Duy,3,38,1,2,1,202-GĐ4-A,,Học tuần 2-11
+741,K69C-CE2,CTE2023 28,Cơ học kỹ thuật,TH,Phạm Đình Nguyện+Nguyễn Văn Duy,3,39,2,4,1,401-GĐ4-A,,Học tuần 2-11
+742,K69C-CE1,CTE2027 27,Hình họa – Vẽ kỹ thuật,LT,Lê Thùy Dương+Bùi Văn Trường,4,60,CL,4,4,101-GĐ4-B,,Học tuần 1-10
+745,K69C-CE1,CTE2027 27,Hình họa – Vẽ kỹ thuật,TH,Lê Thùy Dương+Bùi Văn Trường,4,60,CL,6,3,110-GĐ4-B,,Học tuần 2-11
+746,K69C-CE1,CTE2027 27,Hình họa – Vẽ kỹ thuật,TH,Lê Thùy Dương+Bùi Văn Trường,4,60,CL,5,1,110-GĐ4-B,,Học tuần 2-11
+747,K69C-CE2,CTE2027 28,Hình họa – Vẽ kỹ thuật,LT,Lê Thùy Dương+Bùi Văn Trường,4,77,CL,3,4,206-GĐ3,,Học tuần 1-10
+748,K69C-CE2,CTE2027 28,Hình họa – Vẽ kỹ thuật,TH,Lê Thùy Dương+Bùi Văn Trường,4,38,1,4,1,402-GĐ4-A,,Học tuần 2-11
+749,K69C-CE2,CTE2027 28,Hình họa – Vẽ kỹ thuật,TH,Lê Thùy Dương+Bùi Văn Trường,4,38,1,2,2,504-GĐ4-A,,Học tuần 2-11
+750,K69C-CE2,CTE2027 28,Hình họa – Vẽ kỹ thuật,TH,Lê Thùy Dương+Bùi Văn Trường,4,39,2,4,2,404-GĐ4-A,,Học tuần 2-11
+751,K69C-CE2,CTE2027 28,Hình họa – Vẽ kỹ thuật,TH,Lê Thùy Dương+Bùi Văn Trường,4,39,2,5,2,213-GĐ3,,Học tuần 2-11
+752,K69C-CE1,CTE3053 27,Trắc địa,LT,Vũ Minh Anh,2,60,CL,2,1,110-GĐ4-B,,Học tuần 1-10
+753,K69C-CE2,CTE3053 28,Trắc địa,LT,Vũ Minh Anh,2,77,CL,6,1,208-GĐ3,"Đổi thời gian, Giảng đường",Học tuần 1-10
+754,K69C-CE1,EPN1096 27,Vật lý đại cương 2,LT,Hồ Thị Anh,2,60,CL,6,2,110-GĐ4-B,,Học tuần 1-10
+755,K69C-CE2,EPN1096 28,Vật lý đại cương 2,LT,Phạm Văn Vĩnh,2,77,CL,3,2,206-GĐ3,,Học tuần 1-10
+756,K69C-CE1,PHI1006 27,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,60,CL,4,3,102-GĐ4-B,,Học tuần 1-15
+757,K69C-CE2,PHI1006 28,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,77,CL,3,3,205-GĐ3,,Học tuần 1-15
+758,K69C-ID1,CTE2055 24,Vật liệu học cơ sở,LT,Nguyễn Đình Đức+Phan Hải Đăng,2,60,CL,3,2,109-GĐ4-B,,Học tuần 1-10
+759,K69C-ID1,CTE2056 24,Lập trình Python,LT,Ngô Đình Đạt+Phạm Hồng Ngọc,3,60,CL,6,2,102-GĐ4-B,,Học tuần 1-10
+760,K69C-ID1,CTE2056 24,Lập trình Python,TH,Ngô Đình Đạt+Phạm Hồng Ngọc,3,60,CL,6,4,107-GĐ4-B,,Học tuần 2-11
+761,K69C-ID1,CTE2060 24,"Đồ họa I: Adobe Photoshop, Illustrator and InDesign",LT,Dương Thị Tuyết Nhung,3,60,CL,3,1,109-GĐ4-B,,Học tuần 1-12
+762,K69C-ID1,CTE2060 24,"Đồ họa I: Adobe Photoshop, Illustrator and InDesign",TH,Dương Thị Tuyết Nhung,3,60,CL,3,3,207-GĐ4-A,,Học tuần 2-13
+764,K69C-ID1,CTE3131 24,Trình bày ý tưởng và khái niệm,LT,"Nguyễn Như Tùng (VNU-IS)+Nguyễn Văn Cảnh (ĐH Công nghiệp HN)",2,60,CL,5,4,207-GĐ4-B,"Đổi thời gian, Giảng đường",Học tuần 1-10
+765,K69C-ID1,PHI1006 24,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,60,CL,4,1,107-GĐ4-B,,Học tuần 1-15
+766,K69C-ID1,HIS1001 24,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,60,CL,3,4,107-GĐ4-B,,Học tuần 1-10
+767,K69C-ID1,CTE2063 24,Vẽ tĩnh vật,LT,Phạm Hoàng Vân,2,60,CL,2,1,107-GĐ4-B,,Học tuần 1-10
+768,K69C-ID2,CTE2055 25,Vật liệu học cơ sở,LT,Nguyễn Đình Đức+Phan Hải Đăng,2,60,CL,5,1,108-GĐ4-B,,Học tuần 1-10
+769,K69C-ID2,CTE2056 25,Lập trình Python,LT,Vũ Minh Anh+Nguyễn Văn Duy,3,60,CL,5,2,104-GĐ4-B,,Học tuần 1-10
+770,K69C-ID2,CTE2056 25,Lập trình Python,TH,Vũ Minh Anh+Nguyễn Văn Duy,3,60,CL,6,4,110-GĐ4-B,,Học tuần 2-11
+771,K69C-ID2,CTE2060 25,"Đồ họa I: Adobe Photoshop, Illustrator and InDesign",LT,Dương Thị Tuyết Nhung,3,60,CL,4,2,107-GĐ4-B,,Học tuần 1-12
+772,K69C-ID2,CTE2060 25,"Đồ họa I: Adobe Photoshop, Illustrator and InDesign",TH,Dương Thị Tuyết Nhung,3,60,CL,4,3,110-GĐ4-B,,Học tuần 2-13
+774,K69C-ID2,CTE3131 25,Trình bày ý tưởng và khái niệm,LT,"Nguyễn Như Tùng (VNU-IS)+Nguyễn Văn Cảnh (ĐH Công nghiệp HN)",2,60,CL,2,4,210-GĐ4-B,"Đổi thời gian, Giảng đường",Học tuần 1-10
+775,K69C-ID2,PHI1006 25,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,60,CL,6,3,507-GĐ4-B,,Học tuần 1-15
+776,K69C-ID2,HIS1001 25,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,60,CL,3,1,110-GĐ4-B,,Học tuần 1-10
+777,K69C-ID2,CTE2063 25,Vẽ tĩnh vật,LT,Trần Tuấn Linh,2,60,CL,4,4,103-GĐ4-B,,Học tuần 1-10
+778,K69C-ID3,CTE2055 26,Vật liệu học cơ sở,LT,Nguyễn Đình Đức+Phan Hải Đăng,2,60,CL,2,4,108-GĐ4-B,,Học tuần 1-10
+779,K69C-ID3,CTE2056 26,Lập trình Python,LT,Vũ Minh Anh+Nguyễn Văn Duy,3,60,CL,2,3,103-GĐ4-B,,Học tuần 1-10
+780,K69C-ID3,CTE2056 26,Lập trình Python,TH,Vũ Minh Anh+Nguyễn Văn Duy,3,60,CL,6,2,103-GĐ4-B,,Học tuần 2-11
+781,K69C-ID3,CTE2060 26,"Đồ họa I: Adobe Photoshop, Illustrator and InDesign",LT,Dương Thị Tuyết Nhung,3,60,CL,3,2,509-GĐ4-B,"Đổi thời gian, Giảng đường",Học tuần 1-12
+782,K69C-ID3,CTE2060 26,"Đồ họa I: Adobe Photoshop, Illustrator and InDesign",TH,Dương Thị Tuyết Nhung,3,60,CL,4,1,103-GĐ4-B,,Học tuần 2-13
+784,K69C-ID3,CTE3131 26,Trình bày ý tưởng và khái niệm,LT,"Nguyễn Như Tùng (VNU-IS)+Nguyễn Văn Cảnh (ĐH Công nghiệp HN)",2,60,CL,6,4,507-GĐ4-B,"Đổi thời gian, Giảng đường",Học tuần 1-10
+785,K69C-ID3,PHI1006 26,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,60,CL,6,1,108-GĐ4-B,,Học tuần 1-15
+786,K69C-ID3,HIS1001 26,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,60,CL,3,3,103-GĐ4-B,,Học tuần 1-10
+787,K69C-ID3,CTE2063 26,Vẽ tĩnh vật,LT,Trần Tuấn Linh,2,60,CL,5,1,103-GĐ4-B,,Học tuần 1-10
+788,K69E-CE1,ELT2040 57,Điện tử tương tự,LT,Mai Linh,3,60,CL,4,4,105-GĐ4-B,,Học tuần 1-15
+789,K69E-CE1,ELT2041 57,Điện tử số,LT,Nguyễn Xuân Dương,3,60,CL,3,4,201-GĐ4-B,,Học tuần 1-15
+790,K69E-CE1,INT2210 57,Cấu trúc dữ liệu và giải thuật,LT,Mẫn Đức Chức,4,60,CL,4,1,201-GĐ4-B,,Học tuần 1-10
+791,K69E-CE1,INT2210 57,Cấu trúc dữ liệu và giải thuật,ONL,Mẫn Đức Chức,4,60,CL,7,2,,,Học tuần 1-5
+792,K69E-CE1,INT2210 57,Cấu trúc dữ liệu và giải thuật,TH,Khoa CNTT,4,60,CL,3,2,201-GĐ4-B,,Học tuần 2-11
+793,K69E-CE1,ELT2035 57,Tín hiệu và hệ thống,LT,Nguyễn Hồng Thịnh,3,60,CL,4,3,201-GĐ4-B,,Học tuần 1-15
+796,K69E-CE1,HIS1001 38,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,90,CL,5,2,209-GĐ3,,Học tuần 1-10
+797,K69E-CE1,MAT1101 57,Xác suất thống kê,LT,Lê Trung Thành,3,60,CL,5,3,207-GĐ4-B,,Học tuần 1-15
+798,K69E-CE2,ELT2040 58,Điện tử tương tự,LT,Mai Linh,3,60,CL,5,1,102-GĐ4-B,,Học tuần 1-15
+799,K69E-CE2,ELT2041 58,Điện tử số,LT,Nguyễn Xuân Dương,3,60,CL,2,1,103-GĐ4-B,,Học tuần 1-15
+800,K69E-CE2,INT2210 58,Cấu trúc dữ liệu và giải thuật,LT,Mẫn Đức Chức,4,60,CL,5,2,101-GĐ4-B,,Học tuần 1-10
+801,K69E-CE2,INT2210 58,Cấu trúc dữ liệu và giải thuật,ONL,Mẫn Đức Chức,4,60,CL,CN,2,,,Học tuần 1-5
+802,K69E-CE2,INT2210 58,Cấu trúc dữ liệu và giải thuật,TH,Khoa CNTT,4,60,CL,4,1,303-GĐ4-A,,Học tuần 2-11
+803,K69E-CE2,ELT2035 58,Tín hiệu và hệ thống,LT,Nguyễn Hồng Thịnh,3,60,CL,2,4,103-GĐ4-B,,Học tuần 1-15
+806,K69E-CE2,HIS1001 58,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,60,CL,2,2,104-GĐ4-B,,Học tuần 1-10
+807,K69E-CE2,MAT1101 58,Xác suất thống kê,LT,Lâm Sinh Công,3,60,CL,2,3,104-GĐ4-B,,Học tuần 1-15
+808,K69E-CE3,ELT2040 59,Điện tử tương tự,LT,Mai Linh,3,60,CL,6,4,109-GĐ4-B,,Học tuần 1-15
+809,K69E-CE3,ELT2041 59,Điện tử số,LT,Nguyễn Văn Thắng,3,60,CL,5,1,104-GĐ4-B,,Học tuần 1-15
+810,K69E-CE3,INT2210 59,Cấu trúc dữ liệu và giải thuật,LT,Khoa CNTT,4,60,CL,3,2,103-GĐ4-B,,Học tuần 1-10
+811,K69E-CE3,INT2210 59,Cấu trúc dữ liệu và giải thuật,ONL,Khoa CNTT,4,60,CL,6,2,,,Học tuần 1-5
+812,K69E-CE3,INT2210 59,Cấu trúc dữ liệu và giải thuật,TH,Khoa CNTT,4,60,CL,3,4,103-GĐ4-B,,Học tuần 2-11
+813,K69E-CE3,ELT2035 59,Tín hiệu và hệ thống,LT,Trần Thị Thúy Quỳnh,3,60,CL,4,1,102-GĐ4-B,,Học tuần 1-15
+816,K69E-CE3,HIS1001 59,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,60,CL,6,3,103-GĐ4-B,,Học tuần 1-10
+817,K69E-CE3,MAT1101 59,Xác suất thống kê,LT,Lê Trung Thành,3,60,CL,5,2,201-GĐ4-B,,Học tuần 1-15
+818,K69E-CE4,ELT2040 60,Điện tử tương tự,LT,Bùi Thanh Tùng,3,60,CL,6,2,105-GĐ4-B,,Học tuần 1-15
+819,K69E-CE4,ELT2041 60,Điện tử số,LT,Nguyễn Văn Thắng,3,60,CL,6,1,105-GĐ4-B,,Học tuần 1-15
+820,K69E-CE4,INT2210 60,Cấu trúc dữ liệu và giải thuật,LT,Khoa CNTT,4,60,CL,2,3,105-GĐ4-B,,Học tuần 1-10
+821,K69E-CE4,INT2210 60,Cấu trúc dữ liệu và giải thuật,ONL,Khoa CNTT,4,60,CL,CN,2,,,Học tuần 1-5
+822,K69E-CE4,INT2210 60,Cấu trúc dữ liệu và giải thuật,TH,Khoa CNTT,4,60,CL,5,1,105-GĐ4-B,,Học tuần 2-11
+823,K69E-CE4,ELT2035 60,Tín hiệu và hệ thống,LT,Trần Thị Thúy Quỳnh,3,60,CL,6,3,105-GĐ4-B,,Học tuần 1-15
+826,K69E-CE4,HIS1001 60,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐHKHXHNV,2,60,CL,2,4,105-GĐ4-B,,Học tuần 1-10
+827,K69E-CE4,MAT1101 60,Xác suất thống kê,LT,Lê Trung Thành,3,60,CL,2,2,105-GĐ4-B,,Học tuần 1-15
+828,K69E-CE5,ELT2040 61,Điện tử tương tự,LT,Phạm Duy Hưng,3,60,CL,5,2,504-GĐ4-A,,Học tuần 1-15
+829,K69E-CE5,ELT2041 61,Điện tử số,LT,Vũ Quốc Tuấn,3,60,CL,6,3,102-GĐ4-B,,Học tuần 1-15
+830,K69E-CE5,INT2210 61,Cấu trúc dữ liệu và giải thuật,LT,Khoa CNTT,4,60,CL,2,1,102-GĐ4-B,,Học tuần 1-10
+831,K69E-CE5,INT2210 61,Cấu trúc dữ liệu và giải thuật,ONL,Khoa CNTT,4,60,CL,CN,1,,,Học tuần 1-5
+832,K69E-CE5,INT2210 61,Cấu trúc dữ liệu và giải thuật,TH,Khoa CNTT,4,60,CL,4,1,304-GĐ4-A,,Học tuần 2-11
+833,K69E-CE5,ELT2035 61,Tín hiệu và hệ thống,LT,Nguyễn Minh Trần,3,60,CL,5,1,101-GĐ4-B,,Học tuần 1-15
+836,K69E-CE5,HIS1001 61,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐhKHXHNV,2,60,CL,6,4,104-GĐ4-B,,Học tuần 1-10
+837,K69E-CE5,MAT1101 61,Xác suất thống kê,LT,Lâm Sinh Công,3,60,CL,6,2,104-GĐ4-B,,Học tuần 1-15
+838,K69E-CE6,ELT2040 62,Điện tử tương tự,LT,Phạm Duy Hưng,3,60,CL,6,3,104-GĐ4-B,,Học tuần 1-15
+839,K69E-CE6,ELT2041 62,Điện tử số,LT,Vũ Quốc Tuấn,3,60,CL,4,2,109-GĐ4-B,,Học tuần 1-15
+840,K69E-CE6,INT2210 62,Cấu trúc dữ liệu và giải thuật,LT,Khoa CNTT,4,60,CL,4,3,104-GĐ4-B,,Học tuần 1-10
+841,K69E-CE6,INT2210 62,Cấu trúc dữ liệu và giải thuật,ONL,Khoa CNTT,4,60,CL,6,4,,,Học tuần 1-5
+842,K69E-CE6,INT2210 62,Cấu trúc dữ liệu và giải thuật,TH,Khoa CNTT,4,60,CL,4,4,104-GĐ4-B,,Học tuần 2-11
+843,K69E-CE6,ELT2035 62,Tín hiệu và hệ thống,LT,Lưu Mạnh Hà,3,60,CL,6,2,101-GĐ4-B,,Học tuần 1-15
+846,K69E-CE6,HIS1001 62,Lịch sử Đảng Cộng sản Việt Nam,LT,ĐhKHXHNV,2,60,CL,6,1,104-GĐ4-B,,Học tuần 1-10
+847,K69E-CE6,MAT1101 62,Xác suất thống kê,LT,Lâm Sinh Công,3,60,CL,4,1,205-GĐ4-B,,Học tuần 1-15
+848,K69E-EC1,PEC1008 47,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,60,CL,6,2,108-GĐ4-B,,Học tuần 1-10
+849,K69E-EC1,FLF1108 47,Tiếng Anh B2,LT,ĐHNN,5,45,CL,3,2,108-GĐ4-B,,Học tuần 1-10
+850,K69E-EC1,FLF1108 47,Tiếng Anh B2,LT,ĐHNN,5,45,CL,6,1,109-GĐ4-B,,Học tuần 1-10
+851,K69E-EC1,FLF1108 57,Tiếng Anh B2,LT,ĐHNN,5,45,CL,3,2,501-GĐ4-A,,Học tuần 1-10
+852,K69E-EC1,FLF1108 57,Tiếng Anh B2,LT,ĐHNN,5,45,CL,6,1,306-GĐ4-A,,Học tuần 1-10
+853,K69E-EC1,ELT2035 47,Tín hiệu và hệ thống,LT,Đinh Thị Thái Mai,3,60,CL,3,4,101-GĐ4-B,,Học tuần 1-15
+854,K69E-EC1,INT2210 47,Cấu trúc dữ liệu và giải thuật,LT,Bùi Ngọc Thăng,4,60,CL,2,2,101-GĐ4-B,,Học tuần 1-10
+855,K69E-EC1,INT2210 47,Cấu trúc dữ liệu và giải thuật,ONL,Bùi Ngọc Thăng,4,60,CL,6,4,,,Học tuần 1-5
+856,K69E-EC1,INT2210 47,Cấu trúc dữ liệu và giải thuật,TH,Khoa CNTT,4,60,CL,2,4,101-GĐ4-B,,Học tuần 2-11
+857,K69E-EC1,MAT1101 47,Xác suất thống kê,LT,Phùng Đức Thuận,3,60,CL,2,1,201-GĐ4-B,,Học tuần 1-15
+859,K69E-EC1,ELT2032 47,Linh kiện điện tử,LT,Mai Hồng Hạnh,3,60,CL,3,3,101-GĐ4-B,,Học tuần 1-10
+860,K69E-EC1,INE1050 47,Kinh tế vi mô,LT,Trần Thị Lan Hương,3,60,CL,6,3,101-GĐ4-B,,Học tuần 1-15
+862,K69E-EC2,PEC1008 48,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,60,CL,4,4,107-GĐ4-B,,Học tuần 1-10
+863,K69E-EC2,FLF1108 48,Tiếng Anh B2,LT,ĐHNN,5,45,CL,4,3,103-GĐ4-B,,Học tuần 1-10
+864,K69E-EC2,FLF1108 48,Tiếng Anh B2,LT,ĐHNN,5,45,CL,2,4,107-GĐ4-B,,Học tuần 1-10
+865,K69E-EC2,FLF1108 58,Tiếng Anh B2,LT,ĐHNN,5,45,CL,4,3,203-GĐ4-A,,Học tuần 1-10
+866,K69E-EC2,FLF1108 58,Tiếng Anh B2,LT,ĐHNN,5,45,CL,2,4,405-GĐ4-A,,Học tuần 1-10
+867,K69E-EC2,ELT2035 48,Tín hiệu và hệ thống,LT,Đinh Thị Thái Mai,3,60,CL,3,1,107-GĐ4-B,,Học tuần 1-15
+868,K69E-EC2,INT2210 48,Cấu trúc dữ liệu và giải thuật,LT,Bùi Ngọc Thăng,4,60,CL,6,3,107-GĐ4-B,,Học tuần 1-10
+869,K69E-EC2,INT2210 48,Cấu trúc dữ liệu và giải thuật,ONL,Bùi Ngọc Thăng,4,60,CL,CN,1,,,Học tuần 1-5
+870,K69E-EC2,INT2210 48,Cấu trúc dữ liệu và giải thuật,TH,Khoa CNTT,4,60,CL,4,2,207-GĐ4-A,,Học tuần 2-11
+871,K69E-EC2,MAT1101 48,Xác suất thống kê,LT,Nguyễn Đức Cường,3,60,CL,4,1,105-GĐ4-B,,Học tuần 1-15
+873,K69E-EC2,ELT2032 48,Linh kiện điện tử,LT,Phạm Ngọc Thảo,3,60,CL,2,2,107-GĐ4-B,,Học tuần 1-10
+874,K69E-EC2,INE1050 48,Kinh tế vi mô,LT,Trần Thị Lan Hương,3,60,CL,2,3,107-GĐ4-B,,Học tuần 1-15
+876,K69E-EC3,PEC1008 49,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,60,CL,6,1,107-GĐ4-B,,Học tuần 1-10
+877,K69E-EC3,FLF1108 49,Tiếng Anh B2,LT,ĐHNN,5,45,CL,2,4,102-GĐ4-B,,Học tuần 1-10
+878,K69E-EC3,FLF1108 49,Tiếng Anh B2,LT,ĐHNN,5,45,CL,4,3,105-GĐ4-B,,Học tuần 1-10
+879,K69E-EC3,FLF1108 59,Tiếng Anh B2,LT,ĐHNN,5,45,CL,2,4,201-GĐ4-A,,Học tuần 1-10
+880,K69E-EC3,FLF1108 59,Tiếng Anh B2,LT,ĐHNN,5,45,CL,4,3,204-GĐ4-A,,Học tuần 1-10
+881,K69E-EC3,ELT2035 49,Tín hiệu và hệ thống,LT,Trần Thị Thúy Quỳnh,3,60,CL,2,3,108-GĐ4-B,,Học tuần 1-15
+882,K69E-EC3,INT2210 49,Cấu trúc dữ liệu và giải thuật,LT,Bùi Ngọc Thăng,4,60,CL,2,1,105-GĐ4-B,,Học tuần 1-10
+883,K69E-EC3,INT2210 49,Cấu trúc dữ liệu và giải thuật,ONL,Bùi Ngọc Thăng,4,60,CL,7,1,,,Học tuần 1-5
+884,K69E-EC3,INT2210 49,Cấu trúc dữ liệu và giải thuật,TH,Khoa CNTT,4,60,CL,2,2,303-GĐ4-A,,Học tuần 2-11
+885,K69E-EC3,MAT1101 49,Xác suất thống kê,LT,Nguyễn Đức Cường,3,60,CL,4,2,110-GĐ4-B,,Học tuần 1-15
+887,K69E-EC3,ELT2032 49,Linh kiện điện tử,LT,Mai Anh Tuấn,3,60,CL,6,2,109-GĐ4-B,,Học tuần 1-10
+888,K69E-EC3,INE1050 49,Kinh tế vi mô,LT,Trần Thị Lan Hương,3,60,CL,5,1,202-GĐ4-B,,Học tuần 1-15
+890,K69E-EC4,PEC1008 50,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,60,CL,4,1,101-GĐ4-B,,Học tuần 1-10
+891,K69E-EC4,FLF1108 50,Tiếng Anh B2,LT,ĐHNN,5,45,CL,3,1,103-GĐ4-B,,Học tuần 1-10
+892,K69E-EC4,FLF1108 50,Tiếng Anh B2,LT,ĐHNN,5,45,CL,6,1,207-GĐ4-A,,Học tuần 1-10
+893,K69E-EC4,FLF1108 60,Tiếng Anh B2,LT,ĐHNN,5,45,CL,3,1,201-GĐ4-A,,Học tuần 1-10
+894,K69E-EC4,FLF1108 60,Tiếng Anh B2,LT,ĐHNN,5,45,CL,6,1,502-GĐ4-A,,Học tuần 1-10
+895,K69E-EC4,ELT2035 50,Tín hiệu và hệ thống,LT,Trần Thị Thúy Quỳnh,3,60,CL,2,2,108-GĐ4-B,,Học tuần 1-15
+896,K69E-EC4,INT2210 50,Cấu trúc dữ liệu và giải thuật,LT,Bùi Ngọc Thăng,4,60,CL,2,3,110-GĐ4-B,,Học tuần 1-10
+897,K69E-EC4,INT2210 50,Cấu trúc dữ liệu và giải thuật,ONL,Bùi Ngọc Thăng,4,60,CL,6,2,,,Học tuần 1-5
+898,K69E-EC4,INT2210 50,Cấu trúc dữ liệu và giải thuật,TH,Khoa CNTT,4,60,CL,2,1,207-GĐ4-A,,Học tuần 2-11
+899,K69E-EC4,MAT1101 50,Xác suất thống kê,LT,Lê Phê Đô,3,60,CL,3,2,110-GĐ4-B,,Học tuần 1-15
+901,K69E-EC4,ELT2032 50,Linh kiện điện tử,LT,Mai Anh Tuấn,3,60,CL,6,3,207-GĐ4-A,,Học tuần 1-10
+902,K69E-EC4,INE1050 50,Kinh tế vi mô,LT,Trần Thị Lan Hương,3,60,CL,5,2,103-GĐ4-B,,Học tuần 1-15
+904,K69E-EC5,PEC1008 51,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,60,CL,6,4,101-GĐ4-B,,Học tuần 1-10
+905,K69E-EC5,FLF1108 51,Tiếng Anh B2,LT,ĐHNN,5,45,CL,6,1,201-GĐ4-B,,Học tuần 1-10
+906,K69E-EC5,FLF1108 51,Tiếng Anh B2,LT,ĐHNN,5,45,CL,3,4,102-GĐ4-B,,Học tuần 1-10
+907,K69E-EC5,FLF1108 61,Tiếng Anh B2,LT,ĐHNN,5,45,CL,6,1,506-GĐ4-A,,Học tuần 1-10
+908,K69E-EC5,FLF1108 61,Tiếng Anh B2,LT,ĐHNN,5,45,CL,3,4,204-GĐ4-A,,Học tuần 1-10
+909,K69E-EC5,ELT2035 51,Tín hiệu và hệ thống,LT,Lê Vũ Hà,3,60,CL,5,1,203-GĐ4-B,,Học tuần 1-15
+910,K69E-EC5,INT2210 51,Cấu trúc dữ liệu và giải thuật,LT,Nguyễn Thị Nhật Thanh,4,60,CL,4,1,108-GĐ4-B,,Học tuần 1-10
+911,K69E-EC5,INT2210 51,Cấu trúc dữ liệu và giải thuật,ONL,Nguyễn Thị Nhật Thanh,4,60,CL,6,3,,,Học tuần 1-5
+912,K69E-EC5,INT2210 51,Cấu trúc dữ liệu và giải thuật,TH,Khoa CNTT,4,60,CL,3,3,403-GĐ4-A,,Học tuần 2-11
+913,K69E-EC5,MAT1101 51,Xác suất thống kê,LT,Lê Việt Cường,3,60,CL,3,2,101-GĐ4-B,,Học tuần 1-15
+915,K69E-EC5,ELT2032 51,Linh kiện điện tử,LT,Mai Hồng Hạnh,3,60,CL,6,2,201-GĐ4-B,,Học tuần 1-10
+916,K69E-EC5,INE1050 51,Kinh tế vi mô,LT,Trần Thị Lan Hương,3,60,CL,3,1,101-GĐ4-B,,Học tuần 1-15
+918,K69E-EC6,PEC1008 52,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,60,CL,6,3,108-GĐ4-B,,Học tuần 1-10
+919,K69E-EC6,FLF1108 52,Tiếng Anh B2,LT,ĐHNN,5,45,CL,5,2,108-GĐ4-B,,Học tuần 1-10
+920,K69E-EC6,FLF1108 52,Tiếng Anh B2,LT,ĐHNN,5,45,CL,2,1,108-GĐ4-B,,Học tuần 1-10
+921,K69E-EC6,FLF1108 62,Tiếng Anh B2,LT,ĐHNN,5,45,CL,5,2,505-GĐ4-A,,Học tuần 1-10
+922,K69E-EC6,FLF1108 62,Tiếng Anh B2,LT,ĐHNN,5,45,CL,2,1,206-GĐ4-A,,Học tuần 1-10
+923,K69E-EC6,ELT2035 52,Tín hiệu và hệ thống,LT,Lưu Mạnh Hà,3,60,CL,5,1,204-GĐ4-B,,Học tuần 1-15
+924,K69E-EC6,INT2210 52,Cấu trúc dữ liệu và giải thuật,LT,Khoa CNTT,4,60,CL,6,1,202-GĐ4-B,,Học tuần 1-10
+925,K69E-EC6,INT2210 52,Cấu trúc dữ liệu và giải thuật,ONL,Khoa CNTT,4,60,CL,6,2,,,Học tuần 1-5
+926,K69E-EC6,INT2210 52,Cấu trúc dữ liệu và giải thuật,TH,Khoa CNTT,4,60,CL,6,4,207-GĐ4-A,,Học tuần 2-11
+927,K69E-EC6,MAT1101 52,Xác suất thống kê,LT,Lê Việt Cường,3,60,CL,3,1,203-GĐ4-B,,Học tuần 1-15
+929,K69E-EC6,ELT2032 52,Linh kiện điện tử,LT,Phạm Ngọc Thảo,3,60,CL,4,4,108-GĐ4-B,,Học tuần 1-10
+930,K69E-EC6,INE1050 52,Kinh tế vi mô,LT,Trần Thị Lan Hương,3,60,CL,4,2,103-GĐ4-B,,Học tuần 1-15
+931,"K69E-RE1 (Nhóm 1)",ELT3134 66,Thực tập Kỹ thuật điện tử,TH,Phạm Quang Hùng+Đinh Bảo Minh,2,20,CL,3,3,209-G2,,Học tuần 12-16
+932,"K69E-RE1 (Nhóm 1)",ELT3134 66,Thực tập Kỹ thuật điện tử,TH,Phạm Quang Hùng+Đinh Bảo Minh,2,20,CL,3,4,209-G2,,Học tuần 12-16
+935,K69E-RE1,RBE2021 66,"Thực hành Thiết kế và xây dựng Robot 1",TH,Lê Xuân Lực+Đinh Bảo Minh,2,20,CL,6,3,101-GĐ3,,Học tuần 2-11
+936,K69E-RE1,RBE2021 66,"Thực hành Thiết kế và xây dựng Robot 1",TH,Lê Xuân Lực+Đinh Bảo Minh,2,20,CL,6,4,101-GĐ3,,Học tuần 2-11
+937,K69E-RE1,ELT2035 66,Tín hiệu và hệ thống,LT,Lê Vũ Hà,3,70,CL,3,2,210-GĐ3,,Học tuần 1-15
+938,K69E-RE1,INT2210 66,Cấu trúc dữ liệu và giải thuật,LT,Khoa CNTT,4,40,CL,3,1,104-GĐ3,,Học tuần 1-10
+939,K69E-RE1,INT2210 66,Cấu trúc dữ liệu và giải thuật,ONL,Khoa CNTT,4,40,CL,6,2,,,Học tuần 1-5
+940,K69E-RE1,INT2210 66,Cấu trúc dữ liệu và giải thuật,TH,Khoa CNTT,4,40,CL,4,1,504-GĐ4-A,,Học tuần 2-11
+941,K69E-RE1,ELT2201 66,Nguyên lý Kỹ thuật điện tử,LT,Trần Như Chí,3,40,CL,4,3,213-GĐ3,,Học tuần 1-15
+944,K69E-RE1,PEC1008 66,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,48,CL,5,1,401-GĐ4-A,,Học tuần 1-10
+945,"K69E-RE1 (Nhóm 2)",ELT3134 67,Thực tập Kỹ thuật điện tử,TH,Trần Như Chí+Phạm Quang Hùng,2,20,CL,5,3,209-G2,,Học tuần 11-16
+946,"K69E-RE1 (Nhóm 2)",ELT3134 67,Thực tập Kỹ thuật điện tử,TH,Trần Như Chí+Phạm Quang Hùng,2,20,CL,5,4,209-G2,,Học tuần 11-16
+947,"K69E-RE1 (Nhóm 2)",ELT3134 67,Thực tập Kỹ thuật điện tử,TH,Trần Như Chí+Phạm Quang Hùng,2,20,CL,Chủ nhật,3,209-G2,,Học tuần 5-10
+948,"K69E-RE1 (Nhóm 2)",ELT3134 67,Thực tập Kỹ thuật điện tử,TH,Trần Như Chí+Phạm Quang Hùng,2,20,CL,Chủ nhật,4,209-G2,,Học tuần 5-10
+949,K69E-RE1,RBE2021 67,"Thực hành Thiết kế và xây dựng Robot 1",TH,Lê Xuân Lực+Đinh Bảo Minh,2,20,CL,2,1,101-GĐ3,,Học tuần 2-11
+950,K69E-RE1,RBE2021 67,"Thực hành Thiết kế và xây dựng Robot 1",TH,Lê Xuân Lực+Đinh Bảo Minh,2,20,CL,2,2,101-GĐ3,,Học tuần 2-11
+951,"K69E-RE2 (Nhóm 1)",ELT3134 68,Thực tập Kỹ thuật điện tử,TH,Đặng Anh Việt+Phạm Quang Hùng,2,20,CL,3,1,209-G2,,Học tuần 12-16
+952,"K69E-RE2 (Nhóm 1)",ELT3134 68,Thực tập Kỹ thuật điện tử,TH,Đặng Anh Việt+Phạm Quang Hùng,2,20,CL,3,2,209-G2,,Học tuần 12-16
+953,"K69E-RE2 (Nhóm 1)",ELT3134 68,Thực tập Kỹ thuật điện tử,TH,Đặng Anh Việt+Phạm Quang Hùng,2,20,CL,4,1,209-G2,,Học tuần 12-16
+954,"K69E-RE2 (Nhóm 1)",ELT3134 68,Thực tập Kỹ thuật điện tử,TH,Đặng Anh Việt+Phạm Quang Hùng,2,20,CL,4,2,209-G2,,Học tuần 12-16
+955,K69E-RE2,RBE2021 68,"Thực hành Thiết kế và xây dựng Robot 1",TH,Lê Xuân Lực+Đinh Bảo Minh,2,20,CL,6,1,101-GĐ3,,Học tuần 2-11
+956,K69E-RE2,RBE2021 68,"Thực hành Thiết kế và xây dựng Robot 1",TH,Lê Xuân Lực+Đinh Bảo Minh,2,20,CL,6,2,101-GĐ3,,Học tuần 2-11
+957,K69E-RE2,ELT2035 67,Tín hiệu và hệ thống,LT,Nguyễn Hồng Thịnh,3,40,CL,5,1,215-GĐ3,,Học tuần 1-15
+958,K69E-RE2,INT2210 67,Cấu trúc dữ liệu và giải thuật,LT,Khoa CNTT,4,40,CL,3,4,GĐ3,,Học tuần 1-10
+959,K69E-RE2,INT2210 67,Cấu trúc dữ liệu và giải thuật,ONL,Khoa CNTT,4,40,CL,CN,1,,,Học tuần 1-5
+960,K69E-RE2,INT2210 67,Cấu trúc dữ liệu và giải thuật,TH,Khoa CNTT,4,40,CL,3,3,104-GĐ3,,Học tuần 2-11
+961,K69E-RE2,ELT2201 67,Nguyên lý Kỹ thuật điện tử,LT,Trần Như Chí,3,40,CL,4,2,104-GĐ3,,Học tuần 1-15
+962,"K69E-RE1+K69E-RE2",RBE2001 67,Vẽ kỹ thuật,LT,Lê Xuân Lực,2,80,CL,7,3,106-GĐ3,,Học tuần 1-15
+964,K69E-RE2,PEC1008 67,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,40,CL,2,2,104-GĐ3,,Học tuần 1-10
+965,"K69E-RE2 (Nhóm 2)",ELT3134 69,Thực tập Kỹ thuật điện tử,TH,Phạm Đình Tuân+Đặng Văn Hiếu,2,20,CL,3,1,209-G2,,Học tuần 11-16
+966,"K69E-RE2 (Nhóm 2)",ELT3134 69,Thực tập Kỹ thuật điện tử,TH,Phạm Đình Tuân+Đặng Văn Hiếu,2,20,CL,3,2,209-G2,,Học tuần 11-16
+967,"K69E-RE2 (Nhóm 2)",ELT3134 69,Thực tập Kỹ thuật điện tử,TH,Phạm Đình Tuân+Đặng Văn Hiếu,2,20,CL,Chủ nhật,1,209-G2,,Học tuần 5-10
+968,"K69E-RE2 (Nhóm 2)",ELT3134 69,Thực tập Kỹ thuật điện tử,TH,Phạm Đình Tuân+Đặng Văn Hiếu,2,20,CL,Chủ nhật,2,209-G2,,Học tuần 5-10
+969,K69E-RE2,RBE2021 69,"Thực hành Thiết kế và xây dựng Robot 1",TH,Lê Xuân Lực+Đinh Bảo Minh,2,20,CL,7,1,101-GĐ3,,Học tuần 2-11
+970,K69E-RE2,RBE2021 69,"Thực hành Thiết kế và xây dựng Robot 1",TH,Lê Xuân Lực+Đinh Bảo Minh,2,20,CL,7,2,101-GĐ3,,Học tuần 2-11
+971,"K69G-AT1+K69G-AT2",AGT2103 23,Hóa nông nghiệp và thực phẩm,LT,Lê Thị Hiên+Vũ Thị Huyền,4,50,CL,2,4,206-GĐ4-A,,Học tuần 1-15
+972,"K69G-AT1+K69G-AT2",AGT2103 23,Hóa nông nghiệp và thực phẩm,LT,Lê Thị Hiên+Vũ Thị Huyền,4,50,CL,3,4,205-GĐ4-A,,Học tuần 11-12
+973,K69G-AT1,AGT2103 23,Hóa nông nghiệp và thực phẩm,TH,Vũ Thị Huyền,4,25,1,6,3,PTNNN1,,"Học tuần 7, 9, 11, 13"
+974,K69G-AT1,AGT2103 23,Hóa nông nghiệp và thực phẩm,TH,Vũ Thị Huyền,4,25,1,6,4,PTNNN1,,"Học tuần 7, 9, 11, 13"
+975,K69G-AT2,AGT2103 23,Hóa nông nghiệp và thực phẩm,TH,Vũ Thị Huyền,4,25,2,6,3,PTNNN1,,"Học tuần 6, 8, 10, 12"
+976,K69G-AT2,AGT2103 23,Hóa nông nghiệp và thực phẩm,TH,Vũ Thị Huyền,4,25,2,6,4,PTNNN1,,"Học tuần 6, 8, 10, 12"
+977,"K69G-AT1+K69G-AT2",AGT2105 23,Trồng trọt,LT,Nguyễn Lê Khanh+Trần Đăng Khoa,4,50,CL,2,3,206-GĐ4-A,,Học tuần 1-15
+978,"K69G-AT1+K69G-AT2",AGT2105 23,Trồng trọt,LT,Nguyễn Lê Khanh+Trần Đăng Khoa,4,50,CL,3,3,205-GĐ4-A,,Học tuần 11-12
+979,K69G-AT1,AGT2105 23,Trồng trọt,TH,Trần Đăng Khoa,4,25,1,5,1,"Phòng TN Hòa Lạc",,Học tuần 2-7
+980,K69G-AT2,AGT2105 23,Trồng trọt,TH,Trần Đăng Khoa,4,25,2,5,2,"Phòng TN Hòa Lạc",,Học tuần 2-7
+981,"K69G-AT1+K69G-AT2",AGT2111 23,Công nghệ sinh học,LT,"Lê Huy Hàm+Hà Thị Quyến+Chu Đức Hà+Nguyễn Văn Hạnh",3,50,CL,2,2,306-GĐ4-A,,Học tuần 1-14
+982,K69G-AT1,AGT2111 23,Công nghệ sinh học,TH,Chu Đức Hà,3,25,1,6,1,PTNNN1,,"Học tuần 6, 8"
+983,K69G-AT1,AGT2111 23,Công nghệ sinh học,TH,Chu Đức Hà,3,25,1,6,2,PTNNN1,,"Học tuần 6, 8"
+984,K69G-AT2,AGT2111 23,Công nghệ sinh học,TH,Hà Thị Quyến,3,25,2,6,1,PTNNN1,,"Học tuần 7, 9"
+985,K69G-AT2,AGT2111 23,Công nghệ sinh học,TH,Hà Thị Quyến,3,25,2,6,2,PTNNN1,,"Học tuần 7, 9"
+986,"K69G-AT1+K69G-AT2",MAT1101 23,Xác suất thống kê,LT,Nguyễn Thị Ngọc Ánh,3,50,CL,3,1,205-GĐ4-A,,Học tuần 1-15
+987,"K69G-AT1+K69G-AT2",PHI1002 23,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,50,CL,3,2,205-GĐ4-A,,Học tuần 1-10
+988,"K69G-AT1+K69G-AT2",PHI1006 23,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,50,CL,2,1,205-GĐ4-A,,Học tuần 1-15
+989,"K69I-CN1+K69I-CN2",INT2204 15,Lập trình hướng đối tượng,LT,Tô Văn Khánh,3,90,CL,2,1,105-GĐ3,,Học tuần 1-10
+990,K69I-CN1,INT2204 15,Lập trình hướng đối tượng,TH,Nguyễn Vũ Bình Dương,3,45,1,4,1,307-GĐ4-A,,Học tuần 1-10
+991,K69I-CN2,INT2204 15,Lập trình hướng đối tượng,TH,Nguyễn Vũ Bình Dương,3,45,2,4,3,407-GĐ4-A,,Học tuần 1-10
+992,"K69I-CN1+K69I-CN2",INT2210 15,Cấu trúc dữ liệu và giải thuật,LT,Phạm Minh Triển,4,90,CL,3,4,105-GĐ3,,Học tuần 1-10
+993,"K69I-CN1+K69I-CN2",INT2210 15,Cấu trúc dữ liệu và giải thuật,ONL,Phạm Minh Triển,4,90,CL,7,1,,,
+994,K69I-CN1,INT2210 15,Cấu trúc dữ liệu và giải thuật,TH,Phạm Minh Triển,4,45,1,4,2,307-GĐ4-A,,Học tuần 1-10
+995,K69I-CN2,INT2210 15,Cấu trúc dữ liệu và giải thuật,TH,Phạm Minh Triển,4,45,2,4,1,404-GĐ4-A,,Học tuần 1-10
+996,"K69I-CN1+K69I-CN2",INT2211 15,Cơ sở dữ liệu,LT,Nguyễn Hải Châu,4,90,CL,6,1,105-GĐ3,,Học tuần 1-15
+997,K69I-CN1,INT2211 15,Cơ sở dữ liệu,TH,Phạm Thị Quỳnh Trang+Nguyễn Công,4,45,1,4,3,503-GĐ4-A,,
+998,K69I-CN2,INT2211 15,Cơ sở dữ liệu,TH,Nguyễn Thị Cẩm Vân+Phạm An Đức Vinh,4,45,2,4,2,403-GĐ4-A,,
+999,"K69I-CN1+K69I-CN2",INT2212 15,Kiến trúc máy tính,LT,Trần Xuân Tú+Bùi Duy Hiếu,4,90,CL,5,1,105-GĐ3,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1000,"K69I-CN1+K69I-CN2",INT2212 15,Kiến trúc máy tính,LT,Trần Xuân Tú+Bùi Duy Hiếu,4,90,CL,3,2,105-GĐ3,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1001,"K69I-CN1+K69I-CN2",MAT1101 15,Xác suất thống kê,LT,Lê Thị Hường,3,90,CL,3,3,105-GĐ3,,Học tuần 1-15
+1002,"K69I-CN1+K69I-CN2",PEC1008 8,Kinh tế chính trị Mác-Lênin,LT,ĐHKHXHNV,2,90,CL,5,2,105-GĐ3,,Học tuần 1-10
+1003,K69I-CS1,INT2204 7,Lập trình hướng đối tượng,LT,Trần Hoàng Việt,3,60,CL,4,3,108-GĐ4-B,,Học tuần 1-10
+1004,K69I-CS1,INT2204 7,Lập trình hướng đối tượng,TH,Vũ Đức Hiếu,3,60,CL,4,4,207-GĐ4-A,,Học tuần 1-10
+1005,K69I-CS1,INT2210 7,Cấu trúc dữ liệu và giải thuật,LT,Trần Thị Minh Châu,4,60,CL,6,1,203-GĐ4-B,,Học tuần 1-10
+1006,K69I-CS1,INT2210 7,Cấu trúc dữ liệu và giải thuật,ONL,Trần Thị Minh Châu,4,60,CL,6,3,,,
+1007,K69I-CS1,INT2210 7,Cấu trúc dữ liệu và giải thuật,TH,Ngô Xuân Trường,4,60,CL,4,2,303-GĐ4-A,,Học tuần 1-10
+1008,K69I-CS1,INT2211 7,Cơ sở dữ liệu,LT,Nguyễn Hải Châu,4,60,CL,6,4,108-GĐ4-B,,Học tuần 1-15
+1009,K69I-CS1,INT2211 7,Cơ sở dữ liệu,TH,Nguyễn Thị Cẩm Vân+Đoàn Xuân Dũng,4,60,CL,6,2,207-GĐ4-A,,Học tuần 1-15
+1010,K69I-CS1,INT2212 7,Kiến trúc máy tính,LT,Trần Trọng Hiếu,4,60,CL,3,1,407-GĐ4-A,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1011,K69I-CS1,INT2212 7,Kiến trúc máy tính,LT,Trần Trọng Hiếu,4,60,CL,3,3,108-GĐ4-B,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1012,K69I-CS1,MAT1101 7,Xác suất thống kê,LT,Đặng Cao Cường,3,60,CL,3,4,108-GĐ4-B,,Học tuần 1-15
+1013,K69I-CS1,PHI1006 1,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,60,CL,3,2,507-GĐ4-B,,Học tuần 1-15
+1014,K69I-CS2,INT2204 8,Lập trình hướng đối tượng,LT,Trần Hoàng Việt,3,60,CL,2,2,201-GĐ4-B,,Học tuần 1-10
+1015,K69I-CS2,INT2204 8,Lập trình hướng đối tượng,TH,Vũ Đức Hiếu,3,60,CL,2,3,303-GĐ4-A,,Học tuần 1-10
+1016,K69I-CS2,INT2210 8,Cấu trúc dữ liệu và giải thuật,LT,Trần Thị Minh Châu,4,60,CL,3,3,104-GĐ4-B,,Học tuần 1-10
+1017,K69I-CS2,INT2210 8,Cấu trúc dữ liệu và giải thuật,ONL,Trần Thị Minh Châu,4,60,CL,CN,1,,,
+1018,K69I-CS2,INT2210 8,Cấu trúc dữ liệu và giải thuật,TH,Ngô Xuân Trường,4,60,CL,3,2,403-GĐ4-A,,Học tuần 1-10
+1019,K69I-CS2,INT2211 8,Cơ sở dữ liệu,LT,Vương Thị Hải Yến,4,60,CL,5,1,205-GĐ4-B,,Học tuần 1-15
+1020,K69I-CS2,INT2211 8,Cơ sở dữ liệu,TH,Nguyễn Quốc An+Nguyễn Văn Công,4,60,CL,2,1,303-GĐ4-A,,Học tuần 1-15
+1021,K69I-CS2,INT2212 8,Kiến trúc máy tính,LT,Trần Trọng Hiếu,4,60,CL,5,2,303-GĐ4-A,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1022,K69I-CS2,INT2212 8,Kiến trúc máy tính,LT,Trần Trọng Hiếu,4,60,CL,3,4,104-GĐ4-B,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1023,K69I-CS2,MAT1101 8,Xác suất thống kê,LT,Đặng Cao Cường,3,60,CL,4,2,202-GĐ4-B,,Học tuần 1-15
+1024,K69I-CS2,PHI1006 2,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,60,CL,4,3,303-GĐ4-A,,Học tuần 1-15
+1025,K69I-CS3,INT2204 9,Lập trình hướng đối tượng,LT,Nguyễn Văn Sơn,3,60,CL,3,1,507-GĐ4-B,,Học tuần 1-10
+1026,K69I-CS3,INT2204 9,Lập trình hướng đối tượng,TH,Trần Ngọc Trúc Linh,3,60,CL,4,4,507-GĐ4-B,,Học tuần 1-10
+1027,K69I-CS3,INT2210 9,Cấu trúc dữ liệu và giải thuật,LT,Lê Quang Hiếu,4,60,CL,4,3,507-GĐ4-B,,Học tuần 1-10
+1028,K69I-CS3,INT2210 9,Cấu trúc dữ liệu và giải thuật,ONL,Lê Quang Hiếu,4,60,CL,6,1,,,
+1029,K69I-CS3,INT2210 9,Cấu trúc dữ liệu và giải thuật,TH,Lê Bằng Giang,4,60,CL,2,1,507-GĐ4-B,,Học tuần 1-10
+1030,K69I-CS3,INT2211 9,Cơ sở dữ liệu,LT,Lê Hồng Hải,4,60,CL,2,3,507-GĐ4-B,,Học tuần 1-15
+1031,K69I-CS3,INT2211 9,Cơ sở dữ liệu,TH,"Phạm Thị Quỳnh Trang+Nguyễn Văn Công",4,60,CL,2,2,507-GĐ4-B,,Học tuần 1-15
+1032,K69I-CS3,INT2212 9,Kiến trúc máy tính,LT,Nguyễn Ngọc An,4,60,CL,5,2,507-GĐ4-B,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1033,K69I-CS3,INT2212 9,Kiến trúc máy tính,LT,Nguyễn Ngọc An,4,60,CL,4,2,203-GĐ4-B,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1034,K69I-CS3,MAT1101 9,Xác suất thống kê,LT,Đặng Cao Cường,3,60,CL,2,4,507-GĐ4-B,,Học tuần 1-15
+1035,K69I-CS3,PHI1006 3,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,60,CL,5,1,507-GĐ4-B,,Học tuần 1-15
+1036,K69I-CS4,INT2204 10,Lập trình hướng đối tượng,TH,Trần Ngọc Trúc Linh,3,60,CL,2,1,207-GĐ3,,Học tuần 1-10
+1037,K69I-CS4,INT2204 10,Lập trình hướng đối tượng,LT,Nguyễn Thu Trang,3,60,CL,4,2,208-GĐ4-B,,Học tuần 1-10
+1038,K69I-CS4,INT2210 10,Cấu trúc dữ liệu và giải thuật,LT,Lê Quang Hiếu,4,60,CL,6,4,102-GĐ4-B,,Học tuần 1-10
+1039,K69I-CS4,INT2210 10,Cấu trúc dữ liệu và giải thuật,ONL,Lê Quang Hiếu,4,60,CL,CN,1,,,
+1040,K69I-CS4,INT2210 10,Cấu trúc dữ liệu và giải thuật,TH,Lê Bằng Giang,4,60,CL,4,3,207-GĐ4-A,,Học tuần 1-10
+1041,K69I-CS4,INT2211 10,Cơ sở dữ liệu,LT,Nguyễn Thị Hậu,4,60,CL,6,2,202-GĐ4-B,,Học tuần 1-15
+1042,K69I-CS4,INT2211 10,Cơ sở dữ liệu,TH,Phạm Thị Quỳnh Trang+Nguyễn Công,4,60,CL,3,1,303-GĐ4-A,,Học tuần 1-15
+1043,K69I-CS4,INT2212 10,Kiến trúc máy tính,LT,Hoàng Gia Hưng,4,60,CL,4,4,102-GĐ4-B,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1044,K69I-CS4,INT2212 10,Kiến trúc máy tính,LT,Hoàng Gia Hưng,4,60,CL,5,1,206-GĐ4-B,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1045,K69I-CS4,MAT1101 10,Xác suất thống kê,LT,Nghiêm Nguyễn Việt Dũng,3,60,CL,2,2,210-GĐ3,,Học tuần 1-15
+1046,K69I-CS4,PHI1006 4,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,60,CL,6,3,202-GĐ4-B,,Học tuần 1-15
+1047,K69I-CS5,INT2204 11,Lập trình hướng đối tượng,LT,Nguyễn Đức Anh,3,80,CL,3,4,205-GĐ3,,Học tuần 1-10
+1048,K69I-CS5.1,INT2204 11,Lập trình hướng đối tượng,TH,Trần Mạnh Cường,3,40,1,5,1,505-GĐ4-A,,Học tuần 1-10
+1049,K69I-CS5.2,INT2204 11,Lập trình hướng đối tượng,TH,Trần Mạnh Cường,3,40,2,5,2,502-GĐ4-A,,Học tuần 1-10
+1050,K69I-CS5,INT2210 11,Cấu trúc dữ liệu và giải thuật,LT,Nguyễn Việt Anh,4,80,CL,4,2,102-GĐ3,,Học tuần 1-10
+1051,K69I-CS5,INT2210 11,Cấu trúc dữ liệu và giải thuật,ONL,Nguyễn Việt Anh,4,80,CL,CN,1,,,
+1052,K69I-CS5.1,INT2210 11,Cấu trúc dữ liệu và giải thuật,TH,Nguyễn Minh Đức,4,40,1,3,2,214-GĐ3,,Học tuần 1-10
+1053,K69I-CS5.2,INT2210 11,Cấu trúc dữ liệu và giải thuật,TH,Nguyễn Minh Đức,4,40,2,2,2,503-GĐ4-A,,Học tuần 1-10
+1054,K69I-CS5,INT2211 11,Cơ sở dữ liệu,LT,Nguyễn Thị Hậu,4,80,CL,3,3,102-GĐ3,,Học tuần 1-15
+1055,K69I-CS5.1,INT2211 11,Cơ sở dữ liệu,TH,"Phạm Thị Quỳnh Trang+Phạm An Đức Vinh",4,40,1,6,3,104-GĐ3,,Học tuần 1-15
+1056,K69I-CS5.2,INT2211 11,Cơ sở dữ liệu,TH,"Phạm Thị Quỳnh Trang+Phạm An Đức Vinh",4,40,2,2,3,404-GĐ4-A,,Học tuần 1-15
+1057,K69I-CS5,INT2212 11,Kiến trúc máy tính,LT,Phạm Đức Quang,4,80,CL,3,1,206-GĐ3,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1058,K69I-CS5,INT2212 11,Kiến trúc máy tính,LT,Phạm Đức Quang,4,80,CL,6,4,205-GĐ3,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1059,K69I-CS5,MAT1101 11,Xác suất thống kê,LT,Nghiêm Nguyễn Việt Dũng,3,80,CL,4,3,102-GĐ3,,Học tuần 1-15
+1060,K69I-CS5,PHI1006 5,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,80,CL,6,2,102-GĐ3,,Học tuần 1-15
+1061,K69I-IS1,PHI1006 6,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,55,CL,6,3,106-GĐ3,,Học tuần 1-15
+1062,K69I-IS1,INT2210 12,Cấu trúc dữ liệu và giải thuật,LT,Ma Thị Châu,4,55,CL,2,1,106-GĐ3,,Học tuần 1-10
+1063,K69I-IS1,INT2210 12,Cấu trúc dữ liệu và giải thuật,ONL,Ma Thị Châu,4,55,CL,6,2,,,
+1064,K69I-IS1,INT2210 12,Cấu trúc dữ liệu và giải thuật,TH,Nguyễn Đức Hoàng Long,4,55,CL,6,4,106-GĐ3,,Học tuần 1-10
+1065,K69I-IS1,MAT1101 12,Xác suất thống kê,LT,Đặng Thanh Hải,3,55,CL,4,2,209-GĐ3,,Học tuần 1-15
+1066,K69I-IS1,INT2211 12,Cơ sở dữ liệu,LT,Dư Phương Hạnh,4,55,CL,4,4,107-GĐ3,,Học tuần 1-15
+1067,K69I-IS1,INT2211 12,Cơ sở dữ liệu,TH,Nguyễn Quốc An+Phạm Minh Cường,4,55,CL,5,1,403-GĐ4-A,,Học tuần 1-15
+1068,K69I-IS1,INT2212 12,Kiến trúc máy tính,LT,Nguyễn Ngọc Hoá,4,55,CL,3,1,106-GĐ3,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1069,K69I-IS1,INT2212 12,Kiến trúc máy tính,LT,Nguyễn Ngọc Hoá,4,55,CL,4,1,106-GĐ3,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1070,K69I-IS1,INT2204 12,Lập trình hướng đối tượng,LT,Trần Mạnh Cường,3,55,CL,6,1,106-GĐ3,,Học tuần 1-10
+1071,K69I-IS1,INT2204 12,Lập trình hướng đối tượng,TH,Phạm Tùng Thủy,3,55,CL,5,2,307-GĐ4-A,,Học tuần 1-10
+1072,K69I-IS2,PHI1006 7,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,55,CL,4,3,508-GĐ4-B,,Học tuần 1-15
+1073,K69I-IS2,INT2210 13,Cấu trúc dữ liệu và giải thuật,LT,Ma Thị Châu,4,55,CL,3,3,509-GĐ4-B,,Học tuần 1-10
+1074,K69I-IS2,INT2210 13,Cấu trúc dữ liệu và giải thuật,ONL,Ma Thị Châu,4,55,CL,6,1,,,
+1075,K69I-IS2,INT2210 13,Cấu trúc dữ liệu và giải thuật,TH,Nguyễn Đức Hoàng Long,4,55,CL,3,4,307-GĐ4-A,,Học tuần 1-10
+1076,K69I-IS2,MAT1101 13,Xác suất thống kê,LT,Đặng Thanh Hải,3,55,CL,4,1,206-GĐ3,,Học tuần 1-15
+1077,K69I-IS2,INT2211 13,Cơ sở dữ liệu,LT,Dư Phương Hạnh,4,55,CL,4,2,210-GĐ3,,Học tuần 1-15
+1078,K69I-IS2,INT2211 13,Cơ sở dữ liệu,TH,Nguyễn Quốc An+Phạm Minh Cường,4,55,CL,3,1,304-GĐ4-A,,
+1079,K69I-IS2,INT2212 13,Kiến trúc máy tính,LT,Nguyễn Ngọc Hoá,4,55,CL,5,1,304-GĐ4-A,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1080,K69I-IS2,INT2212 13,Kiến trúc máy tính,LT,Nguyễn Ngọc Hoá,4,55,CL,5,2,202-GĐ4-B,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1081,K69I-IS2,INT2204 13,Lập trình hướng đối tượng,LT,Tô Văn Khánh,3,55,CL,3,2,510-GĐ4-B,,Học tuần 1-10
+1082,K69I-IS2,INT2204 13,Lập trình hướng đối tượng,TH,Phạm Tùng Thủy,3,55,CL,4,4,303-GĐ4-A,,Học tuần 1-10
+1083,K69I-IS3,PHI1006 8,Triết học Mác – Lênin,LT,ĐHKHXHNV,3,55,CL,4,1,210-GĐ3,,Học tuần 1-15
+1084,K69I-IS3,INT2210 14,Cấu trúc dữ liệu và giải thuật,LT,Nguyễn Thị Nhật Thanh,4,55,CL,6,4,208-GĐ4-B,,Học tuần 1-10
+1085,K69I-IS3,INT2210 14,Cấu trúc dữ liệu và giải thuật,ONL,Nguyễn Thị Nhật Thanh,4,55,CL,7,2,,,
+1086,K69I-IS3,INT2210 14,Cấu trúc dữ liệu và giải thuật,TH,Nguyễn Đức Hoàng Long,4,55,CL,6,2,404-GĐ4-A,,Học tuần 1-10
+1087,K69I-IS3,MAT1101 14,Xác suất thống kê,LT,Lê Thị Hường,3,55,CL,4,2,208-GĐ3,,Học tuần 1-15
+1088,K69I-IS3,INT2211 14,Cơ sở dữ liệu,LT,Vũ Bá Duy,4,55,CL,5,2,508-GĐ4-B,,Học tuần 1-15
+1089,K69I-IS3,INT2211 14,Cơ sở dữ liệu,TH,Nguyễn Thị Cẩm Vân+Đoàn Xuân Dũng,4,55,CL,6,1,304-GĐ4-A,,Học tuần 1-15
+1090,K69I-IS3,INT2212 14,Kiến trúc máy tính,LT,Phạm Minh Triển,4,55,CL,5,1,509-GĐ4-B,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1091,K69I-IS3,INT2212 14,Kiến trúc máy tính,LT,Phạm Minh Triển,4,55,CL,4,3,509-GĐ4-B,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1092,K69I-IS3,INT2204 14,Lập trình hướng đối tượng,LT,Võ Đình Hiếu,3,55,CL,4,4,508-GĐ4-B,,Học tuần 1-10
+1093,K69I-IS3,INT2204 14,Lập trình hướng đối tượng,TH,Kiều Văn Tuyên,3,55,CL,6,3,304-GĐ4-A,,Học tuần 1-10
+1094,K69I-IT1,PEC1008 1,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,60,CL,4,3,203-GĐ4-B,,Học tuần 1-10
+1095,K69I-IT1,INT2210 1,Cấu trúc dữ liệu và giải thuật,LT,Nguyễn Việt Anh,4,60,CL,3,1,407-GĐ4-A,,Học tuần 1-10
+1096,K69I-IT1,INT2210 1,Cấu trúc dữ liệu và giải thuật,ONL,Nguyễn Việt Anh,4,60,CL,6,4,,,
+1097,K69I-IT1,INT2210 1,Cấu trúc dữ liệu và giải thuật,TH,Lê Bằng Giang,4,60,CL,3,3,404-GĐ4-A,,Học tuần 1-10
+1098,K69I-IT1,MAT1101 1,Xác suất thống kê,LT,Nghiêm Nguyễn Việt Dũng,3,60,CL,4,1,109-GĐ4-B,,Học tuần 1-15
+1099,K69I-IT1,INT2212 1,Kiến trúc máy tính,LT,Nguyễn Trí Thành,4,60,CL,5,1,207-GĐ4-B,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1100,K69I-IT1,INT2212 1,Kiến trúc máy tính,LT,Nguyễn Trí Thành,4,60,CL,4,4,201-GĐ4-B,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1101,K69I-IT1,INT2211 1,Cơ sở dữ liệu,LT,Vũ Bá Duy,4,60,CL,6,2,203-GĐ4-B,,Học tuần 1-15
+1102,K69I-IT1,INT2211 1,Cơ sở dữ liệu,TH,Nguyễn Thị Cẩm Vân+Nguyễn Công,4,60,CL,6,3,201-GĐ4-B,,
+1103,K69I-IT1,INT2204 1,Lập trình hướng đối tượng,LT,Nguyễn Đức Anh,3,60,CL,3,2,206-GĐ4-B,,Học tuần 1-10
+1104,K69I-IT1,INT2204 1,Lập trình hướng đối tượng,TH,Vũ Trọng Thanh,3,60,CL,4,2,304-GĐ4-A,,Học tuần 1-10
+1105,K69I-IT2,PEC1008 2,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,60,CL,2,1,202-GĐ4-B,,Học tuần 1-10
+1106,K69I-IT2,INT2210 2,Cấu trúc dữ liệu và giải thuật,LT,Trần Thị Minh Châu,4,60,CL,4,1,202-GĐ4-B,,Học tuần 1-10
+1107,K69I-IT2,INT2210 2,Cấu trúc dữ liệu và giải thuật,ONL,Trần Thị Minh Châu,4,60,CL,7,1,,,
+1108,K69I-IT2,INT2210 2,Cấu trúc dữ liệu và giải thuật,TH,Lê Bằng Giang,4,60,CL,6,3,303-GĐ4-A,,Học tuần 1-10
+1109,K69I-IT2,MAT1101 2,Xác suất thống kê,LT,Đặng Cao Cường,3,60,CL,2,2,210-GĐ4-B,,Học tuần 1-15
+1110,K69I-IT2,INT2212 2,Kiến trúc máy tính,LT,Nguyễn Trí Thành,4,60,CL,6,4,204-GĐ4-B,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1111,K69I-IT2,INT2212 2,Kiến trúc máy tính,LT,Nguyễn Trí Thành,4,60,CL,3,3,202-GĐ4-B,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1112,K69I-IT2,INT2211 2,Cơ sở dữ liệu,LT,Vũ Bá Duy,4,60,CL,6,1,204-GĐ4-B,,Học tuần 1-15
+1113,K69I-IT2,INT2211 2,Cơ sở dữ liệu,TH,Nguyễn Quốc An+Phạm An Đức Vinh,4,60,CL,3,4,202-GĐ4-B,,
+1114,K69I-IT2,INT2204 2,Lập trình hướng đối tượng,LT,Nguyễn Văn Sơn,3,60,CL,3,2,204-GĐ4-B,,Học tuần 1-10
+1115,K69I-IT2,INT2204 2,Lập trình hướng đối tượng,TH,Vũ Trọng Thanh,3,60,CL,6,2,304-GĐ4-A,,Học tuần 1-10
+1116,K69I-IT3,PEC1008 3,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,60,CL,4,4,304-GĐ4-A,,Học tuần 1-10
+1117,K69I-IT3,INT2210 3,Cấu trúc dữ liệu và giải thuật,LT,Lê Quang Hiếu,4,60,CL,3,4,304-GĐ4-A,,Học tuần 1-10
+1118,K69I-IT3,INT2210 3,Cấu trúc dữ liệu và giải thuật,ONL,Lê Quang Hiếu,4,60,CL,7,2,,,
+1119,K69I-IT3,INT2210 3,Cấu trúc dữ liệu và giải thuật,TH,Nguyễn Minh Đức,4,60,CL,2,1,304-GĐ4-A,,Học tuần 1-10
+1120,K69I-IT3,MAT1101 3,Xác suất thống kê,LT,Hoàng Thị Điệp,3,60,CL,4,1,110-GĐ4-B,,Học tuần 1-15
+1121,K69I-IT3,INT2212 3,Kiến trúc máy tính,LT,Nguyễn Trí Thành,4,60,CL,4,2,206-GĐ4-B,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1122,K69I-IT3,INT2212 3,Kiến trúc máy tính,LT,Nguyễn Trí Thành,4,60,CL,3,2,304-GĐ4-A,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1123,K69I-IT3,INT2211 3,Cơ sở dữ liệu,LT,Dư Phương Hạnh,4,60,CL,4,3,304-GĐ4-A,,Học tuần 1-15
+1124,K69I-IT3,INT2211 3,Cơ sở dữ liệu,TH,"Phạm Thị Quỳnh Trang+Nguyễn Hoàng Trung",4,60,CL,3,3,304-GĐ4-A,,
+1125,K69I-IT3,INT2204 3,Lập trình hướng đối tượng,LT,Vũ Thị Hồng Nhạn,3,60,CL,2,2,304-GĐ4-A,,Học tuần 1-10
+1126,K69I-IT3,INT2204 3,Lập trình hướng đối tượng,TH,Trần Ngọc Trúc Linh,3,60,CL,2,3,304-GĐ4-A,,Học tuần 1-10
+1127,K69I-IT4,PEC1008 4,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,60,CL,6,4,203-GĐ4-B,,Học tuần 1-10
+1128,K69I-IT4,INT2210 4,Cấu trúc dữ liệu và giải thuật,LT,Nguyễn Việt Anh,4,60,CL,3,2,407-GĐ4-A,,Học tuần 1-10
+1129,K69I-IT4,INT2210 4,Cấu trúc dữ liệu và giải thuật,ONL,Nguyễn Việt Anh,4,60,CL,7,1,,,
+1130,K69I-IT4,INT2210 4,Cấu trúc dữ liệu và giải thuật,TH,Lê Việt Quân,4,60,CL,4,1,203-GĐ4-B,,Học tuần 1-10
+1131,K69I-IT4,MAT1101 4,Xác suất thống kê,LT,Hoàng Thị Điệp,3,60,CL,2,4,203-GĐ4-B,,Học tuần 1-15
+1132,K69I-IT4,INT2212 4,Kiến trúc máy tính,LT,Nguyễn Trí Thành,4,60,CL,2,1,203-GĐ4-B,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1133,K69I-IT4,INT2212 4,Kiến trúc máy tính,LT,Nguyễn Trí Thành,4,60,CL,3,1,509-GĐ4-B,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1134,K69I-IT4,INT2211 4,Cơ sở dữ liệu,LT,Dư Phương Hạnh,3,60,CL,2,2,203-GĐ4-B,,Học tuần 1-15
+1135,K69I-IT4,INT2211 4,Cơ sở dữ liệu,TH,"Nguyễn Hoàng Trung+Phạm Thị Quỳnh Trang",3,60,CL,2,3,203-GĐ4-B,,
+1136,K69I-IT4,INT2204 4,Lập trình hướng đối tượng,LT,Vũ Thị Hồng Nhạn,3,60,CL,6,3,204-GĐ4-B,,Học tuần 1-10
+1137,K69I-IT4,INT2204 4,Lập trình hướng đối tượng,TH,Vũ Đức Hiếu,3,60,CL,6,1,303-GĐ4-A,,Học tuần 1-10
+1138,K69I-IT5,PEC1008 5,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,60,CL,2,2,204-GĐ4-B,,Học tuần 1-10
+1139,K69I-IT5,INT2210 5,Cấu trúc dữ liệu và giải thuật,LT,Lê Nguyên Khôi,4,60,CL,2,1,204-GĐ4-B,,Học tuần 1-10
+1140,K69I-IT5,INT2210 5,Cấu trúc dữ liệu và giải thuật,ONL,Lê Nguyên Khôi,4,60,CL,CN,1,,,
+1141,K69I-IT5,INT2210 5,Cấu trúc dữ liệu và giải thuật,TH,Lê Việt Quân,4,60,CL,2,3,204-GĐ4-B,,Học tuần 1-10
+1142,K69I-IT5,MAT1101 5,Xác suất thống kê,LT,Hoàng Thị Điệp,3,60,CL,4,2,207-GĐ4-B,,Học tuần 1-15
+1143,K69I-IT5,INT2212 5,Kiến trúc máy tính,LT,Trần Trọng Hiếu,4,60,CL,2,4,204-GĐ4-B,,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1144,K69I-IT5,INT2212 5,Kiến trúc máy tính,LT,Trần Trọng Hiếu,4,60,CL,5,1,208-GĐ4-B,,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1145,K69I-IT5,INT2211 5,Cơ sở dữ liệu,LT,Vương Thị Hải Yến,3,60,CL,4,3,204-GĐ4-B,,Học tuần 1-15
+1146,K69I-IT5,INT2211 5,Cơ sở dữ liệu,TH,Nguyễn Quốc An+Nguyễn Hoàng Trung,3,60,CL,5,2,204-GĐ4-B,,
+1147,K69I-IT5,INT2204 5,Lập trình hướng đối tượng,LT,Nguyễn Thu Trang,3,60,CL,3,1,106-GĐ4-A,,Học tuần 1-10
+1148,K69I-IT5,INT2204 5,Lập trình hướng đối tượng,TH,Trương Xuân Hiếu,3,60,CL,4,4,204-GĐ4-B,,Học tuần 1-10
+1149,K69I-IT6,PEC1008 6,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,60,CL,6,1,403-GĐ4-A,,Học tuần 1-10
+1150,K69I-IT6,INT2210 6,Cấu trúc dữ liệu và giải thuật,LT,Vương Thị Hải Yến,4,60,CL,3,1,403-GĐ4-A,,Học tuần 1-10
+1151,K69I-IT6,INT2210 6,Cấu trúc dữ liệu và giải thuật,ONL,Vương Thị Hải Yến,4,60,CL,6,2,,,
+1152,K69I-IT6,INT2210 6,Cấu trúc dữ liệu và giải thuật,TH,Lê Việt Quân,4,60,CL,6,4,403-GĐ4-A,,Học tuần 1-10
+1153,K69I-IT6,MAT1101 6,Xác suất thống kê,LT,Lê Thị Hường,3,60,CL,4,3,403-GĐ4-A,,Học tuần 1-15
+1154,K69I-IT6,INT2212 6,Kiến trúc máy tính,LT,Trần Trọng Hiếu,4,60,CL,4,2,201-GĐ4-B,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1155,K69I-IT6,INT2212 6,Kiến trúc máy tính,LT,Trần Trọng Hiếu,4,60,CL,2,3,403-GĐ4-A,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1156,K69I-IT6,INT2211 6,Cơ sở dữ liệu,LT,Nguyễn Hải Châu,3,60,CL,6,3,403-GĐ4-A,,Học tuần 1-15
+1157,K69I-IT6,INT2211 6,Cơ sở dữ liệu,TH,Nguyễn Quốc An+Nguyễn Hoàng Trung,3,60,CL,2,2,403-GĐ4-A,,
+1158,K69I-IT6,INT2204 6,Lập trình hướng đối tượng,LT,Tô Văn Khánh,3,60,CL,4,1,403-GĐ4-A,,Học tuần 1-10
+1159,K69I-IT6,INT2204 6,Lập trình hướng đối tượng,TH,Trương Xuân Hiếu,3,60,CL,5,2,403-GĐ4-A,,Học tuần 1-10
+1160,K69M-AT1,POL1001 47,Tư tưởng Hồ Chí Minh,LT,ĐHKHXHNV,2,60,CL,6,2,205-GĐ4-B,,Học tuần 1-10
+1161,K69M-AT1,EMA2011 35,Phương pháp tính trong kỹ thuật,LT,Trần Thanh Hải,3,60,CL,2,4,110-GĐ4-B,,Học tuần 1-10
+1162,K69M-AT1,EMA2011 35,Phương pháp tính trong kỹ thuật,TH,Trần Thanh Hải,3,60,CL,4,1,204-GĐ4-B,,Học tuần 2-11
+1163,K69M-AT1,EMA2050 35,Xác suất thống kê ứng dụng,LT,Nguyễn Văn Quang,3,60,CL,2,3,201-GĐ4-B,,Học tuần 1-10
+1164,K69M-AT1,EMA2050 35,Xác suất thống kê ứng dụng,TH,Trần Thanh Tùng,3,60,CL,3,1,205-GĐ4-B,,Học tuần 2-11
+1165,K69M-AT1,EMA2036 35,Cơ học kỹ thuật 1,LT,Đào Như Mai,3,60,CL,6,3,205-GĐ4-B,,Học tuần 5-14
+1166,K69M-AT1,EMA2036 35,Cơ học kỹ thuật 1,TH,Nguyễn Đông Anh+Đỗ Nam,3,60,CL,5,4,110-GĐ4-B,,Học tuần 6-15
+1167,K69M-AT1,EMA2006 35,Matlab và ứng dụng,LT,Nguyễn Cao Sơn,3,60,CL,4,3,109-GĐ4-B,,Học tuần 1-10
+1168,K69M-AT1,EMA2006 35,Matlab và ứng dụng,TH,Nguyễn Cao Sơn,3,60,CL,6,4,303-GĐ4-A,,Học tuần 2-11
+1169,K69M-AT1,EMA2032 35,Hình hoạ Kỹ thuật và CAD,LT,Hoàng Quốc Anh,2,60,CL,4,2,102-GĐ4-B,,Học tuần 1-10
+1170,K69M-AT1,EMA2032 35,Hình hoạ Kỹ thuật và CAD,TH,Hoàng Quốc Anh,2,60,CL,4,4,110-GĐ4-B,,Học tuần 2-11
+1171,K69M-AT1,EMA2026 35,Cơ sở kỹ thuật điện,LT,Trần Như Chí,2,60,CL,6,1,205-GĐ4-B,,Học tuần 1-10
+1172,K69M-AT1,EMA2026 35,Cơ sở kỹ thuật điện,TH,Trần Như Chí+Nguyễn Danh Vương,2,20,1,7,2,701-E3,,Học tuần 3-7
+1173,K69M-AT1,EMA2026 35,Cơ sở kỹ thuật điện,TH,Trần Như Chí+Nguyễn Danh Vương,2,20,2,5,1,701-E3,,Học tuần 3-7
+1174,K69M-AT1,EMA2026 35,Cơ sở kỹ thuật điện,TH,Phạm Quang Hùng+Nguyễn Danh Vương,2,20,3,5,2,701-E3,,Học tuần 3-7
+1175,K69M-AT2,POL1001 48,Tư tưởng Hồ Chí Minh,LT,ĐHKHXHNV,2,60,CL,3,4,205-GĐ4-B,,Học tuần 1-10
+1176,K69M-AT2,EMA2011 36,Phương pháp tính trong kỹ thuật,LT,Trần Thanh Hải,3,60,CL,6,3,206-GĐ4-B,,Học tuần 1-10
+1177,K69M-AT2,EMA2011 36,Phương pháp tính trong kỹ thuật,TH,Trần Thanh Hải,3,60,CL,2,3,205-GĐ4-B,,Học tuần 2-11
+1178,K69M-AT2,EMA2050 36,Xác suất thống kê ứng dụng,LT,Nguyễn Văn Quang,3,60,CL,2,4,205-GĐ4-B,,Học tuần 1-10
+1179,K69M-AT2,EMA2050 36,Xác suất thống kê ứng dụng,TH,Trần Thanh Tùng,3,60,CL,5,2,205-GĐ4-B,,Học tuần 2-11
+1180,K69M-AT2,EMA2036 36,Cơ học kỹ thuật 1,LT,Đào Như Mai,3,60,CL,3,2,205-GĐ4-B,,Học tuần 5-14
+1181,K69M-AT2,EMA2036 36,Cơ học kỹ thuật 1,TH,Nguyễn Đông Anh+Đỗ Nam,3,60,CL,5,3,110-GĐ4-B,,Học tuần 6-15
+1182,K69M-AT2,EMA2006 36,Matlab và ứng dụng,LT,Nguyễn Cao Sơn,3,60,CL,2,1,205-GĐ4-B,,Học tuần 1-10
+1183,K69M-AT2,EMA2006 36,Matlab và ứng dụng,TH,Nguyễn Cao Sơn,3,60,CL,3,3,205-GĐ4-B,,Học tuần 2-11
+1184,K69M-AT2,EMA2032 36,Hình hoạ Kỹ thuật và CAD,LT,Hoàng Quốc Anh,2,60,CL,2,2,205-GĐ4-B,,Học tuần 1-10
+1185,K69M-AT2,EMA2032 36,Hình hoạ Kỹ thuật và CAD,TH,Hoàng Quốc Anh,2,60,CL,6,2,403-GĐ4-A,,Học tuần 2-11
+1186,K69M-AT2,EMA2026 36,Cơ sở kỹ thuật điện,LT,Hoàng Bảo Anh,2,60,CL,6,1,206-GĐ4-B,,Học tuần 1-10
+1187,K69M-AT2,EMA2026 36,Cơ sở kỹ thuật điện,TH,Phạm Đình Tuân+Đặng Văn Hiếu,2,20,1,4,3,701-E3,,Học tuần 3-7
+1188,K69M-AT2,EMA2026 36,Cơ sở kỹ thuật điện,TH,Phạm Đình Tuân+Đặng Văn Hiếu,2,20,2,4,4,701-E3,,Học tuần 3-7
+1189,K69M-AT2,EMA2026 36,Cơ sở kỹ thuật điện,TH,Hoàng Bảo Anh+Lê Thành Trung,2,20,3,4,2,701-E3,,Học tuần 3-7
+1190,K69M-AT3,POL1001 49,Tư tưởng Hồ Chí Minh,LT,ĐHKHXHNV,2,60,CL,2,4,206-GĐ4-B,,Học tuần 1-10
+1191,K69M-AT3,EMA2011 37,Phương pháp tính trong kỹ thuật,LT,Trần Thanh Hải,3,60,CL,4,2,205-GĐ4-B,,Học tuần 1-10
+1192,K69M-AT3,EMA2011 37,Phương pháp tính trong kỹ thuật,LT,Trần Thanh Hải,3,60,CL,6,4,206-GĐ4-B,,Học tuần 2-11
+1193,K69M-AT3,EMA2050 37,Xác suất thống kê ứng dụng,LT,Nguyễn Văn Quang,3,60,CL,2,2,206-GĐ4-B,,Học tuần 1-10
+1194,K69M-AT3,EMA2050 37,Xác suất thống kê ứng dụng,TH,Trần Thanh Tùng,3,60,CL,6,2,206-GĐ4-B,,Học tuần 2-11
+1195,K69M-AT3,EMA2036 37,Cơ học kỹ thuật 1,LT,Đào Như Mai,3,60,CL,2,1,206-GĐ4-B,,Học tuần 5-14
+1196,K69M-AT3,EMA2036 37,Cơ học kỹ thuật 1,TH,Nguyễn Đông Anh+Đỗ Huy Điệp,3,60,CL,4,3,206-GĐ4-B,,Học tuần 6-15
+1197,K69M-AT3,EMA2006 37,Matlab và ứng dụng,LT,Nguyễn Cao Sơn,3,60,CL,4,4,206-GĐ4-B,,Học tuần 1-10
+1198,K69M-AT3,EMA2006 37,Matlab và ứng dụng,TH,Nguyễn Cao Sơn,3,60,CL,4,1,206-GĐ4-B,,Học tuần 2-11
+1199,K69M-AT3,EMA2032 37,Hình hoạ Kỹ thuật và CAD,LT,Hoàng Quốc Anh,2,60,CL,6,3,207-GĐ4-B,,Học tuần 1-10
+1200,K69M-AT3,EMA2032 37,Hình hoạ Kỹ thuật và CAD,TH,Hoàng Quốc Anh,2,60,CL,6,1,207-GĐ4-B,,Học tuần 2-11
+1201,K69M-AT3,EMA2026 37,Cơ sở kỹ thuật điện,LT,Trần Văn Quảng,2,60,CL,2,3,206-GĐ4-B,,Học tuần 1-10
+1202,K69M-AT3,EMA2026 37,Cơ sở kỹ thuật điện,TH,Hoàng Bảo Anh+Đặng Văn Hiếu,2,20,1,7,1,701-E3,,Học tuần 3-7
+1203,K69M-AT3,EMA2026 37,Cơ sở kỹ thuật điện,TH,Hoàng Bảo Anh+Đặng Văn Hiếu,2,20,2,3,2,701-E3,,Học tuần 3-7
+1204,K69M-AT3,EMA2026 37,Cơ sở kỹ thuật điện,TH,Hoàng Bảo Anh+Đặng Văn Hiếu,2,20,3,3,1,701-E3,,Học tuần 3-7
+1206,"K69M-EM1+K69M-EM2",EMA2006 32,Matlab và ứng dụng,LT,Nguyễn Cao Sơn,3,80,CL,6,2,205-GĐ3,,Học tuần 1-10
+1207,K69M-EM1,EMA2006 32,Matlab và ứng dụng,TH,Nguyễn Cao Sơn,3,40,1,2,2,407-GĐ4-A,,Học tuần 2-11
+1208,K69M-EM2,EMA2006 32,Matlab và ứng dụng,TH,Nguyễn Cao Sơn,3,40,2,6,1,215-GĐ3,,Học tuần 2-11
+1209,"K69M-EM1+K69M-EM2",EMA2011 32,Phương pháp tính trong kỹ thuật,LT,Đặng Thế Ba,3,80,CL,4,4,205-GĐ3,,Học tuần 1-10
+1210,K69M-EM1,EMA2011 32,Phương pháp tính trong kỹ thuật,TH,Phạm Đình Nguyện,3,40,1,5,4,104-GĐ3,,Học tuần 2-11
+1211,K69M-EM2,EMA2011 32,Phương pháp tính trong kỹ thuật,TH,Phạm Đình Nguyện,3,40,2,2,2,215-GĐ3,,Học tuần 2-11
+1212,"K69M-EM1+K69M-EM2",EMA2032 32,Hình hoạ kỹ thuật và CAD,LT,Hoàng Quốc Anh,2,80,CL,5,2,205-GĐ3,,Học tuần 1-10
+1213,K69M-EM1,EMA2032 32,Hình hoạ kỹ thuật và CAD,TH,Hoàng Quốc Anh,2,40,1,2,3,407-GĐ4-A,,Học tuần 2-11
+1214,K69M-EM2,EMA2032 32,Hình hoạ kỹ thuật và CAD,TH,Hoàng Quốc Anh,2,40,2,3,4,215-GĐ3,,Học tuần 2-11
+1215,"K69M-EM1+K69M-EM2",EMA2036 32,Cơ học kỹ thuật 1,LT,Đào Như Mai,3,80,CL,5,1,205-GĐ3,,Học tuần 5-14
+1216,K69M-EM1,EMA2036 32,Cơ học kỹ thuật 1,TH,Đỗ Huy Điệp,3,40,1,2,4,407-GĐ4-A,,Học tuần 6-15
+1217,K69M-EM2,EMA2036 32,Cơ học kỹ thuật 1,TH,Đỗ Huy Điệp,3,40,2,6,3,215-GĐ3,,Học tuần 6-15
+1218,"K69M-EM1+K69M-EM2",EMA2041 32,"Phương trình vi phân và đạo hàm riêng",LT,Nguyễn Thế Đức+Nguyễn Đình Kiên,4,80,CL,4,2,206-GĐ3,,Học tuần 1-15
+1219,K69M-EM1,EMA2041 32,"Phương trình vi phân và đạo hàm riêng",TH,Nguyễn Thế Đức+Nguyễn Đình Kiên,4,40,1,4,1,217-GĐ3,,Học tuần 2-11
+1220,K69M-EM2,EMA2041 32,"Phương trình vi phân và đạo hàm riêng",TH,Nguyễn Thế Đức+Nguyễn Đình Kiên,4,40,2,3,2,213-GĐ3,,Học tuần 2-11
+1221,"K69M-EM1+K69M-EM2",EMA2050 32,Xác suất thống kê ứng dụng,LT,Nguyễn Văn Quang,3,80,CL,3,1,205-GĐ3,,Học tuần 1-10
+1222,K69M-EM1,EMA2050 32,Xác suất thống kê ứng dụng,TH,Trần Thanh Tùng,3,40,1,3,2,107-GĐ3,,Học tuần 2-11
+1223,K69M-EM2,EMA2050 32,Xác suất thống kê ứng dụng,TH,Trần Thanh Tùng,3,40,2,3,3,215-GĐ3,,Học tuần 2-11
+1224,"K69M-EM1+K69M-EM2",POL1001 46,Tư tưởng Hồ Chí Minh,LT,ĐHKHXHNV,2,80,CL,4,3,206-GĐ3,,Học tuần 1-10
+1225,K69M-MT1,PEC1008 40,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,60,CL,4,3,207-GĐ4-B,,Học tuần 1-10
+1226,K69M-MT1,EMA2050 40,Xác suất thống kê ứng dụng,LT,Nguyễn Văn Quang,3,60,CL,5,1,210-GĐ4-B,,Học tuần 1-10
+1227,K69M-MT1,EMA2050 40,Xác suất thống kê ứng dụng,TH,Trần Thanh Tùng,3,60,CL,6,3,208-GĐ4-B,,Học tuần 2-11
+1228,K69M-MT1,EMA2036 40,Cơ học kỹ thuật 1,LT,Đào Như Mai,3,60,CL,4,2,105-GĐ4-B,,Học tuần 5-14
+1229,K69M-MT1,EMA2036 40,Cơ học kỹ thuật 1,TH,Đỗ Nam,3,60,CL,3,2,203-GĐ4-B,,Học tuần 6-15
+1230,K69M-MT1,EMA2006E 40,Matlab và ứng dụng,LT,Đinh Trần Hiệp+Ngô Tiến Sáng,3,60,CL,2,1,207-GĐ4-B,,Học tuần 1-10
+1231,K69M-MT1,EMA2006E 40,Matlab và ứng dụng,TH,Ngô Tiến Sáng,3,60,CL,4,4,207-GĐ4-B,,Học tuần 2-11
+1232,K69M-MT1,EMA2032 40,Hình hoạ kỹ thuật và CAD,LT,Phan Thị Trà My,2,60,CL,7,3,107-GĐ3,,Học tuần 1-10
+1233,K69M-MT1,EMA2032 40,Hình hoạ kỹ thuật và CAD,TH,Phan Thị Trà My,2,60,CL,7,4,107-GĐ3,,Học tuần 2-11
+1234,K69M-MT1,EMA2026 40,Cơ sở kỹ thuật điện,LT,Bùi Thanh Tùng,2,60,CL,6,1,208-GĐ4-B,,Học tuần 1-10
+1235,K69M-MT1,EMA2026 40,Cơ sở kỹ thuật điện,TH,Phạm Đình Tuân+Lê Thành Trung,2,20,1,3,3,701-E3,,Học tuần 8-12
+1236,K69M-MT1,EMA2026 40,Cơ sở kỹ thuật điện,TH,Nguyễn Thu Hằng+Đỗ Đình Minh,2,20,2,2,3,701-E3,,Học tuần 8-12
+1237,K69M-MT1,EMA2026 40,Cơ sở kỹ thuật điện,TH,Đặng Văn Hiếu+Lê Thành Trung,2,20,3,5,3,701-E3,,Học tuần 8-12
+1238,K69M-MT1,EMA2011 40,Phương pháp tính trong kỹ thuật,LT,Nguyễn Văn Quang,3,60,CL,6,4,207-GĐ4-B,,Học tuần 1-10
+1239,K69M-MT1,EMA2011 40,Phương pháp tính trong kỹ thuật,TH,Nguyễn Văn Quang,3,60,CL,6,2,207-GĐ4-B,,Học tuần 2-11
+1240,K69M-MT1,PHI1002 40,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,60,CL,2,4,207-GĐ4-B,,Học tuần 1-10
+1241,K69M-MT2,PEC1008 41,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,60,CL,3,4,208-GĐ4-B,,Học tuần 1-10
+1242,K69M-MT2,EMA2050 41,Xác suất thống kê ứng dụng,LT,Nguyễn Văn Quang,3,60,CL,6,3,209-GĐ4-B,,Học tuần 1-10
+1243,K69M-MT2,EMA2050 41,Xác suất thống kê ứng dụng,TH,Trần Thanh Tùng,3,60,CL,4,2,104-GĐ4-B,,Học tuần 2-11
+1244,K69M-MT2,EMA2036 41,Cơ học kỹ thuật 1,LT,Đào Như Mai,3,60,CL,2,2,208-GĐ4-B,,Học tuần 1-10
+1245,K69M-MT2,EMA2036 41,Cơ học kỹ thuật 1,TH,Đỗ Nam,3,60,CL,4,4,208-GĐ4-B,,Học tuần 2-11
+1246,K69M-MT2,EMA2006E 41,Matlab và ứng dụng,LT,Đinh Trần Hiệp+Ngô Tiến Sáng,3,60,CL,5,2,208-GĐ4-B,,Học tuần 1-10
+1247,K69M-MT2,EMA2006E 41,Matlab và ứng dụng,TH,Ngô Tiến Sáng,3,60,CL,2,3,208-GĐ4-B,,Học tuần 2-11
+1248,K69M-MT2,EMA2032 41,Hình hoạ kỹ thuật và CAD,LT,Phan Thị Trà My,2,60,CL,3,3,208-GĐ4-B,,Học tuần 1-10
+1249,K69M-MT2,EMA2032 41,Hình hoạ kỹ thuật và CAD,TH,Phan Thị Trà My,2,60,CL,3,2,208-GĐ4-B,,Học tuần 2-11
+1250,K69M-MT2,EMA2026 41,Cơ sở kỹ thuật điện,LT,Đỗ Quang Lộc,2,60,CL,6,2,208-GĐ4-B,,Học tuần 1-10
+1251,K69M-MT2,EMA2026 41,Cơ sở kỹ thuật điện,TH,Đỗ Quang Lộc+Nguyễn Danh Vương,2,20,1,6,4,701-E3,,Học tuần 8-12
+1252,K69M-MT2,EMA2026 41,Cơ sở kỹ thuật điện,TH,Đỗ Quang Lộc+Nguyễn Danh Vương,2,20,2,2,4,701-E3,,Học tuần 8-12
+1253,K69M-MT2,EMA2026 41,Cơ sở kỹ thuật điện,TH,Đỗ Quang Lộc+Nguyễn Danh Vương,2,20,3,3,1,701-E3,,Học tuần 8-12
+1254,K69M-MT2,EMA2011 41,Phương pháp tính trong kỹ thuật,LT,Nguyễn Văn Quang,3,60,CL,4,3,208-GĐ4-B,,Học tuần 1-10
+1255,K69M-MT2,EMA2011 41,Phương pháp tính trong kỹ thuật,LT,Nguyễn Văn Quang,3,60,CL,6,1,209-GĐ4-B,,Học tuần 2-11
+1256,K69M-MT2,PHI1002 41,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,60,CL,2,1,208-GĐ4-B,,Học tuần 1-10
+1257,K69M-MT3,PEC1008 42,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,60,CL,6,3,210-GĐ4-B,,Học tuần 1-10
+1258,K69M-MT3,EMA2050 42,Xác suất thống kê ứng dụng,LT,Nguyễn Văn Quang,3,60,CL,4,1,209-GĐ4-B,,Học tuần 1-10
+1259,K69M-MT3,EMA2050 42,Xác suất thống kê ứng dụng,TH,Trần Thanh Tùng,3,60,CL,4,3,209-GĐ4-B,,Học tuần 2-11
+1260,K69M-MT3,EMA2036 42,Cơ học kỹ thuật 1,LT,Đào Như Mai,3,60,CL,6,1,210-GĐ4-B,,Học tuần 1-10
+1261,K69M-MT3,EMA2036 42,Cơ học kỹ thuật 1,TH,Đỗ Nam,3,60,CL,6,2,209-GĐ4-B,,Học tuần 2-11
+1262,K69M-MT3,EMA2006E 42,Matlab và ứng dụng,LT,Đinh Trần Hiệp+Ngô Tiến Sáng,3,60,CL,4,4,209-GĐ4-B,,Học tuần 1-10
+1263,K69M-MT3,EMA2006E 42,Matlab và ứng dụng,TH,Ngô Tiến Sáng,3,60,CL,6,4,202-GĐ4-B,,Học tuần 2-11
+1264,K69M-MT3,EMA2032 42,Hình hoạ kỹ thuật và CAD,LT,Phan Thị Trà My,2,60,CL,2,4,209-GĐ4-B,,Học tuần 1-10
+1265,K69M-MT3,EMA2032 42,Hình hoạ kỹ thuật và CAD,TH,Phan Thị Trà My,2,60,CL,2,3,209-GĐ4-B,,Học tuần 2-11
+1266,K69M-MT3,EMA2026 42,Cơ sở kỹ thuật điện,LT,Nguyễn Thu Hằng,2,60,CL,3,3,209-GĐ4-B,,Học tuần 1-10
+1267,K69M-MT3,EMA2026 42,Cơ sở kỹ thuật điện,TH,Lê Thành Trung+Nguyễn Danh Vương,2,20,1,3,2,701-E3,,Học tuần 8-12
+1268,K69M-MT3,EMA2026 42,Cơ sở kỹ thuật điện,TH,Nguyễn Thu Hằng+Nguyễn Danh Vương,2,20,2,2,2,701-E3,,Học tuần 8-12
+1269,K69M-MT3,EMA2026 42,Cơ sở kỹ thuật điện,TH,Nguyễn Thu Hằng+Nguyễn Danh Vương,2,20,3,4,2,701-E3,,Học tuần 8-12
+1270,K69M-MT3,EMA2011 42,Phương pháp tính trong kỹ thuật,LT,Nguyễn Văn Quang,3,60,CL,2,1,209-GĐ4-B,,Học tuần 1-10
+1271,K69M-MT3,EMA2011 42,Phương pháp tính trong kỹ thuật,LT,Nguyễn Văn Quang,3,60,CL,5,2,209-GĐ4-B,,Học tuần 2-11
+1272,K69M-MT3,PHI1002 42,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,60,CL,3,4,209-GĐ4-B,,Học tuần 1-10
+1273,K69P-EE1,PHI1002 3,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,50,CL,2,1,305-GĐ4-A,,Học tuần 1-10
+1274,K69P-EE1,EPN2055 1,Điện - Quang,LT,Hồ Thị Anh+Nguyễn Đăng Cơ,3,50,CL,2,2,305-GĐ4-A,,Học tuần 1-15
+1275,K69P-EE1,EET2020 1,Đồ họa kỹ thuật,TH,Hồ Anh Tâm,2,50,CL,5,2,305-GĐ4-A,,Học tuần 1-10
+1276,K69P-EE1,EET2024 1,Cơ sở hóa học và nhiên liệu 1,LT,Nguyễn Phương Hoài Nam,4,50,CL,4,2,206-GĐ4-A,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1277,K69P-EE1,EET2024 1,Cơ sở hóa học và nhiên liệu 1,LT,Nguyễn Phương Hoài Nam,4,50,CL,2,4,305-GĐ4-A,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1278,K69P-EE1,EMA2004 1,Cơ học môi trường liên tục,LT,Khoa Cơ,4,50,CL,2,3,305-GĐ4-A,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1279,K69P-EE1,EMA2004 1,Cơ học môi trường liên tục,LT,Khoa Cơ,4,50,CL,5,1,305-GĐ4-A,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1280,K69P-EE2,PHI1002 4,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,50,CL,6,2,206-GĐ4-A,,Học tuần 1-10
+1281,K69P-EE2,EPN2055 2,Điện - Quang,LT,Hồ Thị Anh+Nguyễn Đăng Cơ,3,50,CL,3,1,206-GĐ4-A,,Học tuần 1-15
+1282,K69P-EE2,EET2020 2,Đồ họa kỹ thuật,TH,Hồ Anh Tâm,2,50,CL,3,4,403-GĐ4-A,,Học tuần 1-10
+1283,K69P-EE2,EET2024 2,Cơ sở hóa học và nhiên liệu 1,LT,Nguyễn Phương Hoài Nam,4,40,CL,2,2,203-GĐ3,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1284,K69P-EE2,EET2024 2,Cơ sở hóa học và nhiên liệu 1,LT,Nguyễn Phương Hoài Nam,4,40,CL,3,2,206-GĐ4-A,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1285,K69P-EE2,EMA2004 2,Cơ học môi trường liên tục,LT,Khoa Cơ,4,50,CL,3,3,206-GĐ4-A,Ca 1,"Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1286,K69P-EE2,EMA2004 2,Cơ học môi trường liên tục,LT,Khoa Cơ,4,50,CL,5,2,206-GĐ4-A,"Ca 2, học từ tuần 11-15","Học 1 ca trong 10 tuần đầu, từ tuần 11 học 2 ca, thi vào đợt 2"
+1287,K69P-EP1,PHI1002 1,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,60,CL,3,1,508-GĐ4-B,,Học tuần 1-10
+1288,K69P-EP1,EPN2055 3,Điện và Quang,LT,Nguyễn Thị Minh Hồng+Nguyễn Đăng Cơ,3,60,CL,3,3,210-GĐ4-B,,Học tuần 1-15
+1289,K69P-EP1,PHY1104 1,Thực hành Vật lý đại cương,LT,ĐHKHTN,2,60,CL,4,2,209-GĐ4-B,,Học tuần 1-10
+1290,K69P-EP1,EPN2023 1,Các phương pháp toán lý,LT,Hoàng Nam Nhật+Nguyễn Huy Tiệp,3,60,CL,2,1,210-GĐ4-B,,Học tuần 1-15
+1291,K69P-EP1,EPN2015 1,Vật lý lượng tử,LT,Hoàng Nam Nhật+Nguyễn Đình Lãm,3,60,CL,4,1,210-GĐ4-B,,Học tuần 1-15
+1292,K69P-EP1.1,FLF1108 1,Tiếng Anh B2,LT,ĐHNN,5,45,CL,4,3,201-GĐ4-A,"Lớp K69P-EP1 chọn 1 trong 2 lớp FLF1108 1 hoặc FLF1108","Học 2 buổi 1 tuần, thi theo lịch của ĐHNN"
+1293,K69P-EP1.1,FLF1108 1,Tiếng Anh B2,LT,ĐHNN,5,45,CL,3,4,201-GĐ4-A,"Lớp K69P-EP1 chọn 1 trong 2 lớp FLF1108 1 hoặc FLF1108","Học 2 buổi 1 tuần, thi theo lịch của ĐHNN"
+1294,K69P-EP1.2,FLF1108 2,Tiếng Anh B2,LT,ĐHNN,5,45,CL,4,4,201-GĐ4-A,"Lớp K69P-EP1 chọn 1 trong 2 lớp FLF1108 1 hoặc FLF1108","Học 2 buổi 1 tuần, thi theo lịch của ĐHNN"
+1295,K69P-EP1.2,FLF1108 2,Tiếng Anh B2,LT,ĐHNN,5,45,CL,3,2,201-GĐ4-A,"Lớp K69P-EP1 chọn 1 trong 2 lớp FLF1108 1 hoặc FLF1108","Học 2 buổi 1 tuần, thi theo lịch của ĐHNN"
+1296,K69P-EP2,PHI1002 2,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,66,CL,6,1,204-GĐ4-A,,Học tuần 1-10
+1297,K69P-EP2,EPN2055 4,Điện và Quang,LT,Nguyễn Thị Minh Hồng+Nguyễn Đăng Cơ,3,66,CL,3,2,404-GĐ4-A,,Học tuần 1-15
+1298,K69P-EP2,PHY1104 2,Thực hành Vật lý đại cương,LT,ĐHKHTN,2,66,CL,3,3,106-GĐ4-A,,Học tuần 1-10
+1299,K69P-EP2,EPN2023 2,Các phương pháp toán lý,LT,Hoàng Nam Nhật+Nguyễn Huy Tiệp,3,66,CL,3,4,106-GĐ4-A,,Học tuần 1-15
+1300,K69P-EP2,EPN2015 2,Vật lý lượng tử,LT,Hoàng Nam Nhật+Nguyễn Đình Lãm,3,66,CL,6,2,106-GĐ4-A,,Học tuần 1-15
+1301,K69P-EP2.1,FLF1108 3,Tiếng Anh B2,LT,ĐHNN,5,45,CL,6,4,201-GĐ4-A,"Lớp K69P-EP2 chọn 1 trong 2 lớp FLF1108 3 hoặc FLF1108","Học 2 buổi 1 tuần, thi theo lịch của ĐHNN"
+1302,K69P-EP2.1,FLF1108 3,Tiếng Anh B2,LT,ĐHNN,5,45,CL,5,1,201-GĐ4-A,"Lớp K69P-EP2 chọn 1 trong 2 lớp FLF1108 3 hoặc FLF1108","Học 2 buổi 1 tuần, thi theo lịch của ĐHNN"
+1303,K69P-EP2.2,FLF1108 4,Tiếng Anh B2,LT,ĐHNN,5,45,CL,6,3,201-GĐ4-A,"Lớp K69P-EP2 chọn 1 trong 2 lớp FLF1108 3 hoặc FLF1108","Học 2 buổi 1 tuần, thi theo lịch của ĐHNN"
+1304,K69P-EP2.2,FLF1108 4,Tiếng Anh B2,LT,ĐHNN,5,45,CL,5,2,201-GĐ4-A,"Lớp K69P-EP2 chọn 1 trong 2 lớp FLF1108 3 hoặc FLF1108","Học 2 buổi 1 tuần, thi theo lịch của ĐHNN"
+1305,K69S-AE1,AER2011 20,Phương pháp số,LT,Lê Đình Anh,3,60,CL,2,3,307-GĐ4-A,,Học tuần 1-10
+1306,K69S-AE1,AER2011 20,Phương pháp số,TH,Nguyễn Công Minh,3,60,CL,5,1,107-GĐ4-B,,Học tuần 2-11
+1308,K69S-AE1,AER2013 20,"Cơ học kỹ thuật cho Công nghệ Hàng không Vũ trụ",LT,Nguyễn Văn Thương,3,60,2,3,3,307-GĐ4-A,,Học tuần 1-10
+1309,K69S-AE1,AER2013 20,"Cơ học kỹ thuật cho Công nghệ Hàng không Vũ trụ",TH,Trần Đăng Huy,3,60,CL,3,4,204-GĐ4-B,,Học tuần 2-11
+1311,K69S-AE1,EMA2041 20,"Phương trình vi phân và đạo hàm riêng",LT,Nguyễn Hoàng Quân,4,60,2,3,1,307-GĐ4-A,,Học tuần 1-15
+1312,K69S-AE1,EMA2041 20,"Phương trình vi phân và đạo hàm riêng",TH,Trần Đăng Huy,4,60,CL,6,2,504-GĐ4-A,,Học tuần 2-11
+1314,K69S-AE1,INT1008 20,Nhập môn lập trình,LT,Lê Quang Minh,3,60,CL,3,2,307-GĐ4-A,,Học tuần 1-8
+1315,K69S-AE1,INT1008 20,Nhập môn lập trình,TH,Bành Đức Minh,3,60,CL,5,2,407-GĐ4-A,,Học tuần 2-15
+1317,K69S-AE1,MAT1101 20,Xác suất thống kê,LT,Phùng Đức Thuận,3,60,CL,2,2,307-GĐ4-A,,Học tuần 1-15
+1318,K69S-AE1,PEC1008 20,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,60,2,2,4,307-GĐ4-A,,Học tuần 1-10
+1319,K69S-AE1,PHI1002 20,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,60,CL,6,3,307-GĐ4-A,,Học tuần 1-10
+1320,K69S-AE2,AER2011 21,Phương pháp số,LT,Lê Đình Anh,3,60,CL,2,4,508-GĐ4-B,,Học tuần 1-10
+1321,K69S-AE2,AER2011 21,Phương pháp số,TH,Nguyễn Công Minh,3,60,1,2,3,508-GĐ4-B,,Học tuần 2-11
+1322,K69S-AE2,AER2013 21,"Cơ học kỹ thuật cho Công nghệ Hàng không Vũ trụ",LT,Nguyễn Văn Thương,3,60,2,4,1,508-GĐ4-B,,Học tuần 1-10
+1323,K69S-AE2,AER2013 21,"Cơ học kỹ thuật cho Công nghệ Hàng không Vũ trụ",TH,Trần Đăng Huy,3,60,1,3,2,508-GĐ4-B,,Học tuần 2-11
+1324,K69S-AE2,EMA2041 21,"Phương trình vi phân và đạo hàm riêng",LT,Nguyễn Hoàng Quân,4,60,2,3,4,508-GĐ4-B,,Học tuần 1-15
+1325,K69S-AE2,EMA2041 21,"Phương trình vi phân và đạo hàm riêng",TH,Trần Đăng Huy,4,60,1,6,3,508-GĐ4-B,,Học tuần 2-11
+1326,K69S-AE2,INT1008 21,Nhập môn lập trình,LT,Lê Quang Minh,3,60,CL,5,1,504-GĐ4-A,,Học tuần 2-15
+1327,K69S-AE2,INT1008 21,Nhập môn lập trình,TH,Bành Đức Minh,3,60,1,2,2,508-GĐ4-B,,Học tuần 2-15
+1328,K69S-AE2,MAT1101 21,Xác suất thống kê,LT,Phùng Đức Thuận,3,60,CL,6,2,508-GĐ4-B,,Học tuần 1-15
+1329,K69S-AE2,PEC1008 21,Kinh tế chính trị Mác – Lênin,LT,ĐHKT,2,60,2,2,1,508-GĐ4-B,,Học tuần 1-10
+1330,K69S-AE2,PHI1002 21,Chủ nghĩa xã hội khoa học,LT,ĐHKHXHNV,2,60,CL,3,3,508-GĐ4-B,,Học tuần 1-10
