@@ -22,7 +22,7 @@ AntColony::AntColony(
     conflict_exams(student_conflict),
     total_student_conflict([&]() {
       std::vector<int> total_conflict(num_exams);
-      for (int exam = 0; exam < num_exams; ++exam) {
+      for (size_t exam = 0; exam < num_exams; ++exam) {
         auto [first, last] = conflict_exams.row_range(exam);
         for (auto it = first; it != last; ++it) {
           int neighbor_exam = *it;
@@ -101,7 +101,7 @@ void AntColony::run() {
     std::mt19937 thread_rng(time_seed + thread_id);
 
     #pragma omp for schedule(dynamic)
-    for (int i = 0; i < hyperparams.aco.num_ants; ++i) {
+    for (size_t i = 0; i < hyperparams.aco.num_ants; ++i) {
       bool ok = false;
       while (!ok) {
         ok = construct_ant(ants[i], thread_rng);
@@ -111,7 +111,7 @@ void AntColony::run() {
   }
 
   int i_best = 0;
-  for (int i = 1; i < hyperparams.aco.num_ants; ++i) {
+  for (size_t i = 1; i < hyperparams.aco.num_ants; ++i) {
     if (ants[i].fitness < ants[i_best].fitness) {
       i_best = i;
     }

@@ -36,8 +36,8 @@ public:
   Matrix(const std::vector<std::vector<T>>& list)
     : Matrix(list.size(), list[0].size())
   {
-    for (int r = 0; r < rows; ++r) {
-      for (int c = 0; c < cols; ++c) {
+    for (size_t r = 0; r < rows; ++r) {
+      for (size_t c = 0; c < cols; ++c) {
         data[r * cols + c] = list[r][c];
       }
     }
