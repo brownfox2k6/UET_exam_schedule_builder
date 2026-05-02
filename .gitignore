@@ -1,1 +1,60 @@
+# CMake outputs
 build/
+out/
+bin/
+
+# CMake temp files
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+
+# C++ Object files & Binaries
+*.o
+*.obj
+*.a
+*.lib
+*.out
+*.app
+
+# pybind11 outputs
+*.so
+*.dylib
+*.pyd
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+env/
+.env/
+.venv/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Tooling Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# CLion
+.idea/
+cmake-build-*/
