@@ -24,6 +24,9 @@ compile_commands.json
 *.dylib
 *.pyd
 
+# clangd
+.cache/
+
 # Python Cache
 __pycache__/
 *.py[cod]

@@ -34,13 +34,10 @@ list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 
 pybind11_add_module(aco_solver ${SOURCES})
 
-target_include_directories(aco_solver PRIVATE 
-  include
-  third_party
-)
+target_include_directories(aco_solver PRIVATE include)
 
 if(OpenMP_CXX_FOUND)
   target_link_libraries(aco_solver PRIVATE OpenMP::OpenMP_CXX)
 endif()
 
-set_target_properties(aco_solver PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}")
+set_target_properties(aco_solver PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
