@@ -1,5 +1,6 @@
 #include <chrono>
 #include <cstddef>
+#include <functional>
 #include <random>
 #include <omp.h>
 #include "ant_colony.hpp"
@@ -93,7 +94,7 @@ void AntColony::update_pheromone(const Ant& best_ant) {
   }
 }
 
-void AntColony::run() {
+double AntColony::run_one_iteration() {
   #pragma omp parallel
   {
     auto time_seed = std::chrono::steady_clock::now().time_since_epoch().count();
@@ -116,10 +117,21 @@ void AntColony::run() {
       i_best = i;
     }
   }
-  if (ants[i_best].fitness < global_best.fitness) {
-    global_best = ants[i_best];
+  Ant& iter_best = ants[i_best];
+  if (iter_best.fitness < global_best.fitness) {
+    global_best = iter_best;
   }
-  update_pheromone(ants[i_best]);
+  update_pheromone(iter_best);
+  return iter_best.fitness;
+}
+
+void AntColony::run(std::function<void(int, double)> callback) {
+  for (int iter = 1; iter <= hyperparams.aco.num_iters; ++iter) {
+    double iter_best_cost = run_one_iteration();
+    if (callback) {
+      callback(iter, iter_best_cost);
+    }
+  }
 }
 
 } // namespace aco

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <vector>
 #include <random>
 #include "ant.hpp"
@@ -10,7 +11,7 @@
 namespace aco {
 
 /*
- * @brief The core engine for the Ant Colony Optimization technique.
+ * @brief The core engine for the Ant Colony Optimization algorithm.
  */
 class AntColony {
 private:
@@ -81,10 +82,21 @@ public:
   Ant global_best;
 
   /**
-   * @brief Executes the main loop of the Ant Colony Optimization algorithm.
-   * Handles multi-threading, ant construction, local search, and global pheromone updates.
+   * @brief Executes a single iteration of the Ant Colony Optimization algorithm.
+   * This involves constructing solutions for all ants in parallel, applying 
+   * local search, finding the best ant of the generation, updating the 
+   * global best solution, and updating the pheromone matrix.
+   * @return double The best cost (fitness) found by the ants in this iteration.
    */
-  void run();
+  double run_one_iteration();
+
+  /**
+   * @brief Executes the main loop of the Ant Colony Optimization algorithm.
+   * @param callback Optional callback function for real-time progress monitoring (e.g., via Python).
+   * - Param 1 (int): The current iteration number.
+   * - Param 2 (double): The best cost (penalty) found in the current iteration.
+   */
+  void run(std::function<void(int, double)> callback = nullptr);
 };
 
 } // namespace aco
