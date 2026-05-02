@@ -3,7 +3,6 @@
 #include <cstddef>
 #include <vector>
 #include <cassert>
-#include <cmath>
 #include "matrix.hpp"
 #include "csr_matrix.hpp"
 
