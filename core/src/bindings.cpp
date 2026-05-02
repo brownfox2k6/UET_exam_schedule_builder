@@ -1,8 +1,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include "ant.hpp"
 #include "ant_colony.hpp"
 #include "hyperparameters.hpp"
-#include "structures.hpp"
 
 namespace py = pybind11;
 

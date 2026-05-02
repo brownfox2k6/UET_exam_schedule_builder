@@ -1,5 +1,4 @@
 #include "ant_colony.hpp"
-#include "structures.hpp"
 #include <random>
 
 namespace aco {

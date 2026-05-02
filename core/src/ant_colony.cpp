@@ -1,10 +1,10 @@
-#include "ant_colony.hpp"
-#include "hyperparameters.hpp"
-#include "structures.hpp"
 #include <chrono>
 #include <cstddef>
 #include <random>
 #include <omp.h>
+#include "ant_colony.hpp"
+#include "hyperparameters.hpp"
+#include "matrix.hpp"
 
 namespace aco {
 

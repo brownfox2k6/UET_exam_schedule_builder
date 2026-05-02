@@ -4,93 +4,8 @@
 #include <vector>
 #include <cassert>
 #include <cmath>
-
-namespace common {
-
-/**
-* @brief A generic 2D matrix structure.
-* Implements a flat 1D vector back-end to ensure memory continuity. 
-*/
-template<typename T>
-struct Matrix {
-private:
-  std::vector<T> data;
-
-public:
-  const size_t rows;
-  const size_t cols;
-
-  Matrix(size_t r, size_t c, T value = T())
-    : rows(r), cols(c)
-  {
-    assert(r > 0 && "Matrix rows must be positive.");
-    assert(c > 0 && "Matrix columns must be positive.");
-    data.assign(rows * cols, value);
-  }
-
-  Matrix(const std::vector<std::vector<T>>& list)
-    : Matrix(list.size(), list[0].size())
-  {
-    for (int i = 0; i < rows; ++i) {
-      for (int j = 0; j < cols; ++j) {
-        data(i, j) = list[i][j];
-      }
-    }
-  }
-
-  inline T& operator()(size_t r, size_t c) {
-    assert(r < rows && "Row index out-of-bounds.");
-    assert(c < cols && "Column index out-of-bounds.");
-    return data[r * cols + c];
-  }
-
-  inline T operator()(size_t r, size_t c) const {
-    assert(r < rows && "Row index out-of-bounds.");
-    assert(c < cols && "Column index out-of-bounds.");
-    return data[r * cols + c];
-  }
-
-  void fill(T value) {
-    std::fill(data.begin(), data.end(), value);
-  }
-};
-
-/**
- * @brief A generic Compressed Sparse Row (CSR) matrix structure.
- * Implements flat 1D vectors for data and offsets to ensure memory continuity and fast, cache-friendly row iteration.
- */
-template<typename T>
-struct CsrMatrix {
-private:
-  std::vector<T> columns;
-  std::vector<size_t> offsets;
-
-public:
-  CsrMatrix() = default;
-
-  CsrMatrix(const common::Matrix<T>& matrix) {
-    offsets.assign(matrix.rows + 1, 0);
-    for (size_t i = 0; i < matrix.rows; ++i) {
-      for (size_t j = 0; j < matrix.cols; ++j) {
-        if (i != j && matrix(i, j) > 0) {
-          columns.emplace_back(static_cast<T>(j));
-        }
-      }
-      offsets[i + 1] = columns.size();
-    }
-    columns.shrink_to_fit();
-  }
-
-  auto row_range(size_t row_index) const {
-    return std::make_pair(
-      columns.begin() + offsets[row_index],
-      columns.begin() + offsets[row_index + 1]
-    );
-  }
-};
-
-} // namespace common
-
+#include "matrix.hpp"
+#include "csr_matrix.hpp"
 
 namespace aco {
 
@@ -119,10 +34,19 @@ public:
   // That is, `feasible_slots_count[i] = count(conflicting_exams_count(i, j) == 0)`
   std::vector<int> feasible_slots_count;
 
+  // `schedule[i]` tells the assigned slot for exam `i`
   std::vector<int> schedule;
+
+  // A dense matrix tracking available slot IDs for each exam. 
+  // Used alongside `feasible_slots_count` to allow O(1) random selection of a valid slot.
   common::Matrix<int> feasible_slots;
+
+  // The total soft constraint penalty score of the current schedule (lower is better).
   double fitness;
 
+  /**
+   * @brief Initializes an ant with empty schedule and default tracking matrices. 
+   */
   Ant(size_t n_exams, size_t n_slots)
     : num_exams(n_exams),
       num_slots(n_slots),
@@ -136,6 +60,11 @@ public:
     reset_feasible_slots();
   }
 
+  /**
+    * WARNING: This is a PARTIAL assignment.
+    * It only copies `schedule` and `fitness` for performance when saving the global_best.
+    * Do NOT use this to duplicate an Ant for local search or further modifications!
+    */
   Ant& operator=(const Ant& other) {
     if (this != &other) {
       this->schedule = other.schedule;
@@ -144,6 +73,9 @@ public:
     return *this;
   }
 
+  /**
+   * @brief Re-initializes the feasible slots tracking matrix to its initial state (all slots available). 
+   */
   void reset_feasible_slots() {
     for (size_t exam = 0; exam < num_exams; ++exam) {
       for (size_t slot = 0; slot < num_slots; ++slot) {
@@ -152,6 +84,9 @@ public:
     }
   }
 
+  /**
+   * @brief Resets the ant's memory, schedule, and conflict states to prepare for a new iteration. 
+   */
   void reset() {
     std::fill(schedule.begin(), schedule.end(), -1);
     reset_feasible_slots();
@@ -161,6 +96,12 @@ public:
     std::fill(forbidden_slots_count.begin(), forbidden_slots_count.end(), 0);
   }
 
+  /**
+   * Heuristic: Exam scheduling order
+   * Find the next exam to schedule based on the Saturation Degree heuristic.
+   * Prioritize the exam with the fewest feasible slots (in other words, the most forbidden slots).
+   * If there is a tie, select the exam with the highest total conflict degree (against all other exams).
+   */
   int get_next_exam(const std::vector<int>& total_student_conflict) const {
     int best_exam = -1;
     int max_degree = -1;
@@ -180,6 +121,9 @@ public:
     return best_exam;
   }
 
+  /**
+   * @brief Assigns an exam to a slot, accumulates penalty, and updates conflict/feasibility states for neighbors.
+   */
   void assign_exam(
     int exam,
     int slot,
@@ -210,6 +154,9 @@ public:
     }
   }
 
+  /**
+   * @brief Removes an exam from its current slot and restores the conflict/feasibility states for neighbors.
+   */
   void unassign_exam(
     int exam,
     const common::CsrMatrix<int>& conflict_exams
@@ -226,6 +173,9 @@ public:
     }
   }
 
+  /**
+   * @brief Calculates the change in fitness (soft penalty) if an exam is placed in or moved to a new slot.
+   */
   double calculate_delta_penalty(
     int exam,
     int new_slot,
