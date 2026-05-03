@@ -14,15 +14,17 @@ template<typename T>
 struct Matrix {
 private:
   std::vector<T> data;
+  int rows;
+  int cols;
 
 public:
-  const size_t rows;
-  const size_t cols;
+  int num_rows() { return rows; }
+  int num_cols() { return cols; }
 
   /**
    * @brief Initializes a matrix of size r x c with a default value. 
    */
-  Matrix(size_t r, size_t c, T value = T())
+  Matrix(int r, int c, T value = T())
     : rows(r), cols(c)
   {
     assert(r > 0 && "Matrix rows must be positive.");
