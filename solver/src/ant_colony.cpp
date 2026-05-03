@@ -74,6 +74,7 @@ bool AntColony::construct_ant(Ant& ant) {
     // Check if the solution is infeasible --> ant die now
     const int count_feasible = ant.feasible_slots_count[exam];
     if (count_feasible == 0) {
+      ant.fitness = HARD_CONSTRAINT_PENALTY;
       return false;
     }
 
@@ -124,10 +125,12 @@ double AntColony::run_one_iteration() {
   #pragma omp parallel for schedule(dynamic)
   for (int i = 0; i < hyperparams.aco.num_ants; ++i) {
     bool ok = false;
-    while (!ok) {
+    for (int t = 0; !ok && t < 100; ++t) {
       ok = construct_ant(ants[i]);
     }
-    local_search(ants[i]);
+    if (ok) {
+      local_search(ants[i]);
+    }
   }
 
   const Ant& iter_best = *std::min_element(ants.begin(), ants.end());
