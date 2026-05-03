@@ -16,8 +16,8 @@ namespace aco {
 */
 struct Ant {
 private:
-  const size_t num_exams;
-  const size_t num_slots;
+  int num_exams;
+  int num_slots;
 
 public:
   // `conflicting_exams_count(i, j)` tells how many exams `k` that 
@@ -47,13 +47,6 @@ public:
    * @brief Initializes an ant with empty schedule and default tracking matrices. 
    */
   Ant(size_t n_exams, size_t n_slots);
-
-  /**
-   * WARNING: This is a PARTIAL assignment.
-   * It only copies `schedule` and `fitness` for performance when saving the global_best.
-   * Do NOT use this to duplicate an Ant for local search or further modifications!
-   */
-  Ant& operator=(const Ant& other);
 
   /**
    * @brief Overloads the less-than operator for Ant comparison.

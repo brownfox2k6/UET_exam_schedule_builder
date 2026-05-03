@@ -20,7 +20,7 @@ AntColony::AntColony(
   const common::Matrix<int>& student_conflicts_matrix,
   const std::vector<int64_t>& slot_timestamps,
   int base_seed
-) : num_exams(student_conflicts_matrix.rows),
+) : num_exams(student_conflicts_matrix.num_rows()),
     num_slots(slot_timestamps.size()),
     hyperparams(hp),
     student_conflicts(student_conflicts_matrix),

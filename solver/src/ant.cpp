@@ -16,14 +16,6 @@ Ant::Ant(size_t n_exams, size_t n_slots)
   reset_feasible_slots();
 }
 
-Ant& Ant::operator=(const Ant& other) {
-  if (this != &other) {
-    this->schedule = other.schedule;
-    this->fitness = other.fitness;
-  }
-  return *this;
-}
-
 bool Ant::operator<(const Ant& other) const {
   return fitness < other.fitness;
 }

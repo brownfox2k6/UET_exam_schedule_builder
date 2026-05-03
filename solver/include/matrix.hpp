@@ -18,8 +18,8 @@ private:
   int cols;
 
 public:
-  int num_rows() { return rows; }
-  int num_cols() { return cols; }
+  int num_rows() const { return rows; }
+  int num_cols() const { return cols; }
 
   /**
    * @brief Initializes a matrix of size r x c with a default value. 
