@@ -2,8 +2,13 @@ cmake_minimum_required(VERSION 3.19)
 
 project(aco_solver CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_program(IWYU_PATH NAMES include-what-you-use iwyu)
+if(IWYU_PATH)
+  set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IWYU_PATH}")
+endif()
 
 if(APPLE AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "arm64")

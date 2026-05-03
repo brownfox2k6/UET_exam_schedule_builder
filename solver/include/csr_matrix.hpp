@@ -3,9 +3,28 @@
 #include <cstddef>
 #include <vector>
 #include <cassert>
+#include <span>
 #include "matrix.hpp"
 
 namespace common {
+
+/**
+ * @brief Represents a non-zero entry in a sparse matrix row.
+ * This structure pairs a column index with its corresponding value.
+ * Using a struct here ensures that the index and value are stored adjacently in memory, maximizing cache hits during row traversal.
+ */
+template<typename T>
+struct CsrElement {
+  int index;
+  T value;
+
+  CsrElement(int i, T v) : index(i), value(v) {}
+
+  // For std::accumulate
+  friend T operator+(const T& sum, const CsrElement& element) {
+    return sum + element.value;
+  }
+};
 
 /**
  * @brief A generic Compressed Sparse Row matrix structure.
@@ -14,7 +33,7 @@ namespace common {
 template<typename T>
 struct CsrMatrix {
 private:
-  std::vector<T> columns;
+  std::vector<CsrElement<T>> data;
   std::vector<size_t> offsets;
 
 public:
@@ -30,23 +49,26 @@ public:
     offsets.assign(matrix.rows + 1, 0);
     for (size_t i = 0; i < matrix.rows; ++i) {
       for (size_t j = 0; j < matrix.cols; ++j) {
-        if (i != j && matrix(i, j) > 0) {
-          columns.emplace_back(static_cast<T>(j));
+        T val = matrix(i, j);
+        if (i != j && val > 0) {
+          data.emplace_back(static_cast<int>(j), val);
         }
       }
-      offsets[i + 1] = columns.size();
+      offsets[i + 1] = data.size();
     }
-    columns.shrink_to_fit();
+    data.shrink_to_fit();
   }
 
   /**
-   * @brief Returns an iterator pair (begin, end) for the non-zero elements in the specified row. 
+   * @brief Access a specific row of the matrix.
+   * Usage: for (const auto& element : matrix[i]) { ... }
    */
-  auto row_range(size_t row_index) const {
-    return std::make_pair(
-      columns.begin() + offsets[row_index],
-      columns.begin() + offsets[row_index + 1]
-    );
+  std::span<const CsrElement<T>> operator[](size_t row_index) const {
+    assert(row_index + 1 < offsets.size());
+    return {
+      data.begin() + offsets[row_index],
+      data.begin() + offsets[row_index + 1]
+    };
   }
 };
 

@@ -49,11 +49,20 @@ public:
   Ant(size_t n_exams, size_t n_slots);
 
   /**
-    * WARNING: This is a PARTIAL assignment.
-    * It only copies `schedule` and `fitness` for performance when saving the global_best.
-    * Do NOT use this to duplicate an Ant for local search or further modifications!
-    */
+   * WARNING: This is a PARTIAL assignment.
+   * It only copies `schedule` and `fitness` for performance when saving the global_best.
+   * Do NOT use this to duplicate an Ant for local search or further modifications!
+   */
   Ant& operator=(const Ant& other);
+
+  /**
+   * @brief Overloads the less-than operator for Ant comparison.
+   * * Used by standard algorithms like std::min_element or std::sort.
+   * An ant is considered "less than" another if it has a lower penalty score (fitness).
+   * * @param other The ant to compare with.
+   * @return true if this ant's fitness is strictly less than the other's.
+   */
+  bool operator<(const Ant& other) const;
 
   /**
    * @brief Re-initializes the feasible slots tracking matrix to its initial state (all slots available). 
@@ -79,8 +88,7 @@ public:
   void assign_exam(
     int exam,
     int slot,
-    const common::CsrMatrix<int>& conflict_exams,
-    double penalty = 0.0
+    const common::CsrMatrix<int>& student_conflicts
   );
 
   /**
@@ -88,7 +96,7 @@ public:
    */
   void unassign_exam(
     int exam,
-    const common::CsrMatrix<int>& conflict_exams
+    const common::CsrMatrix<int>& student_conflicts
   );
 
   /**
@@ -97,10 +105,9 @@ public:
   double calculate_delta_penalty(
     int exam,
     int new_slot,
-    const common::Matrix<int>& student_conflict,
-    const common::CsrMatrix<int>& conflict_exams,
-    const std::vector<double>& absolute_day_slots,
-    const int ignore_exam = -1
+    const common::CsrMatrix<int>& student_conflicts,
+    const common::Matrix<double>& proximity_penalties,
+    int ignore_exam = -1
   ) const;
 };
 

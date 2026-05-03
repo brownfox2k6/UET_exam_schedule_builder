@@ -1,9 +1,13 @@
 #include "ant_colony.hpp"
+#include <omp.h>
 #include <random>
 
 namespace aco {
 
-bool AntColony::go_1_move(Ant& ant, std::mt19937& rng) {
+bool AntColony::go_1_move(Ant& ant) {
+  const int thread_id = omp_get_thread_num();
+  std::mt19937& rng = workspace_rngs[thread_id];
+
   int exam = std::uniform_int_distribution<int>(0, num_exams - 1)(rng);
 
   // Check if the exam cannot be moved to any other slot
@@ -20,23 +24,27 @@ bool AntColony::go_1_move(Ant& ant, std::mt19937& rng) {
   }
 
   // Calculate delta if we assign the exam to this new slot
-  double delta = ant.calculate_delta_penalty(exam, new_slot, student_conflict, conflict_exams, absolute_day_slots);
+  double delta = ant.calculate_delta_penalty(exam, new_slot, student_conflicts, proximity_penalties);
   if (delta > 0.0) {
     return false;
   }
 
   // Accept if cost reduces (or may be unchanged)
-  ant.unassign_exam(exam, conflict_exams);
-  ant.assign_exam(exam, new_slot, conflict_exams, delta);
+  ant.unassign_exam(exam, student_conflicts);
+  ant.assign_exam(exam, new_slot, student_conflicts);
+  ant.fitness += delta;
   return true;
 }
 
-bool AntColony::go_2_swap(Ant& ant, std::mt19937& rng) {
+bool AntColony::go_2_swap(Ant& ant) {
+  const int thread_id = omp_get_thread_num();
+  std::mt19937& rng = workspace_rngs[thread_id];
+
   // Pick two random exams and ensure their assigned slots are different
-  int exam1 = std::uniform_int_distribution<int>(0, num_exams - 1)(rng);
-  int exam2 = std::uniform_int_distribution<int>(0, num_exams - 1)(rng);
-  int slot1 = ant.schedule[exam1];
-  int slot2 = ant.schedule[exam2];
+  const int exam1 = std::uniform_int_distribution<int>(0, num_exams - 1)(rng);
+  const int exam2 = std::uniform_int_distribution<int>(0, num_exams - 1)(rng);
+  const int slot1 = ant.schedule[exam1];
+  const int slot2 = ant.schedule[exam2];
   if (exam1 == exam2 || slot1 == slot2) {
     return false;
   }
@@ -44,7 +52,7 @@ bool AntColony::go_2_swap(Ant& ant, std::mt19937& rng) {
   // Check for hard constraint violation if we swap their slots
   int conflicts_in_slot1 = ant.conflicting_exams_count(exam2, slot1);
   int conflicts_in_slot2 = ant.conflicting_exams_count(exam1, slot2);
-  if (student_conflict(exam1, exam2) > 0) {
+  if (student_conflicts_matrix(exam1, exam2) > 0) {
     --conflicts_in_slot1;
     --conflicts_in_slot2;
   }
@@ -53,21 +61,25 @@ bool AntColony::go_2_swap(Ant& ant, std::mt19937& rng) {
   }
 
   // Calculate delta if we swap their slots
-  double delta = ant.calculate_delta_penalty(exam1, slot2, student_conflict, conflict_exams, absolute_day_slots, exam2)
-               + ant.calculate_delta_penalty(exam2, slot1, student_conflict, conflict_exams, absolute_day_slots, exam1);
+  double delta = ant.calculate_delta_penalty(exam1, slot2, student_conflicts, proximity_penalties, exam2)
+               + ant.calculate_delta_penalty(exam2, slot1, student_conflicts, proximity_penalties, exam1);
   if (delta > 0) {
     return false;
   }
 
   // Accept if cost reduces (or may be unchanged)
-  ant.unassign_exam(exam1, conflict_exams);
-  ant.unassign_exam(exam2, conflict_exams);
-  ant.assign_exam(exam1, slot2, conflict_exams);
-  ant.assign_exam(exam2, slot1, conflict_exams, delta);
+  ant.unassign_exam(exam1, student_conflicts);
+  ant.unassign_exam(exam2, student_conflicts);
+  ant.assign_exam(exam1, slot2, student_conflicts);
+  ant.assign_exam(exam2, slot1, student_conflicts);
+  ant.fitness += delta;
   return true;
 }
 
-void AntColony::local_search(Ant& ant, std::mt19937& rng) {
+void AntColony::local_search(Ant& ant) {
+  const int thread_id = omp_get_thread_num();
+  std::mt19937& rng = workspace_rngs[thread_id];
+
   int improvements = 0;
   int consecutive_fails = 0;
 
@@ -76,9 +88,9 @@ void AntColony::local_search(Ant& ant, std::mt19937& rng) {
     double random = std::uniform_real_distribution<double>(0.0, 1.0)(rng);
     bool ok;
     if (random < hyperparams.ls.prob_1_move) {
-      ok = go_1_move(ant, rng);
+      ok = go_1_move(ant);
     } else {
-      ok = go_2_swap(ant, rng);
+      ok = go_2_swap(ant);
     }
 
     if (ok) {

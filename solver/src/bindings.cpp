@@ -1,6 +1,9 @@
+#include <pybind11/attr.h>
+#include <pybind11/gil.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/functional.h>
+#include <cstdint>
 #include "ant.hpp"
 #include "ant_colony.hpp"
 #include "hyperparameters.hpp"
@@ -40,10 +43,10 @@ PYBIND11_MODULE(aco_solver, m) {
     .def(py::init([](int num_exams, int num_slots, 
                   const common::Hyperparams& hp, 
                   const std::vector<std::vector<int>>& conflict_data, 
-                  const std::vector<double>& abs_slots) {
+                  const std::vector<int64_t>& timestamps) {
       common::Matrix<int> conflict_mat(conflict_data);
-      return new aco::AntColony(num_exams, num_slots, hp, conflict_mat, abs_slots);
+      return new aco::AntColony(num_exams, num_slots, hp, conflict_mat, timestamps);
     }))
-    .def("run", &aco::AntColony::run)
+    .def("run", &aco::AntColony::run, py::call_guard<py::gil_scoped_release>())
     .def_readonly("global_best", &aco::AntColony::global_best);
 }

@@ -14,13 +14,28 @@ struct Hyperparams {
   double tau_min; // Minimum pheromone trail limit
   double tau_max; // Maximum pheromone trail limit
 
-  Hyperparams()
-    : num_iters(100), num_ants(10), alpha(1.0), beta(2.0),
-      rho(0.1), tau_min(0.01), tau_max(1.0) {}
+  // Base for the exponential decay of time-gap penalties (base ^ -delta_days).
+  // Controls how fast the penalty drops: 2.0 halves the penalty each day.
+  double penalty_decay_base; 
 
-  Hyperparams(int iters, int ants, double a, double b, double r, double t_min, double t_max)
-    : num_iters(iters), num_ants(ants), alpha(a), beta(b),
-      rho(r), tau_min(t_min), tau_max(t_max) {}
+  Hyperparams(
+    int _num_iters = 100,
+    int _num_ants = 10,
+    double _alpha = 1.0,
+    double _beta = 2.0,
+    double _rho = 0.1,
+    double _tau_min = 0.01,
+    double _tau_max = 1.0,
+    double _penalty_decay_base = 2.0
+  ) : num_iters(_num_iters),
+      num_ants(_num_ants),
+      alpha(_alpha),
+      beta(_beta),
+      rho(_rho),
+      tau_min(_tau_min),
+      tau_max(_tau_max),
+      penalty_decay_base(_penalty_decay_base)
+  {}
 };
 
 } // namespace aco
@@ -36,11 +51,14 @@ struct Hyperparams {
   int max_improvements; // Maximum number of actual successful moves (downhill steps)
   int patience;         // Stop early after this many consecutive non-improving attempts
 
-  Hyperparams()
-    : prob_1_move(0.5), max_improvements(10), patience(100) {}
-
-  Hyperparams(double p1m, int m_improve, int m_fails)
-    : prob_1_move(p1m), max_improvements(m_improve), patience(m_fails) {}
+  Hyperparams(
+    double _prob_1_move = 0.5,
+    int _max_improvements = 10,
+    int _patience = 100
+  ) : prob_1_move(_prob_1_move),
+      max_improvements(_max_improvements),
+      patience(_patience)
+  {}
 };
 
 } // namespace ls

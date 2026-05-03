@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <functional>
 #include <vector>
 #include <random>
@@ -19,18 +20,38 @@ private:
   const int num_slots;
   const common::Hyperparams hyperparams;
 
-  // `student_conflict(i, j)` tells the number of students taking both exams `i` and `j`
-  const common::Matrix<int> student_conflict;
-  
-  // Absolute time of each slot in days (used to calculate time-gap penalties)
-  const std::vector<double> absolute_day_slots;
+  // Buffers
+  std::vector<std::mt19937> workspace_rngs;
+  std::vector<std::vector<double>> workspace_weights;
+  std::vector<std::vector<double>> workspace_delta_soft;
 
-  // `conflict_exams[i]` contains all exams `j` where `student_conflict(i, j) > 0`
-  const common::CsrMatrix<int> conflict_exams;
+  /**
+   * @brief Compressed representation of the exam conflict graph.
+   * * Each row `i` contains a list of `CsrElement` objects, where:
+   * - `index`: The ID of exam `j` that has at least one student in common with exam `i`.
+   * - `value`: The exact number of students shared between exam `i` and `j`.
+   */
+  const common::CsrMatrix<int> student_conflicts;
 
-  // `total_student_conflict[i]` = sum of `student_conflict(i, j)` for all `j`. 
-  // It represents the total aggregate conflict degree of exam `i` relative to all other exams.
-  const std::vector<int> total_student_conflict;
+  /**
+   * @brief Matrix reprsentation of `student_conflicts`.
+   * * `student_conflict(i, j)` tells the number of students taking both exams `i` and `j`
+   */
+  const common::Matrix<int> student_conflicts_matrix;
+
+  /**
+   * @brief Precalculated time-gap penalties for O(1) lookup.
+   * `proximity_penalties(i, j)` tells the closeness between slot `i` and `j`.
+   */
+  const common::Matrix<double> proximity_penalties;
+
+  /**
+   * @brief The total weighted conflict degree for each exam.
+   * * For each exam `i`, this stores the sum of weights (students) across all its 
+   * neighbors in the conflict graph: `sum(student_conflicts[i].value)`.
+   * Used as a heuristic to identify "heavy" exams that are harder to schedule.
+   */
+  const std::vector<int> total_student_conflicts;
 
   // Pheromone matrix representing learned experience for exam-to-slot assignments
   common::Matrix<double> pheromone;
@@ -42,24 +63,24 @@ private:
    * @brief Constructs a complete timetable for a single ant using pheromone and heuristic probabilities.
    * @return True if a feasible schedule is fully constructed, false if it gets stuck.
    */
-  bool construct_ant(Ant& ant, std::mt19937& rng);
+  bool construct_ant(Ant& ant);
 
   /**
    * @brief Local search operator: Attempts to move a single exam to a different feasible slot.
    * @return True if the move is successfully applied (downhill or neutral step).
    */
-  bool go_1_move(Ant& ant, std::mt19937& rng);
+  bool go_1_move(Ant& ant);
 
   /**
    * @brief Local search operator: Attempts to swap the slots of two assigned exams.
    * @return True if the swap is successfully applied and maintains feasibility.
    */
-  bool go_2_swap(Ant& ant, std::mt19937& rng);
+  bool go_2_swap(Ant& ant);
 
   /**
    * @brief Applies a series of 1-move and 2-swap operators to refine an ant's fully constructed schedule.
    */
-  void local_search(Ant& ant, std::mt19937& rng);
+  void local_search(Ant& ant);
 
   /**
    * @brief Evaporates existing pheromones and deposits new pheromones based on the iteration's best ant.
@@ -74,8 +95,9 @@ public:
     int n_exams,
     int n_slots,
     const common::Hyperparams& hp,
-    const common::Matrix<int>& s_conflict,
-    const std::vector<double>& a_d_slots
+    const common::Matrix<int>& student_conflicts_matrix,
+    const std::vector<int64_t>& slot_timestamps,
+    int base_seed = -1
   );
 
   // The best solution found since the start of the algorithm

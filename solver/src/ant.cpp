@@ -1,4 +1,5 @@
 #include "ant.hpp"
+#include "matrix.hpp"
 
 namespace aco {
 
@@ -21,6 +22,10 @@ Ant& Ant::operator=(const Ant& other) {
     this->fitness = other.fitness;
   }
   return *this;
+}
+
+bool Ant::operator<(const Ant& other) const {
+  return fitness < other.fitness;
 }
 
 void Ant::reset_feasible_slots() {
@@ -62,45 +67,39 @@ int Ant::get_next_exam(const std::vector<int>& total_student_conflict) const {
 void Ant::assign_exam(
   int exam,
   int slot,
-  const common::CsrMatrix<int>& conflict_exams,
-  double penalty
+  const common::CsrMatrix<int>& student_conflicts
 ) {
   schedule[exam] = slot;
-  fitness += penalty;
-  auto [first, last] = conflict_exams.row_range(exam);
-  for (auto it = first; it != last; ++it) {
-    int neighbor_exam = *it;
-    if (conflicting_exams_count(neighbor_exam, slot) == 0) {
-      ++forbidden_slots_count[neighbor_exam];
+  for (const auto& [conflict_exam, _] : student_conflicts[exam]) {
+    if (conflicting_exams_count(conflict_exam, slot) == 0) {
+      ++forbidden_slots_count[conflict_exam];
       int target = -1;
-      for (size_t j = 0; j < feasible_slots_count[neighbor_exam]; ++j) {
-        if (feasible_slots(neighbor_exam, j) == slot) {
+      for (size_t j = 0; j < feasible_slots_count[conflict_exam]; ++j) {
+        if (feasible_slots(conflict_exam, j) == slot) {
           target = j;
           break;
         }
       }
       if (target != -1) {
-        feasible_slots(neighbor_exam, target)
-          = feasible_slots(neighbor_exam, --feasible_slots_count[neighbor_exam]);
+        feasible_slots(conflict_exam, target)
+          = feasible_slots(conflict_exam, --feasible_slots_count[conflict_exam]);
         ;
       }
     }
-    ++conflicting_exams_count(neighbor_exam, slot);
+    ++conflicting_exams_count(conflict_exam, slot);
   }
 }
 
 void Ant::unassign_exam(
   int exam,
-  const common::CsrMatrix<int>& conflict_exams
+  const common::CsrMatrix<int>& student_conflicts
 ) {
   int old_slot = schedule[exam];
   schedule[exam] = -1;
-  auto [first, last] = conflict_exams.row_range(exam);
-  for (auto it = first; it != last; ++it) {
-    int neighbor_exam = *it;
-    if (--conflicting_exams_count(neighbor_exam, old_slot) == 0) {
-      --forbidden_slots_count[neighbor_exam];
-      feasible_slots(neighbor_exam, feasible_slots_count[neighbor_exam]++) = old_slot;
+  for (const auto& [conflict_exam, _] : student_conflicts[exam]) {
+    if (--conflicting_exams_count(conflict_exam, old_slot) == 0) {
+      --forbidden_slots_count[conflict_exam];
+      feasible_slots(conflict_exam, feasible_slots_count[conflict_exam]++) = old_slot;
     }
   }
 }
@@ -108,25 +107,21 @@ void Ant::unassign_exam(
 double Ant::calculate_delta_penalty(
   int exam,
   int new_slot,
-  const common::Matrix<int>& student_conflict,
-  const common::CsrMatrix<int>& conflict_exams,
-  const std::vector<double>& absolute_day_slots,
-  const int ignore_exam
+  const common::CsrMatrix<int>& student_conflicts,
+  const common::Matrix<double>& proximity_penalties,
+  int ignore_exam
 ) const {
+  const int cur_slot = schedule[exam];
   double delta = 0.0;
-  double d_old = schedule[exam] != -1 ? absolute_day_slots[schedule[exam]] : -1.0;
-  double d_new = absolute_day_slots[new_slot];
-  auto [first, last] = conflict_exams.row_range(exam);
-  for (auto it = first; it != last; ++it) {
-    int e = *it;
-    int weight = student_conflict(exam, e);
-    if (weight == 0 || e == ignore_exam || e == exam || schedule[e] == -1) {
+  for (const auto& [conflict_exam, weight] : student_conflicts[exam]) {
+    const int conflict_slot = schedule[conflict_exam];
+    if (conflict_exam == ignore_exam || conflict_slot == -1) {
       continue;
     }
-    double d_cur = absolute_day_slots[schedule[e]];
-    double penalty_old = schedule[exam] != -1 ? weight * std::exp2(-std::fabs(d_old - d_cur)) : 0.0;
-    double penalty_new = weight * std::exp2(-std::fabs(d_new - d_cur));
-    delta += penalty_new - penalty_old;
+    delta += weight * proximity_penalties(new_slot, conflict_slot);
+    if (cur_slot != -1) {
+      delta -= weight * proximity_penalties(cur_slot, conflict_slot);
+    }
   }
   return delta;
 }
