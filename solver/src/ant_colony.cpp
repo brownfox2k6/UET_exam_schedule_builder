@@ -16,14 +16,12 @@ constexpr double HARD_CONSTRAINT_PENALTY = 1e9;
 namespace aco {
 
 AntColony::AntColony(
-  int n_exams,
-  int n_slots,
   const common::Hyperparams& hp,
   const common::Matrix<int>& student_conflicts_matrix,
   const std::vector<int64_t>& slot_timestamps,
   int base_seed
-) : num_exams(n_exams),
-    num_slots(n_slots),
+) : num_exams(student_conflicts_matrix.rows),
+    num_slots(slot_timestamps.size()),
     hyperparams(hp),
     student_conflicts(student_conflicts_matrix),
     student_conflicts_matrix(student_conflicts_matrix),

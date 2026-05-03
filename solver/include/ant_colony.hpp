@@ -92,8 +92,6 @@ public:
    * @brief Initializes the Ant Colony algorithm, precomputes conflict structures, and sets up the population.
    */
   AntColony(
-    int n_exams,
-    int n_slots,
     const common::Hyperparams& hp,
     const common::Matrix<int>& student_conflicts_matrix,
     const std::vector<int64_t>& slot_timestamps,
