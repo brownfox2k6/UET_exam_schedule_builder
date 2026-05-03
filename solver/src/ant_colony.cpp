@@ -27,10 +27,10 @@ AntColony::AntColony(
     student_conflicts_matrix(student_conflicts_matrix),
     proximity_penalties([&]() {
       common::Matrix<double> penalties(num_slots, num_slots, 0.0);
-      for (size_t i = 0; i < num_slots; ++i) {
+      for (int i = 0; i < num_slots; ++i) {
         penalties(i, i) = HARD_CONSTRAINT_PENALTY;
         const int64_t slot_i = slot_timestamps[i];
-        for (size_t j = i + 1; j < num_slots; ++j) {
+        for (int j = i + 1; j < num_slots; ++j) {
           const double diff_days = std::abs(slot_i - slot_timestamps[j]) / SECONDS_PER_DAY;
           const double value = std::pow(hyperparams.aco.penalty_decay_base, -diff_days);
           penalties(i, j) = penalties(j, i) = value;
@@ -40,7 +40,7 @@ AntColony::AntColony(
     }()),
     total_student_conflicts([&]() {
       std::vector<int> totals(num_exams);
-      for (size_t exam = 0; exam < num_exams; ++exam) {
+      for (int exam = 0; exam < num_exams; ++exam) {
         const auto row = student_conflicts[exam];
         totals[exam] = std::accumulate(row.begin(), row.end(), 0);
       }
@@ -68,7 +68,7 @@ bool AntColony::construct_ant(Ant& ant) {
   std::vector<double>& weights = workspace_weights[thread_id];
   std::vector<double>& delta_soft = workspace_delta_soft[thread_id];
 
-  for (size_t i = 0; i < num_exams; ++i) {
+  for (int i = 0; i < num_exams; ++i) {
     const int exam = ant.get_next_exam(total_student_conflicts);
 
     // Check if the solution is infeasible --> ant die now
@@ -79,7 +79,7 @@ bool AntColony::construct_ant(Ant& ant) {
 
     // For each feasible slot, calculate penalty if we assign this exam to that slot
     double total_weight = 0.0;
-    for (size_t j = 0; j < count_feasible; ++j) {
+    for (int j = 0; j < count_feasible; ++j) {
       const int slot = ant.feasible_slots(exam, j);
       delta_soft[j] = ant.calculate_delta_penalty(exam, slot, student_conflicts, proximity_penalties);
       const double eta = 1.0 / (1.0 + delta_soft[j]);
@@ -91,8 +91,8 @@ bool AntColony::construct_ant(Ant& ant) {
     // Choose a random slot using Stochastic Propotional Rule (roulette wheel)
     const double threshold = std::uniform_real_distribution<double>(0.0, total_weight)(rng);
     double cumulative = 0.0;
-    size_t chosen_j = count_feasible - 1;
-    for (size_t j = 0; j < count_feasible; ++j) {
+    int chosen_j = count_feasible - 1;
+    for (int j = 0; j < count_feasible; ++j) {
       cumulative += weights[j];
       if (cumulative >= threshold) {
         chosen_j = j;
@@ -109,9 +109,9 @@ bool AntColony::construct_ant(Ant& ant) {
 }
 
 void AntColony::update_pheromone(const Ant& best_ant) {
-  for (size_t exam = 0; exam < num_exams; ++exam) {
+  for (int exam = 0; exam < num_exams; ++exam) {
     const int assigned_slot = best_ant.schedule[exam];
-    for (size_t slot = 0; slot < num_slots; ++slot) {
+    for (int slot = 0; slot < num_slots; ++slot) {
       const double delta_tau = slot == assigned_slot
           ? hyperparams.aco.rho * hyperparams.aco.tau_max
           : hyperparams.aco.rho * hyperparams.aco.tau_min;
@@ -122,7 +122,7 @@ void AntColony::update_pheromone(const Ant& best_ant) {
 
 double AntColony::run_one_iteration() {
   #pragma omp parallel for schedule(dynamic)
-  for (size_t i = 0; i < hyperparams.aco.num_ants; ++i) {
+  for (int i = 0; i < hyperparams.aco.num_ants; ++i) {
     bool ok = false;
     while (!ok) {
       ok = construct_ant(ants[i]);

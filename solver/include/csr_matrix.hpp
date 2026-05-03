@@ -34,7 +34,7 @@ template<typename T>
 struct CsrMatrix {
 private:
   std::vector<CsrElement<T>> data;
-  std::vector<size_t> offsets;
+  std::vector<int> offsets;
 
 public:
   /**
@@ -47,8 +47,8 @@ public:
    */
   CsrMatrix(const Matrix<T>& matrix) {
     offsets.assign(matrix.rows + 1, 0);
-    for (size_t i = 0; i < matrix.rows; ++i) {
-      for (size_t j = 0; j < matrix.cols; ++j) {
+    for (int i = 0; i < matrix.rows; ++i) {
+      for (int j = 0; j < matrix.cols; ++j) {
         T val = matrix(i, j);
         if (i != j && val > 0) {
           data.emplace_back(static_cast<int>(j), val);
@@ -63,7 +63,7 @@ public:
    * @brief Access a specific row of the matrix.
    * Usage: for (const auto& element : matrix[i]) { ... }
    */
-  std::span<const CsrElement<T>> operator[](size_t row_index) const {
+  std::span<const CsrElement<T>> operator[](int row_index) const {
     assert(row_index + 1 < offsets.size());
     return {
       data.begin() + offsets[row_index],

@@ -38,8 +38,8 @@ public:
   Matrix(const std::vector<std::vector<T>>& list)
     : Matrix(list.size(), list[0].size())
   {
-    for (size_t r = 0; r < rows; ++r) {
-      for (size_t c = 0; c < cols; ++c) {
+    for (int r = 0; r < rows; ++r) {
+      for (int c = 0; c < cols; ++c) {
         data[r * cols + c] = list[r][c];
       }
     }
@@ -48,7 +48,7 @@ public:
   /**
    * @brief Accesses the element at (r, c) by reference (read/write). 
    */
-  inline T& operator()(size_t r, size_t c) {
+  inline T& operator()(int r, int c) {
     assert(r < rows && "Row index out-of-bounds.");
     assert(c < cols && "Column index out-of-bounds.");
     return data[r * cols + c];
@@ -57,7 +57,7 @@ public:
   /**
    * @brief Accesses the element at (r, c) by value (read-only). 
    */
-  inline T operator()(size_t r, size_t c) const {
+  inline T operator()(int r, int c) const {
     assert(r < rows && "Row index out-of-bounds.");
     assert(c < cols && "Column index out-of-bounds.");
     return data[r * cols + c];

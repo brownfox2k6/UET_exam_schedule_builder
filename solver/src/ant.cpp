@@ -3,7 +3,7 @@
 
 namespace aco {
 
-Ant::Ant(size_t n_exams, size_t n_slots)
+Ant::Ant(int n_exams, int n_slots)
   : num_exams(n_exams),
     num_slots(n_slots),
     schedule(num_exams, -1),
@@ -21,8 +21,8 @@ bool Ant::operator<(const Ant& other) const {
 }
 
 void Ant::reset_feasible_slots() {
-  for (size_t exam = 0; exam < num_exams; ++exam) {
-    for (size_t slot = 0; slot < num_slots; ++slot) {
+  for (int exam = 0; exam < num_exams; ++exam) {
+    for (int slot = 0; slot < num_slots; ++slot) {
       feasible_slots(exam, slot) = slot;
     }
   }
@@ -41,7 +41,7 @@ int Ant::get_next_exam(const std::vector<int>& total_student_conflict) const {
   int best_exam = -1;
   int max_degree = -1;
   int max_conflict = -1;
-  for (size_t exam = 0; exam < num_exams; ++exam) {
+  for (int exam = 0; exam < num_exams; ++exam) {
     if (schedule[exam] != -1) {
       continue;
     }
@@ -66,7 +66,7 @@ void Ant::assign_exam(
     if (conflicting_exams_count(conflict_exam, slot) == 0) {
       ++forbidden_slots_count[conflict_exam];
       int target = -1;
-      for (size_t j = 0; j < feasible_slots_count[conflict_exam]; ++j) {
+      for (int j = 0; j < feasible_slots_count[conflict_exam]; ++j) {
         if (feasible_slots(conflict_exam, j) == slot) {
           target = j;
           break;

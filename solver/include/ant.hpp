@@ -46,7 +46,7 @@ public:
   /**
    * @brief Initializes an ant with empty schedule and default tracking matrices. 
    */
-  Ant(size_t n_exams, size_t n_slots);
+  Ant(int n_exams, int n_slots);
 
   /**
    * @brief Overloads the less-than operator for Ant comparison.
