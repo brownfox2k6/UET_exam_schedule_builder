@@ -16,13 +16,14 @@ PYBIND11_MODULE(aco_solver, m) {
 
   py::class_<aco::Hyperparams>(m, "AcoParams")
     .def(py::init<>())
-    .def_readwrite("num_iters", &aco::Hyperparams::num_iters)
-    .def_readwrite("num_ants",  &aco::Hyperparams::num_ants)
-    .def_readwrite("alpha",     &aco::Hyperparams::alpha)
-    .def_readwrite("beta",      &aco::Hyperparams::beta)
-    .def_readwrite("rho",       &aco::Hyperparams::rho)
-    .def_readwrite("tau_min",   &aco::Hyperparams::tau_min)
-    .def_readwrite("tau_max",   &aco::Hyperparams::tau_max);
+    .def_readwrite("num_iters",          &aco::Hyperparams::num_iters)
+    .def_readwrite("num_ants",           &aco::Hyperparams::num_ants)
+    .def_readwrite("alpha",              &aco::Hyperparams::alpha)
+    .def_readwrite("beta",               &aco::Hyperparams::beta)
+    .def_readwrite("rho",                &aco::Hyperparams::rho)
+    .def_readwrite("tau_min",            &aco::Hyperparams::tau_min)
+    .def_readwrite("tau_max",            &aco::Hyperparams::tau_max)
+    .def_readwrite("penalty_decay_base", &aco::Hyperparams::penalty_decay_base);
 
   py::class_<ls::Hyperparams>(m, "LsParams")
     .def(py::init<>())
@@ -42,10 +43,12 @@ PYBIND11_MODULE(aco_solver, m) {
   py::class_<aco::AntColony>(m, "AntColony")
     .def(py::init([](const common::Hyperparams& hp, 
                      const std::vector<std::vector<int>>& conflict_data, 
-                     const std::vector<int64_t>& timestamps) {
+                     const std::vector<int64_t>& timestamps,
+                     int base_seed = -1) {
       common::Matrix<int> conflict_mat(conflict_data);
-      return new aco::AntColony(hp, conflict_mat, timestamps);
+      return new aco::AntColony(hp, conflict_mat, timestamps, base_seed);
     }))
+    .def("run_one_iteration", &aco::AntColony::run_one_iteration)
     .def("run", &aco::AntColony::run, py::call_guard<py::gil_scoped_release>())
     .def_readonly("global_best", &aco::AntColony::global_best);
 }

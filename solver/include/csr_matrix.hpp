@@ -46,9 +46,9 @@ public:
    * @brief Converts a dense 2D Matrix into a CSR format. 
    */
   CsrMatrix(const Matrix<T>& matrix) {
-    offsets.assign(matrix.rows + 1, 0);
-    for (int i = 0; i < matrix.rows; ++i) {
-      for (int j = 0; j < matrix.cols; ++j) {
+    offsets.assign(matrix.num_rows() + 1, 0);
+    for (int i = 0; i < matrix.num_rows(); ++i) {
+      for (int j = 0; j < matrix.num_cols(); ++j) {
         T val = matrix(i, j);
         if (i != j && val > 0) {
           data.emplace_back(static_cast<int>(j), val);

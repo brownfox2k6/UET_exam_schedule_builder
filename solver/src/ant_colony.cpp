@@ -57,8 +57,8 @@ AntColony::AntColony(
   for (int i = 0; i < max_threads; ++i) {
     workspace_rngs.emplace_back(base_seed == -1 ? rd() : base_seed + i);
   }
-  workspace_weights.resize(num_slots);
-  workspace_delta_soft.resize(num_slots);
+  workspace_weights.assign(max_threads, std::vector<double>(num_slots));
+  workspace_delta_soft.assign(max_threads, std::vector<double>(num_slots));
 }
 
 bool AntColony::construct_ant(Ant& ant) {
