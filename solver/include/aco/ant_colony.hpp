@@ -2,11 +2,12 @@
 
 #include <cstdint>
 #include <functional>
-#include <vector>
 #include <random>
+#include <vector>
+
 #include "ant.hpp"
-#include "hyperparameters.hpp"
-#include "matrix.hpp"
+#include "../common/hyperparameters.hpp"
+#include "../common/matrix.hpp"
 
 namespace aco {
 

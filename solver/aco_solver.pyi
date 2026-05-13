@@ -4,9 +4,9 @@ Solver for University Examination Timetabling using Ant Colony Optimization and 
 from __future__ import annotations
 import collections.abc
 import typing
-__all__: list[str] = ['AcoParams', 'Ant', 'AntColony', 'Hyperparams', 'LsParams']
+__all__: list[str] = ['AcoParams', 'Ant', 'AntColony', 'EvalParams', 'Hyperparams', 'LsParams']
 class AcoParams:
-    def __init__(self) -> None:
+    def __init__(self, _num_iters: typing.SupportsInt | typing.SupportsIndex = 100, _num_ants: typing.SupportsInt | typing.SupportsIndex = 10, _alpha: typing.SupportsFloat | typing.SupportsIndex = 1.0, _beta: typing.SupportsFloat | typing.SupportsIndex = 2.0, _rho: typing.SupportsFloat | typing.SupportsIndex = 0.1, _tau_min: typing.SupportsFloat | typing.SupportsIndex = 0.01, _tau_max: typing.SupportsFloat | typing.SupportsIndex = 1.0) -> None:
         ...
     @property
     def alpha(self) -> float:
@@ -31,12 +31,6 @@ class AcoParams:
         ...
     @num_iters.setter
     def num_iters(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None:
-        ...
-    @property
-    def penalty_decay_base(self) -> float:
-        ...
-    @penalty_decay_base.setter
-    def penalty_decay_base(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None:
         ...
     @property
     def rho(self) -> float:
@@ -73,13 +67,22 @@ class AntColony:
     @property
     def global_best(self) -> Ant:
         ...
+class EvalParams:
+    def __init__(self, _penalty_decay_base: typing.SupportsFloat | typing.SupportsIndex = 2.0) -> None:
+        ...
+    @property
+    def penalty_decay_base(self) -> float:
+        ...
+    @penalty_decay_base.setter
+    def penalty_decay_base(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None:
+        ...
 class Hyperparams:
     aco: AcoParams
     ls: LsParams
-    def __init__(self) -> None:
+    def __init__(self, _eval: EvalParams = ..., _aco: AcoParams = ..., _ls: LsParams = ...) -> None:
         ...
 class LsParams:
-    def __init__(self) -> None:
+    def __init__(self, _prob_1_move: typing.SupportsFloat | typing.SupportsIndex = 0.5, _max_improvements: typing.SupportsInt | typing.SupportsIndex = 10, _patience: typing.SupportsInt | typing.SupportsIndex = 100) -> None:
         ...
     @property
     def max_improvements(self) -> int:

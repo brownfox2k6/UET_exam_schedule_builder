@@ -1,6 +1,7 @@
-#include "ant_colony.hpp"
-#include <omp.h>
 #include <random>
+#include <omp.h>
+
+#include "aco/ant_colony.hpp"
 
 namespace aco {
 

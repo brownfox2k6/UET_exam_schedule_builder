@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.19)
-
 project(aco_solver CXX)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -17,9 +16,7 @@ if(APPLE AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(BREW_PREFIX "/usr/local")    # Mac Intel
   endif()
 
-  set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I${BREW_PREFIX}/opt/libomp/include")
-  set(OpenMP_CXX_LIB_NAMES "omp")
-  set(OpenMP_omp_LIBRARY "${BREW_PREFIX}/opt/libomp/lib/libomp.dylib")
+  list(APPEND CMAKE_PREFIX_PATH "${BREW_PREFIX}/opt/libomp")
 endif()
 
 find_package(OpenMP REQUIRED)
@@ -35,9 +32,19 @@ FetchContent_MakeAvailable(pybind11)
 
 file(GLOB SOURCES "src/*.cpp")
 
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
+  list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
+endif()
+
 list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 
+find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+
+set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE})
+
 pybind11_add_module(aco_solver ${SOURCES})
+
+target_link_libraries(aco_solver PRIVATE Python3::Python)
 
 target_include_directories(aco_solver PRIVATE include)
 
@@ -46,3 +53,17 @@ if(OpenMP_CXX_FOUND)
 endif()
 
 set_target_properties(aco_solver PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+
+# Tìm lệnh pybind11-stubgen
+find_program(STUBGEN_EXE pybind11-stubgen)
+
+if(STUBGEN_EXE)
+  add_custom_command(TARGET aco_solver POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E env "PYTHONPATH=$<TARGET_FILE_DIR:aco_solver>"
+            ${Python3_EXECUTABLE} -m pybind11_stubgen aco_solver --out $<TARGET_FILE_DIR:aco_solver>
+    COMMENT "Generating Python stubs using Python ${Python3_VERSION}..."
+    VERBATIM
+  )
+else()
+  message(WARNING "pybind11-stubgen NOT FOUND! Stubs will not be generated.")
+endif()

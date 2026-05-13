@@ -1,9 +1,9 @@
 #pragma once
 
-#include <cstddef>
-#include <vector>
 #include <cassert>
+#include <cstddef>
 #include <span>
+#include <vector>
 
 namespace common {
 

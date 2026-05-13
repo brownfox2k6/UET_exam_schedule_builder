@@ -1,14 +1,11 @@
-#include <algorithm>
 #include <cstddef>
-#include <functional>
-#include <numeric>
 #include <pybind11/gil.h>
-#include <random>
-#include <omp.h>
 #include <pybind11/pybind11.h>
-#include "ant_colony.hpp"
-#include "hyperparameters.hpp"
-#include "matrix.hpp"
+#include <omp.h>
+
+#include "aco/ant_colony.hpp"
+#include "common/hyperparameters.hpp"
+#include "common/matrix.hpp"
 
 constexpr double SECONDS_PER_DAY = 86400.0;
 constexpr double HARD_CONSTRAINT_PENALTY = 1e9;
@@ -32,7 +29,7 @@ AntColony::AntColony(
         const int64_t slot_i = slot_timestamps[i];
         for (int j = i + 1; j < num_slots; ++j) {
           const double diff_days = std::abs(slot_i - slot_timestamps[j]) / SECONDS_PER_DAY;
-          const double value = std::pow(hyperparams.aco.penalty_decay_base, -diff_days);
+          const double value = std::pow(hyperparams.eval.penalty_decay_base, -diff_days);
           penalties(i, j) = penalties(j, i) = value;
         }
       }

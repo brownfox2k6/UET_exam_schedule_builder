@@ -1,5 +1,5 @@
-#include "ant.hpp"
-#include "matrix.hpp"
+#include "aco/ant.hpp"
+#include "common/matrix.hpp"
 
 namespace aco {
 
@@ -27,7 +27,7 @@ void Ant::reset_feasible_slots() {
     }
   }
 }
-  
+
 void Ant::reset() {
   std::fill(schedule.begin(), schedule.end(), -1);
   reset_feasible_slots();

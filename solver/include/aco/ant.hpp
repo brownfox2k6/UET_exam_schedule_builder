@@ -1,9 +1,10 @@
 #pragma once
 
+#include <cassert>
 #include <cstddef>
 #include <vector>
-#include <cassert>
-#include "matrix.hpp"
+
+#include "../common/matrix.hpp"
 
 namespace aco {
 
