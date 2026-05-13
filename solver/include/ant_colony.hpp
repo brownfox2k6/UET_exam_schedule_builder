@@ -6,7 +6,6 @@
 #include <random>
 #include "ant.hpp"
 #include "hyperparameters.hpp"
-#include "csr_matrix.hpp"
 #include "matrix.hpp"
 
 namespace aco {

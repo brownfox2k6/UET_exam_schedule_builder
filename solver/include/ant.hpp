@@ -4,7 +4,6 @@
 #include <vector>
 #include <cassert>
 #include "matrix.hpp"
-#include "csr_matrix.hpp"
 
 namespace aco {
 
