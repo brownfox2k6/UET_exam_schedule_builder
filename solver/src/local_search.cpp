@@ -7,8 +7,7 @@
 namespace aco {
 
 bool AntColony::go_1_move(common::Solution& ant) {
-  const int thread_id = omp_get_thread_num();
-  std::mt19937& rng = workspace_rngs[thread_id];
+  static thread_local std::mt19937 rng(std::random_device{}());
 
   const int exam = std::uniform_int_distribution<int>(0, num_exams - 1)(rng);
 
@@ -39,8 +38,7 @@ bool AntColony::go_1_move(common::Solution& ant) {
 }
 
 bool AntColony::go_2_swap(common::Solution& ant) {
-  const int thread_id = omp_get_thread_num();
-  std::mt19937& rng = workspace_rngs[thread_id];
+  static thread_local std::mt19937 rng(std::random_device{}());
 
   // Pick two random exams and ensure their assigned slots are different
   const int exam1 = std::uniform_int_distribution<int>(0, num_exams - 1)(rng);
@@ -79,8 +77,7 @@ bool AntColony::go_2_swap(common::Solution& ant) {
 }
 
 void AntColony::local_search(common::Solution& ant) {
-  const int thread_id = omp_get_thread_num();
-  std::mt19937& rng = workspace_rngs[thread_id];
+  static thread_local std::mt19937 rng(std::random_device{}());
 
   int improvements = 0;
   int consecutive_fails = 0;

@@ -2,7 +2,6 @@
 
 #include <cstdint>
 #include <functional>
-#include <random>
 #include <vector>
 
 #include "../common/solution.hpp"
@@ -22,11 +21,6 @@ private:
 
   const int num_exams;
   const int num_slots;
-
-  // Buffers
-  std::vector<std::mt19937> workspace_rngs;
-  std::vector<std::vector<double>> workspace_weights;
-  std::vector<std::vector<double>> workspace_delta_soft;
 
   // Pheromone matrix representing learned experience for exam-to-slot assignments
   common::Matrix<double> pheromone;

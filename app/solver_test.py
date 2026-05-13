@@ -73,12 +73,13 @@ def test_ant_colony_full_run_and_callback(sample_data):
     assert len(callback_history) == hp.aco.num_iters
     
     # Kiểm tra kết quả con kiến tốt nhất (global_best)
-    best_ant = colony.global_best
+    best_schedule = colony.global_best_schedule
+    best_fitness = colony.global_best_fitness
     
-    assert len(best_ant.schedule) == num_exams, "Thiếu lịch thi của một số môn"
+    assert len(best_schedule) == num_exams, "Thiếu lịch thi của một số môn"
     
     # Kiểm tra xem có môn nào bị bỏ sót (-1) không và slot có hợp lệ không
-    for exam_id, assigned_slot in enumerate(best_ant.schedule):
+    for exam_id, assigned_slot in enumerate(best_schedule):
         assert 0 <= assigned_slot < num_slots, f"Môn {exam_id} được xếp vào slot không hợp lệ: {assigned_slot}"
         
-    assert isinstance(best_ant.fitness, float)
+    assert isinstance(best_fitness, float)

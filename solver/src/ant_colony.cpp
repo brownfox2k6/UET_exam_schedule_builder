@@ -2,6 +2,7 @@
 #include <pybind11/gil.h>
 #include <pybind11/pybind11.h>
 #include <omp.h>
+#include <random>
 
 #include "aco/ant_colony.hpp"
 #include "common/evaluator.hpp"
@@ -26,22 +27,16 @@ AntColony::AntColony(
     ants(hyperparams.aco.num_ants, common::Solution(num_exams, num_slots)),
     global_best_schedule(num_exams),
     global_best_fitness(HARD_CONSTRAINT_PENALTY)
-{
-  const int max_threads = omp_get_max_threads();
-  std::random_device rd;
-  for (int i = 0; i < max_threads; ++i) {
-    workspace_rngs.emplace_back(base_seed == -1 ? rd() : base_seed + i);
-  }
-  workspace_weights.assign(max_threads, std::vector<double>(num_slots));
-  workspace_delta_soft.assign(max_threads, std::vector<double>(num_slots));
-}
+{}
 
 bool AntColony::construct_ant(common::Solution& ant) {
   ant.reset();
   const int thread_id = omp_get_thread_num();
-  std::mt19937& rng = workspace_rngs[thread_id];
-  std::vector<double>& weights = workspace_weights[thread_id];
-  std::vector<double>& delta_soft = workspace_delta_soft[thread_id];
+  static thread_local std::mt19937 rng(std::random_device{}());
+  static thread_local std::vector<double> weights;
+  static thread_local std::vector<double> delta_soft;
+  weights.resize(num_slots);
+  delta_soft.resize(num_slots);
 
   for (int i = 0; i < num_exams; ++i) {
     const int exam = ant.get_next_exam(evaluator.total_student_conflicts);
@@ -65,6 +60,7 @@ bool AntColony::construct_ant(common::Solution& ant) {
     }
 
     // Choose a random slot using Stochastic Propotional Rule (roulette wheel)
+    total_weight = std::max(total_weight, 1e-9);
     const double threshold = std::uniform_real_distribution<double>(0.0, total_weight)(rng);
     double cumulative = 0.0;
     int chosen_j = count_feasible - 1;

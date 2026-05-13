@@ -80,7 +80,9 @@ public:
     assert(index < count && "Value is already inactive or invalid.");
     int last_val = options(item, count - 1);
     options(item, index) = last_val;
+    options(item, count - 1) = value;
     pos(item, last_val) = index;
+    pos(item, value) = count - 1;
     --count;
   }
 
