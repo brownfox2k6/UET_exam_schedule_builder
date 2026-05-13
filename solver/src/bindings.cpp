@@ -4,9 +4,9 @@
 #include <pybind11/stl.h>
 #include <pybind11/functional.h>
 
-#include "aco/ant.hpp"
 #include "aco/ant_colony.hpp"
 #include "common/hyperparameters.hpp"
+#include "common/solution.hpp"
 
 namespace py = pybind11;
 
@@ -46,15 +46,16 @@ PYBIND11_MODULE(aco_solver, m) {
 
   py::class_<common::Hyperparams>(m, "Hyperparams")
     .def(py::init<common::Hyperparams::Evaluation, common::Hyperparams::ACO, common::Hyperparams::LS>(),
-         py::arg("_eval") = common::Hyperparams::Evaluation(),
-         py::arg("_aco") = common::Hyperparams::ACO(),
-         py::arg("_ls") = common::Hyperparams::LS())
-    .def_readwrite("aco", &common::Hyperparams::aco)
-    .def_readwrite("ls",  &common::Hyperparams::ls);
+         py::arg_v("_eval", common::Hyperparams::Evaluation(), "EvalParams()"),
+         py::arg_v("_aco", common::Hyperparams::ACO(), "AcoParams()"),
+         py::arg_v("_ls", common::Hyperparams::LS(), "LsParams()"))
+    .def_readwrite("eval", &common::Hyperparams::eval)
+    .def_readwrite("aco",  &common::Hyperparams::aco)
+    .def_readwrite("ls",   &common::Hyperparams::ls);
 
-  py::class_<aco::Ant>(m, "Ant")
-    .def_readonly("schedule", &aco::Ant::schedule)
-    .def_readonly("fitness",  &aco::Ant::fitness);
+  py::class_<common::Solution>(m, "Solution")
+    .def_readonly("schedule", &common::Solution::schedule)
+    .def_readonly("fitness",  &common::Solution::fitness);
 
   py::class_<aco::AntColony>(m, "AntColony")
     .def(py::init([](const common::Hyperparams& hp, 
@@ -66,5 +67,6 @@ PYBIND11_MODULE(aco_solver, m) {
     }))
     .def("run_one_iteration", &aco::AntColony::run_one_iteration)
     .def("run", &aco::AntColony::run, py::call_guard<py::gil_scoped_release>())
-    .def_readonly("global_best", &aco::AntColony::global_best);
+    .def_readonly("global_best_schedule", &aco::AntColony::global_best_schedule)
+    .def_readonly("global_best_fitness", &aco::AntColony::global_best_fitness);
 }

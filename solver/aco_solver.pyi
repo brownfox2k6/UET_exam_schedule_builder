@@ -4,7 +4,7 @@ Solver for University Examination Timetabling using Ant Colony Optimization and 
 from __future__ import annotations
 import collections.abc
 import typing
-__all__: list[str] = ['AcoParams', 'Ant', 'AntColony', 'EvalParams', 'Hyperparams', 'LsParams']
+__all__: list[str] = ['AcoParams', 'AntColony', 'EvalParams', 'Hyperparams', 'LsParams', 'Solution']
 class AcoParams:
     def __init__(self, _num_iters: typing.SupportsInt | typing.SupportsIndex = 100, _num_ants: typing.SupportsInt | typing.SupportsIndex = 10, _alpha: typing.SupportsFloat | typing.SupportsIndex = 1.0, _beta: typing.SupportsFloat | typing.SupportsIndex = 2.0, _rho: typing.SupportsFloat | typing.SupportsIndex = 0.1, _tau_min: typing.SupportsFloat | typing.SupportsIndex = 0.01, _tau_max: typing.SupportsFloat | typing.SupportsIndex = 1.0) -> None:
         ...
@@ -50,13 +50,6 @@ class AcoParams:
     @tau_min.setter
     def tau_min(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None:
         ...
-class Ant:
-    @property
-    def fitness(self) -> float:
-        ...
-    @property
-    def schedule(self) -> list[int]:
-        ...
 class AntColony:
     def __init__(self, arg0: Hyperparams, arg1: collections.abc.Sequence[collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]], arg2: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], arg3: typing.SupportsInt | typing.SupportsIndex) -> None:
         ...
@@ -65,7 +58,10 @@ class AntColony:
     def run_one_iteration(self) -> float:
         ...
     @property
-    def global_best(self) -> Ant:
+    def global_best_fitness(self) -> float:
+        ...
+    @property
+    def global_best_schedule(self) -> list[int]:
         ...
 class EvalParams:
     def __init__(self, _penalty_decay_base: typing.SupportsFloat | typing.SupportsIndex = 2.0) -> None:
@@ -78,6 +74,7 @@ class EvalParams:
         ...
 class Hyperparams:
     aco: AcoParams
+    eval: EvalParams
     ls: LsParams
     def __init__(self, _eval: EvalParams = ..., _aco: AcoParams = ..., _ls: LsParams = ...) -> None:
         ...
@@ -101,4 +98,11 @@ class LsParams:
         ...
     @prob_1_move.setter
     def prob_1_move(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None:
+        ...
+class Solution:
+    @property
+    def fitness(self) -> float:
+        ...
+    @property
+    def schedule(self) -> list[int]:
         ...

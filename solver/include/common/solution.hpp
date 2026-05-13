@@ -4,9 +4,10 @@
 #include <cstddef>
 #include <vector>
 
-#include "../common/matrix.hpp"
+#include "feasible_set.hpp"
+#include "matrix.hpp"
 
-namespace aco {
+namespace common {
 
 /**
 * @brief Represents an individual ant constructing an exam timetable.
@@ -14,7 +15,7 @@ namespace aco {
 * and the stored value represents the assigned Timeslot ID (-1 for unassigned).
 * The fitness tracks soft constraint violations (lower is better).
 */
-struct Ant {
+struct Solution {
 private:
   int num_exams;
   int num_slots;
@@ -25,20 +26,11 @@ public:
   // If this value is > 0, slot `j` is strictly forbidden for exam `i`.
   common::Matrix<int> conflicting_exams_count;
 
-  // `forbidden_slots_count[i]` tells how many slots that exam `i` cannot be assigned to. 
-  // That is, `forbidden_slots_count[i] = count(conflicting_exams_count(i, j) > 0)`
-  std::vector<int> forbidden_slots_count;
-
-  // `feasible_slots_count[i]` tells how many slots that exam `i` can be assigned to. 
-  // That is, `feasible_slots_count[i] = count(conflicting_exams_count(i, j) == 0)`
-  std::vector<int> feasible_slots_count;
-
   // `schedule[i]` tells the assigned slot for exam `i`
   std::vector<int> schedule;
 
-  // A dense matrix tracking available slot IDs for each exam. 
-  // Used alongside `feasible_slots_count` to allow O(1) random selection of a valid slot.
-  common::Matrix<int> feasible_slots;
+  // Tracks available slot IDs for each exam.
+  common::FeasibleSet<int> feasible_slots;
 
   // The total soft constraint penalty score of the current schedule (lower is better).
   double fitness;
@@ -46,7 +38,7 @@ public:
   /**
    * @brief Initializes an ant with empty schedule and default tracking matrices. 
    */
-  Ant(int n_exams, int n_slots);
+  Solution(int n_exams, int n_slots);
 
   /**
    * @brief Overloads the less-than operator for Ant comparison.
@@ -55,12 +47,7 @@ public:
    * * @param other The ant to compare with.
    * @return true if this ant's fitness is strictly less than the other's.
    */
-  bool operator<(const Ant& other) const;
-
-  /**
-   * @brief Re-initializes the feasible slots tracking matrix to its initial state (all slots available). 
-   */
-  void reset_feasible_slots();
+  bool operator<(const Solution& other) const;
 
   /**
    * @brief Resets the ant's memory, schedule, and conflict states to prepare for a new iteration. 
@@ -91,17 +78,6 @@ public:
     int exam,
     const common::CsrMatrix<int>& student_conflicts
   );
-
-  /**
-   * @brief Calculates the change in fitness (soft penalty) if an exam is placed in or moved to a new slot.
-   */
-  double calculate_delta_penalty(
-    int exam,
-    int new_slot,
-    const common::CsrMatrix<int>& student_conflicts,
-    const common::Matrix<double>& proximity_penalties,
-    int ignore_exam = -1
-  ) const;
 };
 
-} // namespace aco
+} // namespace common

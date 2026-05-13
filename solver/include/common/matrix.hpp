@@ -47,7 +47,7 @@ public:
   }
 
   /**
-   * @brief Accesses the element at (r, c) by reference (read/write). 
+   * @brief Accesses the element at `(r, c)` by reference (read/write). 
    */
   T& operator()(int r, int c) {
     assert(r < rows && "Row index out-of-bounds.");
@@ -56,7 +56,7 @@ public:
   }
 
   /**
-   * @brief Accesses the element at (r, c) by value (read-only). 
+   * @brief Accesses the element at `(r, c)` by value (read-only). 
    */
   T operator()(int r, int c) const {
     assert(r < rows && "Row index out-of-bounds.");

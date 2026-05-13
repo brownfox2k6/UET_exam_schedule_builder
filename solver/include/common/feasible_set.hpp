@@ -50,8 +50,15 @@ public:
   /**
    * @brief Gets the number of currently feasible options for an item.
    */
-  int get_count(int item) const {
+  int get_feasible_count(int item) const {
     return counts[item];
+  }
+
+  /**
+   * @brief Gets the number of currently forbidden options for an item.
+   */
+  int get_forbidden_count(int item) const {
+    return num_options - counts[item];
   }
 
   /**
@@ -67,7 +74,7 @@ public:
   /**
    * @brief Removes an option from the feasible set of an item in O(1).
    */
-  void remove_option(int item, int value) {
+  void remove_option(int item, T value) {
     int &count = counts[item];
     int index = pos(item, value);
     assert(index < count && "Value is already inactive or invalid.");
@@ -80,7 +87,7 @@ public:
   /**
    * @brief Restores an option to the feasible set of an item in O(1).
    */
-  void add_option(int item, int value) {
+  void add_option(int item, T value) {
     int &count = counts[item];
     int index = pos(item, value);
     assert(index >= count && "Value is already active.");
@@ -90,6 +97,20 @@ public:
     pos(item, first_inactive_val) = index;
     pos(item, value) = count;
     ++count;
+  }
+
+  /**
+   * @brief Accesses the element at `(item, index)` by value (read-only). 
+   */
+  T operator()(int item, int index) const {
+    assert(item >= 0 && item < num_items);
+    assert(index >= 0 && index < counts[item] && "Index out of feasible range");
+    return options(item, index);
+  }
+
+  std::span<const T> operator[](int item) const {
+    assert(item >= 0 && item < num_items);
+    return std::span<const T>(&options(item, 0), counts[item]);
   }
 };
 

@@ -4,10 +4,11 @@
 #include <omp.h>
 
 #include "aco/ant_colony.hpp"
+#include "common/evaluator.hpp"
 #include "common/hyperparameters.hpp"
 #include "common/matrix.hpp"
+#include "common/solution.hpp"
 
-constexpr double SECONDS_PER_DAY = 86400.0;
 constexpr double HARD_CONSTRAINT_PENALTY = 1e9;
 
 namespace aco {
@@ -17,38 +18,15 @@ AntColony::AntColony(
   const common::Matrix<int>& student_conflicts_matrix,
   const std::vector<int64_t>& slot_timestamps,
   int base_seed
-) : num_exams(student_conflicts_matrix.num_rows()),
-    num_slots(slot_timestamps.size()),
-    hyperparams(hp),
-    student_conflicts(student_conflicts_matrix),
-    student_conflicts_matrix(student_conflicts_matrix),
-    proximity_penalties([&]() {
-      common::Matrix<double> penalties(num_slots, num_slots, 0.0);
-      for (int i = 0; i < num_slots; ++i) {
-        penalties(i, i) = HARD_CONSTRAINT_PENALTY;
-        const int64_t slot_i = slot_timestamps[i];
-        for (int j = i + 1; j < num_slots; ++j) {
-          const double diff_days = std::abs(slot_i - slot_timestamps[j]) / SECONDS_PER_DAY;
-          const double value = std::pow(hyperparams.eval.penalty_decay_base, -diff_days);
-          penalties(i, j) = penalties(j, i) = value;
-        }
-      }
-      return penalties;
-    }()),
-    total_student_conflicts([&]() {
-      std::vector<int> totals(num_exams);
-      for (int exam = 0; exam < num_exams; ++exam) {
-        const auto row = student_conflicts[exam];
-        totals[exam] = std::accumulate(row.begin(), row.end(), 0);
-      }
-      return totals;
-    }()),
+) : hyperparams(hp),
+    evaluator(hp, slot_timestamps, student_conflicts_matrix),
+    num_exams(evaluator.num_exams),
+    num_slots(evaluator.num_slots),
     pheromone(num_exams, num_slots, hyperparams.aco.tau_max),
-    ants(hyperparams.aco.num_ants, Ant(num_exams, num_slots)),
-    global_best(num_exams, num_slots)
+    ants(hyperparams.aco.num_ants, common::Solution(num_exams, num_slots)),
+    global_best_schedule(num_exams),
+    global_best_fitness(HARD_CONSTRAINT_PENALTY)
 {
-  global_best.fitness = std::numeric_limits<double>::infinity();
-
   const int max_threads = omp_get_max_threads();
   std::random_device rd;
   for (int i = 0; i < max_threads; ++i) {
@@ -58,7 +36,7 @@ AntColony::AntColony(
   workspace_delta_soft.assign(max_threads, std::vector<double>(num_slots));
 }
 
-bool AntColony::construct_ant(Ant& ant) {
+bool AntColony::construct_ant(common::Solution& ant) {
   ant.reset();
   const int thread_id = omp_get_thread_num();
   std::mt19937& rng = workspace_rngs[thread_id];
@@ -66,10 +44,10 @@ bool AntColony::construct_ant(Ant& ant) {
   std::vector<double>& delta_soft = workspace_delta_soft[thread_id];
 
   for (int i = 0; i < num_exams; ++i) {
-    const int exam = ant.get_next_exam(total_student_conflicts);
+    const int exam = ant.get_next_exam(evaluator.total_student_conflicts);
 
     // Check if the solution is infeasible --> ant die now
-    const int count_feasible = ant.feasible_slots_count[exam];
+    const int count_feasible = ant.feasible_slots.get_feasible_count(exam);
     if (count_feasible == 0) {
       ant.fitness = HARD_CONSTRAINT_PENALTY;
       return false;
@@ -79,7 +57,7 @@ bool AntColony::construct_ant(Ant& ant) {
     double total_weight = 0.0;
     for (int j = 0; j < count_feasible; ++j) {
       const int slot = ant.feasible_slots(exam, j);
-      delta_soft[j] = ant.calculate_delta_penalty(exam, slot, student_conflicts, proximity_penalties);
+      delta_soft[j] = evaluator.calculate_delta_penalty(ant.schedule, exam, slot);
       const double eta = 1.0 / (1.0 + delta_soft[j]);
       const double tau = pheromone(exam, slot);
       weights[j] = std::pow(tau, hyperparams.aco.alpha) * std::pow(eta, hyperparams.aco.beta);
@@ -100,15 +78,15 @@ bool AntColony::construct_ant(Ant& ant) {
 
     const int slot = ant.feasible_slots(exam, chosen_j);
     const double penalty = delta_soft[chosen_j];
-    ant.assign_exam(exam, slot, student_conflicts);
+    ant.assign_exam(exam, slot, evaluator.student_conflicts);
     ant.fitness += penalty;
   }
   return true;
 }
 
-void AntColony::update_pheromone(const Ant& best_ant) {
+void AntColony::update_pheromone(const std::vector<int>& best_schedule) {
   for (int exam = 0; exam < num_exams; ++exam) {
-    const int assigned_slot = best_ant.schedule[exam];
+    const int assigned_slot = best_schedule[exam];
     for (int slot = 0; slot < num_slots; ++slot) {
       const double delta_tau = slot == assigned_slot
           ? hyperparams.aco.rho * hyperparams.aco.tau_max
@@ -130,11 +108,12 @@ double AntColony::run_one_iteration() {
     }
   }
 
-  const Ant& iter_best = *std::min_element(ants.begin(), ants.end());
-  if (iter_best.fitness < global_best.fitness) {
-    global_best = iter_best;
+  const common::Solution& iter_best = *std::min_element(ants.begin(), ants.end());
+  if (iter_best.fitness < global_best_fitness) {
+    global_best_fitness = iter_best.fitness;
+    global_best_schedule = iter_best.schedule;
   }
-  update_pheromone(iter_best);
+  update_pheromone(iter_best.schedule);
   return iter_best.fitness;
 }
 

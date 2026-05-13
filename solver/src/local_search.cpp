@@ -2,17 +2,18 @@
 #include <omp.h>
 
 #include "aco/ant_colony.hpp"
+#include "common/solution.hpp"
 
 namespace aco {
 
-bool AntColony::go_1_move(Ant& ant) {
+bool AntColony::go_1_move(common::Solution& ant) {
   const int thread_id = omp_get_thread_num();
   std::mt19937& rng = workspace_rngs[thread_id];
 
-  int exam = std::uniform_int_distribution<int>(0, num_exams - 1)(rng);
+  const int exam = std::uniform_int_distribution<int>(0, num_exams - 1)(rng);
 
   // Check if the exam cannot be moved to any other slot
-  int count_feasible = ant.feasible_slots_count[exam];
+  const int count_feasible = ant.feasible_slots.get_feasible_count(exam);
   if (count_feasible == 0) {
     return false;
   }
@@ -25,19 +26,19 @@ bool AntColony::go_1_move(Ant& ant) {
   }
 
   // Calculate delta if we assign the exam to this new slot
-  double delta = ant.calculate_delta_penalty(exam, new_slot, student_conflicts, proximity_penalties);
+  double delta = evaluator.calculate_delta_penalty(ant.schedule, exam, new_slot);
   if (delta > 0.0) {
     return false;
   }
 
   // Accept if cost reduces (or may be unchanged)
-  ant.unassign_exam(exam, student_conflicts);
-  ant.assign_exam(exam, new_slot, student_conflicts);
+  ant.unassign_exam(exam, evaluator.student_conflicts);
+  ant.assign_exam(exam, new_slot, evaluator.student_conflicts);
   ant.fitness += delta;
   return true;
 }
 
-bool AntColony::go_2_swap(Ant& ant) {
+bool AntColony::go_2_swap(common::Solution& ant) {
   const int thread_id = omp_get_thread_num();
   std::mt19937& rng = workspace_rngs[thread_id];
 
@@ -53,7 +54,7 @@ bool AntColony::go_2_swap(Ant& ant) {
   // Check for hard constraint violation if we swap their slots
   int conflicts_in_slot1 = ant.conflicting_exams_count(exam2, slot1);
   int conflicts_in_slot2 = ant.conflicting_exams_count(exam1, slot2);
-  if (student_conflicts_matrix(exam1, exam2) > 0) {
+  if (evaluator.student_conflicts_matrix(exam1, exam2) > 0) {
     --conflicts_in_slot1;
     --conflicts_in_slot2;
   }
@@ -62,22 +63,22 @@ bool AntColony::go_2_swap(Ant& ant) {
   }
 
   // Calculate delta if we swap their slots
-  double delta = ant.calculate_delta_penalty(exam1, slot2, student_conflicts, proximity_penalties, exam2)
-               + ant.calculate_delta_penalty(exam2, slot1, student_conflicts, proximity_penalties, exam1);
+  double delta = evaluator.calculate_delta_penalty(ant.schedule, exam1, slot2, exam2)
+               + evaluator.calculate_delta_penalty(ant.schedule, exam2, slot1, exam1);
   if (delta > 0) {
     return false;
   }
 
   // Accept if cost reduces (or may be unchanged)
-  ant.unassign_exam(exam1, student_conflicts);
-  ant.unassign_exam(exam2, student_conflicts);
-  ant.assign_exam(exam1, slot2, student_conflicts);
-  ant.assign_exam(exam2, slot1, student_conflicts);
+  ant.unassign_exam(exam1, evaluator.student_conflicts);
+  ant.unassign_exam(exam2, evaluator.student_conflicts);
+  ant.assign_exam(exam1, slot2, evaluator.student_conflicts);
+  ant.assign_exam(exam2, slot1, evaluator.student_conflicts);
   ant.fitness += delta;
   return true;
 }
 
-void AntColony::local_search(Ant& ant) {
+void AntColony::local_search(common::Solution& ant) {
   const int thread_id = omp_get_thread_num();
   std::mt19937& rng = workspace_rngs[thread_id];
 

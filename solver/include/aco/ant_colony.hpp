@@ -5,7 +5,8 @@
 #include <random>
 #include <vector>
 
-#include "ant.hpp"
+#include "../common/solution.hpp"
+#include "../common/evaluator.hpp"
 #include "../common/hyperparameters.hpp"
 #include "../common/matrix.hpp"
 
@@ -16,76 +17,50 @@ namespace aco {
  */
 class AntColony {
 private:
+  const common::Hyperparams hyperparams;
+  common::Evaluator evaluator;
+
   const int num_exams;
   const int num_slots;
-  const common::Hyperparams hyperparams;
 
   // Buffers
   std::vector<std::mt19937> workspace_rngs;
   std::vector<std::vector<double>> workspace_weights;
   std::vector<std::vector<double>> workspace_delta_soft;
 
-  /**
-   * @brief Compressed representation of the exam conflict graph.
-   * * Each row `i` contains a list of `CsrElement` objects, where:
-   * - `index`: The ID of exam `j` that has at least one student in common with exam `i`.
-   * - `value`: The exact number of students shared between exam `i` and `j`.
-   */
-  const common::CsrMatrix<int> student_conflicts;
-
-  /**
-   * @brief Matrix reprsentation of `student_conflicts`.
-   * * `student_conflict(i, j)` tells the number of students taking both exams `i` and `j`
-   */
-  const common::Matrix<int> student_conflicts_matrix;
-
-  /**
-   * @brief Precalculated time-gap penalties for O(1) lookup.
-   * `proximity_penalties(i, j)` tells the closeness between slot `i` and `j`.
-   */
-  const common::Matrix<double> proximity_penalties;
-
-  /**
-   * @brief The total weighted conflict degree for each exam.
-   * * For each exam `i`, this stores the sum of weights (students) across all its 
-   * neighbors in the conflict graph: `sum(student_conflicts[i].value)`.
-   * Used as a heuristic to identify "heavy" exams that are harder to schedule.
-   */
-  const std::vector<int> total_student_conflicts;
-
   // Pheromone matrix representing learned experience for exam-to-slot assignments
   common::Matrix<double> pheromone;
 
   // Current population of ants used to construct solutions in each iteration
-  std::vector<Ant> ants;
+  std::vector<common::Solution> ants;
 
   /**
    * @brief Constructs a complete timetable for a single ant using pheromone and heuristic probabilities.
    * @return True if a feasible schedule is fully constructed, false if it gets stuck.
    */
-  bool construct_ant(Ant& ant);
+  bool construct_ant(common::Solution& ant);
 
   /**
    * @brief Local search operator: Attempts to move a single exam to a different feasible slot.
    * @return True if the move is successfully applied (downhill or neutral step).
    */
-  bool go_1_move(Ant& ant);
+  bool go_1_move(common::Solution& ant);
 
   /**
    * @brief Local search operator: Attempts to swap the slots of two assigned exams.
    * @return True if the swap is successfully applied and maintains feasibility.
    */
-  bool go_2_swap(Ant& ant);
+  bool go_2_swap(common::Solution& ant);
 
   /**
    * @brief Applies a series of 1-move and 2-swap operators to refine an ant's fully constructed schedule.
    */
-  void local_search(Ant& ant);
+  void local_search(common::Solution& ant);
 
   /**
    * @brief Evaporates existing pheromones and deposits new pheromones based on the iteration's best ant.
    */
-  void update_pheromone(const Ant& best_ant);
+  void update_pheromone(const std::vector<int>& best_schedule);
 
 public:
   /**
@@ -99,7 +74,8 @@ public:
   );
 
   // The best solution found since the start of the algorithm
-  Ant global_best;
+  std::vector<int> global_best_schedule;
+  double global_best_fitness;
 
   /**
    * @brief Executes a single iteration of the Ant Colony Optimization algorithm.
