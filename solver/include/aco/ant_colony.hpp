@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <functional>
+#include <random>
 #include <vector>
 
 #include "../common/solution.hpp"
@@ -17,10 +18,13 @@ namespace aco {
 class AntColony {
 private:
   const common::Hyperparams hyperparams;
-  common::Evaluator evaluator;
+  const common::Evaluator evaluator;
+  const uint64_t base_seed;
 
   const int num_exams;
   const int num_slots;
+
+  std::vector<std::mt19937> rngs;
 
   // Pheromone matrix representing learned experience for exam-to-slot assignments
   common::Matrix<double> pheromone;
@@ -32,24 +36,24 @@ private:
    * @brief Constructs a complete timetable for a single ant using pheromone and heuristic probabilities.
    * @return True if a feasible schedule is fully constructed, false if it gets stuck.
    */
-  bool construct_ant(common::Solution& ant);
+  bool construct_ant(common::Solution& ant, std::mt19937& rng);
 
   /**
    * @brief Local search operator: Attempts to move a single exam to a different feasible slot.
    * @return True if the move is successfully applied (downhill or neutral step).
    */
-  bool go_1_move(common::Solution& ant);
+  bool go_1_move(common::Solution& ant, std::mt19937& rng);
 
   /**
    * @brief Local search operator: Attempts to swap the slots of two assigned exams.
    * @return True if the swap is successfully applied and maintains feasibility.
    */
-  bool go_2_swap(common::Solution& ant);
+  bool go_2_swap(common::Solution& ant, std::mt19937& rng);
 
   /**
    * @brief Applies a series of 1-move and 2-swap operators to refine an ant's fully constructed schedule.
    */
-  void local_search(common::Solution& ant);
+  void local_search(common::Solution& ant, std::mt19937& rng);
 
   /**
    * @brief Evaporates existing pheromones and deposits new pheromones based on the iteration's best ant.
@@ -64,7 +68,7 @@ public:
     const common::Hyperparams& hp,
     const common::Matrix<int>& student_conflicts_matrix,
     const std::vector<int64_t>& slot_timestamps,
-    int base_seed = -1
+    int64_t _base_seed = -1
   );
 
   // The best solution found since the start of the algorithm

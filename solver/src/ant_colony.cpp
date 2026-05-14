@@ -1,4 +1,5 @@
 #include <cstddef>
+#include <cstdint>
 #include <pybind11/gil.h>
 #include <pybind11/pybind11.h>
 #include <omp.h>
@@ -14,27 +15,45 @@ constexpr double HARD_CONSTRAINT_PENALTY = 1e9;
 
 namespace aco {
 
+static uint64_t make_random_seed() {
+  std::random_device rd;
+  uint64_t high = static_cast<uint64_t>(rd());
+  uint64_t low  = static_cast<uint64_t>(rd());
+  return (high << 32) ^ low;
+}
+
 AntColony::AntColony(
   const common::Hyperparams& hp,
   const common::Matrix<int>& student_conflicts_matrix,
   const std::vector<int64_t>& slot_timestamps,
-  int base_seed
+  int64_t _base_seed
 ) : hyperparams(hp),
     evaluator(hp, slot_timestamps, student_conflicts_matrix),
+    base_seed(_base_seed == -1 ? make_random_seed() : static_cast<uint64_t>(_base_seed)),
     num_exams(evaluator.num_exams),
     num_slots(evaluator.num_slots),
     pheromone(num_exams, num_slots, hyperparams.aco.tau_max),
     ants(hyperparams.aco.num_ants, common::Solution(num_exams, num_slots)),
-    global_best_schedule(num_exams),
+    global_best_schedule(num_exams, -1),
     global_best_fitness(HARD_CONSTRAINT_PENALTY)
-{}
+{
+  assert((_base_seed == -1 && _base_seed >= 0) && "base_seed must be -1 or non-negative.");
+  rngs.reserve(hyperparams.aco.num_ants);
+  for (int i = 0; i < hyperparams.aco.num_ants; ++i) {
+    std::seed_seq seq {
+      static_cast<uint32_t>(base_seed),
+      static_cast<uint32_t>(base_seed >> 32),
+      static_cast<uint32_t>(i),
+      0x9e3779b9u  // golden-ratio constant for seed mixing
+    };
+    rngs.emplace_back(seq);
+  }
+}
 
-bool AntColony::construct_ant(common::Solution& ant) {
-  ant.reset();
-  const int thread_id = omp_get_thread_num();
-  static thread_local std::mt19937 rng(std::random_device{}());
+bool AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) {
   static thread_local std::vector<double> weights;
   static thread_local std::vector<double> delta_soft;
+  ant.reset();
   weights.resize(num_slots);
   delta_soft.resize(num_slots);
 
@@ -97,14 +116,17 @@ double AntColony::run_one_iteration() {
   for (int i = 0; i < hyperparams.aco.num_ants; ++i) {
     bool ok = false;
     for (int t = 0; !ok && t < 100; ++t) {
-      ok = construct_ant(ants[i]);
+      ok = construct_ant(ants[i], rngs[i]);
     }
     if (ok) {
-      local_search(ants[i]);
+      local_search(ants[i], rngs[i]);
     }
   }
 
   const common::Solution& iter_best = *std::min_element(ants.begin(), ants.end());
+  if (iter_best.fitness >= HARD_CONSTRAINT_PENALTY) {
+    return iter_best.fitness;
+  }
   if (iter_best.fitness < global_best_fitness) {
     global_best_fitness = iter_best.fitness;
     global_best_schedule = iter_best.schedule;

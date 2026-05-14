@@ -6,9 +6,7 @@
 
 namespace aco {
 
-bool AntColony::go_1_move(common::Solution& ant) {
-  static thread_local std::mt19937 rng(std::random_device{}());
-
+bool AntColony::go_1_move(common::Solution& ant, std::mt19937 &rng) {
   const int exam = std::uniform_int_distribution<int>(0, num_exams - 1)(rng);
 
   // Check if the exam cannot be moved to any other slot
@@ -37,9 +35,7 @@ bool AntColony::go_1_move(common::Solution& ant) {
   return true;
 }
 
-bool AntColony::go_2_swap(common::Solution& ant) {
-  static thread_local std::mt19937 rng(std::random_device{}());
-
+bool AntColony::go_2_swap(common::Solution& ant, std::mt19937& rng) {
   // Pick two random exams and ensure their assigned slots are different
   const int exam1 = std::uniform_int_distribution<int>(0, num_exams - 1)(rng);
   const int exam2 = std::uniform_int_distribution<int>(0, num_exams - 1)(rng);
@@ -76,9 +72,7 @@ bool AntColony::go_2_swap(common::Solution& ant) {
   return true;
 }
 
-void AntColony::local_search(common::Solution& ant) {
-  static thread_local std::mt19937 rng(std::random_device{}());
-
+void AntColony::local_search(common::Solution& ant, std::mt19937 &rng) {
   int improvements = 0;
   int consecutive_fails = 0;
 
@@ -87,9 +81,9 @@ void AntColony::local_search(common::Solution& ant) {
     double random = std::uniform_real_distribution<double>(0.0, 1.0)(rng);
     bool ok;
     if (random < hyperparams.ls.prob_1_move) {
-      ok = go_1_move(ant);
+      ok = go_1_move(ant, rng);
     } else {
-      ok = go_2_swap(ant);
+      ok = go_2_swap(ant, rng);
     }
 
     if (ok) {

@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <pybind11/attr.h>
 #include <pybind11/gil.h>
 #include <pybind11/pybind11.h>
@@ -61,9 +62,9 @@ PYBIND11_MODULE(aco_solver, m) {
     .def(py::init([](const common::Hyperparams& hp, 
                      const std::vector<std::vector<int>>& conflict_data, 
                      const std::vector<int64_t>& timestamps,
-                     int base_seed = -1) {
+                     int64_t _base_seed = -1) {
       common::Matrix<int> conflict_mat(conflict_data);
-      return new aco::AntColony(hp, conflict_mat, timestamps, base_seed);
+      return new aco::AntColony(hp, conflict_mat, timestamps, _base_seed);
     }))
     .def("run_one_iteration", &aco::AntColony::run_one_iteration)
     .def("run", &aco::AntColony::run, py::call_guard<py::gil_scoped_release>())
