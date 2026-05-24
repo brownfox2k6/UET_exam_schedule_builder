@@ -1,11 +1,4 @@
-#include <cstdint>
-#include <pybind11/attr.h>
-#include <pybind11/cast.h>
-#include <pybind11/gil.h>
 #include <pybind11/pybind11.h>
-#include <pybind11/pytypes.h>
-#include <pybind11/stl.h>
-#include <pybind11/functional.h>
 
 #include "aco/ant_colony.hpp"
 #include "common/hyperparameters.hpp"
