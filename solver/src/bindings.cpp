@@ -27,12 +27,12 @@ PYBIND11_MODULE(aco_solver, m) {
          py::arg("_feasible_slots"),
          py::arg("_feasible_rooms"),
          py::arg("_feasible_proctors"))
-    .def_readwrite("code", &common::Exam::code)
-    .def_readwrite("credits", &common::Exam::credits)
-    .def_readonly("student_count", &common::Exam::student_count)
-    .def_readwrite("students", &common::Exam::students)
-    .def_readwrite("feasible_slots", &common::Exam::feasible_slots)
-    .def_readwrite("feasible_rooms", &common::Exam::feasible_rooms)
+    .def_readwrite("code",              &common::Exam::code)
+    .def_readwrite("credits",           &common::Exam::credits)
+    .def_readonly("student_count",      &common::Exam::student_count)
+    .def_readwrite("students",          &common::Exam::students)
+    .def_readwrite("feasible_slots",    &common::Exam::feasible_slots)
+    .def_readwrite("feasible_rooms",    &common::Exam::feasible_rooms)
     .def_readwrite("feasible_proctors", &common::Exam::feasible_proctors);
 
   py::class_<common::Hyperparams::Evaluation>(m, "EvalParams")
