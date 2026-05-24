@@ -10,7 +10,7 @@
 #include "aco/ant_colony.hpp"
 #include "common/hyperparameters.hpp"
 #include "common/solution.hpp"
-#include "exam.hpp"
+#include "common/exam.hpp"
 
 namespace py = pybind11;
 
@@ -87,7 +87,7 @@ PYBIND11_MODULE(aco_solver, m) {
       return aco::AntColony(hp, conflict_mat, timestamps, _base_seed);
     }))
     .def("run_one_iteration", &aco::AntColony::run_one_iteration, py::call_guard<py::gil_scoped_release>())
-    .def("run", &aco::AntColony::run, py::call_guard<py::gil_scoped_release>())
+    .def("run", &aco::AntColony::run)
     .def_readonly("global_best_schedule", &aco::AntColony::global_best_schedule)
     .def_readonly("global_best_fitness", &aco::AntColony::global_best_fitness);
 }

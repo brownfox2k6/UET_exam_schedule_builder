@@ -136,6 +136,7 @@ double AntColony::run_one_iteration() {
 }
 
 void AntColony::run(std::function<void(int, double)> callback) {
+  pybind11::gil_scoped_release release;
   for (int iter = 1; iter <= hyperparams.aco.num_iters; ++iter) {
     const double iter_best_cost = run_one_iteration();
     if (callback) {
