@@ -4,8 +4,8 @@
 #include <cstddef>
 #include <vector>
 
-#include "feasible_set.hpp"
-#include "matrix.hpp"
+#include "utils/feasible_set.hpp"
+#include "utils/matrix.hpp"
 
 namespace common {
 
@@ -24,13 +24,13 @@ public:
   // `conflicting_exams_count(i, j)` tells how many exams `k` that 
   // have conflict with exam `i` and have been assigned to slot `j`.
   // If this value is > 0, slot `j` is strictly forbidden for exam `i`.
-  common::Matrix<int> conflicting_exams_count;
+  utils::Matrix<int> conflicting_exams_count;
 
   // `schedule[i]` tells the assigned slot for exam `i`
   std::vector<int> schedule;
 
   // Tracks available slot IDs for each exam.
-  common::FeasibleSet<int> feasible_slots;
+  utils::FeasibleSet<int> feasible_slots;
 
   // The total soft constraint penalty score of the current schedule (lower is better).
   double fitness;
@@ -68,7 +68,7 @@ public:
   void assign_exam(
     int exam,
     int slot,
-    const common::CsrMatrix<int>& student_conflicts
+    const utils::CsrMatrix<int>& student_conflicts
   );
 
   /**
@@ -76,7 +76,7 @@ public:
    */
   void unassign_exam(
     int exam,
-    const common::CsrMatrix<int>& student_conflicts
+    const utils::CsrMatrix<int>& student_conflicts
   );
 };
 

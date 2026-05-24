@@ -48,13 +48,13 @@ PYBIND11_MODULE(aco_solver, m) {
          py::arg("_rho") = 0.1,
          py::arg("_tau_min") = 0.01,
          py::arg("_tau_max") = 1.0)
-    .def_readwrite("num_iters",          &common::Hyperparams::ACO::num_iters)
-    .def_readwrite("num_ants",           &common::Hyperparams::ACO::num_ants)
-    .def_readwrite("alpha",              &common::Hyperparams::ACO::alpha)
-    .def_readwrite("beta",               &common::Hyperparams::ACO::beta)
-    .def_readwrite("rho",                &common::Hyperparams::ACO::rho)
-    .def_readwrite("tau_min",            &common::Hyperparams::ACO::tau_min)
-    .def_readwrite("tau_max",            &common::Hyperparams::ACO::tau_max);
+    .def_readwrite("num_iters", &common::Hyperparams::ACO::num_iters)
+    .def_readwrite("num_ants",  &common::Hyperparams::ACO::num_ants)
+    .def_readwrite("alpha",     &common::Hyperparams::ACO::alpha)
+    .def_readwrite("beta",      &common::Hyperparams::ACO::beta)
+    .def_readwrite("rho",       &common::Hyperparams::ACO::rho)
+    .def_readwrite("tau_min",   &common::Hyperparams::ACO::tau_min)
+    .def_readwrite("tau_max",   &common::Hyperparams::ACO::tau_max);
 
   py::class_<common::Hyperparams::LS>(m, "LsParams")
     .def(py::init<double, int, int>(),
@@ -68,8 +68,8 @@ PYBIND11_MODULE(aco_solver, m) {
   py::class_<common::Hyperparams>(m, "Hyperparams")
     .def(py::init<common::Hyperparams::Evaluation, common::Hyperparams::ACO, common::Hyperparams::LS>(),
          py::arg_v("_eval", common::Hyperparams::Evaluation(), "EvalParams()"),
-         py::arg_v("_aco", common::Hyperparams::ACO(), "AcoParams()"),
-         py::arg_v("_ls", common::Hyperparams::LS(), "LsParams()"))
+         py::arg_v("_aco",  common::Hyperparams::ACO(), "AcoParams()"),
+         py::arg_v("_ls",   common::Hyperparams::LS(), "LsParams()"))
     .def_readwrite("eval", &common::Hyperparams::eval)
     .def_readwrite("aco",  &common::Hyperparams::aco)
     .def_readwrite("ls",   &common::Hyperparams::ls);
@@ -83,7 +83,7 @@ PYBIND11_MODULE(aco_solver, m) {
                      const std::vector<std::vector<int>>& conflict_data, 
                      const std::vector<int64_t>& timestamps,
                      int64_t _base_seed = -1) {
-      common::Matrix<int> conflict_mat(conflict_data);
+      utils::Matrix<int> conflict_mat(conflict_data);
       return aco::AntColony(hp, conflict_mat, timestamps, _base_seed);
     }))
     .def("run_one_iteration", &aco::AntColony::run_one_iteration, py::call_guard<py::gil_scoped_release>())

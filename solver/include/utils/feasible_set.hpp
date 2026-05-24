@@ -4,8 +4,9 @@
 #include <random>
 
 #include "matrix.hpp"
+#include "utils/assert.hpp"
 
-namespace common {
+namespace utils {
 
 /**
  * @brief A data structure to manage a set of feasible options for multiple items.
@@ -66,7 +67,7 @@ public:
    */
   int get_random(int item, std::mt19937& rng) const {
     int count = counts[item];
-    assert(count > 0 && "No feasible options left to pick from.");
+    utils::panic_if(count <= 0, "Item {}: No feasible options left to pick from", item);
     std::uniform_int_distribution<int> dist(0, count - 1);
     return options(item, dist(rng));
   }
@@ -77,7 +78,7 @@ public:
   void remove_option(int item, T value) {
     int &count = counts[item];
     int index = pos(item, value);
-    assert(index < count && "Value is already inactive or invalid.");
+    utils::panic_if(index >= count, "Item {}: Value {} is already inactive or invalid", item, value);
     int last_val = options(item, count - 1);
     options(item, index) = last_val;
     options(item, count - 1) = value;
@@ -92,7 +93,7 @@ public:
   void add_option(int item, T value) {
     int &count = counts[item];
     int index = pos(item, value);
-    assert(index >= count && "Value is already active.");
+    utils::panic_if(index < count, "Item {}: Value {} is already active", item, value);
     int first_inactive_val = options(item, count);
     options(item, index) = first_inactive_val;
     options(item, count) = value;
@@ -105,15 +106,15 @@ public:
    * @brief Accesses the element at `(item, index)` by value (read-only). 
    */
   T operator()(int item, int index) const {
-    assert(item >= 0 && item < num_items);
-    assert(index >= 0 && index < counts[item] && "Index out of feasible range");
+    utils::panic_if(item < 0 || item >= num_items, "Item index out of range (got: {}, size: {})", item, num_items);
+    utils::panic_if(index < 0 || index >= counts[item], "Item {}: Index {} out of feasible range", item, index);
     return options(item, index);
   }
 
   std::span<const T> operator[](int item) const {
-    assert(item >= 0 && item < num_items);
+    utils::panic_if(item < 0 || item >= num_items, "Item index out of range (got: {}, size: {})", item, num_items);
     return std::span<const T>(&options(item, 0), counts[item]);
   }
 };
 
-} // namespace common
+} // namespace utils

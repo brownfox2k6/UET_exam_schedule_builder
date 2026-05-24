@@ -1,23 +1,14 @@
 #pragma once
 
 #include <cstdlib>
-#include <format>
-#include <iostream>
 #include <set>
 #include <string>
 #include <utility>
 #include <vector>
 
-namespace common {
+#include "utils/assert.hpp"
 
-#ifndef NDEBUG
-inline void panic_if(bool condition, std::string error_message) {
-  if (condition) {
-    std::cerr << std::move(error_message) << ".\n";
-    std::abort();
-  }
-}
-#endif // NDEBUG
+namespace common {
 
 /**
  * @brief Represents an exam entity in the Examination Timetabling Problem.
@@ -53,26 +44,26 @@ struct Exam {
       feasible_proctors(std::move(_feasible_proctors))
   {
 #ifndef NDEBUG
-    panic_if(code.empty(), "Exam code cannot be an empty string");
-    panic_if(credits <= 0, std::format("Exam '{}' must have positive credits (got: {})", code, credits));
-    panic_if(students.empty(), std::format("Exam '{}' has 0 registered students", code));
+    utils::panic_if(code.empty(), "Exam code cannot be an empty string");
+    utils::panic_if(credits <= 0, "Exam '{}' must have positive credits (got: {})", code, credits);
+    utils::panic_if(students.empty(), "Exam '{}' has 0 registered students", code);
     std::set<std::string> unique_checker;
     for (const std::string& s : students) {
-      panic_if(s.empty(), std::format("Exam '{}' contains an empty student ID", code));
+      utils::panic_if(s.empty(), "Exam '{}' contains an empty student ID", code);
       auto [it, is_inserted] = unique_checker.emplace(s);
-      panic_if(!is_inserted, std::format("'students' of exam '{}' contains duplicate ID: '{}'", code, s));
+      utils::panic_if(!is_inserted, "'students' of exam '{}' contains duplicate ID: '{}'", code, s);
     }
-    panic_if(feasible_slots.empty(), std::format("'feasible_slots' of exam '{}' is empty", code));
-    panic_if(feasible_rooms.empty(), std::format("'feasible_rooms' of exam '{}' is empty", code));
-    panic_if(feasible_proctors.empty(), std::format("'feasible_proctors' of exam '{}' is empty", code));
+    utils::panic_if(feasible_slots.empty(), "'feasible_slots' of exam '{}' is empty", code);
+    utils::panic_if(feasible_rooms.empty(), "'feasible_rooms' of exam '{}' is empty", code);
+    utils::panic_if(feasible_proctors.empty(), "'feasible_proctors' of exam '{}' is empty", code);
     for (int slot : feasible_slots) {
-      panic_if(slot < 0, std::format("'feasible_slots' of exam '{}' has negative value ({})", code, slot));
+      utils::panic_if(slot < 0, "'feasible_slots' of exam '{}' has negative value ({})", code, slot);
     }
     for (int room : feasible_rooms) {
-      panic_if(room < 0, std::format("'feasible_rooms' of exam '{}' has negative value ({})", code, room));
+      utils::panic_if(room < 0, "'feasible_rooms' of exam '{}' has negative value ({})", code, room);
     }
     for (int proctor : feasible_proctors) {
-      panic_if(proctor < 0, std::format("'feasible_proctors' of exam '{}' has negative value ({})", code, proctor));
+      utils::panic_if(proctor < 0, "'feasible_proctors' of exam '{}' has negative value ({})", code, proctor);
     }
 #endif // NDEBUG
   }

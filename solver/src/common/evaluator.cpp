@@ -10,13 +10,13 @@ namespace common {
 Evaluator::Evaluator(
   const common::Hyperparams& hp,
   const std::vector<int64_t>& slot_timestamps,
-  const common::Matrix<int>& student_conflicts_matrix
+  const utils::Matrix<int>& student_conflicts_matrix
 ):
   hyperparams(hp.eval),
   num_exams(student_conflicts_matrix.num_rows()),
   num_slots(slot_timestamps.size()),
   proximity_penalties([&]() {
-    common::Matrix<double> penalties(num_slots, num_slots, 0.0);
+    utils::Matrix<double> penalties(num_slots, num_slots, 0.0);
     for (int i = 0; i < num_slots; ++i) {
       penalties(i, i) = HARD_CONSTRAINT_PENALTY;
       const int64_t slot_i = slot_timestamps[i];

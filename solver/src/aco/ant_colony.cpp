@@ -8,8 +8,9 @@
 #include "aco/ant_colony.hpp"
 #include "common/evaluator.hpp"
 #include "common/hyperparameters.hpp"
-#include "common/matrix.hpp"
 #include "common/solution.hpp"
+#include "utils/assert.hpp"
+#include "utils/matrix.hpp"
 
 constexpr double HARD_CONSTRAINT_PENALTY = 1e9;
 
@@ -24,7 +25,7 @@ static uint64_t make_random_seed() {
 
 AntColony::AntColony(
   const common::Hyperparams& hp,
-  const common::Matrix<int>& student_conflicts_matrix,
+  const utils::Matrix<int>& student_conflicts_matrix,
   const std::vector<int64_t>& slot_timestamps,
   int64_t _base_seed
 ) : hyperparams(hp),
@@ -37,7 +38,7 @@ AntColony::AntColony(
     global_best_schedule(num_exams, -1),
     global_best_fitness(HARD_CONSTRAINT_PENALTY)
 {
-  assert((_base_seed == -1 && _base_seed >= 0) && "base_seed must be -1 or non-negative.");
+  utils::panic_if(base_seed < 0 && base_seed != -1, "base_seed must be -1 or non-negative (got: {})", base_seed);
   rngs.reserve(hyperparams.aco.num_ants);
   for (int i = 0; i < hyperparams.aco.num_ants; ++i) {
     std::seed_seq seq {

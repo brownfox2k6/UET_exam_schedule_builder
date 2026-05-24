@@ -1,11 +1,12 @@
 #pragma once
 
+#include "utils/assert.hpp"
 #include <cassert>
 #include <cstddef>
 #include <span>
 #include <vector>
 
-namespace common {
+namespace utils {
 
 /**
 * @brief A generic 2D matrix structure.
@@ -28,8 +29,8 @@ public:
   Matrix(int r, int c, T value = T())
     : rows(r), cols(c)
   {
-    assert(r > 0 && "Matrix rows must be positive.");
-    assert(c > 0 && "Matrix columns must be positive.");
+    utils::panic_if(r <= 0, "Matrix rows must be positive (got: {})", rows);
+    utils::panic_if(c <= 0, "Matrix columns must be positive (got: {})", cols);
     data.assign(rows * cols, value);
   }
 
@@ -50,8 +51,8 @@ public:
    * @brief Accesses the element at `(r, c)` by reference (read/write). 
    */
   T& operator()(int r, int c) {
-    assert(r < rows && "Row index out-of-bounds.");
-    assert(c < cols && "Column index out-of-bounds.");
+    utils::panic_if(r < 0 || r >= rows, "Row index out-of-bounds (got: {}, rows={})", r, rows);
+    utils::panic_if(c < 0 || c >= cols, "Column index out-of-bounds (got: {}, cols={})", c, cols);
     return data[r * cols + c];
   }
 
@@ -59,8 +60,8 @@ public:
    * @brief Accesses the element at `(r, c)` by value (read-only). 
    */
   T operator()(int r, int c) const {
-    assert(r < rows && "Row index out-of-bounds.");
-    assert(c < cols && "Column index out-of-bounds.");
+    utils::panic_if(r < 0 || r >= rows, "Row index out-of-bounds (got: {}, rows={})", r, rows);
+    utils::panic_if(c < 0 || c >= cols, "Column index out-of-bounds (got: {}, cols={})", c, cols);
     return data[r * cols + c];
   }
 
@@ -128,7 +129,7 @@ public:
    * Usage: for (const auto& element : matrix[i]) { ... }
    */
   std::span<const CsrElement<T>> operator[](int row_index) const {
-    assert(row_index + 1 < offsets.size());
+    utils::panic_if(row_index >= offsets.size() - 1, "Row index out-of-bounds (got: {}, rows={})", row_index, offsets.size() - 1);
     return {
       data.begin() + offsets[row_index],
       data.begin() + offsets[row_index + 1]
@@ -136,4 +137,4 @@ public:
   }
 };
 
-} // namespace common
+} // namespace utils

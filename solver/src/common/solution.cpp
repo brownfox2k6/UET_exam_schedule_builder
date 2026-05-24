@@ -1,5 +1,6 @@
 #include "common/solution.hpp"
-#include "common/matrix.hpp"
+#include "utils/assert.hpp"
+#include "utils/matrix.hpp"
 
 namespace common {
 
@@ -45,7 +46,7 @@ int Solution::get_next_exam(const std::vector<int>& total_student_conflict) cons
 void Solution::assign_exam(
   int exam,
   int slot,
-  const common::CsrMatrix<int>& student_conflicts
+  const utils::CsrMatrix<int>& student_conflicts
 ) {
   schedule[exam] = slot;
   for (const auto& [conflict_exam, _] : student_conflicts[exam]) {
@@ -58,14 +59,14 @@ void Solution::assign_exam(
 
 void Solution::unassign_exam(
   int exam,
-  const common::CsrMatrix<int>& student_conflicts
+  const utils::CsrMatrix<int>& student_conflicts
 ) {
   int old_slot = schedule[exam];
-  assert(old_slot != -1);
+  utils::panic_if(old_slot == -1, "Unassign Error: Exam {} is not scheduled already", exam);
   schedule[exam] = -1;
   for (const auto& [conflict_exam, _] : student_conflicts[exam]) {
     int &count = conflicting_exams_count(conflict_exam, old_slot);
-    assert(count > 0);
+    utils::panic_if(count <= 0, "Implementation Error in student_conflicts and conflicting_exams_count");
     if (--count == 0) {
       feasible_slots.add_option(conflict_exam, old_slot);
     }

@@ -32,13 +32,7 @@ FetchContent_Declare(
 set(PYBIND11_FINDPYTHON ON)
 FetchContent_MakeAvailable(pybind11)
 
-file(GLOB SOURCES "src/*.cpp")
-
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
-  list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
-endif()
-
-list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
+file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 

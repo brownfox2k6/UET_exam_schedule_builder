@@ -5,10 +5,10 @@
 #include <random>
 #include <vector>
 
-#include "../common/solution.hpp"
-#include "../common/evaluator.hpp"
-#include "../common/hyperparameters.hpp"
-#include "../common/matrix.hpp"
+#include "common/solution.hpp"
+#include "common/evaluator.hpp"
+#include "common/hyperparameters.hpp"
+#include "utils/matrix.hpp"
 
 namespace aco {
 
@@ -27,7 +27,7 @@ private:
   std::vector<std::mt19937> rngs;
 
   // Pheromone matrix representing learned experience for exam-to-slot assignments
-  common::Matrix<double> pheromone;
+  utils::Matrix<double> pheromone;
 
   // Current population of ants used to construct solutions in each iteration
   std::vector<common::Solution> ants;
@@ -66,7 +66,7 @@ public:
    */
   AntColony(
     const common::Hyperparams& hp,
-    const common::Matrix<int>& student_conflicts_matrix,
+    const utils::Matrix<int>& student_conflicts_matrix,
     const std::vector<int64_t>& slot_timestamps,
     int64_t _base_seed = -1
   );
