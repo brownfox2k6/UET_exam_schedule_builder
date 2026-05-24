@@ -1,19 +1,39 @@
 #include <cstdint>
 #include <pybind11/attr.h>
+#include <pybind11/cast.h>
 #include <pybind11/gil.h>
 #include <pybind11/pybind11.h>
+#include <pybind11/pytypes.h>
 #include <pybind11/stl.h>
 #include <pybind11/functional.h>
 
 #include "aco/ant_colony.hpp"
 #include "common/hyperparameters.hpp"
 #include "common/solution.hpp"
+#include "exam.hpp"
 
 namespace py = pybind11;
 
 PYBIND11_MODULE(aco_solver, m) {
   m.doc() = "Solver for University Examination Timetabling "
             "using Ant Colony Optimization and Local Search";
+
+  py::class_<common::Exam>(m, "Exam")
+    .def(py::init<>())
+    .def(py::init<std::string, int, std::vector<std::string>, std::vector<int>, std::vector<int>, std::vector<int>>(),
+         py::arg("_code"),
+         py::arg("_credits"),
+         py::arg("_students"),
+         py::arg("_feasible_slots"),
+         py::arg("_feasible_rooms"),
+         py::arg("_feasible_proctors"))
+    .def_readwrite("code", &common::Exam::code)
+    .def_readwrite("credits", &common::Exam::credits)
+    .def_readonly("student_count", &common::Exam::student_count)
+    .def_readwrite("students", &common::Exam::students)
+    .def_readwrite("feasible_slots", &common::Exam::feasible_slots)
+    .def_readwrite("feasible_rooms", &common::Exam::feasible_rooms)
+    .def_readwrite("feasible_proctors", &common::Exam::feasible_proctors);
 
   py::class_<common::Hyperparams::Evaluation>(m, "EvalParams")
     .def(py::init<double>(), py::arg("_penalty_decay_base") = 2.0)
@@ -64,9 +84,9 @@ PYBIND11_MODULE(aco_solver, m) {
                      const std::vector<int64_t>& timestamps,
                      int64_t _base_seed = -1) {
       common::Matrix<int> conflict_mat(conflict_data);
-      return new aco::AntColony(hp, conflict_mat, timestamps, _base_seed);
+      return aco::AntColony(hp, conflict_mat, timestamps, _base_seed);
     }))
-    .def("run_one_iteration", &aco::AntColony::run_one_iteration)
+    .def("run_one_iteration", &aco::AntColony::run_one_iteration, py::call_guard<py::gil_scoped_release>())
     .def("run", &aco::AntColony::run, py::call_guard<py::gil_scoped_release>())
     .def_readonly("global_best_schedule", &aco::AntColony::global_best_schedule)
     .def_readonly("global_best_fitness", &aco::AntColony::global_best_fitness);

@@ -4,7 +4,7 @@ Solver for University Examination Timetabling using Ant Colony Optimization and 
 from __future__ import annotations
 import collections.abc
 import typing
-__all__: list[str] = ['AcoParams', 'AntColony', 'EvalParams', 'Hyperparams', 'LsParams', 'Solution']
+__all__: list[str] = ['AcoParams', 'AntColony', 'EvalParams', 'Exam', 'Hyperparams', 'LsParams', 'Solution']
 class AcoParams:
     def __init__(self, _num_iters: typing.SupportsInt | typing.SupportsIndex = 100, _num_ants: typing.SupportsInt | typing.SupportsIndex = 10, _alpha: typing.SupportsFloat | typing.SupportsIndex = 1.0, _beta: typing.SupportsFloat | typing.SupportsIndex = 2.0, _rho: typing.SupportsFloat | typing.SupportsIndex = 0.1, _tau_min: typing.SupportsFloat | typing.SupportsIndex = 0.01, _tau_max: typing.SupportsFloat | typing.SupportsIndex = 1.0) -> None:
         ...
@@ -71,6 +71,47 @@ class EvalParams:
         ...
     @penalty_decay_base.setter
     def penalty_decay_base(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None:
+        ...
+class Exam:
+    code: str
+    @typing.overload
+    def __init__(self) -> None:
+        ...
+    @typing.overload
+    def __init__(self, _code: str, _credits: typing.SupportsInt | typing.SupportsIndex, _students: collections.abc.Sequence[str], _feasible_slots: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], _feasible_rooms: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], _feasible_proctors: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]) -> None:
+        ...
+    @property
+    def credits(self) -> int:
+        ...
+    @credits.setter
+    def credits(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None:
+        ...
+    @property
+    def feasible_proctors(self) -> list[int]:
+        ...
+    @feasible_proctors.setter
+    def feasible_proctors(self, arg0: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]) -> None:
+        ...
+    @property
+    def feasible_rooms(self) -> list[int]:
+        ...
+    @feasible_rooms.setter
+    def feasible_rooms(self, arg0: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]) -> None:
+        ...
+    @property
+    def feasible_slots(self) -> list[int]:
+        ...
+    @feasible_slots.setter
+    def feasible_slots(self, arg0: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]) -> None:
+        ...
+    @property
+    def student_count(self) -> int:
+        ...
+    @property
+    def students(self) -> list[str]:
+        ...
+    @students.setter
+    def students(self, arg0: collections.abc.Sequence[str]) -> None:
         ...
 class Hyperparams:
     aco: AcoParams
