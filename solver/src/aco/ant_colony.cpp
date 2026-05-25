@@ -9,6 +9,7 @@
 #include "common/evaluator.hpp"
 #include "common/hyperparameters.hpp"
 #include "common/solution.hpp"
+#include "common/exam.hpp"
 #include "utils/assert.hpp"
 #include "utils/matrix.hpp"
 
@@ -24,12 +25,12 @@ static uint64_t make_random_seed() {
 }
 
 AntColony::AntColony(
-  const common::Hyperparams& hp,
-  const utils::Matrix<int>& student_conflicts_matrix,
-  const std::vector<int64_t>& slot_timestamps,
+  common::Hyperparams _hyperparams,
+  std::vector<common::Exam> _exams,
+  std::vector<int64_t> _slot_timestamps,
   int64_t _base_seed
-) : hyperparams(hp),
-    evaluator(hp, slot_timestamps, student_conflicts_matrix),
+) : hyperparams(std::move(_hyperparams)),
+    evaluator(_hyperparams, _exams, _slot_timestamps),
     base_seed(_base_seed == -1 ? make_random_seed() : static_cast<uint64_t>(_base_seed)),
     num_exams(evaluator.num_exams),
     num_slots(evaluator.num_slots),

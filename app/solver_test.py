@@ -1,85 +1,178 @@
+"""
+GOOGLE GEMINI GENERATED
+Pretests for solver
+"""
+
+import os
+import sys
+
+# Ép Python phải nhìn thấy thư mục gốc 'app/' nơi chứa package 'solver'
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+
 import pytest
 import solver  # Import qua file __init__.py trong thư mục solver/
 
-def test_hyperparams_initialization():
-    """Kiểm tra xem cầu nối C++ <-> Python có gán đúng Hyperparameters không"""
-    hp = solver.Hyperparams()
-    
-    # Gán thử giá trị
-    hp.aco.num_iters = 50
-    hp.aco.num_ants = 15
-    hp.ls.prob_1_move = 0.8
-    
-    # Đảm bảo C++ nhận đúng giá trị
-    assert hp.aco.num_iters == 50
-    assert hp.aco.num_ants == 15
-    assert hp.ls.prob_1_move == 0.8
+# ==========================================
+# 1. FIXTURES - KHỞI TẠO DỮ LIỆU MẪU
+# ==========================================
 
 @pytest.fixture
 def sample_data():
-    """Tạo dữ liệu giả lập cho bài toán xếp lịch thi (4 môn, 3 slot)"""
-    num_exams = 4
-    num_slots = 3
-    
-    # Ma trận xung đột sinh viên (Đối xứng, đường chéo = 0)
-    conflicts = [
-        [0, 10,  0,  0],
-        [10, 0,  5,  0],
-        [0,  5,  0,  2],
-        [0,  0,  2,  0]
-    ]
-    
-    # Timestamps (mỗi slot cách nhau 1 ngày = 86400 giây)
-    timestamps = [0, 86400, 172800]
-    
+    """Tạo dữ liệu giả lập chuẩn theo cấu trúc thực tế (4 môn thi, 3 ca thi)"""
     hp = solver.Hyperparams()
-    hp.aco.num_ants = 5
-    hp.aco.num_iters = 10  # Chạy test nhanh với 10 iters
+    hp.aco.num_ants = 4
+    hp.aco.num_iters = 5  # Giữ số vòng lặp nhỏ để test chạy cực nhanh
     
-    # Vẫn trả về num_exams và num_slots để dùng cho các hàm assert kiểm tra kết quả
-    return num_exams, num_slots, hp, conflicts, timestamps
+    # Giả lập mốc thời gian Unix Epoch (mỗi slot cách nhau 1 ngày = 86400s)
+    timestamps = [1716613200, 1716699600, 1716786000]
+    
+    # Thiết lập danh sách môn thi (Exam) có ràng buộc chồng lấn sinh viên và tín chỉ
+    # Cú pháp C++: Exam(code, credits, students, feasible_slots, feasible_rooms, feasible_proctors)
+    exams = [
+        solver.Exam("MATH101", 3, ["SV01", "SV02", "SV03"], [0, 1, 2], [101, 102], [201]),
+        solver.Exam("PHYS101", 4, ["SV02", "SV03", "SV04"], [0, 1, 2], [101, 102], [201]),
+        solver.Exam("PROG101", 2, ["SV04", "SV05"],         [0, 1],    [101],      [202]),
+        solver.Exam("ENGL101", 1, ["SV06"],                 [1, 2],    [102],      [202])
+    ]
+    return exams, timestamps, hp
+
+
+# ==========================================
+# 2. UNIT TESTS - KIỂM TRA TỪNG THÀNH PHẦN
+# ==========================================
+
+def test_exam_initialization_and_properties():
+    """TEST 1: Kiểm tra việc tạo và đọc ghi thuộc tính của class Exam"""
+    exam = solver.Exam("CS101", 3, ["S1", "S2"], [0, 1], [101], [201])
+    
+    assert exam.code == "CS101"
+    assert exam.credits == 3
+    assert "S1" in exam.students
+    assert exam.feasible_slots == [0, 1]
+    
+    # Kiểm tra khả năng chỉnh sửa (Read-Write fields)
+    exam.credits = 4
+    assert exam.credits == 4
+
+
+def test_hyperparams_nested_values():
+    """TEST 2: Kiểm tra cấu trúc phân cấp phức tạp của Hyperparameters"""
+    hp = solver.Hyperparams()
+    
+    # Thay đổi các thông số ở cả 3 nhóm tham số khác nhau
+    hp.eval.penalty_decay_base = 2.5
+    hp.aco.alpha = 1.2
+    hp.aco.beta = 1.8
+    hp.ls.patience = 50
+    
+    # Đảm bảo C++ lưu giữ chính xác
+    assert hp.eval.penalty_decay_base == 2.5
+    assert hp.aco.alpha == 1.2
+    assert hp.aco.beta == 1.8
+    assert hp.ls.patience == 50
+
+
+def test_hyperparams_default_argument_values():
+    """TEST 3: Kiểm tra các hàm khởi tạo phụ (Overloaded Constructors) có nhận đúng default value"""
+    eval_p = solver.EvalParams()
+    aco_p = solver.AcoParams()
+    ls_p = solver.LsParams()
+    
+    assert eval_p.penalty_decay_base == 2.0
+    assert aco_p.num_ants == 10
+    assert ls_p.prob_1_move == 0.5
+
+
+def test_ant_colony_initialization(sample_data):
+    """TEST 4: Kiểm tra việc nạp dữ liệu từ Python vào Constructor của AntColony thành công"""
+    exams, timestamps, hp = sample_data
+    
+    # Khởi tạo đàn kiến, kiểm tra xem có bị crash bộ nhớ hay văng lỗi loại dữ liệu không
+    colony = solver.AntColony(hp, exams, timestamps, base_seed=42)
+    
+    # Sau khi truyền vào Colony, danh sách ban đầu ở Python vẫn phải toàn vẹn cấu trúc
+    assert len(exams) == 4
+    assert colony.global_best_fitness > 0.0
+
+
+# ==========================================
+# 3. INTEGRATION TESTS - KIỂM TRA CORE THUẬT TOÁN
+# ==========================================
 
 def test_ant_colony_run_one_iteration(sample_data):
-    """Kiểm tra hàm chạy 1 vòng lặp"""
-    num_exams, num_slots, hp, conflicts, timestamps = sample_data
-    base_seed = 42
+    """TEST 5: Kiểm tra tính đúng đắn của 1 bước tiến hóa (Dựng lịch + Local Search)"""
+    exams, timestamps, hp = sample_data
+    colony = solver.AntColony(hp, exams, timestamps, base_seed=100)
     
-    # Đã sửa: Khởi tạo AntColony chỉ với 4 tham số theo đúng yêu cầu của C++
-    colony = solver.AntColony(hp, conflicts, timestamps, base_seed)
+    cost = colony.run_one_iteration()
     
-    # Chạy 1 vòng
-    best_cost = colony.run_one_iteration()
-    
-    assert isinstance(best_cost, float)
-    assert best_cost >= 0.0, "Fitness (số lượng vi phạm) không thể là số âm"
+    assert isinstance(cost, float)
+    assert cost >= 0.0, "Điểm phạt (Penalty/Fitness) không thể âm"
 
-def test_ant_colony_full_run_and_callback(sample_data):
-    """Kiểm tra hàm chạy toàn bộ thuật toán và cơ chế Callback về Python"""
-    num_exams, num_slots, hp, conflicts, timestamps = sample_data
+
+def test_ant_colony_full_run_with_callback(sample_data):
+    """TEST 6: Kiểm tra hàm run() tổng và cơ chế thu hồi GIL để tương tác Callback về Python"""
+    exams, timestamps, hp = sample_data
+    colony = solver.AntColony(hp, exams, timestamps, base_seed=999)
     
-    # Đã sửa: Khởi tạo AntColony chỉ với 4 tham số
-    colony = solver.AntColony(hp, conflicts, timestamps, 123)
-    
-    # Biến để hứng dữ liệu từ C++ callback
-    callback_history = []
-    
-    def monitor_progress(iteration, current_best_cost):
-        callback_history.append((iteration, current_best_cost))
+    history = []
+    def python_callback(iteration, best_cost):
+        history.append((iteration, best_cost))
         
-    # Chạy toàn bộ thuật toán
-    colony.run(monitor_progress)
+    # Chạy full thuật toán
+    colony.run(python_callback)
     
-    # Kiểm tra callback có được gọi đủ số lần không
-    assert len(callback_history) == hp.aco.num_iters
+    # Hệ thống phải trigger callback đúng số vòng lặp cấu hình
+    assert len(history) == hp.aco.num_iters
+    assert history[0][0] == 1  # Vòng lặp đầu tiên bắt đầu từ 1
+    assert history[-1][0] == hp.aco.num_iters
+
+
+def test_solution_schedule_integrity(sample_data):
+    """TEST 7: Kiểm tra tính hợp lệ của mảng kết quả lịch thi sau khi tối ưu xong"""
+    exams, timestamps, hp = sample_data
+    colony = solver.AntColony(hp, exams, timestamps, base_seed=777)
     
-    # Kiểm tra kết quả con kiến tốt nhất (global_best)
+    colony.run()  # Chạy không cần truyền callback (Test tính năng Safe-Null)
+    
     best_schedule = colony.global_best_schedule
-    best_fitness = colony.global_best_fitness
     
-    assert len(best_schedule) == num_exams, "Thiếu lịch thi của một số môn"
+    assert len(best_schedule) == len(exams), "Số lượng môn được xếp lịch bị lệch"
+    for slot_assigned in best_schedule:
+        # Ca thi được phân phối phải nằm trong phạm vi chỉ mục hợp lệ của mảng timestamps
+        assert 0 <= slot_assigned < len(timestamps)
+
+
+def test_solver_determinism_with_same_seed(sample_data):
+    """TEST 8: Kiểm tra tính nhất quán (Determinism). Cùng seed phải ra kết quả y hệt nhau"""
+    exams, timestamps, hp = sample_data
     
-    # Kiểm tra xem có môn nào bị bỏ sót (-1) không và slot có hợp lệ không
-    for exam_id, assigned_slot in enumerate(best_schedule):
-        assert 0 <= assigned_slot < num_slots, f"Môn {exam_id} được xếp vào slot không hợp lệ: {assigned_slot}"
-        
-    assert isinstance(best_fitness, float)
+    colony_a = solver.AntColony(hp, exams, timestamps, base_seed=12345)
+    colony_b = solver.AntColony(hp, exams, timestamps, base_seed=12345)
+    
+    cost_a = colony_a.run_one_iteration()
+    cost_b = colony_b.run_one_iteration()
+    
+    assert cost_a == cost_b, "Thuật toán bị mất tính nhất quán dù chung hạt giống PRNG Seed"
+    assert colony_a.global_best_schedule == colony_b.global_best_schedule
+
+
+def test_solver_stochasticity_with_different_seeds(sample_data):
+    """TEST 9: Kiểm tra tính ngẫu nhiên (Stochasticity). Khác seed phải sinh ra đường đi của kiến khác nhau"""
+    exams, timestamps, hp = sample_data
+    
+    # Tăng số kiến lên một chút để thấy rõ sự khác biệt giữa 2 thực thể đàn kiến độc lập
+    hp.aco.num_ants = 20
+    
+    colony_a = solver.AntColony(hp, exams, timestamps, base_seed=111)
+    colony_b = solver.AntColony(hp, exams, timestamps, base_seed=222)
+    
+    colony_a.run_one_iteration()
+    colony_b.run_one_iteration()
+    
+    # Xác suất cực cao (gần như 100%) là hai đàn kiến độc lập với hạt giống khác nhau 
+    # sẽ có cấu trúc tìm kiếm giải pháp ban đầu không trùng khít hoàn toàn
+    assert colony_a.global_best_fitness != colony_b.global_best_fitness or \
+           colony_a.global_best_schedule != colony_b.global_best_schedule

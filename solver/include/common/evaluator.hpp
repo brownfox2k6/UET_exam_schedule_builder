@@ -1,5 +1,6 @@
 #pragma once
 
+#include "exam.hpp"
 #include "hyperparameters.hpp"
 #include "utils/matrix.hpp"
 
@@ -39,10 +40,12 @@ struct Evaluator {
    */
   const std::vector<int> total_student_conflicts;
 
+  const std::vector<Exam> exams;
+
   Evaluator(
     const Hyperparams& _hyperparams,
-    const std::vector<int64_t>& _slot_timestamps,
-    const utils::Matrix<int>& _student_conflicts_matrix
+    std::vector<Exam> _exams,
+    const std::vector<int64_t>& _slot_timestamps
   );
 
   double calculate_delta_penalty(const std::vector<int>& schedule, int exam, int new_slot, int ignore_exam = -1) const;

@@ -8,6 +8,7 @@
 #include "common/solution.hpp"
 #include "common/evaluator.hpp"
 #include "common/hyperparameters.hpp"
+#include "common/exam.hpp"
 #include "utils/matrix.hpp"
 
 namespace aco {
@@ -65,9 +66,9 @@ public:
    * @brief Initializes the Ant Colony algorithm, precomputes conflict structures, and sets up the population.
    */
   AntColony(
-    const common::Hyperparams& hp,
-    const utils::Matrix<int>& student_conflicts_matrix,
-    const std::vector<int64_t>& slot_timestamps,
+    common::Hyperparams _hyperparams,
+    std::vector<common::Exam> _exams,
+    std::vector<int64_t> _slot_timestamps,
     int64_t _base_seed = -1
   );
 

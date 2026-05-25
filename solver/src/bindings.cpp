@@ -79,15 +79,19 @@ PYBIND11_MODULE(aco_solver, m) {
     .def_readonly("fitness",  &common::Solution::fitness);
 
   py::class_<aco::AntColony>(m, "AntColony")
-    .def(py::init([](const common::Hyperparams& hp, 
-                     const std::vector<std::vector<int>>& conflict_data, 
+    .def(py::init([](const common::Hyperparams& hyperparams, 
+                     std::vector<common::Exam> exams, 
                      const std::vector<int64_t>& timestamps,
-                     int64_t _base_seed = -1) {
-      utils::Matrix<int> conflict_mat(conflict_data);
-      return aco::AntColony(hp, conflict_mat, timestamps, _base_seed);
-    }))
+                     int64_t base_seed) {
+      return aco::AntColony(hyperparams, std::move(exams), timestamps, base_seed);
+    }),
+    py::arg("hyperparams"),
+    py::arg("exams"),
+    py::arg("timestamps"),
+    py::arg("base_seed") = -1
+    )
     .def("run_one_iteration", &aco::AntColony::run_one_iteration, py::call_guard<py::gil_scoped_release>())
-    .def("run", &aco::AntColony::run)
+    .def("run", &aco::AntColony::run, py::arg("callback") = py::none())
     .def_readonly("global_best_schedule", &aco::AntColony::global_best_schedule)
     .def_readonly("global_best_fitness", &aco::AntColony::global_best_fitness);
 }
