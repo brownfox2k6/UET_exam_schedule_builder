@@ -39,7 +39,7 @@ AntColony::AntColony(
     global_best_schedule(num_exams, -1),
     global_best_fitness(HARD_CONSTRAINT_PENALTY)
 {
-  utils::panic_if(base_seed < 0 && base_seed != -1, "base_seed must be -1 or non-negative (got: {})", base_seed);
+  utils::panic_if(_base_seed < -1, "base_seed must be -1 or non-negative (got: {})", _base_seed);
   rngs.reserve(hyperparams.aco.num_ants);
   for (int i = 0; i < hyperparams.aco.num_ants; ++i) {
     std::seed_seq seq {

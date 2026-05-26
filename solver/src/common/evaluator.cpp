@@ -1,8 +1,10 @@
 #include "common/evaluator.hpp"
+#include "utils/assert.hpp"
 #include "utils/matrix.hpp"
 
 #include <iterator>
 #include <numeric>
+#include <string>
 #include <unordered_set>
 #include <vector>
 
@@ -63,7 +65,15 @@ Evaluator::Evaluator(
     return totals;
   }()),
   exams(std::move(_exams))
-{}
+{
+#ifndef NDEBUG
+  std::unordered_set<std::string> unique_checker;
+  for (const Exam& e : exams) {
+    utils::panic_if(!unique_checker.emplace(e.code).second,
+                    "Duplicate exam code: {}", e.code);
+  }
+#endif // NDEBUG
+}
 
 double Evaluator::calculate_delta_penalty(
   const std::vector<int>& schedule,
