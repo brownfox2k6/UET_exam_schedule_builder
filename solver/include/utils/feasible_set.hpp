@@ -23,11 +23,11 @@ private:
   std::vector<int> active_ends; // Current number of feasible options for item i: `active_ends[i+1] - options.offsets[i]`
 
   void check_bounds(std::string_view where, int item, int option = 0) const {
-    utils::panic_if(
+    PANIC_IF(
       item < 0 || item >= options.num_rows(),
       "{}: Item index {} out of bounds [0, {}]", where, item, options.num_rows() - 1
     );
-    utils::panic_if(
+    PANIC_IF(
       option < 0 || option >= num_options,
       "{}: Option {} out of bounds [0, {}]", where, option, num_options - 1
     );
@@ -51,7 +51,7 @@ public:
     for (int item = 0; item < options.num_rows(); ++item) {
       int index = 0;
       for (int option : options[item].values) {
-        utils::panic_if(
+        PANIC_IF(
           option < 0 || option >= num_options,
           "FeasibleSet::reset: Option value {} out of bounds [0, {}]", option, num_options - 1
         );
@@ -102,7 +102,7 @@ public:
   int get_random(int item, std::mt19937& rng) const {
     check_bounds("FeasibleSet::get_random", item);
     int count = get_feasible_count(item);
-    utils::panic_if(count == 0, "Item {}: No feasible options left to pick from", item);
+    PANIC_IF(count == 0, "Item {}: No feasible options left to pick from", item);
     std::uniform_int_distribution<int> dist(0, count - 1);
     return options[item].values[dist(rng)];
   }
@@ -114,11 +114,11 @@ public:
     check_bounds("FeasibleSet::remove", item, option);
     const int count = get_feasible_count(item);
     const int index = pos(item, option);
-    utils::panic_if(
+    PANIC_IF(
       index < 0,
       "FeasibleSet::remove: Item {} does not contain {} in its initial feasible set", item, option
     );
-    utils::panic_if(
+    PANIC_IF(
       index >= count,
       "FeasibleSet::remove: Item {}: Option {} is already inactive", item, option
     );
@@ -135,11 +135,11 @@ public:
     check_bounds("FeasibleSet::restore", item, option);
     const int count = get_feasible_count(item);
     const int index = pos(item, option);
-    utils::panic_if(
+    PANIC_IF(
       index < 0,
       "FeasibleSet::restore: Item {} does not contain {} in its initial feasible set", item, option
     );
-    utils::panic_if(
+    PANIC_IF(
       index < count,
       "FeasibleSet::restore: Item {}: Option {} is already active", item, option
     );
@@ -154,7 +154,7 @@ public:
    */
   int operator()(int item, int index) const {
     check_bounds("FeasibleSet::operator()", item, 0);
-    utils::panic_if(
+    PANIC_IF(
       index < 0 || index >= get_feasible_count(item),
       "FeasibleSet::operator(): Item {}: Index {} out of feasible range", item, index
     );

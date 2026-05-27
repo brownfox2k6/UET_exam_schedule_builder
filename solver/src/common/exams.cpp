@@ -22,34 +22,34 @@ Exam::Exam(
   feasible_proctors(std::move(_feasible_proctors))
 {
 #ifndef NDEBUG
-  utils::panic_if(code.empty(), "Exam code cannot be an empty string");
-  utils::panic_if(credits <= 0, "Exam '{}': Must have positive credits (got: {})", code, credits);
-  utils::panic_if(students.empty(), "Exam '{}': No registered students", code);
+  PANIC_IF(code.empty(), "Exam code cannot be an empty string");
+  PANIC_IF(credits <= 0, "Exam '{}': Must have positive credits (got: {})", code, credits);
+  PANIC_IF(students.empty(), "Exam '{}': No registered students", code);
   std::unordered_set<std::string_view> unique_students_checker;
   for (const std::string& s : students) {
-    utils::panic_if(s.empty(), "Exam '{}': `students` contains an empty ID", code);
-    utils::panic_if(!unique_students_checker.emplace(s).second,
+    PANIC_IF(s.empty(), "Exam '{}': `students` contains an empty ID", code);
+    PANIC_IF(!unique_students_checker.emplace(s).second,
                     "Exam '{}': 'students' contains duplicate ID: '{}'", code, s);
   }
-  utils::panic_if(feasible_slots.empty(), "Exam '{}': 'feasible_slots' is empty", code);
-  utils::panic_if(feasible_rooms.empty(), "Exam '{}': 'feasible_rooms' is empty", code);
-  utils::panic_if(feasible_proctors.empty(), "Exam '{}': 'feasible_proctors' is empty", code);
+  PANIC_IF(feasible_slots.empty(), "Exam '{}': 'feasible_slots' is empty", code);
+  PANIC_IF(feasible_rooms.empty(), "Exam '{}': 'feasible_rooms' is empty", code);
+  PANIC_IF(feasible_proctors.empty(), "Exam '{}': 'feasible_proctors' is empty", code);
   std::unordered_set<int> unique_checker;
   for (int slot : feasible_slots) {
-    utils::panic_if(slot < 0, "Exam '{}': 'feasible_slots' has a negative value ({})", code, slot);
-    utils::panic_if(!unique_checker.emplace(slot).second,
+    PANIC_IF(slot < 0, "Exam '{}': 'feasible_slots' has a negative value ({})", code, slot);
+    PANIC_IF(!unique_checker.emplace(slot).second,
                     "Exam '{}': 'feasible_slots' has duplicate values ({})", code, slot);
   }
   unique_checker.clear();
   for (int room : feasible_rooms) {
-    utils::panic_if(room < 0, "Exam '{}': 'feasible_rooms' has a negative value ({})", code, room);
-    utils::panic_if(!unique_checker.emplace(room).second,
+    PANIC_IF(room < 0, "Exam '{}': 'feasible_rooms' has a negative value ({})", code, room);
+    PANIC_IF(!unique_checker.emplace(room).second,
                     "Exam '{}': 'feasible_rooms' has duplicate values ({})", code, room);
   }
   unique_checker.clear();
   for (int proctor : feasible_proctors) {
-    utils::panic_if(proctor < 0, "Exam '{}': 'feasible_proctors' has a negative value ({})", code, proctor);
-    utils::panic_if(!unique_checker.emplace(proctor).second,
+    PANIC_IF(proctor < 0, "Exam '{}': 'feasible_proctors' has a negative value ({})", code, proctor);
+    PANIC_IF(!unique_checker.emplace(proctor).second,
                     "Exam '{}': 'feasible_proctors' has duplicate values ({})", code, proctor);
   }
 #endif // NDEBUG
@@ -73,20 +73,20 @@ Exams::Exams(
   feasible_rooms(build_feasible_rooms(_exams, _num_rooms))
 {
 #ifndef NDEBUG
-  utils::panic_if(num_exams == 0, "Exams: '_exams' is empty");
-  utils::panic_if(num_slots <= 0, "Exams: '_num_slots' must be positive (got: {})", num_slots);
-  utils::panic_if(num_rooms <= 0, "Exams: '_num_rooms' must be positive (got: {})", num_rooms);
+  PANIC_IF(num_exams == 0, "Exams: '_exams' is empty");
+  PANIC_IF(num_slots <= 0, "Exams: '_num_slots' must be positive (got: {})", num_slots);
+  PANIC_IF(num_rooms <= 0, "Exams: '_num_rooms' must be positive (got: {})", num_rooms);
   std::unordered_set<std::string_view> unique_codes_checker;
   for (int i = 0; i < num_exams; ++i) {
-    utils::panic_if(!unique_codes_checker.emplace(codes[i]).second,
+    PANIC_IF(!unique_codes_checker.emplace(codes[i]).second,
                     "Exams: Duplicate exam code detected: {}", codes[i]);
     for (int slot : _exams[i].feasible_slots) {
-      utils::panic_if(slot >= num_slots,
+      PANIC_IF(slot >= num_slots,
                       "Exam {} has out-of-bounds feasible slot (got: {}, max allowed: {})",
                       codes[i], slot, num_slots - 1);
     }
     for (int room : _exams[i].feasible_rooms) {
-      utils::panic_if(room >= num_rooms,
+      PANIC_IF(room >= num_rooms,
                       "Exam {} has out-of-bounds feasible room (got: {}, max allowed: {})",
                       codes[i], room, num_rooms - 1);
     }

@@ -26,8 +26,8 @@ public:
   Matrix(int r, int c, T value = T())
     : rows(r), cols(c)
   {
-    utils::panic_if(r <= 0, "Matrix rows must be positive (got: {})", rows);
-    utils::panic_if(c <= 0, "Matrix columns must be positive (got: {})", cols);
+    PANIC_IF(r <= 0, "Matrix rows must be positive (got: {})", rows);
+    PANIC_IF(c <= 0, "Matrix columns must be positive (got: {})", cols);
     data.assign(rows * cols, value);
   }
 
@@ -52,8 +52,8 @@ public:
    * @brief Accesses the element at `(r, c)` by reference (read/write). 
    */
   T& operator()(int r, int c) {
-    utils::panic_if(r < 0 || r >= rows, "Row index out-of-bounds (got: {}, rows={})", r, rows);
-    utils::panic_if(c < 0 || c >= cols, "Column index out-of-bounds (got: {}, cols={})", c, cols);
+    PANIC_IF(r < 0 || r >= rows, "Row index out-of-bounds (got: {}, rows={})", r, rows);
+    PANIC_IF(c < 0 || c >= cols, "Column index out-of-bounds (got: {}, cols={})", c, cols);
     return data[r * cols + c];
   }
 
@@ -61,8 +61,8 @@ public:
    * @brief Accesses the element at `(r, c)` by value (read-only). 
    */
   const T& operator()(int r, int c) const {
-    utils::panic_if(r < 0 || r >= rows, "Row index out-of-bounds (got: {}, rows={})", r, rows);
-    utils::panic_if(c < 0 || c >= cols, "Column index out-of-bounds (got: {}, cols={})", c, cols);
+    PANIC_IF(r < 0 || r >= rows, "Row index out-of-bounds (got: {}, rows={})", r, rows);
+    PANIC_IF(c < 0 || c >= cols, "Column index out-of-bounds (got: {}, cols={})", c, cols);
     return data[r * cols + c];
   }
 
@@ -144,7 +144,7 @@ public:
    * Usage: for (const auto& element : matrix[i]) { ... }
    */
   const CsrRowConstView<T> operator[](int row_index) const {
-    utils::panic_if(
+    PANIC_IF(
       row_index < 0 || row_index >= num_rows(),
       "CsrMatrix::operator[]: Row index {} out of bounds [0, {}]",
       row_index, num_rows() - 1
@@ -163,7 +163,7 @@ public:
    * @brief Access a specific row of the matrix (read-write).
    */
   CsrRowView<T> operator[](int row_index) {
-    utils::panic_if(
+    PANIC_IF(
       row_index < 0 || row_index >= num_rows(),
       "CsrMatrix::operator[]: Row index {} out of bounds [0, {}]",
       row_index, num_rows() - 1

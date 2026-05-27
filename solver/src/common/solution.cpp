@@ -46,22 +46,22 @@ void Solution::assign_exam(
   int slot,
   const utils::CsrMatrix<int>& conflicts_csrmatrix
 ) {
-  utils::panic_if(
+  PANIC_IF(
     exam < 0 || exam >= schedule.size(),
     "Solution::assign_exam: Exam index {} out of bounds [0, {}]", exam, schedule.size() - 1
   );
-  utils::panic_if(
+  PANIC_IF(
     slot < 0 || slot >= conflicting_exams_count.num_cols(),
     "Solution::assign_exam: Slot index {} out of bounds [0, {}]",
     exam, conflicting_exams_count.num_cols() - 1
   );
   int& current_slot = schedule[exam];
-  utils::panic_if(
+  PANIC_IF(
     current_slot != -1,
     "Solution::assign_exam: Exam {} is already scheduled at slot {}, failed to assign to slot {}",
     exam, current_slot, slot
   );
-  utils::panic_if(
+  PANIC_IF(
     !feasible_slots.is_active(exam, slot),
     "Solution::assign_exam: Exam {} cannot be assigned to inactive/infeasible slot {}",
     exam, slot
@@ -79,18 +79,18 @@ void Solution::unassign_exam(
   int exam,
   const utils::CsrMatrix<int>& conflicts_csrmatrix
 ) {
-  utils::panic_if(
+  PANIC_IF(
     exam < 0 || exam >= schedule.size(),
     "Solution::unassign_exam: Exam index {} out of bounds [0, {}]", exam, schedule.size() - 1
   );
   int& current_slot = schedule[exam];
-  utils::panic_if(
+  PANIC_IF(
     current_slot == -1,
     "Solution::unassign_exam: Exam {} is not scheduled yet", exam
   );
   for (int conflict_exam : conflicts_csrmatrix[exam].indices) {
     int &count = conflicting_exams_count(conflict_exam, current_slot);
-    utils::panic_if(
+    PANIC_IF(
       count <= 0,
       "Solution::unassign_exam: Invalid conflict count for exam {} at slot {}: {}",
       exam, current_slot, count

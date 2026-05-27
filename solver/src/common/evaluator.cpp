@@ -40,15 +40,15 @@ double Evaluator::calculate_delta_penalty(
   int new_slot,
   int ignore_exam
 ) const {
-  utils::panic_if(
+  PANIC_IF(
     exam < 0 || exam >= exams.num_exams,
     "Evaluator::calculate_delta_penalty: exam index out of bounds: {}", exam
   );
-  utils::panic_if(
+  PANIC_IF(
     new_slot < 0 || new_slot >= exams.num_slots,
     "Evaluator::calculate_delta_penalty: new_slot out of bounds: {}", new_slot
   );
-  utils::panic_if(
+  PANIC_IF(
     schedule.size() != static_cast<size_t>(exams.num_exams),
     "Evaluator::calculate_delta_penalty: schedule size mismatch: got {}, expected {}",
     schedule.size(), exams.num_exams

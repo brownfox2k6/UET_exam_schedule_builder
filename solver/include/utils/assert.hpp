@@ -1,42 +1,32 @@
 #pragma once
 
-#include <cstdlib>
-#include <format>
-#include <iostream>
-#include <ostream>
-#include <string_view>
-
-namespace utils {
-
 #ifndef NDEBUG
 
-/**
- * @brief Asserts a condition during Debug mode and aborts if true.
- * @note Formatting is lazily evaluated only when the condition is met.
- * @tparam Args Types for the formatting arguments.
- * @param condition Triggers panic if true.
- * @param fmt `std::format` compliant string template.
- * @param args Perfect-forwarded arguments for the format string.
- */
-template <typename... Args>
-inline void panic_if(bool condition, std::string_view fmt, Args&&... args) {
-  if (condition) {
-    std::cerr << "[Validation Error] " 
-              << std::vformat(fmt, std::make_format_args(args...)) 
-              << ".\n"
-              << std::flush;
-    std::abort();
-  }
-}
+#include <format>       // IWYU pragma: keep
+#include <iostream>     // IWYU pragma: keep
+#include <stdexcept>    // IWYU pragma: keep
+#include <string>       // IWYU pragma: keep
+#include <string_view>  // IWYU pragma: keep
+
+#define PANIC_IF(condition, fmt, ...)                          \
+  do {                                                         \
+    if (static_cast<bool>(condition)) {                        \
+      std::string error_msg = std::format(                     \
+        "\n[Validation Error]\n"                               \
+        "  Location: {}:{}\n"                                  \
+        "  Function: {}\n"                                     \
+        "   Message: {}\n\n",                                  \
+        __FILE__, __LINE__, __func__,                          \
+        std::format((fmt) __VA_OPT__(,) __VA_ARGS__)           \
+      );                                                       \
+      throw std::runtime_error(error_msg);                     \
+    }                                                          \
+  } while (false)
 
 #else
 
-/**
- * @brief Zero-cost no-op stub for `panic_if` during Release mode.
- */
-template <typename... Args>
-inline void panic_if(bool, std::string_view, Args&&...) {}
+#define PANIC_IF(condition, fmt, ...)                          \
+  do {                                                         \
+  } while (false)
 
 #endif // NDEBUG
-
-} // namespace utils
