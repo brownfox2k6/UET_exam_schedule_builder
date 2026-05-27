@@ -1,54 +1,40 @@
 #pragma once
 
-#include "exam.hpp"
+#include "exams.hpp"
 #include "hyperparameters.hpp"
 #include "utils/matrix.hpp"
+
+constexpr double SECONDS_PER_DAY = 86400.0;
+constexpr double HARD_CONSTRAINT_PENALTY = 1e9;
 
 namespace common {
 
 struct Evaluator {
 
-  const Hyperparams::Evaluation hyperparams;
-  const int num_exams;
-  const int num_slots;
+public:
+  double calculate_delta_penalty(const std::vector<int>& schedule, int exam, int new_slot, int ignore_exam = -1) const;
+  
+  Evaluator(
+    const Hyperparams& _hyperparams,
+    const Exams& _exams,
+    const std::vector<int64_t>& _slot_timestamps,
+    int num_rooms
+  );
+  
+private:
+  const Hyperparams::Evaluation& hyperparams;
+  const Exams& exams;
   
   /**
    * @brief Precalculated time-gap penalties for O(1) lookup.
    * * `proximity_penalties(i, j)` tells the closeness between slot `i` and `j`.
    */
   const utils::Matrix<double> proximity_penalties;
-  
-  /**
-    * @brief Matrix reprsentation of `student_conflicts`.
-    * * `student_conflict(i, j)` tells the number of students taking both exams `i` and `j`
-    */
-  const utils::Matrix<int> student_conflicts_matrix;
 
-  /**
-   * @brief Compressed representation of the exam conflict graph.
-   * * Each row `i` contains a list of `CsrElement` objects, where:
-   * - `index`: The ID of exam `j` that has at least one student in common with exam `i`.
-   * - `value`: The exact number of students shared between exam `i` and `j`.
-   */
-  const utils::CsrMatrix<int> student_conflicts;
-
-  /**
-   * @brief The total weighted conflict degree for each exam.
-   * * For each exam `i`, this stores the sum of weights (students) across all its 
-   * neighbors in the conflict graph: `sum(student_conflicts[i].value)`.
-   * Used as a heuristic to identify "heavy" exams that are harder to schedule.
-   */
-  const std::vector<int> total_student_conflicts;
-
-  const std::vector<Exam> exams;
-
-  Evaluator(
-    const Hyperparams& _hyperparams,
-    std::vector<Exam> _exams,
-    const std::vector<int64_t>& _slot_timestamps
+  static utils::Matrix<double> build_proximity_penalties(
+    const std::vector<int64_t>& slot_timestamps,
+    const Hyperparams::Evaluation& hyperparams
   );
-
-  double calculate_delta_penalty(const std::vector<int>& schedule, int exam, int new_slot, int ignore_exam = -1) const;
 
 }; // struct Evaluator
 

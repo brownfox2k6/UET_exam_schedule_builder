@@ -4,13 +4,11 @@
 
 namespace common {
 
-Solution::Solution(int n_exams, int n_slots)
-  : num_exams(n_exams),
-    num_slots(n_slots),
-    schedule(num_exams, -1),
-    feasible_slots(num_exams, num_slots),
-    fitness(0.0),
-    conflicting_exams_count(num_exams, num_slots, 0)
+Solution::Solution(const Exams& exams): 
+  schedule(exams.num_exams, -1),
+  feasible_slots(exams.num_exams, exams.num_slots),
+  fitness(0.0),
+  conflicting_exams_count(exams.num_exams, exams.num_slots, 0)
 {}
 
 bool Solution::operator<(const Solution& other) const {
@@ -24,16 +22,16 @@ void Solution::reset() {
   conflicting_exams_count.fill(0);
 }
 
-int Solution::get_next_exam(const std::vector<int>& total_student_conflict) const {
+int Solution::get_next_exam(const std::vector<int>& total_conflicts) const {
   int best_exam = -1;
   int max_degree = -1;
   int max_conflict = -1;
-  for (int exam = 0; exam < num_exams; ++exam) {
+  for (int exam = 0; exam < schedule.size(); ++exam) {
     if (schedule[exam] != -1) {
       continue;
     }
     int degree = feasible_slots.get_forbidden_count(exam);
-    int conflict = total_student_conflict[exam];
+    int conflict = total_conflicts[exam];
     if (std::tie(degree, conflict) > std::tie(max_degree, max_conflict)) {
       max_degree = degree;
       max_conflict = conflict;
@@ -46,31 +44,54 @@ int Solution::get_next_exam(const std::vector<int>& total_student_conflict) cons
 void Solution::assign_exam(
   int exam,
   int slot,
-  const utils::CsrMatrix<int>& student_conflicts
+  const utils::CsrMatrix<int>& conflicts_csrmatrix
 ) {
-  schedule[exam] = slot;
-  for (const auto& [conflict_exam, _] : student_conflicts[exam]) {
-    if (conflicting_exams_count(conflict_exam, slot) == 0) {
+  utils::panic_if(
+    exam < 0 || exam >= schedule.size(),
+    "Solution::assign_exam: exam index out-of-bounds (got: {}, allowed: [0, {}])",
+    exam, schedule.size() - 1
+  );
+  utils::panic_if(
+    slot < 0 || slot >= conflicting_exams_count.num_cols(),
+    "Solution::assign_exam: slot index out-of-bounds (got: {}, allowed: [0, {}])",
+    exam, conflicting_exams_count.num_cols() - 1
+  );
+  int& current_slot = schedule[exam];
+  utils::panic_if(
+    current_slot != -1,
+    "Solution::assign_exam: Exam {} is already scheduled at slot {}, failed to assign to slot {}",
+    exam, current_slot, slot
+  );
+  for (int conflict_exam : conflicts_csrmatrix[exam].indices) {
+    int& count = conflicting_exams_count(conflict_exam, slot);
+    if (count++ == 0) {
       feasible_slots.remove_option(conflict_exam, slot);
     }
-    ++conflicting_exams_count(conflict_exam, slot);
   }
+  current_slot = slot;
 }
 
 void Solution::unassign_exam(
   int exam,
-  const utils::CsrMatrix<int>& student_conflicts
+  const utils::CsrMatrix<int>& conflicts_csrmatrix
 ) {
-  int old_slot = schedule[exam];
-  utils::panic_if(old_slot == -1, "Unassign Error: Exam {} is not scheduled already", exam);
-  schedule[exam] = -1;
-  for (const auto& [conflict_exam, _] : student_conflicts[exam]) {
-    int &count = conflicting_exams_count(conflict_exam, old_slot);
-    utils::panic_if(count <= 0, "Implementation Error in student_conflicts and conflicting_exams_count");
+  utils::panic_if(
+    exam < 0 || exam >= schedule.size(),
+    "Solution::unassign_exam: exam index out-of-bounds (got: {}, allowed: [0, {}])",
+    exam, schedule.size() - 1
+  );
+  int& current_slot = schedule[exam];
+  utils::panic_if(
+    current_slot == -1,
+    "Solution::unassign_exam: Exam {} is not scheduled yet", exam
+  );
+  for (int conflict_exam : conflicts_csrmatrix[exam].indices) {
+    int &count = conflicting_exams_count(conflict_exam, current_slot);
     if (--count == 0) {
-      feasible_slots.add_option(conflict_exam, old_slot);
+      feasible_slots.add_option(conflict_exam, current_slot);
     }
   }
+  current_slot = -1;
 }
 
 } // namespace common

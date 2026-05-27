@@ -8,7 +8,7 @@
 #include "common/solution.hpp"
 #include "common/evaluator.hpp"
 #include "common/hyperparameters.hpp"
-#include "common/exam.hpp"
+#include "common/exams.hpp"
 #include "utils/matrix.hpp"
 
 namespace aco {
@@ -19,12 +19,10 @@ namespace aco {
 class AntColony {
 private:
   const common::Hyperparams hyperparams;
+  const common::Exams exams;
   const common::Evaluator evaluator;
+
   const uint64_t base_seed;
-
-  const int num_exams;
-  const int num_slots;
-
   std::vector<std::mt19937> rngs;
 
   // Pheromone matrix representing learned experience for exam-to-slot assignments
@@ -68,7 +66,8 @@ public:
   AntColony(
     common::Hyperparams _hyperparams,
     std::vector<common::Exam> _exams,
-    std::vector<int64_t> _slot_timestamps,
+    const std::vector<int64_t>& _slot_timestamps,
+    int num_rooms,
     int64_t _base_seed = -1
   );
 

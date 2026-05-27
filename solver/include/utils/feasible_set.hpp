@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cassert>
 #include <random>
 
 #include "matrix.hpp"
@@ -93,7 +92,7 @@ public:
   void add_option(int item, T value) {
     int &count = counts[item];
     int index = pos(item, value);
-    utils::panic_if(index < count, "Item {}: Value {} is already active", item, value);
+    utils::panic_if(index < count, "FeasibleSet: Item {}: Value {} is already active", item, value);
     int first_inactive_val = options(item, count);
     options(item, index) = first_inactive_val;
     options(item, count) = value;
@@ -105,14 +104,23 @@ public:
   /**
    * @brief Accesses the element at `(item, index)` by value (read-only). 
    */
-  T operator()(int item, int index) const {
-    utils::panic_if(item < 0 || item >= num_items, "Item index out of range (got: {}, size: {})", item, num_items);
-    utils::panic_if(index < 0 || index >= counts[item], "Item {}: Index {} out of feasible range", item, index);
+  T& operator()(int item, int index) const {
+    utils::panic_if(
+      item < 0 || item >= num_items,
+      "FeasibleSet: Item index out of range (got: {}, allowed: [0, {}])", item, num_items - 1
+    );
+    utils::panic_if(
+      index < 0 || index >= counts[item],
+      "FeasibleSet: Item {}: Index {} out of feasible range", item, index
+    );
     return options(item, index);
   }
 
   std::span<const T> operator[](int item) const {
-    utils::panic_if(item < 0 || item >= num_items, "Item index out of range (got: {}, size: {})", item, num_items);
+    utils::panic_if(
+      item < 0 || item >= num_items,
+      "FeasibleSet: Item index out of range (got: {}, allowed: [0, {}])", item, num_items - 1
+    );
     return std::span<const T>(&options(item, 0), counts[item]);
   }
 };

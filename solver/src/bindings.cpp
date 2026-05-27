@@ -10,7 +10,6 @@
 #include "aco/ant_colony.hpp"
 #include "common/hyperparameters.hpp"
 #include "common/solution.hpp"
-#include "common/exam.hpp"
 
 namespace py = pybind11;
 
@@ -19,7 +18,6 @@ PYBIND11_MODULE(aco_solver, m) {
             "using Ant Colony Optimization and Local Search";
 
   py::class_<common::Exam>(m, "Exam")
-    .def(py::init<>())
     .def(py::init<std::string, int, std::vector<std::string>, std::vector<int>, std::vector<int>, std::vector<int>>(),
          py::arg("_code"),
          py::arg("_credits"),
@@ -29,7 +27,7 @@ PYBIND11_MODULE(aco_solver, m) {
          py::arg("_feasible_proctors"))
     .def_readwrite("code",              &common::Exam::code)
     .def_readwrite("credits",           &common::Exam::credits)
-    .def_readonly("student_count",      &common::Exam::student_count)
+    .def_readwrite("student_count",     &common::Exam::student_count)
     .def_readwrite("students",          &common::Exam::students)
     .def_readwrite("feasible_slots",    &common::Exam::feasible_slots)
     .def_readwrite("feasible_rooms",    &common::Exam::feasible_rooms)
@@ -79,16 +77,18 @@ PYBIND11_MODULE(aco_solver, m) {
     .def_readonly("fitness",  &common::Solution::fitness);
 
   py::class_<aco::AntColony>(m, "AntColony")
-    .def(py::init([](const common::Hyperparams& hyperparams, 
+    .def(py::init([](common::Hyperparams hyperparams, 
                      std::vector<common::Exam> exams, 
                      const std::vector<int64_t>& timestamps,
+                     int num_rooms,
                      int64_t base_seed) {
-      return aco::AntColony(hyperparams, std::move(exams), timestamps, base_seed);
-    }),
-    py::arg("hyperparams"),
-    py::arg("exams"),
-    py::arg("timestamps"),
-    py::arg("base_seed") = -1
+        return aco::AntColony(std::move(hyperparams), std::move(exams), timestamps, num_rooms, base_seed);
+      }),
+      py::arg("hyperparams"),
+      py::arg("exams"),
+      py::arg("timestamps"),
+      py::arg("num_rooms") = 100,
+      py::arg("base_seed") = -1
     )
     .def("run_one_iteration", &aco::AntColony::run_one_iteration, py::call_guard<py::gil_scoped_release>())
     .def("run", &aco::AntColony::run, py::arg("callback") = py::none())

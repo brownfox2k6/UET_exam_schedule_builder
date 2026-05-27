@@ -51,7 +51,7 @@ class AcoParams:
     def tau_min(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None:
         ...
 class AntColony:
-    def __init__(self, hyperparams: Hyperparams, exams: collections.abc.Sequence[Exam], timestamps: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], base_seed: typing.SupportsInt | typing.SupportsIndex = -1) -> None:
+    def __init__(self, hyperparams: Hyperparams, exams: collections.abc.Sequence[Exam], timestamps: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], num_rooms: typing.SupportsInt | typing.SupportsIndex = 100, base_seed: typing.SupportsInt | typing.SupportsIndex = -1) -> None:
         ...
     def run(self, callback: collections.abc.Callable[[typing.SupportsInt | typing.SupportsIndex, typing.SupportsFloat | typing.SupportsIndex], None] = None) -> None:
         ...
@@ -74,10 +74,6 @@ class EvalParams:
         ...
 class Exam:
     code: str
-    @typing.overload
-    def __init__(self) -> None:
-        ...
-    @typing.overload
     def __init__(self, _code: str, _credits: typing.SupportsInt | typing.SupportsIndex, _students: collections.abc.Sequence[str], _feasible_slots: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], _feasible_rooms: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], _feasible_proctors: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]) -> None:
         ...
     @property
@@ -106,6 +102,9 @@ class Exam:
         ...
     @property
     def student_count(self) -> int:
+        ...
+    @student_count.setter
+    def student_count(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None:
         ...
     @property
     def students(self) -> list[str]:

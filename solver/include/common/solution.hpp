@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <vector>
 
+#include "common/exams.hpp"
 #include "utils/feasible_set.hpp"
 #include "utils/matrix.hpp"
 
@@ -16,9 +17,6 @@ namespace common {
 * The fitness tracks soft constraint violations (lower is better).
 */
 struct Solution {
-private:
-  int num_exams;
-  int num_slots;
 
 public:
   // `conflicting_exams_count(i, j)` tells how many exams `k` that 
@@ -38,7 +36,7 @@ public:
   /**
    * @brief Initializes an ant with empty schedule and default tracking matrices. 
    */
-  Solution(int n_exams, int n_slots);
+  Solution(const Exams& exams);
 
   /**
    * @brief Overloads the less-than operator for Ant comparison.
@@ -60,7 +58,7 @@ public:
    * Prioritize the exam with the fewest feasible slots (in other words, the most forbidden slots).
    * If there is a tie, select the exam with the highest total conflict degree (against all other exams).
    */
-  int get_next_exam(const std::vector<int>& total_student_conflict) const;
+  int get_next_exam(const std::vector<int>& total_conflicts) const;
 
   /**
    * @brief Assigns an exam to a slot, accumulates penalty, and updates conflict/feasibility states for neighbors.
@@ -68,7 +66,7 @@ public:
   void assign_exam(
     int exam,
     int slot,
-    const utils::CsrMatrix<int>& student_conflicts
+    const utils::CsrMatrix<int>& conflicts_csrmatrix
   );
 
   /**
@@ -76,8 +74,13 @@ public:
    */
   void unassign_exam(
     int exam,
-    const utils::CsrMatrix<int>& student_conflicts
+    const utils::CsrMatrix<int>& conflicts_csrmatrix
   );
-};
+
+private:
+  // const int num_exams;
+  // const int num_slots;
+
+}; // struct Solution
 
 } // namespace common

@@ -20,9 +20,6 @@ private:
   int cols;
 
 public:
-  int num_rows() const { return rows; }
-  int num_cols() const { return cols; }
-
   /**
    * @brief Initializes a matrix of size r x c with a default value. 
    */
@@ -47,6 +44,10 @@ public:
     }
   }
 
+  int num_rows() const { return rows; }
+  int num_cols() const { return cols; }
+  int num_elements() const { return data.size(); }
+
   /**
    * @brief Accesses the element at `(r, c)` by reference (read/write). 
    */
@@ -59,7 +60,7 @@ public:
   /**
    * @brief Accesses the element at `(r, c)` by value (read-only). 
    */
-  T operator()(int r, int c) const {
+  const T& operator()(int r, int c) const {
     utils::panic_if(r < 0 || r >= rows, "Row index out-of-bounds (got: {}, rows={})", r, rows);
     utils::panic_if(c < 0 || c >= cols, "Column index out-of-bounds (got: {}, cols={})", c, cols);
     return data[r * cols + c];
@@ -91,6 +92,16 @@ struct CsrElement {
   }
 };
 
+template<typename T>
+struct CsrRowView {
+  std::span<const int> indices;
+  std::span<const T> values;
+
+  int size() const {
+    return indices.size();
+  }
+};
+
 /**
  * @brief A generic Compressed Sparse Row matrix structure.
  * Implements flat 1D vectors for data and offsets to ensure memory continuity and fast, cache-friendly row iteration.
@@ -98,41 +109,62 @@ struct CsrElement {
 template<typename T>
 struct CsrMatrix {
 private:
-  std::vector<CsrElement<T>> data;
+  // std::vector<CsrElement<T>> data;
+  std::vector<int> indices;
+  std::vector<T> values;
   std::vector<int> offsets;
+  bool has_indices;
 
 public:
   /**
-   * @brief Default constructor for an empty CSR matrix. 
+   * @brief Converts a dense 2D Matrix into a CSR format.
    */
-  CsrMatrix() = default;
-
-  /**
-   * @brief Converts a dense 2D Matrix into a CSR format. 
-   */
-  CsrMatrix(const Matrix<T>& matrix) {
+  CsrMatrix(
+    const Matrix<T>& matrix,
+    int expected_size = 0,
+    T trash_value = 0,
+    bool track_indices = true
+  ) {
+    has_indices = track_indices;
+    if (has_indices) {
+      indices.reserve(expected_size);
+    }
+    values.reserve(expected_size);
     offsets.assign(matrix.num_rows() + 1, 0);
     for (int i = 0; i < matrix.num_rows(); ++i) {
       for (int j = 0; j < matrix.num_cols(); ++j) {
-        T val = matrix(i, j);
-        if (i != j && val > 0) {
-          data.emplace_back(static_cast<int>(j), val);
+        T value = matrix(i, j);
+        if (value > trash_value) {
+          if (has_indices) {
+            indices.emplace_back(j);
+          }
+          values.emplace_back(value);
         }
       }
-      offsets[i + 1] = data.size();
+      offsets[i + 1] = values.size();
     }
-    data.shrink_to_fit();
+    if (has_indices) {
+      indices.shrink_to_fit();
+    }
+    values.shrink_to_fit();
   }
+
+  int num_rows() const { return offsets.size() - 1; }
 
   /**
    * @brief Access a specific row of the matrix.
    * Usage: for (const auto& element : matrix[i]) { ... }
    */
-  std::span<const CsrElement<T>> operator[](int row_index) const {
-    utils::panic_if(row_index >= offsets.size() - 1, "Row index out-of-bounds (got: {}, rows={})", row_index, offsets.size() - 1);
-    return {
-      data.begin() + offsets[row_index],
-      data.begin() + offsets[row_index + 1]
+  CsrRowView<T> operator[](int row_index) const {
+    utils::panic_if(row_index >= num_rows(),
+                    "Row index out-of-bounds (got: {}, rows={})", row_index, num_rows());
+    const int start = offsets[row_index];
+    const int end   = offsets[row_index + 1];
+    return CsrRowView<T> {
+      .indices = has_indices
+        ? std::span<const int>{ indices.begin() + start, indices.begin() + end }
+        : std::span<const int>{},
+      .values = { values.begin() + start, values.begin() + end }
     };
   }
 };

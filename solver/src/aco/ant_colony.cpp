@@ -9,11 +9,9 @@
 #include "common/evaluator.hpp"
 #include "common/hyperparameters.hpp"
 #include "common/solution.hpp"
-#include "common/exam.hpp"
+#include "common/exams.hpp"
 #include "utils/assert.hpp"
 #include "utils/matrix.hpp"
-
-constexpr double HARD_CONSTRAINT_PENALTY = 1e9;
 
 namespace aco {
 
@@ -27,16 +25,16 @@ static uint64_t make_random_seed() {
 AntColony::AntColony(
   common::Hyperparams _hyperparams,
   std::vector<common::Exam> _exams,
-  std::vector<int64_t> _slot_timestamps,
+  const std::vector<int64_t>& _slot_timestamps,
+  int _num_rooms,
   int64_t _base_seed
-) : hyperparams(std::move(_hyperparams)),
-    evaluator(_hyperparams, _exams, _slot_timestamps),
+) : hyperparams(_hyperparams),
+    exams(_exams, _slot_timestamps.size(), _num_rooms),
+    evaluator(hyperparams, exams, _slot_timestamps, _num_rooms),
     base_seed(_base_seed == -1 ? make_random_seed() : static_cast<uint64_t>(_base_seed)),
-    num_exams(evaluator.num_exams),
-    num_slots(evaluator.num_slots),
-    pheromone(num_exams, num_slots, hyperparams.aco.tau_max),
-    ants(hyperparams.aco.num_ants, common::Solution(num_exams, num_slots)),
-    global_best_schedule(num_exams, -1),
+    pheromone(exams.num_exams, exams.num_slots, hyperparams.aco.tau_max),
+    ants(hyperparams.aco.num_ants, common::Solution(exams)),
+    global_best_schedule(exams.num_exams, -1),
     global_best_fitness(HARD_CONSTRAINT_PENALTY)
 {
   utils::panic_if(_base_seed < -1, "base_seed must be -1 or non-negative (got: {})", _base_seed);
@@ -56,11 +54,11 @@ bool AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) {
   static thread_local std::vector<double> weights;
   static thread_local std::vector<double> delta_soft;
   ant.reset();
-  weights.resize(num_slots);
-  delta_soft.resize(num_slots);
+  weights.resize(exams.num_slots);
+  delta_soft.resize(exams.num_slots);
 
-  for (int i = 0; i < num_exams; ++i) {
-    const int exam = ant.get_next_exam(evaluator.total_student_conflicts);
+  for (int i = 0; i < exams.num_exams; ++i) {
+    const int exam = ant.get_next_exam(exams.total_conflicts);
 
     // Check if the solution is infeasible --> ant die now
     const int count_feasible = ant.feasible_slots.get_feasible_count(exam);
@@ -95,16 +93,16 @@ bool AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) {
 
     const int slot = ant.feasible_slots(exam, chosen_j);
     const double penalty = delta_soft[chosen_j];
-    ant.assign_exam(exam, slot, evaluator.student_conflicts);
+    ant.assign_exam(exam, slot, exams.conflicts_csrmatrix);
     ant.fitness += penalty;
   }
   return true;
 }
 
 void AntColony::update_pheromone(const std::vector<int>& best_schedule) {
-  for (int exam = 0; exam < num_exams; ++exam) {
+  for (int exam = 0; exam < exams.num_exams; ++exam) {
     const int assigned_slot = best_schedule[exam];
-    for (int slot = 0; slot < num_slots; ++slot) {
+    for (int slot = 0; slot < exams.num_slots; ++slot) {
       const double delta_tau = slot == assigned_slot
           ? hyperparams.aco.rho * hyperparams.aco.tau_max
           : hyperparams.aco.rho * hyperparams.aco.tau_min;
