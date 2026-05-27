@@ -18,7 +18,6 @@ namespace common {
 */
 struct Solution {
 
-public:
   // `conflicting_exams_count(i, j)` tells how many exams `k` that 
   // have conflict with exam `i` and have been assigned to slot `j`.
   // If this value is > 0, slot `j` is strictly forbidden for exam `i`.
@@ -28,7 +27,7 @@ public:
   std::vector<int> schedule;
 
   // Tracks available slot IDs for each exam.
-  utils::FeasibleSet<int> feasible_slots;
+  utils::FeasibleSet feasible_slots;
 
   // The total soft constraint penalty score of the current schedule (lower is better).
   double fitness;
@@ -76,10 +75,6 @@ public:
     int exam,
     const utils::CsrMatrix<int>& conflicts_csrmatrix
   );
-
-private:
-  // const int num_exams;
-  // const int num_slots;
 
 }; // struct Solution
 

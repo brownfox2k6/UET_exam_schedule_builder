@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <memory>
 #include <pybind11/attr.h>
 #include <pybind11/cast.h>
 #include <pybind11/gil.h>
@@ -82,7 +83,13 @@ PYBIND11_MODULE(aco_solver, m) {
                      const std::vector<int64_t>& timestamps,
                      int num_rooms,
                      int64_t base_seed) {
-        return aco::AntColony(std::move(hyperparams), std::move(exams), timestamps, num_rooms, base_seed);
+        return std::make_unique<aco::AntColony>(
+          std::move(hyperparams),
+          std::move(exams),
+          timestamps,
+          num_rooms,
+          base_seed
+        );
       }),
       py::arg("hyperparams"),
       py::arg("exams"),

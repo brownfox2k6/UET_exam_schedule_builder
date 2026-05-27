@@ -33,7 +33,6 @@ AntColony::AntColony(
     evaluator(hyperparams, exams, _slot_timestamps, _num_rooms),
     base_seed(_base_seed == -1 ? make_random_seed() : static_cast<uint64_t>(_base_seed)),
     pheromone(exams.num_exams, exams.num_slots, hyperparams.aco.tau_max),
-    ants(hyperparams.aco.num_ants, common::Solution(exams)),
     global_best_schedule(exams.num_exams, -1),
     global_best_fitness(HARD_CONSTRAINT_PENALTY)
 {
@@ -47,6 +46,10 @@ AntColony::AntColony(
       0x9e3779b9u  // golden-ratio constant for seed mixing
     };
     rngs.emplace_back(seq);
+  }
+  ants.reserve(hyperparams.aco.num_ants);
+  for (int i = 0; i < hyperparams.aco.num_ants; ++i) {
+    ants.emplace_back(exams);
   }
 }
 

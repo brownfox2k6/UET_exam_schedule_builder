@@ -74,32 +74,20 @@ public:
   }
 };
 
-/**
- * @brief Represents a non-zero entry in a sparse matrix row.
- * This structure pairs a column index with its corresponding value.
- * Using a struct here ensures that the index and value are stored adjacently in memory, maximizing cache hits during row traversal.
- */
 template<typename T>
-struct CsrElement {
-  int index;
-  T value;
+struct CsrRowConstView {
+  std::span<const int> indices;
+  std::span<const T> values;
 
-  CsrElement(int i, T v) : index(i), value(v) {}
-
-  // For std::accumulate
-  friend T operator+(const T& sum, const CsrElement& element) {
-    return sum + element.value;
-  }
+  int size() const { return values.size(); }
 };
 
 template<typename T>
 struct CsrRowView {
   std::span<const int> indices;
-  std::span<const T> values;
+  std::span<T> values;
 
-  int size() const {
-    return indices.size();
-  }
+  int size() const { return values.size(); }
 };
 
 /**
@@ -109,7 +97,6 @@ struct CsrRowView {
 template<typename T>
 struct CsrMatrix {
 private:
-  // std::vector<CsrElement<T>> data;
   std::vector<int> indices;
   std::vector<T> values;
   std::vector<int> offsets;
@@ -150,14 +137,37 @@ public:
   }
 
   int num_rows() const { return offsets.size() - 1; }
+  const std::vector<int>& get_offsets() const { return offsets; }
 
   /**
-   * @brief Access a specific row of the matrix.
+   * @brief Access a specific row of the matrix (read-only).
    * Usage: for (const auto& element : matrix[i]) { ... }
    */
-  CsrRowView<T> operator[](int row_index) const {
-    utils::panic_if(row_index >= num_rows(),
-                    "Row index out-of-bounds (got: {}, rows={})", row_index, num_rows());
+  const CsrRowConstView<T> operator[](int row_index) const {
+    utils::panic_if(
+      row_index < 0 || row_index >= num_rows(),
+      "CsrMatrix::operator[]: Row index {} out of bounds [0, {}]",
+      row_index, num_rows() - 1
+    );
+    const int start = offsets[row_index];
+    const int end   = offsets[row_index + 1];
+    return CsrRowConstView<T> {
+      .indices = has_indices
+        ? std::span<const int>{ indices.begin() + start, indices.begin() + end }
+        : std::span<const int>{},
+      .values = { values.begin() + start, values.begin() + end }
+    };
+  }
+
+  /**
+   * @brief Access a specific row of the matrix (read-write).
+   */
+  CsrRowView<T> operator[](int row_index) {
+    utils::panic_if(
+      row_index < 0 || row_index >= num_rows(),
+      "CsrMatrix::operator[]: Row index {} out of bounds [0, {}]",
+      row_index, num_rows() - 1
+    );
     const int start = offsets[row_index];
     const int end   = offsets[row_index + 1];
     return CsrRowView<T> {

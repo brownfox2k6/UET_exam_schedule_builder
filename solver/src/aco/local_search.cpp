@@ -15,8 +15,7 @@ bool AntColony::go_1_move(common::Solution& ant, std::mt19937 &rng) {
   }
 
   // Pick a random feasible slot and ensure it's not the current slot
-  int j = std::uniform_int_distribution<int>(0, count_feasible - 1)(rng);
-  int new_slot = ant.feasible_slots(exam, j);
+  int new_slot = ant.feasible_slots.get_random(exam, rng);
   if (new_slot == ant.schedule[exam]) {
     return false;
   }
@@ -35,12 +34,16 @@ bool AntColony::go_1_move(common::Solution& ant, std::mt19937 &rng) {
 }
 
 bool AntColony::go_2_swap(common::Solution& ant, std::mt19937& rng) {
-  // Pick two random exams and ensure their assigned slots are different
+  // Pick two random exams, ensure their assigned slots are different and can be swapped
   const int exam1 = std::uniform_int_distribution<int>(0, exams.num_exams - 1)(rng);
   const int exam2 = std::uniform_int_distribution<int>(0, exams.num_exams - 1)(rng);
   const int slot1 = ant.schedule[exam1];
   const int slot2 = ant.schedule[exam2];
   if (exam1 == exam2 || slot1 == slot2) {
+    return false;
+  }
+  if (!ant.feasible_slots.has_option(exam1, slot2)
+      || !ant.feasible_slots.has_option(exam2, slot1)) {
     return false;
   }
 

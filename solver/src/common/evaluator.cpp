@@ -40,13 +40,26 @@ double Evaluator::calculate_delta_penalty(
   int new_slot,
   int ignore_exam
 ) const {
+  utils::panic_if(
+    exam < 0 || exam >= exams.num_exams,
+    "Evaluator::calculate_delta_penalty: exam index out of bounds: {}", exam
+  );
+  utils::panic_if(
+    new_slot < 0 || new_slot >= exams.num_slots,
+    "Evaluator::calculate_delta_penalty: new_slot out of bounds: {}", new_slot
+  );
+  utils::panic_if(
+    schedule.size() != static_cast<size_t>(exams.num_exams),
+    "Evaluator::calculate_delta_penalty: schedule size mismatch: got {}, expected {}",
+    schedule.size(), exams.num_exams
+  );
   const int cur_slot = schedule[exam];
   const int exam_credits = exams.credits[exam];
   double delta = 0.0;
   const auto row_view = exams.conflicts_csrmatrix[exam];
   for (int i = 0; i < row_view.size(); ++i) {
-    int conflict_exam = row_view.indices[i];
-    int conflict_count = row_view.values[i];
+    const int conflict_exam = row_view.indices[i];
+    const int conflict_count = row_view.values[i];
     const int conflict_slot = schedule[conflict_exam];
     if (conflict_exam == ignore_exam || conflict_slot == -1) {
       continue;

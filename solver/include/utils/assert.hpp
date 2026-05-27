@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <format>
 #include <iostream>
+#include <ostream>
 #include <string_view>
 
 namespace utils {
@@ -22,7 +23,8 @@ inline void panic_if(bool condition, std::string_view fmt, Args&&... args) {
   if (condition) {
     std::cerr << "[Validation Error] " 
               << std::vformat(fmt, std::make_format_args(args...)) 
-              << ".\n";
+              << ".\n"
+              << std::flush;
     std::abort();
   }
 }
