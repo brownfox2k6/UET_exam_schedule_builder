@@ -8,6 +8,14 @@
 #include <string>       // IWYU pragma: keep
 #include <string_view>  // IWYU pragma: keep
 
+/**
+ * @brief Throws `std::runtime_error` with location data if condition is true (Debug only).
+ * @note Evaluates lazily. Compiles to a no-op in Release mode (`NDEBUG`).
+ * @param condition Triggers panic if true.
+ * @param fmt `std::format` compliant string template.
+ * @param ... Arguments for the format string.
+ * @throws std::runtime_error Containing the formatted error message.
+ */
 #define PANIC_IF(condition, fmt, ...)                          \
   do {                                                         \
     if (static_cast<bool>(condition)) {                        \
