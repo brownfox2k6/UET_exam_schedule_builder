@@ -1,35 +1,53 @@
 #include "common/problem_data.hpp"
 #include "common/exam.hpp"
+#include "common/room.hpp"
+#include "utils/assert.hpp"
 #include "utils/matrix.hpp"
 
 #include <numeric>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <unordered_set>
 
 namespace common {
 
 ProblemData::ProblemData(
-  const std::vector<Exam>& _exams,
+  std::vector<Exam> _exams,
   std::vector<int64_t> _slot_timestamps,
-  const std::vector<Room>& _rooms
+  std::vector<Room> _rooms
 ):
   num_exams(_exams.size()),
   num_slots(_slot_timestamps.size()),
   num_rooms(_rooms.size()),
-  exam_codes(extract_exam_codes(_exams)),
-  student_to_id(build_student_to_id(_exams)),
+  num_sections(extract_num_sections(_exams)),
+  num_enrolments(extract_num_enrolments(_exams)),
+
+  student_to_id(build_student_to_id(_exams, num_enrolments)),
   id_to_student(build_id_to_student(student_to_id)),
-  exam_students(extract_exam_students(_exams, student_to_id)),
+
+  exam_to_sections(build_exam_to_sections(_exams)),
+  section_to_exam(build_section_to_exam(exam_to_sections)),
+
+  exam_codes(extract_exam_codes(_exams)),
   exam_credits(extract_exam_credits(_exams)),
+  exam_student_counts(extract_exam_student_counts(_exams)),
+
+  section_codes(extract_section_codes(_exams, num_sections)),
+  section_students(extract_section_students(_exams, student_to_id, num_sections, num_enrolments)),
+  section_student_counts(extract_section_student_counts(_exams, num_sections)),
+
   slot_timestamps(std::move(_slot_timestamps)),
+
   room_codes(extract_room_codes(_rooms)),
   room_capacities(extract_room_capacities(_rooms)),
   room_locations(extract_room_locations(_rooms)),
   room_types(extract_room_types(_rooms)),
-  conflicts_matrix(build_conflicts_matrix(exam_students)),
+
+  conflicts_matrix(build_conflicts_matrix(_exams, student_to_id)),
   conflicts_csrmatrix(conflicts_matrix),
   weighted_conflict_degrees(build_weighted_conflict_degrees(conflicts_csrmatrix)),
+
   feasible_slots(build_feasible_slots(_exams, num_slots)),
   feasible_rooms(build_feasible_rooms(_exams, num_rooms))
 {
@@ -43,46 +61,37 @@ ProblemData::ProblemData(
       !unique_codes_checker.emplace(exam_codes[i]).second,
       "Duplicate exam code detected: {}", exam_codes[i]
     );
-    for (int slot : feasible_slots[i].values) {
-      PANIC_IF(
-        slot >= num_slots,
-        "Exam {}: 'feasible_slots' has value {} out of bounds [0, {}]",
-        exam_codes[i], slot, num_slots - 1
-      );
-    }
-    for (int room : feasible_rooms[i].values) {
-      PANIC_IF(
-        room >= num_rooms,
-        "Exam {}: 'feasible_rooms' has value {} out of bounds [0, {}]",
-        exam_codes[i], room, num_rooms - 1
-      );
-    }
   }
 #endif // NDEBUG
 }
 
-std::vector<std::string> ProblemData::extract_exam_codes(const std::vector<Exam>& exams) {
-  std::vector<std::string> codes(exams.size());
-  for (int i = 0; i < exams.size(); ++i) {
-    codes[i] = exams[i].code();
+int ProblemData::extract_num_sections(const std::vector<Exam>& exams) {
+  int num_sections = 0;
+  for (const Exam& exam : exams) {
+    num_sections += exam.section_count();
   }
-  return codes;
+  return num_sections;
 }
 
-std::unordered_map<std::string, int> ProblemData::build_student_to_id(const std::vector<Exam>& exams) {
-  std::unordered_map<std::string, int> student_to_id;
-  int count = 0;
+int ProblemData::extract_num_enrolments(const std::vector<Exam>& exams) {
+  int num_enrolments = 0;
   for (const Exam& exam : exams) {
-    count += exam.students().size();
+    num_enrolments += exam.student_count();
   }
-  student_to_id.reserve(count);
+  return num_enrolments;
+}
+
+std::unordered_map<std::string, int> ProblemData::build_student_to_id(const std::vector<Exam>& exams, int num_enrolments) {
+  std::unordered_map<std::string, int> student_to_id;
+  student_to_id.reserve(num_enrolments);
   for (const Exam& exam : exams) {
-    for (const std::string& student : exam.students()) {
-      if (!student_to_id.contains(student)) {
-        student_to_id.emplace(student, student_to_id.size());
+    for (const ExamSection& section : exam.sections()) {
+      for (const std::string& student : section.students()) {
+        student_to_id.try_emplace(student, student_to_id.size());
       }
     }
   }
+  student_to_id.rehash(0);
   return student_to_id;
 }
 
@@ -94,19 +103,12 @@ std::vector<std::string> ProblemData::build_id_to_student(const std::unordered_m
   return id_to_student;
 }
 
-utils::CsrMatrix<int> ProblemData::extract_exam_students(
-  const std::vector<Exam>& exams,
-  const std::unordered_map<std::string, int>& student_to_id
-) {
-  std::vector<std::vector<int>> exam_students(exams.size());
-  int count = 0;
+std::vector<std::string> ProblemData::extract_exam_codes(const std::vector<Exam>& exams) {
+  std::vector<std::string> codes(exams.size());
   for (int i = 0; i < exams.size(); ++i) {
-    for (const std::string& student : exams[i].students()) {
-      exam_students[i].emplace_back(student_to_id.at(student));
-      ++count;
-    }
+    codes[i] = exams[i].code();
   }
-  return utils::CsrMatrix<int>(exam_students, count, false);
+  return codes;
 }
 
 std::vector<int> ProblemData::extract_exam_credits(const std::vector<Exam>& exams) {
@@ -117,53 +119,157 @@ std::vector<int> ProblemData::extract_exam_credits(const std::vector<Exam>& exam
   return credits;
 }
 
+std::vector<std::string> ProblemData::extract_section_codes(const std::vector<Exam>& exams, int num_sections) {
+  std::vector<std::string> section_codes;
+  section_codes.reserve(num_sections);
+  for (const Exam& exam : exams) {
+    for (const ExamSection& section : exam.sections()) {
+      section_codes.emplace_back(section.code());
+    }
+  }
+  return section_codes;
+}
+
+utils::CsrMatrix<int> ProblemData::extract_section_students(
+  const std::vector<Exam>& exams,
+  const std::unordered_map<std::string, int>& student_to_id,
+  int num_sections,
+  int num_enrolments
+) {
+  std::vector<std::vector<int>> section_students;
+  section_students.reserve(num_sections);
+  for (const Exam& exam : exams) {
+    for (const ExamSection& section : exam.sections()) {
+      std::vector<int> v;
+      v.reserve(section.student_count());
+      for (const std::string& student : section.students()) {
+        v.emplace_back(student_to_id.at(student));
+      }
+      section_students.emplace_back(std::move(v));
+    }
+  }
+  return utils::CsrMatrix<int>(section_students, num_enrolments, false);
+}
+
+std::vector<int> ProblemData::extract_section_student_counts(const std::vector<Exam>& exams, int num_sections) {
+  std::vector<int> sections_student_counts;
+  sections_student_counts.reserve(num_sections);
+  for (const Exam& exam : exams) {
+    for (const ExamSection& section : exam.sections()) {
+      sections_student_counts.emplace_back(section.student_count());
+    }
+  }
+  return sections_student_counts;
+}
+
+std::vector<int> ProblemData::extract_exam_student_counts(const std::vector<Exam>& exams) {
+  std::vector<int> exam_student_counts;
+  exam_student_counts.reserve(exams.size());
+  for (const Exam& exam : exams) {
+    exam_student_counts.emplace_back(exam.student_count());
+  }
+  return exam_student_counts;
+}
+
+utils::CsrMatrix<int> ProblemData::build_exam_to_sections(const std::vector<Exam>& exams) {
+  std::vector<std::vector<int>> exam_to_sections;
+  exam_to_sections.reserve(exams.size());
+  int index = 0;
+  for (const Exam& exam : exams) {
+    std::vector<int> v;
+    v.reserve(exam.section_count());
+    for (int i = 0; i < exam.section_count(); ++i) {
+      v.emplace_back(index++);
+    }
+    exam_to_sections.emplace_back(std::move(v));
+  }
+  return utils::CsrMatrix<int>(exam_to_sections, index, false);
+}
+
+std::vector<int> ProblemData::build_section_to_exam(const utils::CsrMatrix<int>& exam_to_sections) {
+  std::vector<int> section_to_exam;
+  section_to_exam.reserve(exam_to_sections.num_elements());
+  for (int i = 0; i < exam_to_sections.num_rows(); ++i) {
+    for (int j = 0; j < exam_to_sections[i].size(); ++j) {
+      section_to_exam.emplace_back(i);
+    }
+  }
+  return section_to_exam;
+}
+
 std::vector<std::string> ProblemData::extract_room_codes(const std::vector<Room>& rooms) {
-  std::vector<std::string> room_codes(rooms.size());
-  for (int i = 0; i < rooms.size(); ++i) {
-    room_codes[i] = rooms[i].code();
+  std::vector<std::string> room_codes;
+  room_codes.reserve(rooms.size());
+  for (const Room& room : rooms) {
+    room_codes.emplace_back(room.code());
   }
   return room_codes;
 }
 
 std::vector<int> ProblemData::extract_room_capacities(const std::vector<Room>& rooms) {
-  std::vector<int> room_capacities(rooms.size());
-  for (int i = 0; i < rooms.size(); ++i) {
-    room_capacities[i] = rooms[i].capacity();
+  std::vector<int> room_capacities;
+  room_capacities.reserve(rooms.size());
+  for (const Room& room : rooms) {
+    room_capacities.emplace_back(room.capacity());
   }
   return room_capacities;
 }
 
 std::vector<std::string> ProblemData::extract_room_locations(const std::vector<Room>& rooms) {
-  std::vector<std::string> room_locations(rooms.size());
-  for (int i = 0; i < rooms.size(); ++i) {
-    room_locations[i] = rooms[i].location();
+  std::vector<std::string> room_locations;
+  room_locations.reserve(rooms.size());
+  for (const Room& room : rooms) {
+    room_locations.emplace_back(room.location());
   }
   return room_locations;
 }
 
 std::vector<std::string> ProblemData::extract_room_types(const std::vector<Room>& rooms) {
-  std::vector<std::string> room_types(rooms.size());
-  for (int i = 0; i < rooms.size(); ++i) {
-    room_types[i] = rooms[i].type();
+  std::vector<std::string> room_types;
+  room_types.reserve(rooms.size());
+  for (const Room& room : rooms) {
+    room_types.emplace_back(room.type());
   }
   return room_types;
 }
 
-utils::Matrix<int> ProblemData::build_conflicts_matrix(const utils::CsrMatrix<int>& exam_students) {
-  const int num_exams = exam_students.num_rows();
-  utils::Matrix<int> conflicts_matrix(num_exams, num_exams, 0);
-  for (int i = 0; i < num_exams; ++i) {
-    std::unordered_set<int> students_i;
-    students_i.reserve(exam_students[i].size());
-    for (int student_i : exam_students[i].values) {
-      students_i.emplace(student_i);
-    }
-    for (int j = i + 1; j < num_exams; ++j) {
-      int common_count = 0;
-      for (int student_j : exam_students[j].values) {
-        common_count += students_i.contains(student_j);
+utils::Matrix<int> ProblemData::build_conflicts_matrix(
+  const std::vector<Exam>& exams,
+  const std::unordered_map<std::string, int>& student_to_id
+) {
+  std::vector<std::vector<int>> exam_to_students;
+  exam_to_students.reserve(exams.size());
+  for (const Exam& exam : exams) {
+    std::vector<int> students;
+    students.reserve(exam.student_count());
+    for (const ExamSection& section : exam.sections()) {
+      for (const std::string& student : section.students()) {
+        int id = student_to_id.at(student);
+        students.emplace_back(student_to_id.at(student));
       }
-      conflicts_matrix(i, j) = conflicts_matrix(j, i) = common_count;
+    }
+    std::sort(students.begin(), students.end());
+    exam_to_students.emplace_back(std::move(students));
+  }
+  utils::Matrix<int> conflicts_matrix(exams.size(), exams.size(), 0);
+  for (int i = 0; i < exams.size(); ++i) {
+    const std::vector<int>& students_i = exam_to_students[i];
+    for (int j = i + 1; j < exams.size(); ++j) {
+      const std::vector<int>& students_j = exam_to_students[j];
+      int p = 0;
+      int q = 0;
+      int common_count = 0;
+      while (p < students_i.size() && q < students_j.size()) {
+        if (students_i[p] == students_j[q]) {
+          ++common_count; ++p; ++q;
+        } else if (students_i[p] < students_j[q]) {
+          ++p;
+        } else {
+          ++q;
+        }
+      }
+      conflicts_matrix(i, j) = common_count;
+      conflicts_matrix(j, i) = common_count;
     }
   }
   return conflicts_matrix;
@@ -185,6 +291,11 @@ utils::CsrMatrix<int> ProblemData::build_feasible_slots(const std::vector<Exam>&
   for (int i = 0; i < exams.size(); ++i) {
     count += exams[i].feasible_slots().size();
     for (int slot : exams[i].feasible_slots()) {
+      PANIC_IF(
+        slot >= num_slots,
+        "Exam {}: 'feasible_slots' has value {} out of bounds [0, {}]",
+        exams[i].code(), slot, num_slots - 1
+      );
       feasible_slots(i, slot) = slot;
     }
   }
@@ -197,6 +308,11 @@ utils::CsrMatrix<int> ProblemData::build_feasible_rooms(const std::vector<Exam>&
   for (int i = 0; i < exams.size(); ++i) {
     count += exams[i].feasible_rooms().size();
     for (int room : exams[i].feasible_rooms()) {
+      PANIC_IF(
+        room >= num_rooms,
+        "Exam {}: 'feasible_rooms' has value {} out of bounds [0, {}]",
+        exams[i].code(), room, num_rooms - 1
+      );
       feasible_rooms(i, room) = room;
     }
   }

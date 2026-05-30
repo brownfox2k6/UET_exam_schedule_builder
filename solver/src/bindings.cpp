@@ -1,4 +1,5 @@
 #include "aco/ant_colony.hpp"
+#include "common/exam.hpp"
 #include "common/hyperparameters.hpp"
 #include "common/room.hpp"
 #include "common/solution.hpp"
@@ -19,20 +20,32 @@ PYBIND11_MODULE(aco_solver, m) {
   m.doc() = "Solver for University Examination Timetabling "
             "using Ant Colony Optimization and Local Search";
 
+  py::class_<common::ExamSection>(m, "ExamSection")
+    .def(
+      py::init<std::string, std::vector<std::string>>(),
+      py::arg("code"),
+      py::arg("students")
+    )
+    .def_property("code",     &common::ExamSection::code,     &common::ExamSection::set_code)
+    .def_property("students", &common::ExamSection::students, &common::ExamSection::set_students)
+    .def_property_readonly("student_count", &common::ExamSection::student_count);
+
   py::class_<common::Exam>(m, "Exam")
     .def(
-      py::init<std::string, int, std::vector<std::string>, std::vector<int>, std::vector<int>>(),
+      py::init<std::string, int, std::vector<common::ExamSection>, std::vector<int>, std::vector<int>>(),
       py::arg("code"),
       py::arg("credits"),
-      py::arg("students"),
+      py::arg("sections"),
       py::arg("feasible_slots"),
       py::arg("feasible_rooms")
     )
     .def_property("code",           &common::Exam::code,           &common::Exam::set_code)
     .def_property("credits",        &common::Exam::credits,        &common::Exam::set_credits)
-    .def_property("students",       &common::Exam::students,       &common::Exam::set_students)
+    .def_property("sections",       &common::Exam::sections,       &common::Exam::set_sections)
     .def_property("feasible_slots", &common::Exam::feasible_slots, &common::Exam::set_feasible_slots)
-    .def_property("feasible_rooms", &common::Exam::feasible_rooms, &common::Exam::set_feasible_rooms);
+    .def_property("feasible_rooms", &common::Exam::feasible_rooms, &common::Exam::set_feasible_rooms)
+    .def_property_readonly("section_count", &common::Exam::section_count)
+    .def_property_readonly("student_count", &common::Exam::student_count);
   
   py::class_<common::Room>(m, "Room")
     .def(
@@ -124,7 +137,7 @@ PYBIND11_MODULE(aco_solver, m) {
       py::arg("exams"),
       py::arg("slot_timestamps"),
       py::arg("rooms"),
-      py::arg("base_seed") = -1
+      py::arg("base_seed") = 42
     )
     .def("run_one_iteration", &aco::AntColony::run_one_iteration, py::call_guard<py::gil_scoped_release>())
     .def("run", &aco::AntColony::run, py::arg("callback") = py::none())

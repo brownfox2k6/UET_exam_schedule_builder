@@ -172,6 +172,7 @@ public:
   }
 
   int num_rows() const { return offsets.size() - 1; }
+  int num_elements() const { return values.size(); }
   const std::vector<int>& get_offsets() const { return offsets; }
 
   /**

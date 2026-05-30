@@ -27,13 +27,26 @@ struct ProblemData {
   const int num_exams;
   const int num_slots;
   const int num_rooms;
+  const int num_sections;
+  const int num_enrolments;
+  
+  // --- Student ID string <--> int mapping ---
+  const std::unordered_map<std::string, int> student_to_id;
+  const std::vector<std::string> id_to_student;
+
+  // --- Section <--> Exam mapping ---
+  const utils::CsrMatrix<int> exam_to_sections;
+  const std::vector<int> section_to_exam;
 
   // --- Exams metadata ---
   const std::vector<std::string> exam_codes;
-  const std::unordered_map<std::string, int> student_to_id;
-  const std::vector<std::string> id_to_student;
-  const utils::CsrMatrix<int> exam_students;
   const std::vector<int> exam_credits;
+  const std::vector<int> exam_student_counts;
+
+  // --- Sections metadata ---
+  const std::vector<std::string> section_codes;
+  const utils::CsrMatrix<int> section_students;
+  const std::vector<int> section_student_counts;
 
   // --- Time slots metadata ---
   const std::vector<int64_t> slot_timestamps;
@@ -74,27 +87,37 @@ struct ProblemData {
   const utils::CsrMatrix<int> feasible_rooms;
 
   ProblemData(
-    const std::vector<Exam>& _exams,
+    std::vector<Exam> _exams,
     std::vector<int64_t> _slot_timestamps,
-    const std::vector<Room>& _rooms
-  );
+    std::vector<Room> _rooms
+  );  
 
 private:
-  static std::vector<std::string> extract_exam_codes(const std::vector<Exam>& exams);
-  static std::unordered_map<std::string, int> build_student_to_id(const std::vector<Exam>& exams);
+  static int extract_num_sections(const std::vector<Exam>& exams);
+  static int extract_num_enrolments(const std::vector<Exam>& exams);
+  static std::unordered_map<std::string, int> build_student_to_id(const std::vector<Exam>& exams, int num_enrolments);
   static std::vector<std::string> build_id_to_student(const std::unordered_map<std::string, int>& student_to_id);
-  static utils::CsrMatrix<int> extract_exam_students(
-    const std::vector<Exam>& exams,
-    const std::unordered_map<std::string, int>& student_to_id
-  );
+  static std::vector<std::string> extract_exam_codes(const std::vector<Exam>& exams);
   static std::vector<int> extract_exam_credits(const std::vector<Exam>& exams);
-  
+  static std::vector<std::string> extract_section_codes(const std::vector<Exam>& exams, int num_sections);
+  static utils::CsrMatrix<int> extract_section_students(
+    const std::vector<Exam>& exams,
+    const std::unordered_map<std::string, int>& student_to_id,
+    int num_sections,
+    int num_enrolments
+  );
+  static std::vector<int> extract_section_student_counts(const std::vector<Exam>& exams, int num_sections);
+  static std::vector<int> extract_exam_student_counts(const std::vector<Exam>& exams);
+  static utils::CsrMatrix<int> build_exam_to_sections(const std::vector<Exam>& exams);
+  static std::vector<int> build_section_to_exam(const utils::CsrMatrix<int>& exam_to_sections);
   static std::vector<std::string> extract_room_codes(const std::vector<Room>& rooms);
   static std::vector<int> extract_room_capacities(const std::vector<Room>& rooms);
   static std::vector<std::string> extract_room_locations(const std::vector<Room>& rooms);
   static std::vector<std::string> extract_room_types(const std::vector<Room>& rooms);
-
-  static utils::Matrix<int> build_conflicts_matrix(const utils::CsrMatrix<int>& exam_students);
+  static utils::Matrix<int> build_conflicts_matrix(
+    const std::vector<Exam>& exams,
+    const std::unordered_map<std::string, int>& student_to_id
+  );
   static std::vector<int> build_weighted_conflict_degrees(const utils::CsrMatrix<int>& conflicts_csrmatrix);
   static utils::CsrMatrix<int> build_feasible_slots(const std::vector<Exam>& exams, int num_slots);
   static utils::CsrMatrix<int> build_feasible_rooms(const std::vector<Exam>& exams, int num_rooms);

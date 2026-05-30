@@ -68,7 +68,7 @@ public:
     std::vector<common::Exam> _exams,
     std::vector<int64_t> _slot_timestamps,
     std::vector<common::Room> _rooms,
-    int64_t _base_seed = -1
+    int64_t _base_seed = 42
   );
 
   // The best solution found since the start of the algorithm

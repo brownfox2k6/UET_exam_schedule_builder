@@ -4,7 +4,7 @@ Solver for University Examination Timetabling using Ant Colony Optimization and 
 from __future__ import annotations
 import collections.abc
 import typing
-__all__: list[str] = ['AcoParams', 'AntColony', 'EvalParams', 'Exam', 'Hyperparams', 'LsParams', 'Room', 'Solution']
+__all__: list[str] = ['AcoParams', 'AntColony', 'EvalParams', 'Exam', 'ExamSection', 'Hyperparams', 'LsParams', 'Room', 'Solution']
 class AcoParams:
     def __init__(self, num_iters: typing.SupportsInt | typing.SupportsIndex = 100, num_ants: typing.SupportsInt | typing.SupportsIndex = 10, alpha: typing.SupportsFloat | typing.SupportsIndex = 1.0, beta: typing.SupportsFloat | typing.SupportsIndex = 2.0, rho: typing.SupportsFloat | typing.SupportsIndex = 0.1, tau_min: typing.SupportsFloat | typing.SupportsIndex = 0.01, tau_max: typing.SupportsFloat | typing.SupportsIndex = 1.0) -> None:
         ...
@@ -53,7 +53,7 @@ class AcoParams:
     def tau_min(self, arg1: typing.SupportsFloat | typing.SupportsIndex) -> None:
         ...
 class AntColony:
-    def __init__(self, hyperparams: Hyperparams, exams: collections.abc.Sequence[Exam], slot_timestamps: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], rooms: collections.abc.Sequence[Room], base_seed: typing.SupportsInt | typing.SupportsIndex = -1) -> None:
+    def __init__(self, hyperparams: Hyperparams, exams: collections.abc.Sequence[Exam], slot_timestamps: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], rooms: collections.abc.Sequence[Room], base_seed: typing.SupportsInt | typing.SupportsIndex = 42) -> None:
         ...
     def run(self, callback: collections.abc.Callable[[typing.SupportsInt | typing.SupportsIndex, typing.SupportsFloat | typing.SupportsIndex], None] = None) -> None:
         ...
@@ -76,7 +76,7 @@ class EvalParams:
         ...
 class Exam:
     code: str
-    def __init__(self, code: str, credits: typing.SupportsInt | typing.SupportsIndex, students: collections.abc.Sequence[str], feasible_slots: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], feasible_rooms: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]) -> None:
+    def __init__(self, code: str, credits: typing.SupportsInt | typing.SupportsIndex, sections: collections.abc.Sequence[ExamSection], feasible_slots: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], feasible_rooms: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]) -> None:
         ...
     @property
     def credits(self) -> int:
@@ -95,6 +95,25 @@ class Exam:
         ...
     @feasible_slots.setter
     def feasible_slots(self, arg1: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]) -> None:
+        ...
+    @property
+    def section_count(self) -> int:
+        ...
+    @property
+    def sections(self) -> list[ExamSection]:
+        ...
+    @sections.setter
+    def sections(self, arg1: collections.abc.Sequence[ExamSection]) -> None:
+        ...
+    @property
+    def student_count(self) -> int:
+        ...
+class ExamSection:
+    code: str
+    def __init__(self, code: str, students: collections.abc.Sequence[str]) -> None:
+        ...
+    @property
+    def student_count(self) -> int:
         ...
     @property
     def students(self) -> list[str]:

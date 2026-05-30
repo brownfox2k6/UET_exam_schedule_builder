@@ -9,13 +9,6 @@
 
 namespace aco {
 
-static uint64_t make_random_seed() {
-  std::random_device rd;
-  uint64_t high = static_cast<uint64_t>(rd());
-  uint64_t low  = static_cast<uint64_t>(rd());
-  return (high << 32) ^ low;
-}
-
 AntColony::AntColony(
   common::Hyperparams _hyperparams,
   std::vector<common::Exam> _exams,
@@ -23,9 +16,9 @@ AntColony::AntColony(
   std::vector<common::Room> _rooms,
   int64_t _base_seed
 ) : hyperparams(_hyperparams),
-    problem_data(_exams, _slot_timestamps, _rooms),
+    problem_data(std::move(_exams), std::move(_slot_timestamps), std::move(_rooms)),
     evaluator(problem_data, hyperparams),
-    base_seed(_base_seed == -1 ? make_random_seed() : static_cast<uint64_t>(_base_seed)),
+    base_seed(_base_seed),
     pheromone(problem_data.num_exams, problem_data.num_slots, hyperparams.aco.tau_max()),
     global_best_schedule(problem_data.num_exams, -1),
     global_best_fitness(HARD_CONSTRAINT_PENALTY)
