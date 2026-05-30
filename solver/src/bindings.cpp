@@ -1,3 +1,8 @@
+#include "aco/ant_colony.hpp"
+#include "common/hyperparameters.hpp"
+#include "common/room.hpp"
+#include "common/solution.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <pybind11/attr.h>
@@ -7,11 +12,6 @@
 #include <pybind11/pytypes.h>
 #include <pybind11/stl.h>
 #include <pybind11/functional.h>
-
-#include "aco/ant_colony.hpp"
-#include "common/hyperparameters.hpp"
-#include "common/room.hpp"
-#include "common/solution.hpp"
 
 namespace py = pybind11;
 
@@ -100,7 +100,7 @@ PYBIND11_MODULE(aco_solver, m) {
     .def_readwrite("ls",   &common::Hyperparams::ls);
 
   py::class_<common::Solution>(m, "Solution")
-    .def_readonly("schedule", &common::Solution::schedule)
+    .def_readonly("schedule", &common::Solution::assigned_slots)
     .def_readonly("fitness",  &common::Solution::fitness);
 
   py::class_<aco::AntColony>(m, "AntColony")

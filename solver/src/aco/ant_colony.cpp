@@ -68,7 +68,7 @@ bool AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) {
     double total_weight = 0.0;
     for (int j = 0; j < count_feasible; ++j) {
       const int slot = ant.feasible_slots(exam, j);
-      delta_soft[j] = evaluator.calculate_delta_penalty(ant.schedule, exam, slot);
+      delta_soft[j] = evaluator.calculate_delta_penalty(ant.assigned_slots, exam, slot);
       const double eta = 1.0 / (1.0 + delta_soft[j]);
       const double tau = pheromone(exam, slot);
       weights[j] = std::pow(tau, hyperparams.aco.alpha()) * std::pow(eta, hyperparams.aco.beta());
@@ -126,9 +126,9 @@ double AntColony::run_one_iteration() {
   }
   if (iter_best.fitness < global_best_fitness) {
     global_best_fitness = iter_best.fitness;
-    global_best_schedule = iter_best.schedule;
+    global_best_schedule = iter_best.assigned_slots;
   }
-  update_pheromone(iter_best.schedule);
+  update_pheromone(iter_best.assigned_slots);
   return iter_best.fitness;
 }
 

@@ -6,7 +6,7 @@
 namespace common {
 
 Solution::Solution(const ProblemData& exams): 
-  schedule(exams.num_exams, -1),
+  assigned_slots(exams.num_exams, -1),
   feasible_slots(exams.feasible_slots, exams.num_slots),
   feasible_rooms(exams.feasible_rooms, exams.num_rooms),
   fitness(0.0),
@@ -20,7 +20,8 @@ bool Solution::operator<(const Solution& other) const {
 void Solution::reset() {
   fitness = 0.0;
   feasible_slots.reset();
-  std::fill(schedule.begin(), schedule.end(), -1);
+  feasible_rooms.reset();
+  std::fill(assigned_slots.begin(), assigned_slots.end(), -1);
   conflicting_exams_count.fill(0);
 }
 
@@ -28,8 +29,8 @@ int Solution::get_next_exam(const std::vector<int>& total_conflicts) const {
   int best_exam = -1;
   int max_degree = -1;
   int max_conflict = -1;
-  for (int exam = 0; exam < schedule.size(); ++exam) {
-    if (schedule[exam] != -1) {
+  for (int exam = 0; exam < assigned_slots.size(); ++exam) {
+    if (assigned_slots[exam] != -1) {
       continue;
     }
     int degree = feasible_slots.get_forbidden_count(exam);
@@ -49,15 +50,15 @@ void Solution::assign_exam(
   const utils::CsrMatrix<int>& conflicts_csrmatrix
 ) {
   PANIC_IF(
-    exam < 0 || exam >= schedule.size(),
-    "Solution::assign_exam: Exam index {} out of bounds [0, {}]", exam, schedule.size() - 1
+    exam < 0 || exam >= assigned_slots.size(),
+    "Solution::assign_exam: Exam index {} out of bounds [0, {}]", exam, assigned_slots.size() - 1
   );
   PANIC_IF(
     slot < 0 || slot >= conflicting_exams_count.num_cols(),
     "Solution::assign_exam: Slot index {} out of bounds [0, {}]",
     exam, conflicting_exams_count.num_cols() - 1
   );
-  int& current_slot = schedule[exam];
+  int& current_slot = assigned_slots[exam];
   PANIC_IF(
     current_slot != -1,
     "Solution::assign_exam: Exam {} is already scheduled at slot {}, failed to assign to slot {}",
@@ -82,10 +83,10 @@ void Solution::unassign_exam(
   const utils::CsrMatrix<int>& conflicts_csrmatrix
 ) {
   PANIC_IF(
-    exam < 0 || exam >= schedule.size(),
-    "Solution::unassign_exam: Exam index {} out of bounds [0, {}]", exam, schedule.size() - 1
+    exam < 0 || exam >= assigned_slots.size(),
+    "Solution::unassign_exam: Exam index {} out of bounds [0, {}]", exam, assigned_slots.size() - 1
   );
-  int& current_slot = schedule[exam];
+  int& current_slot = assigned_slots[exam];
   PANIC_IF(
     current_slot == -1,
     "Solution::unassign_exam: Exam {} is not scheduled yet", exam

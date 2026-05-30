@@ -16,12 +16,12 @@ bool AntColony::go_1_move(common::Solution& ant, std::mt19937 &rng) {
 
   // Pick a random feasible slot and ensure it's not the current slot
   int new_slot = ant.feasible_slots.get_random(exam, rng);
-  if (new_slot == ant.schedule[exam]) {
+  if (new_slot == ant.assigned_slots[exam]) {
     return false;
   }
 
   // Calculate delta if we assign the exam to this new slot
-  double delta = evaluator.calculate_delta_penalty(ant.schedule, exam, new_slot);
+  double delta = evaluator.calculate_delta_penalty(ant.assigned_slots, exam, new_slot);
   if (delta > 0.0) {
     return false;
   }
@@ -37,8 +37,8 @@ bool AntColony::go_2_swap(common::Solution& ant, std::mt19937& rng) {
   // Pick two random exams, ensure their assigned slots are different and can be swapped
   const int exam1 = std::uniform_int_distribution<int>(0, problem_data.num_exams - 1)(rng);
   const int exam2 = std::uniform_int_distribution<int>(0, problem_data.num_exams - 1)(rng);
-  const int slot1 = ant.schedule[exam1];
-  const int slot2 = ant.schedule[exam2];
+  const int slot1 = ant.assigned_slots[exam1];
+  const int slot2 = ant.assigned_slots[exam2];
   if (exam1 == exam2 || slot1 == slot2) {
     return false;
   }
@@ -59,8 +59,8 @@ bool AntColony::go_2_swap(common::Solution& ant, std::mt19937& rng) {
   }
 
   // Calculate delta if we swap their slots
-  double delta = evaluator.calculate_delta_penalty(ant.schedule, exam1, slot2, exam2)
-               + evaluator.calculate_delta_penalty(ant.schedule, exam2, slot1, exam1);
+  double delta = evaluator.calculate_delta_penalty(ant.assigned_slots, exam1, slot2, exam2)
+               + evaluator.calculate_delta_penalty(ant.assigned_slots, exam2, slot1, exam1);
   if (delta > 0) {
     return false;
   }

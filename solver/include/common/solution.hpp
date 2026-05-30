@@ -19,8 +19,8 @@ struct Solution {
   // If this value is > 0, slot `j` is strictly forbidden for exam `i`.
   utils::Matrix<int> conflicting_exams_count;
 
-  // `schedule[i]` tells the assigned slot for exam `i`
-  std::vector<int> schedule;
+  // `assigned_slots[i]` tells the assigned slot for exam `i`
+  std::vector<int> assigned_slots;
 
   // Tracks available slot IDs for each exam.
   utils::FeasibleSet feasible_slots;
