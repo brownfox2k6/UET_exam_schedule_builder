@@ -56,7 +56,7 @@ struct Solution {
    * Prioritize the exam with the fewest feasible slots (in other words, the most forbidden slots).
    * If there is a tie, select the exam with the highest total conflict degree (against all other exams).
    */
-  int get_next_exam(const std::vector<int>& total_conflicts) const;
+  int get_next_exam(const ProblemData& problem_data) const;
 
   /**
    * @brief Assigns an exam to a slot, accumulates penalty, and updates conflict/feasibility states for neighbors.

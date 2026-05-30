@@ -55,7 +55,7 @@ bool AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) {
   delta_soft.resize(problem_data.num_slots);
 
   for (int i = 0; i < problem_data.num_exams; ++i) {
-    const int exam = ant.get_next_exam(problem_data.weighted_conflict_degrees);
+    const int exam = ant.get_next_exam(problem_data);
 
     // Check if the solution is infeasible --> ant die now
     const int count_feasible = ant.feasible_slots.get_feasible_count(exam);

@@ -1,4 +1,5 @@
 #include "common/solution.hpp"
+#include "common/problem_data.hpp"
 #include "utils/assert.hpp"
 #include "utils/feasible_set.hpp"
 #include "utils/matrix.hpp"
@@ -25,7 +26,7 @@ void Solution::reset() {
   conflicting_exams_count.fill(0);
 }
 
-int Solution::get_next_exam(const std::vector<int>& total_conflicts) const {
+int Solution::get_next_exam(const ProblemData& problem_data) const {
   int best_exam = -1;
   int max_degree = -1;
   int max_conflict = -1;
@@ -34,7 +35,7 @@ int Solution::get_next_exam(const std::vector<int>& total_conflicts) const {
       continue;
     }
     int degree = feasible_slots.get_forbidden_count(exam);
-    int conflict = total_conflicts[exam];
+    int conflict = problem_data.weighted_conflict_degrees[exam];
     if (std::tie(degree, conflict) > std::tie(max_degree, max_conflict)) {
       max_degree = degree;
       max_conflict = conflict;
