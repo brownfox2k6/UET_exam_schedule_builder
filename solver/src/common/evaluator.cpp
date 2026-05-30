@@ -25,7 +25,7 @@ utils::Matrix<double> Evaluator::build_proximity_penalties(
     const int64_t slot_i = slot_timestamps[i];
     for (int j = i + 1; j < num_slots; ++j) {
       const double diff_days = std::abs(slot_i - slot_timestamps[j]) / SECONDS_PER_DAY;
-      const double value = std::pow(hyperparams.penalty_decay_base, -diff_days);
+      const double value = std::pow(hyperparams.penalty_decay_base(), -diff_days);
       penalties(i, j) = penalties(j, i) = value;
     }
   }

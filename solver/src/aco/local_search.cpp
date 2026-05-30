@@ -1,7 +1,7 @@
-#include <omp.h>
-
 #include "aco/ant_colony.hpp"
 #include "common/solution.hpp"
+
+#include <omp.h>
 
 namespace aco {
 
@@ -78,11 +78,11 @@ void AntColony::local_search(common::Solution& ant, std::mt19937 &rng) {
   int improvements = 0;
   int consecutive_fails = 0;
 
-  while (improvements < hyperparams.ls.max_improvements
-         && consecutive_fails < hyperparams.ls.patience) {
+  while (improvements < hyperparams.ls.max_improvements()
+         && consecutive_fails < hyperparams.ls.patience()) {
     double random = std::uniform_real_distribution<double>(0.0, 1.0)(rng);
     bool ok;
-    if (random < hyperparams.ls.prob_1_move) {
+    if (random < hyperparams.ls.prob_1_move()) {
       ok = go_1_move(ant, rng);
     } else {
       ok = go_2_swap(ant, rng);

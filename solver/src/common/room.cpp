@@ -4,22 +4,35 @@
 namespace common {
 
 Room::Room(
-  std::string _code,
-  int _capacity,
-  std::string _location,
-  std::string _type
-):
-  code(std::move(_code)),
-  capacity(_capacity),
-  location(std::move(_location)),
-  type(std::move(_type))
-{
-#ifndef NDEBUG
+  std::string code,
+  int capacity,
+  std::string location,
+  std::string type
+) {
+  set_code(std::move(code));
+  set_capacity(capacity);
+  set_location(std::move(location));
+  set_type(std::move(type));
+}
+
+void Room::set_code(std::string code) {
   PANIC_IF(code.empty(), "Room code cannot be empty");
-  PANIC_IF(capacity <= 0, "Room '{}': capacity must be positive (got: {})", code, capacity);
-  PANIC_IF(location.empty(), "Room '{}': location cannot be empty", code);
-  PANIC_IF(type.empty(), "Room '{}': type cannot be empty", code);
-#endif // NDEBUG
+  code_ = std::move(code);
+}
+
+void Room::set_capacity(int capacity) {
+  PANIC_IF(capacity <= 0, "Room '{}': capacity must be positive (got: {})", code_, capacity);
+  capacity_ = capacity;
+}
+
+void Room::set_location(std::string location) {
+  PANIC_IF(location.empty(), "Room '{}': location cannot be empty", code_);
+  location_ = std::move(location);
+}
+
+void Room::set_type(std::string type) {
+  PANIC_IF(type.empty(), "Room '{}': type cannot be empty", code_);
+  type_ = std::move(type);
 }
 
 } // namespace common

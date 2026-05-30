@@ -64,7 +64,7 @@ ProblemData::ProblemData(
 std::vector<std::string> ProblemData::extract_exam_codes(const std::vector<Exam>& exams) {
   std::vector<std::string> codes(exams.size());
   for (int i = 0; i < exams.size(); ++i) {
-    codes[i] = exams[i].code;
+    codes[i] = exams[i].code();
   }
   return codes;
 }
@@ -73,11 +73,11 @@ std::unordered_map<std::string, int> ProblemData::build_student_to_id(const std:
   std::unordered_map<std::string, int> student_to_id;
   int count = 0;
   for (const Exam& exam : exams) {
-    count += exam.students.size();
+    count += exam.students().size();
   }
   student_to_id.reserve(count);
   for (const Exam& exam : exams) {
-    for (const std::string& student : exam.students) {
+    for (const std::string& student : exam.students()) {
       if (!student_to_id.contains(student)) {
         student_to_id.emplace(student, student_to_id.size());
       }
@@ -101,7 +101,7 @@ utils::CsrMatrix<int> ProblemData::extract_exam_students(
   std::vector<std::vector<int>> exam_students(exams.size());
   int count = 0;
   for (int i = 0; i < exams.size(); ++i) {
-    for (const std::string& student : exams[i].students) {
+    for (const std::string& student : exams[i].students()) {
       exam_students[i].emplace_back(student_to_id.at(student));
       ++count;
     }
@@ -112,7 +112,7 @@ utils::CsrMatrix<int> ProblemData::extract_exam_students(
 std::vector<int> ProblemData::extract_exam_credits(const std::vector<Exam>& exams) {
   std::vector<int> credits(exams.size());
   for (int i = 0; i < exams.size(); ++i) {
-    credits[i] = exams[i].credits;
+    credits[i] = exams[i].credits();
   }
   return credits;
 }
@@ -120,7 +120,7 @@ std::vector<int> ProblemData::extract_exam_credits(const std::vector<Exam>& exam
 std::vector<std::string> ProblemData::extract_room_codes(const std::vector<Room>& rooms) {
   std::vector<std::string> room_codes(rooms.size());
   for (int i = 0; i < rooms.size(); ++i) {
-    room_codes[i] = rooms[i].code;
+    room_codes[i] = rooms[i].code();
   }
   return room_codes;
 }
@@ -128,7 +128,7 @@ std::vector<std::string> ProblemData::extract_room_codes(const std::vector<Room>
 std::vector<int> ProblemData::extract_room_capacities(const std::vector<Room>& rooms) {
   std::vector<int> room_capacities(rooms.size());
   for (int i = 0; i < rooms.size(); ++i) {
-    room_capacities[i] = rooms[i].capacity;
+    room_capacities[i] = rooms[i].capacity();
   }
   return room_capacities;
 }
@@ -136,7 +136,7 @@ std::vector<int> ProblemData::extract_room_capacities(const std::vector<Room>& r
 std::vector<std::string> ProblemData::extract_room_locations(const std::vector<Room>& rooms) {
   std::vector<std::string> room_locations(rooms.size());
   for (int i = 0; i < rooms.size(); ++i) {
-    room_locations[i] = rooms[i].location;
+    room_locations[i] = rooms[i].location();
   }
   return room_locations;
 }
@@ -144,7 +144,7 @@ std::vector<std::string> ProblemData::extract_room_locations(const std::vector<R
 std::vector<std::string> ProblemData::extract_room_types(const std::vector<Room>& rooms) {
   std::vector<std::string> room_types(rooms.size());
   for (int i = 0; i < rooms.size(); ++i) {
-    room_types[i] = rooms[i].type;
+    room_types[i] = rooms[i].type();
   }
   return room_types;
 }
@@ -183,8 +183,8 @@ utils::CsrMatrix<int> ProblemData::build_feasible_slots(const std::vector<Exam>&
   utils::Matrix<int> feasible_slots(exams.size(), num_slots, -1);
   int count = 0;
   for (int i = 0; i < exams.size(); ++i) {
-    count += exams[i].feasible_slots.size();
-    for (int slot : exams[i].feasible_slots) {
+    count += exams[i].feasible_slots().size();
+    for (int slot : exams[i].feasible_slots()) {
       feasible_slots(i, slot) = slot;
     }
   }
@@ -195,8 +195,8 @@ utils::CsrMatrix<int> ProblemData::build_feasible_rooms(const std::vector<Exam>&
   utils::Matrix<int> feasible_rooms(exams.size(), num_rooms, -1);
   int count = 0;
   for (int i = 0; i < exams.size(); ++i) {
-    count += exams[i].feasible_rooms.size();
-    for (int room : exams[i].feasible_rooms) {
+    count += exams[i].feasible_rooms().size();
+    for (int room : exams[i].feasible_rooms()) {
       feasible_rooms(i, room) = room;
     }
   }

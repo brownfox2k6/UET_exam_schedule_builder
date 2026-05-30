@@ -26,13 +26,13 @@ AntColony::AntColony(
     problem_data(_exams, _slot_timestamps, _rooms),
     evaluator(problem_data, hyperparams),
     base_seed(_base_seed == -1 ? make_random_seed() : static_cast<uint64_t>(_base_seed)),
-    pheromone(problem_data.num_exams, problem_data.num_slots, hyperparams.aco.tau_max),
+    pheromone(problem_data.num_exams, problem_data.num_slots, hyperparams.aco.tau_max()),
     global_best_schedule(problem_data.num_exams, -1),
     global_best_fitness(HARD_CONSTRAINT_PENALTY)
 {
   PANIC_IF(_base_seed < -1, "base_seed must be -1 or non-negative (got: {})", _base_seed);
-  rngs.reserve(hyperparams.aco.num_ants);
-  for (int i = 0; i < hyperparams.aco.num_ants; ++i) {
+  rngs.reserve(hyperparams.aco.num_ants());
+  for (int i = 0; i < hyperparams.aco.num_ants(); ++i) {
     std::seed_seq seq {
       static_cast<uint32_t>(base_seed),
       static_cast<uint32_t>(base_seed >> 32),
@@ -41,8 +41,8 @@ AntColony::AntColony(
     };
     rngs.emplace_back(seq);
   }
-  ants.reserve(hyperparams.aco.num_ants);
-  for (int i = 0; i < hyperparams.aco.num_ants; ++i) {
+  ants.reserve(hyperparams.aco.num_ants());
+  for (int i = 0; i < hyperparams.aco.num_ants(); ++i) {
     ants.emplace_back(problem_data);
   }
 }
@@ -71,7 +71,7 @@ bool AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) {
       delta_soft[j] = evaluator.calculate_delta_penalty(ant.schedule, exam, slot);
       const double eta = 1.0 / (1.0 + delta_soft[j]);
       const double tau = pheromone(exam, slot);
-      weights[j] = std::pow(tau, hyperparams.aco.alpha) * std::pow(eta, hyperparams.aco.beta);
+      weights[j] = std::pow(tau, hyperparams.aco.alpha()) * std::pow(eta, hyperparams.aco.beta());
       total_weight += weights[j];
     }
 
@@ -101,16 +101,16 @@ void AntColony::update_pheromone(const std::vector<int>& best_schedule) {
     const int assigned_slot = best_schedule[exam];
     for (int slot = 0; slot < problem_data.num_slots; ++slot) {
       const double delta_tau = slot == assigned_slot
-          ? hyperparams.aco.rho * hyperparams.aco.tau_max
-          : hyperparams.aco.rho * hyperparams.aco.tau_min;
-      pheromone(exam, slot) = (1.0 - hyperparams.aco.rho) * pheromone(exam, slot) + delta_tau;
+          ? hyperparams.aco.rho() * hyperparams.aco.tau_max()
+          : hyperparams.aco.rho() * hyperparams.aco.tau_min();
+      pheromone(exam, slot) = (1.0 - hyperparams.aco.rho()) * pheromone(exam, slot) + delta_tau;
     }
   }
 }
 
 double AntColony::run_one_iteration() {
   #pragma omp parallel for schedule(dynamic)
-  for (int i = 0; i < hyperparams.aco.num_ants; ++i) {
+  for (int i = 0; i < hyperparams.aco.num_ants(); ++i) {
     bool ok = false;
     for (int t = 0; !ok && t < 100; ++t) {
       ok = construct_ant(ants[i], rngs[i]);
@@ -134,7 +134,7 @@ double AntColony::run_one_iteration() {
 
 void AntColony::run(std::function<void(int, double)> callback) {
   pybind11::gil_scoped_release release;
-  for (int iter = 1; iter <= hyperparams.aco.num_iters; ++iter) {
+  for (int iter = 1; iter <= hyperparams.aco.num_iters(); ++iter) {
     const double iter_best_cost = run_one_iteration();
     if (callback) {
       pybind11::gil_scoped_acquire acquire;

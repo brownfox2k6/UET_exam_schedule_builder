@@ -1,59 +1,78 @@
 #include "common/exam.hpp"
 #include "utils/assert.hpp"
 
-#include <algorithm>
 #include <unordered_set>
 
 namespace common {
 
 Exam::Exam(
-  std::string _code,
-  int _credits,
-  std::vector<std::string> _students,
-  std::vector<int> _feasible_slots,
-  std::vector<int> _feasible_rooms
-):
-  code(std::move(_code)),
-  credits(_credits),
-  students(std::move(_students)),
-  feasible_slots(std::move(_feasible_slots)),
-  feasible_rooms(std::move(_feasible_rooms))
-{
-#ifndef NDEBUG
-  PANIC_IF(code.empty(), "Exam code cannot be an empty string");
-  PANIC_IF(credits <= 0, "Exam '{}': Must have positive credits (got: {})", code, credits);
-  PANIC_IF(students.empty(), "Exam '{}': No registered students", code);
+  std::string code,
+  int credits,
+  std::vector<std::string> students,
+  std::vector<int> feasible_slots,
+  std::vector<int> feasible_rooms
+) {
+  set_code(std::move(code));
+  set_credits(credits);
+  set_students(std::move(students));
+  set_feasible_slots(std::move(feasible_slots));
+  set_feasible_rooms(std::move(feasible_rooms));
+}
 
-  std::unordered_set<std::string_view> unique_students_checker;
-  unique_students_checker.reserve(students.size());
+void Exam::set_code(std::string code) {
+  PANIC_IF(code.empty(), "Exam code cannot be an empty string");
+  code_ = std::move(code);
+}
+
+void Exam::set_credits(int credits) {
+  PANIC_IF(credits <= 0, "Exam '{}': Must have positive credits (got: {})", code_, credits);
+  credits_ = credits;
+}
+
+void Exam::set_students(std::vector<std::string> students) {
+#ifndef NDEBUG
+  PANIC_IF(students.empty(), "Exam '{}': No registered students", code_);
+  std::unordered_set<std::string_view> unique_checker;
+  unique_checker.reserve(students.size());
   for (const std::string& s : students) {
-    PANIC_IF(s.empty(), "Exam '{}': 'students' contains an empty ID", code);
+    PANIC_IF(s.empty(), "Exam '{}': 'students' contains an empty ID", code_);
     PANIC_IF(
-      !unique_students_checker.emplace(s).second,
-      "Exam '{}': 'students' contains duplicate ID: '{}'", code, s
+      !unique_checker.emplace(s).second,
+      "Exam '{}': 'students' contains duplicate ID: '{}'", code_, s
     );
   }
-  std::unordered_set<int> unique_checker;
-  unique_checker.reserve(std::max({
-    feasible_slots.size(), feasible_rooms.size()
-  }));
-  auto validate_feasible_sets = [&](
-    const std::vector<int>& values,
-    std::string_view field_name
-  ) {
-    PANIC_IF(values.empty(), "Exam '{}': {} is empty", code, field_name);
-    unique_checker.clear();
-    for (int value : values) {
-      PANIC_IF(value < 0, "Exam '{}': '{}' has a negative value ({})", code, field_name, value);
-      PANIC_IF(
-        !unique_checker.emplace(value).second,
-        "Exam '{}': '{}' has duplicate value ({})", code, field_name, value
-      );
-    }
-  };
-  validate_feasible_sets(feasible_slots, "feasible_slots");
-  validate_feasible_sets(feasible_rooms, "feasible_rooms");
 #endif // NDEBUG
+  students_ = std::move(students);
+}
+
+void Exam::set_feasible_slots(std::vector<int> feasible_slots) {
+#ifndef NDEBUG
+  PANIC_IF(feasible_slots.empty(), "Exam '{}': 'feasible_slots' is empty", code_);
+  std::unordered_set<int> unique_checker;
+  for (int s : feasible_slots) {
+    PANIC_IF(s < 0, "Exam '{}': 'feasible_slots' has a negative value ({})", code_, s);
+    PANIC_IF(
+      !unique_checker.emplace(s).second,
+      "Exam '{}': 'feasible_slots' has duplicate value ({})", code_, s
+    );
+  }
+#endif // NDEBUG
+  feasible_slots_ = std::move(feasible_slots);
+}
+
+void Exam::set_feasible_rooms(std::vector<int> feasible_rooms) {
+#ifndef NDEBUG
+  PANIC_IF(feasible_rooms.empty(), "Exam '{}': 'feasible_rooms' is empty", code_);
+  std::unordered_set<int> unique_checker;
+  for (int r : feasible_rooms) {
+    PANIC_IF(r < 0, "Exam '{}': 'feasible_rooms' has a negative value ({})", code_, r);
+    PANIC_IF(
+      !unique_checker.emplace(r).second,
+      "Exam '{}': 'feasible_rooms' has duplicate value ({})", code_, r
+    );
+  }
+#endif // NDEBUG
+  feasible_rooms_ = std::move(feasible_rooms);
 }
 
 } // namespace common

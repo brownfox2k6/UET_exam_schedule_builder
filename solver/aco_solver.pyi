@@ -6,49 +6,51 @@ import collections.abc
 import typing
 __all__: list[str] = ['AcoParams', 'AntColony', 'EvalParams', 'Exam', 'Hyperparams', 'LsParams', 'Room', 'Solution']
 class AcoParams:
-    def __init__(self, _num_iters: typing.SupportsInt | typing.SupportsIndex = 100, _num_ants: typing.SupportsInt | typing.SupportsIndex = 10, _alpha: typing.SupportsFloat | typing.SupportsIndex = 1.0, _beta: typing.SupportsFloat | typing.SupportsIndex = 2.0, _rho: typing.SupportsFloat | typing.SupportsIndex = 0.1, _tau_min: typing.SupportsFloat | typing.SupportsIndex = 0.01, _tau_max: typing.SupportsFloat | typing.SupportsIndex = 1.0) -> None:
+    def __init__(self, num_iters: typing.SupportsInt | typing.SupportsIndex = 100, num_ants: typing.SupportsInt | typing.SupportsIndex = 10, alpha: typing.SupportsFloat | typing.SupportsIndex = 1.0, beta: typing.SupportsFloat | typing.SupportsIndex = 2.0, rho: typing.SupportsFloat | typing.SupportsIndex = 0.1, tau_min: typing.SupportsFloat | typing.SupportsIndex = 0.01, tau_max: typing.SupportsFloat | typing.SupportsIndex = 1.0) -> None:
+        ...
+    def set_tau_bounds(self, tau_min: typing.SupportsFloat | typing.SupportsIndex, tau_max: typing.SupportsFloat | typing.SupportsIndex) -> None:
         ...
     @property
     def alpha(self) -> float:
         ...
     @alpha.setter
-    def alpha(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None:
+    def alpha(self, arg1: typing.SupportsFloat | typing.SupportsIndex) -> None:
         ...
     @property
     def beta(self) -> float:
         ...
     @beta.setter
-    def beta(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None:
+    def beta(self, arg1: typing.SupportsFloat | typing.SupportsIndex) -> None:
         ...
     @property
     def num_ants(self) -> int:
         ...
     @num_ants.setter
-    def num_ants(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None:
+    def num_ants(self, arg1: typing.SupportsInt | typing.SupportsIndex) -> None:
         ...
     @property
     def num_iters(self) -> int:
         ...
     @num_iters.setter
-    def num_iters(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None:
+    def num_iters(self, arg1: typing.SupportsInt | typing.SupportsIndex) -> None:
         ...
     @property
     def rho(self) -> float:
         ...
     @rho.setter
-    def rho(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None:
+    def rho(self, arg1: typing.SupportsFloat | typing.SupportsIndex) -> None:
         ...
     @property
     def tau_max(self) -> float:
         ...
     @tau_max.setter
-    def tau_max(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None:
+    def tau_max(self, arg1: typing.SupportsFloat | typing.SupportsIndex) -> None:
         ...
     @property
     def tau_min(self) -> float:
         ...
     @tau_min.setter
-    def tau_min(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None:
+    def tau_min(self, arg1: typing.SupportsFloat | typing.SupportsIndex) -> None:
         ...
 class AntColony:
     def __init__(self, hyperparams: Hyperparams, exams: collections.abc.Sequence[Exam], slot_timestamps: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], rooms: collections.abc.Sequence[Room], base_seed: typing.SupportsInt | typing.SupportsIndex = -1) -> None:
@@ -64,47 +66,41 @@ class AntColony:
     def global_best_schedule(self) -> list[int]:
         ...
 class EvalParams:
-    def __init__(self, _penalty_decay_base: typing.SupportsFloat | typing.SupportsIndex = 2.0) -> None:
+    def __init__(self, penalty_decay_base: typing.SupportsFloat | typing.SupportsIndex = 2.0) -> None:
         ...
     @property
     def penalty_decay_base(self) -> float:
         ...
     @penalty_decay_base.setter
-    def penalty_decay_base(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None:
+    def penalty_decay_base(self, arg1: typing.SupportsFloat | typing.SupportsIndex) -> None:
         ...
 class Exam:
     code: str
-    def __init__(self, _code: str, _credits: typing.SupportsInt | typing.SupportsIndex, _students: collections.abc.Sequence[str], _feasible_slots: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], _feasible_rooms: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]) -> None:
+    def __init__(self, code: str, credits: typing.SupportsInt | typing.SupportsIndex, students: collections.abc.Sequence[str], feasible_slots: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], feasible_rooms: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]) -> None:
         ...
     @property
     def credits(self) -> int:
         ...
     @credits.setter
-    def credits(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None:
+    def credits(self, arg1: typing.SupportsInt | typing.SupportsIndex) -> None:
         ...
     @property
     def feasible_rooms(self) -> list[int]:
         ...
     @feasible_rooms.setter
-    def feasible_rooms(self, arg0: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]) -> None:
+    def feasible_rooms(self, arg1: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]) -> None:
         ...
     @property
     def feasible_slots(self) -> list[int]:
         ...
     @feasible_slots.setter
-    def feasible_slots(self, arg0: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]) -> None:
-        ...
-    @property
-    def student_count(self) -> int:
-        ...
-    @student_count.setter
-    def student_count(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None:
+    def feasible_slots(self, arg1: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]) -> None:
         ...
     @property
     def students(self) -> list[str]:
         ...
     @students.setter
-    def students(self, arg0: collections.abc.Sequence[str]) -> None:
+    def students(self, arg1: collections.abc.Sequence[str]) -> None:
         ...
 class Hyperparams:
     aco: AcoParams
@@ -113,37 +109,37 @@ class Hyperparams:
     def __init__(self, _eval: EvalParams = ..., _aco: AcoParams = ..., _ls: LsParams = ...) -> None:
         ...
 class LsParams:
-    def __init__(self, _prob_1_move: typing.SupportsFloat | typing.SupportsIndex = 0.5, _max_improvements: typing.SupportsInt | typing.SupportsIndex = 10, _patience: typing.SupportsInt | typing.SupportsIndex = 100) -> None:
+    def __init__(self, prob_1_move: typing.SupportsFloat | typing.SupportsIndex = 0.5, max_improvements: typing.SupportsInt | typing.SupportsIndex = 10, patience: typing.SupportsInt | typing.SupportsIndex = 100) -> None:
         ...
     @property
     def max_improvements(self) -> int:
         ...
     @max_improvements.setter
-    def max_improvements(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None:
+    def max_improvements(self, arg1: typing.SupportsInt | typing.SupportsIndex) -> None:
         ...
     @property
     def patience(self) -> int:
         ...
     @patience.setter
-    def patience(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None:
+    def patience(self, arg1: typing.SupportsInt | typing.SupportsIndex) -> None:
         ...
     @property
     def prob_1_move(self) -> float:
         ...
     @prob_1_move.setter
-    def prob_1_move(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None:
+    def prob_1_move(self, arg1: typing.SupportsFloat | typing.SupportsIndex) -> None:
         ...
 class Room:
     code: str
     location: str
     type: str
-    def __init__(self, _code: str, _capacity: typing.SupportsInt | typing.SupportsIndex, _location: str, _type: str) -> None:
+    def __init__(self, code: str, capacity: typing.SupportsInt | typing.SupportsIndex, location: str = 'default', type: str = 'default') -> None:
         ...
     @property
     def capacity(self) -> int:
         ...
     @capacity.setter
-    def capacity(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None:
+    def capacity(self, arg1: typing.SupportsInt | typing.SupportsIndex) -> None:
         ...
 class Solution:
     @property

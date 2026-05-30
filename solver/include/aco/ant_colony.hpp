@@ -1,15 +1,15 @@
 #pragma once
 
-#include <cstdint>
-#include <functional>
-#include <random>
-#include <vector>
-
 #include "common/solution.hpp"
 #include "common/evaluator.hpp"
 #include "common/hyperparameters.hpp"
 #include "common/problem_data.hpp"
 #include "utils/matrix.hpp"
+
+#include <cstdint>
+#include <functional>
+#include <random>
+#include <vector>
 
 namespace aco {
 
