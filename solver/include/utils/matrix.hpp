@@ -1,6 +1,7 @@
 #pragma once
 
 #include "utils/assert.hpp"
+
 #include <cassert>
 #include <cstddef>
 #include <span>
@@ -23,9 +24,7 @@ public:
   /**
    * @brief Initializes a matrix of size r x c with a default value. 
    */
-  Matrix(int r, int c, T value = T())
-    : rows(r), cols(c)
-  {
+  Matrix(int r, int c, T value = T()) : rows(r), cols(c) {
     PANIC_IF(r <= 0, "Matrix rows must be positive (got: {})", rows);
     PANIC_IF(c <= 0, "Matrix columns must be positive (got: {})", cols);
     data.assign(rows * cols, value);
@@ -34,10 +33,17 @@ public:
   /**
    * @brief Constructs a matrix from a 2D std::vector (list of lists). 
    */
-  Matrix(const std::vector<std::vector<T>>& list)
-    : Matrix(list.size(), list[0].size())
-  {
+  Matrix(const std::vector<std::vector<T>>& list) {
+    PANIC_IF(list.empty(), "Matrix list must not be empty");
+    PANIC_IF(list[0].empty(), "Matrix list rows must not be empty");
+    rows = list.size();
+    cols = list[0].size();
+    data.assign(rows * cols, T());
     for (int r = 0; r < rows; ++r) {
+      PANIC_IF(
+        static_cast<int>(list[r].size()) != rows,
+        "Matrix row {} has size {}, expected {}", r, list[r].size(), rows
+      );
       for (int c = 0; c < cols; ++c) {
         data[r * cols + c] = list[r][c];
       }
@@ -52,8 +58,8 @@ public:
    * @brief Accesses the element at `(r, c)` by reference (read/write). 
    */
   T& operator()(int r, int c) {
-    PANIC_IF(r < 0 || r >= rows, "Row index out-of-bounds (got: {}, rows={})", r, rows);
-    PANIC_IF(c < 0 || c >= cols, "Column index out-of-bounds (got: {}, cols={})", c, cols);
+    PANIC_IF(r < 0 || r >= rows, "Row index {} out of bounds [0, {}]", r, rows);
+    PANIC_IF(c < 0 || c >= cols, "Column index {} out of bounds [0, {}]", c, cols);
     return data[r * cols + c];
   }
 
@@ -61,8 +67,8 @@ public:
    * @brief Accesses the element at `(r, c)` by value (read-only). 
    */
   const T& operator()(int r, int c) const {
-    PANIC_IF(r < 0 || r >= rows, "Row index out-of-bounds (got: {}, rows={})", r, rows);
-    PANIC_IF(c < 0 || c >= cols, "Column index out-of-bounds (got: {}, cols={})", c, cols);
+    PANIC_IF(r < 0 || r >= rows, "Row index {} out of bounds [0, {}]", r, rows);
+    PANIC_IF(c < 0 || c >= cols, "Column index {} out of bounds [0, {}]", c, cols);
     return data[r * cols + c];
   }
 
@@ -79,7 +85,7 @@ struct CsrRowConstView {
   std::span<const int> indices;
   std::span<const T> values;
 
-  int size() const { return values.size(); }
+  int size() const { return static_cast<int>(values.size()); }
 };
 
 template<typename T>
@@ -87,7 +93,7 @@ struct CsrRowView {
   std::span<const int> indices;
   std::span<T> values;
 
-  int size() const { return values.size(); }
+  int size() const { return static_cast<int>(values.size()); }
 };
 
 /**
@@ -104,13 +110,13 @@ private:
 
 public:
   /**
-   * @brief Converts a dense 2D Matrix into a CSR format.
+   * @brief Constructs a CSR matrix from a dense matrix.
    */
   CsrMatrix(
     const Matrix<T>& matrix,
     int expected_size = 0,
-    T trash_value = 0,
-    bool track_indices = true
+    bool track_indices = true,
+    T trash_value = 0
   ) {
     has_indices = track_indices;
     if (has_indices) {
@@ -136,6 +142,35 @@ public:
     values.shrink_to_fit();
   }
 
+  /**
+   * @brief Constructs a CSR matrix from a 2D std::vector (list of lists).
+   */
+  CsrMatrix(
+    const std::vector<std::vector<T>>& v,
+    int expected_size = 0,
+    bool track_indices = true
+  ) {
+    has_indices = track_indices;
+    if (has_indices) {
+      indices.reserve(expected_size);
+    }
+    values.reserve(expected_size);
+    offsets.assign(v.size() + 1, 0);
+    for (int i = 0; i < v.size(); ++i) {
+      for (int j = 0; j < v[i].size(); ++j) {
+        if (has_indices) {
+          indices.emplace_back(j);
+        }
+        values.emplace_back(v[i][j]);
+      }
+      offsets[i + 1] = values.size();
+    }
+    if (has_indices) {
+      indices.shrink_to_fit();
+    }
+    values.shrink_to_fit();
+  }
+
   int num_rows() const { return offsets.size() - 1; }
   const std::vector<int>& get_offsets() const { return offsets; }
 
@@ -146,8 +181,7 @@ public:
   const CsrRowConstView<T> operator[](int row_index) const {
     PANIC_IF(
       row_index < 0 || row_index >= num_rows(),
-      "CsrMatrix::operator[]: Row index {} out of bounds [0, {}]",
-      row_index, num_rows() - 1
+      "Row index {} out of bounds [0, {}]", row_index, num_rows() - 1
     );
     const int start = offsets[row_index];
     const int end   = offsets[row_index + 1];
@@ -165,8 +199,7 @@ public:
   CsrRowView<T> operator[](int row_index) {
     PANIC_IF(
       row_index < 0 || row_index >= num_rows(),
-      "CsrMatrix::operator[]: Row index {} out of bounds [0, {}]",
-      row_index, num_rows() - 1
+      "Row index {} out of bounds [0, {}]", row_index, num_rows() - 1
     );
     const int start = offsets[row_index];
     const int end   = offsets[row_index + 1];

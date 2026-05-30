@@ -4,7 +4,7 @@ Solver for University Examination Timetabling using Ant Colony Optimization and 
 from __future__ import annotations
 import collections.abc
 import typing
-__all__: list[str] = ['AcoParams', 'AntColony', 'EvalParams', 'Exam', 'Hyperparams', 'LsParams', 'Solution']
+__all__: list[str] = ['AcoParams', 'AntColony', 'EvalParams', 'Exam', 'Hyperparams', 'LsParams', 'Room', 'Solution']
 class AcoParams:
     def __init__(self, _num_iters: typing.SupportsInt | typing.SupportsIndex = 100, _num_ants: typing.SupportsInt | typing.SupportsIndex = 10, _alpha: typing.SupportsFloat | typing.SupportsIndex = 1.0, _beta: typing.SupportsFloat | typing.SupportsIndex = 2.0, _rho: typing.SupportsFloat | typing.SupportsIndex = 0.1, _tau_min: typing.SupportsFloat | typing.SupportsIndex = 0.01, _tau_max: typing.SupportsFloat | typing.SupportsIndex = 1.0) -> None:
         ...
@@ -51,7 +51,7 @@ class AcoParams:
     def tau_min(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None:
         ...
 class AntColony:
-    def __init__(self, hyperparams: Hyperparams, exams: collections.abc.Sequence[Exam], timestamps: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], num_rooms: typing.SupportsInt | typing.SupportsIndex = 100, base_seed: typing.SupportsInt | typing.SupportsIndex = -1) -> None:
+    def __init__(self, hyperparams: Hyperparams, exams: collections.abc.Sequence[Exam], slot_timestamps: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], rooms: collections.abc.Sequence[Room], base_seed: typing.SupportsInt | typing.SupportsIndex = -1) -> None:
         ...
     def run(self, callback: collections.abc.Callable[[typing.SupportsInt | typing.SupportsIndex, typing.SupportsFloat | typing.SupportsIndex], None] = None) -> None:
         ...
@@ -74,19 +74,13 @@ class EvalParams:
         ...
 class Exam:
     code: str
-    def __init__(self, _code: str, _credits: typing.SupportsInt | typing.SupportsIndex, _students: collections.abc.Sequence[str], _feasible_slots: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], _feasible_rooms: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], _feasible_proctors: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]) -> None:
+    def __init__(self, _code: str, _credits: typing.SupportsInt | typing.SupportsIndex, _students: collections.abc.Sequence[str], _feasible_slots: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex], _feasible_rooms: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]) -> None:
         ...
     @property
     def credits(self) -> int:
         ...
     @credits.setter
     def credits(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None:
-        ...
-    @property
-    def feasible_proctors(self) -> list[int]:
-        ...
-    @feasible_proctors.setter
-    def feasible_proctors(self, arg0: collections.abc.Sequence[typing.SupportsInt | typing.SupportsIndex]) -> None:
         ...
     @property
     def feasible_rooms(self) -> list[int]:
@@ -138,6 +132,18 @@ class LsParams:
         ...
     @prob_1_move.setter
     def prob_1_move(self, arg0: typing.SupportsFloat | typing.SupportsIndex) -> None:
+        ...
+class Room:
+    code: str
+    location: str
+    type: str
+    def __init__(self, _code: str, _capacity: typing.SupportsInt | typing.SupportsIndex, _location: str, _type: str) -> None:
+        ...
+    @property
+    def capacity(self) -> int:
+        ...
+    @capacity.setter
+    def capacity(self, arg0: typing.SupportsInt | typing.SupportsIndex) -> None:
         ...
 class Solution:
     @property

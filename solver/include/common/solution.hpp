@@ -1,10 +1,6 @@
 #pragma once
 
-#include <cassert>
-#include <cstddef>
-#include <vector>
-
-#include "common/exams.hpp"
+#include "common/problem_data.hpp"
 #include "utils/feasible_set.hpp"
 #include "utils/matrix.hpp"
 
@@ -29,13 +25,16 @@ struct Solution {
   // Tracks available slot IDs for each exam.
   utils::FeasibleSet feasible_slots;
 
+  // Tracks available room IDs for each exam;
+  utils::FeasibleSet feasible_rooms;
+
   // The total soft constraint penalty score of the current schedule (lower is better).
   double fitness;
 
   /**
    * @brief Initializes an ant with empty schedule and default tracking matrices. 
    */
-  Solution(const Exams& exams);
+  Solution(const ProblemData& exams);
 
   /**
    * @brief Overloads the less-than operator for Ant comparison.

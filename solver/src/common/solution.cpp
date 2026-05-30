@@ -1,12 +1,14 @@
 #include "common/solution.hpp"
 #include "utils/assert.hpp"
+#include "utils/feasible_set.hpp"
 #include "utils/matrix.hpp"
 
 namespace common {
 
-Solution::Solution(const Exams& exams): 
+Solution::Solution(const ProblemData& exams): 
   schedule(exams.num_exams, -1),
   feasible_slots(exams.feasible_slots, exams.num_slots),
+  feasible_rooms(exams.feasible_rooms, exams.num_rooms),
   fitness(0.0),
   conflicting_exams_count(exams.num_exams, exams.num_slots, 0)
 {}

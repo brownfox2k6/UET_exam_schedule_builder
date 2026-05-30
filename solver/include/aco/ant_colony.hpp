@@ -8,7 +8,7 @@
 #include "common/solution.hpp"
 #include "common/evaluator.hpp"
 #include "common/hyperparameters.hpp"
-#include "common/exams.hpp"
+#include "common/problem_data.hpp"
 #include "utils/matrix.hpp"
 
 namespace aco {
@@ -19,7 +19,7 @@ namespace aco {
 class AntColony {
 private:
   const common::Hyperparams hyperparams;
-  const common::Exams exams;
+  const common::ProblemData problem_data;
   const common::Evaluator evaluator;
 
   const uint64_t base_seed;
@@ -66,8 +66,8 @@ public:
   AntColony(
     common::Hyperparams _hyperparams,
     std::vector<common::Exam> _exams,
-    const std::vector<int64_t>& _slot_timestamps,
-    int num_rooms,
+    std::vector<int64_t> _slot_timestamps,
+    std::vector<common::Room> _rooms,
     int64_t _base_seed = -1
   );
 

@@ -10,6 +10,7 @@
 
 #include "aco/ant_colony.hpp"
 #include "common/hyperparameters.hpp"
+#include "common/room.hpp"
 #include "common/solution.hpp"
 
 namespace py = pybind11;
@@ -19,20 +20,29 @@ PYBIND11_MODULE(aco_solver, m) {
             "using Ant Colony Optimization and Local Search";
 
   py::class_<common::Exam>(m, "Exam")
-    .def(py::init<std::string, int, std::vector<std::string>, std::vector<int>, std::vector<int>, std::vector<int>>(),
+    .def(py::init<std::string, int, std::vector<std::string>, std::vector<int>, std::vector<int>>(),
          py::arg("_code"),
          py::arg("_credits"),
          py::arg("_students"),
          py::arg("_feasible_slots"),
-         py::arg("_feasible_rooms"),
-         py::arg("_feasible_proctors"))
-    .def_readwrite("code",              &common::Exam::code)
-    .def_readwrite("credits",           &common::Exam::credits)
-    .def_readwrite("student_count",     &common::Exam::student_count)
-    .def_readwrite("students",          &common::Exam::students)
-    .def_readwrite("feasible_slots",    &common::Exam::feasible_slots)
-    .def_readwrite("feasible_rooms",    &common::Exam::feasible_rooms)
-    .def_readwrite("feasible_proctors", &common::Exam::feasible_proctors);
+         py::arg("_feasible_rooms"))
+    .def_readwrite("code",           &common::Exam::code)
+    .def_readwrite("credits",        &common::Exam::credits)
+    .def_readwrite("student_count",  &common::Exam::student_count)
+    .def_readwrite("students",       &common::Exam::students)
+    .def_readwrite("feasible_slots", &common::Exam::feasible_slots)
+    .def_readwrite("feasible_rooms", &common::Exam::feasible_rooms);
+  
+  py::class_<common::Room>(m, "Room")
+    .def(py::init<std::string, int, std::string, std::string>(),
+         py::arg("_code"),
+         py::arg("_capacity"),
+         py::arg("_location"),
+         py::arg("_type"))
+    .def_readwrite("code",     &common::Room::code)
+    .def_readwrite("capacity", &common::Room::capacity)
+    .def_readwrite("location", &common::Room::location)
+    .def_readwrite("type",     &common::Room::type);
 
   py::class_<common::Hyperparams::Evaluation>(m, "EvalParams")
     .def(py::init<double>(), py::arg("_penalty_decay_base") = 2.0)
@@ -80,21 +90,21 @@ PYBIND11_MODULE(aco_solver, m) {
   py::class_<aco::AntColony>(m, "AntColony")
     .def(py::init([](common::Hyperparams hyperparams, 
                      std::vector<common::Exam> exams, 
-                     const std::vector<int64_t>& timestamps,
-                     int num_rooms,
+                     std::vector<int64_t> slot_timestamps,
+                     std::vector<common::Room> rooms,
                      int64_t base_seed) {
         return std::make_unique<aco::AntColony>(
           std::move(hyperparams),
           std::move(exams),
-          timestamps,
-          num_rooms,
+          std::move(slot_timestamps),
+          std::move(rooms),
           base_seed
         );
       }),
       py::arg("hyperparams"),
       py::arg("exams"),
-      py::arg("timestamps"),
-      py::arg("num_rooms") = 100,
+      py::arg("slot_timestamps"),
+      py::arg("rooms"),
       py::arg("base_seed") = -1
     )
     .def("run_one_iteration", &aco::AntColony::run_one_iteration, py::call_guard<py::gil_scoped_release>())

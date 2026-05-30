@@ -15,8 +15,11 @@ struct Hyperparams {
     // Controls how fast the penalty drops: 2.0 halves the penalty each day.
     double penalty_decay_base;
 
-    Evaluation(double _penalty_decay_base = 2.0)
-      : penalty_decay_base(_penalty_decay_base) {}
+    Evaluation(
+      double _penalty_decay_base = 2.0
+    ):
+      penalty_decay_base(_penalty_decay_base)
+    {}
   }; // struct Evaluation
 
   /**
@@ -39,13 +42,14 @@ struct Hyperparams {
       double _rho = 0.1,
       double _tau_min = 0.01,
       double _tau_max = 1.0
-    ) : num_iters(_num_iters),
-        num_ants(_num_ants),
-        alpha(_alpha),
-        beta(_beta),
-        rho(_rho),
-        tau_min(_tau_min),
-        tau_max(_tau_max)
+    ):
+      num_iters(_num_iters),
+      num_ants(_num_ants),
+      alpha(_alpha),
+      beta(_beta),
+      rho(_rho),
+      tau_min(_tau_min),
+      tau_max(_tau_max)
     {}
   }; // struct ACO
 
@@ -61,9 +65,10 @@ struct Hyperparams {
       double _prob_1_move = 0.5,
       int _max_improvements = 10,
       int _patience = 100
-    ) : prob_1_move(_prob_1_move),
-        max_improvements(_max_improvements),
-        patience(_patience)
+    ):
+      prob_1_move(_prob_1_move),
+      max_improvements(_max_improvements),
+      patience(_patience)
     {}
   }; // struct LS
 
@@ -71,8 +76,15 @@ struct Hyperparams {
   ACO aco;
   LS ls;
 
-  Hyperparams(Evaluation _eval, ACO _aco = ACO(), LS _ls = LS())
-    : eval(_eval), aco(_aco), ls(_ls) {}
+  Hyperparams(
+    Evaluation _eval = Evaluation(),
+    ACO _aco = ACO(),
+    LS _ls = LS()
+  ):
+    eval(_eval),
+    aco(_aco),
+    ls(_ls)
+  {}
 
 }; // struct Hyperparams
 

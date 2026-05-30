@@ -1,11 +1,10 @@
 #pragma once
 
-#include <_strings.h>
-#include <random>
-#include <utility>
-
 #include "matrix.hpp"
 #include "utils/assert.hpp"
+
+#include <random>
+#include <utility>
 
 namespace utils {
 
