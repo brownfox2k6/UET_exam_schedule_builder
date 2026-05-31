@@ -41,8 +41,8 @@ public:
     data.assign(rows * cols, T());
     for (int r = 0; r < rows; ++r) {
       PANIC_IF(
-        static_cast<int>(list[r].size()) != rows,
-        "Matrix row {} has size {}, expected {}", r, list[r].size(), rows
+        static_cast<int>(list[r].size()) != cols,
+        "Matrix row {} has size {}, expected {}", r, list[r].size(), cols
       );
       for (int c = 0; c < cols; ++c) {
         data[r * cols + c] = list[r][c];

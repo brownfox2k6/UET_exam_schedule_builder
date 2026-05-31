@@ -162,7 +162,9 @@ public:
 
   std::span<const int> operator[](int item) const {
     check_bounds("FeasibleSet::operator[]", item, 0);
-    return {options[item].values.begin(), static_cast<size_t>(get_feasible_count(item))};
+    const auto row = options[item].values;
+    const int count = get_feasible_count(item);
+    return row.subspan(0, count);
   }
 };
 

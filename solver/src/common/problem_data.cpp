@@ -52,7 +52,6 @@ ProblemData::ProblemData(
   feasible_rooms(build_feasible_rooms(_exams, num_rooms))
 {
 #ifndef NDEBUG
-  PANIC_IF(num_exams == 0, "'_exams' is empty");
   PANIC_IF(num_slots == 0, "'_slot_timestamps' is empty");
   PANIC_IF(num_rooms == 0, "'_rooms' is empty");
   std::unordered_set<std::string_view> unique_codes_checker;
@@ -66,6 +65,7 @@ ProblemData::ProblemData(
 }
 
 int ProblemData::extract_num_sections(const std::vector<Exam>& exams) {
+  PANIC_IF(exams.empty(), "'_exams' is empty");
   int num_sections = 0;
   for (const Exam& exam : exams) {
     num_sections += exam.section_count();
@@ -237,39 +237,21 @@ utils::Matrix<int> ProblemData::build_conflicts_matrix(
   const std::vector<Exam>& exams,
   const std::unordered_map<std::string, int>& student_to_id
 ) {
-  std::vector<std::vector<int>> exam_to_students;
-  exam_to_students.reserve(exams.size());
-  for (const Exam& exam : exams) {
-    std::vector<int> students;
-    students.reserve(exam.student_count());
-    for (const ExamSection& section : exam.sections()) {
+  std::vector<std::vector<int>> student_to_exams(student_to_id.size());
+  for (int i = 0; i < exams.size(); ++i) {
+    for (const ExamSection& section : exams[i].sections()) {
       for (const std::string& student : section.students()) {
-        int id = student_to_id.at(student);
-        students.emplace_back(student_to_id.at(student));
+        student_to_exams[student_to_id.at(student)].emplace_back(i);
       }
     }
-    std::sort(students.begin(), students.end());
-    exam_to_students.emplace_back(std::move(students));
   }
   utils::Matrix<int> conflicts_matrix(exams.size(), exams.size(), 0);
-  for (int i = 0; i < exams.size(); ++i) {
-    const std::vector<int>& students_i = exam_to_students[i];
-    for (int j = i + 1; j < exams.size(); ++j) {
-      const std::vector<int>& students_j = exam_to_students[j];
-      int p = 0;
-      int q = 0;
-      int common_count = 0;
-      while (p < students_i.size() && q < students_j.size()) {
-        if (students_i[p] == students_j[q]) {
-          ++common_count; ++p; ++q;
-        } else if (students_i[p] < students_j[q]) {
-          ++p;
-        } else {
-          ++q;
-        }
+  for (const std::vector<int>& exams_of_student : student_to_exams) {
+    for (auto exam_i = exams_of_student.begin(); exam_i != exams_of_student.end(); ++exam_i) {
+      for (auto exam_j = exam_i + 1; exam_j != exams_of_student.end(); ++exam_j) {
+        ++conflicts_matrix(*exam_i, *exam_j);
+        ++conflicts_matrix(*exam_j, *exam_i);
       }
-      conflicts_matrix(i, j) = common_count;
-      conflicts_matrix(j, i) = common_count;
     }
   }
   return conflicts_matrix;

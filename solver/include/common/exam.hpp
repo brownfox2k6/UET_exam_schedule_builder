@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common/exam.hpp"
+#include <string>
 #include <vector>
 
 namespace common {
