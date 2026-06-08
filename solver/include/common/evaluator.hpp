@@ -4,9 +4,6 @@
 #include "problem_data.hpp"
 #include "utils/matrix.hpp"
 
-constexpr double SECONDS_PER_DAY = 86400.0;
-constexpr double HARD_CONSTRAINT_PENALTY = 1e9;
-
 namespace common {
 
 struct Evaluator {

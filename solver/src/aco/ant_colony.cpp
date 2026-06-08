@@ -5,8 +5,10 @@
 #include <pybind11/pybind11.h>
 
 #include <algorithm>
+#include <cmath>
 #include <cstddef>
 #include <cstdint>
+#include <limits>
 #include <utility>
 
 #include "common/room.hpp"
@@ -23,7 +25,7 @@ AntColony::AntColony(common::Hyperparams _hyperparams, const std::vector<common:
       base_seed(_base_seed),
       pheromone(problem_data.num_exams, problem_data.num_slots, hyperparams.aco.tau_max()),
       global_best_schedule(static_cast<size_t>(problem_data.num_exams), -1),
-      global_best_fitness(HARD_CONSTRAINT_PENALTY) {
+      global_best_fitness(std::numeric_limits<double>::infinity()) {
   const auto num_ants = static_cast<size_t>(hyperparams.aco.num_ants());
   rngs.reserve(num_ants);
   ants.reserve(num_ants);
@@ -55,7 +57,7 @@ auto AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) -> bool 
     // Check if the solution is infeasible --> ant die now
     const auto count_feasible = static_cast<size_t>(ant.feasible_slots.get_feasible_count(exam));
     if (count_feasible == 0) {
-      ant.fitness = HARD_CONSTRAINT_PENALTY;
+      ant.fitness = std::numeric_limits<double>::infinity();
       return false;
     }
 
@@ -117,8 +119,8 @@ auto AntColony::run_one_iteration() -> double {
 
   const common::Solution& iter_best =
       *std::ranges::min_element(ants, {}, &common::Solution::fitness);
-  if (iter_best.fitness >= HARD_CONSTRAINT_PENALTY) {
-    return iter_best.fitness;
+  if (std::isinf(iter_best.fitness)) {
+    return std::numeric_limits<double>::infinity();
   }
   if (iter_best.fitness < global_best_fitness) {
     global_best_fitness = iter_best.fitness;

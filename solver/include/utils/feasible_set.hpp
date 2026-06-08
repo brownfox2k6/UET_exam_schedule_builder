@@ -171,7 +171,8 @@ struct FeasibleSet {
   template <typename T>
     requires std::is_integral_v<T>
   auto operator[](T item) const -> std::span<const int> {
-    check_bounds("FeasibleSet::operator[]", item, 0);
+    PANIC_IF(std::cmp_less(item, 0) || std::cmp_greater_equal(index, get_feasible_count(item)),
+             "Item {}: Index {} out of feasible range", item, index);
     const auto row = options[item].values;
     const int count = get_feasible_count(item);
     return row.subspan(0, count);

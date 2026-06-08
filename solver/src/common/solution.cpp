@@ -2,6 +2,8 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <limits>
+#include <tuple>
 #include <utility>
 
 #include "common/problem_data.hpp"
@@ -28,15 +30,18 @@ void Solution::reset() {
 
 auto Solution::get_next_exam(const ProblemData& problem_data) const -> int {
   int best_exam = -1;
-  int max_degree = -1;
-  int max_conflict = -1;
+  int max_degree = std::numeric_limits<int>::max();
+  int max_conflict = std::numeric_limits<int>::min();
   for (size_t exam = 0; exam < assigned_slots.size(); ++exam) {
     if (assigned_slots[exam] != -1) {
       continue;
     }
-    int degree = feasible_slots.get_forbidden_count(exam);
+    int degree = feasible_slots.get_feasible_count(exam);
     int conflict = problem_data.weighted_conflict_degrees[exam];
-    if (std::tie(degree, conflict) > std::tie(max_degree, max_conflict)) {
+    // Ranked by:
+    //   1. Lower degree (feasible slots count)
+    //   2. Higher conflict (weighted conflict degrees)
+    if (std::make_tuple(degree, -conflict) < std::make_tuple(max_degree, -max_conflict)) {
       max_degree = degree;
       max_conflict = conflict;
       best_exam = static_cast<int>(exam);

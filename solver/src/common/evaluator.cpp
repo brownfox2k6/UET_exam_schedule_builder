@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <limits>
 #include <utility>
 
 #include "common/hyperparameters.hpp"
@@ -9,6 +10,8 @@
 #include "utils/matrix.hpp"
 
 namespace common {
+
+constexpr double SECONDS_PER_DAY = 86400.0;
 
 Evaluator::Evaluator(const ProblemData& _problem_data, const Hyperparams& _hyperparams)
     : problem_data(_problem_data),
@@ -20,7 +23,7 @@ auto Evaluator::build_proximity_penalties(const ProblemData& problem_data,
     -> utils::Matrix<double> {
   const auto& slot_timestamps = problem_data.slot_timestamps;
   const auto num_slots = static_cast<size_t>(problem_data.num_slots);
-  utils::Matrix<double> penalties(num_slots, num_slots, HARD_CONSTRAINT_PENALTY);
+  utils::Matrix<double> penalties(num_slots, num_slots, std::numeric_limits<double>::infinity());
   for (size_t i = 0; i < num_slots; ++i) {
     const int64_t slot_i = slot_timestamps[i];
     for (size_t j = i + 1; j < num_slots; ++j) {

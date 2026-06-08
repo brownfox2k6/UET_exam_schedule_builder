@@ -43,9 +43,8 @@ struct Solution {
   /**
    * Heuristic: Exam scheduling order
    * Find the next exam to schedule based on the Saturation Degree heuristic.
-   * Prioritize the exam with the fewest feasible slots (in other words, the most forbidden slots).
-   * If there is a tie, select the exam with the highest total conflict degree (against all other
-   * exams).
+   * Prioritize the exam with the fewest feasible slots. If there is a tie, select the exam with the
+   * highest total conflict degree (against all other exams).
    */
   [[nodiscard]] auto get_next_exam(const ProblemData& problem_data) const -> int;
 
