@@ -44,6 +44,24 @@ target_link_libraries(aco_solver PRIVATE Python3::Python)
 
 target_include_directories(aco_solver PRIVATE include)
 
+if(MSVC)
+  target_compile_options(aco_solver PRIVATE /W4 /w15038)
+else()
+  target_compile_options(aco_solver PRIVATE
+    -Wall
+    -Wextra
+    -Wpedantic
+    -Wconversion
+    -Wsign-conversion
+    -Wshadow
+    -Wnon-virtual-dtor
+    -Wold-style-cast
+    -Wunused
+  )
+endif()
+
+set_target_properties(aco_solver PROPERTIES COMPILE_WARNINGS_AS_ERRORS ON)
+
 if(OpenMP_CXX_FOUND)
   target_link_libraries(aco_solver PRIVATE OpenMP::OpenMP_CXX)
 endif()

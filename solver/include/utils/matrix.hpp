@@ -1,216 +1,215 @@
 #pragma once
 
-#include "utils/assert.hpp"
-
 #include <cassert>
 #include <cstddef>
 #include <span>
+#include <type_traits>
+#include <utility>
 #include <vector>
+
+#include "utils/assert.hpp"
 
 namespace utils {
 
 /**
-* @brief A generic 2D matrix structure.
-* Implements a flat 1D vector back-end to ensure memory continuity. 
-*/
-template<typename T>
+ * @brief A generic 2D matrix structure.
+ * Implements a flat 1D vector back-end to ensure memory continuity.
+ */
+template <typename T>
 struct Matrix {
-private:
-  std::vector<T> data;
-  int rows;
-  int cols;
+ private:
+  std::vector<T> data_;
+  int num_rows_;
+  int num_cols_;
 
-public:
+ public:
   /**
-   * @brief Initializes a matrix of size r x c with a default value. 
+   * @brief Initializes a matrix of size r x c with a default value.
    */
-  Matrix(int r, int c, T value = T()) : rows(r), cols(c) {
-    PANIC_IF(r <= 0, "Matrix rows must be positive (got: {})", rows);
-    PANIC_IF(c <= 0, "Matrix columns must be positive (got: {})", cols);
-    data.assign(rows * cols, value);
+  template <typename R, typename C>
+    requires std::is_integral_v<R> && std::is_integral_v<C>
+  Matrix(R rows, C cols, T value = T()) {
+    PANIC_IF(std::cmp_less_equal(rows, 0), "Matrix rows must be positive (got: {})", rows);
+    PANIC_IF(std::cmp_less_equal(cols, 0), "Matrix columns must be positive (got: {})", cols);
+    num_rows_ = static_cast<int>(rows);
+    num_cols_ = static_cast<int>(cols);
+    data_.assign(static_cast<size_t>(rows) * static_cast<size_t>(cols), value);
   }
 
   /**
-   * @brief Constructs a matrix from a 2D std::vector (list of lists). 
+   * @brief Constructs a matrix from a 2D std::vector (list of lists).
    */
   Matrix(const std::vector<std::vector<T>>& list) {
     PANIC_IF(list.empty(), "Matrix list must not be empty");
     PANIC_IF(list[0].empty(), "Matrix list rows must not be empty");
-    rows = list.size();
-    cols = list[0].size();
-    data.assign(rows * cols, T());
-    for (int r = 0; r < rows; ++r) {
-      PANIC_IF(
-        static_cast<int>(list[r].size()) != cols,
-        "Matrix row {} has size {}, expected {}", r, list[r].size(), cols
-      );
-      for (int c = 0; c < cols; ++c) {
-        data[r * cols + c] = list[r][c];
+    num_rows_ = list.size();
+    num_cols_ = list[0].size();
+    data_.assign(num_rows_ * num_cols_, T());
+    int element_index = 0;
+    for (int row_index = 0; row_index < num_rows_; ++row_index) {
+      const std::vector<T>& row = list[row_index];
+      PANIC_IF(row.size() != num_cols_, "Matrix row {} has size {}, expected {}", row_index,
+               row.size(), num_cols_);
+      for (const T& element : row) {
+        data_[element_index++] = element;
       }
     }
   }
 
-  int num_rows() const { return rows; }
-  int num_cols() const { return cols; }
-  int num_elements() const { return data.size(); }
+  [[nodiscard]] auto data() const -> const std::vector<T>& { return data_; }
+  [[nodiscard]] auto num_rows() const -> int { return num_rows_; }
+  [[nodiscard]] auto num_cols() const -> int { return num_cols_; }
+  [[nodiscard]] auto num_elements() const -> int { return static_cast<int>(data_.size()); }
 
   /**
-   * @brief Accesses the element at `(r, c)` by reference (read/write). 
+   * @brief Accesses the element at `(row, col)` by value (read-only).
    */
-  T& operator()(int r, int c) {
-    PANIC_IF(r < 0 || r >= rows, "Row index {} out of bounds [0, {}]", r, rows);
-    PANIC_IF(c < 0 || c >= cols, "Column index {} out of bounds [0, {}]", c, cols);
-    return data[r * cols + c];
+  template <typename R, typename C>
+    requires std::is_integral_v<R> && std::is_integral_v<C>
+  auto operator()(R row, C col) const -> const T& {
+    PANIC_IF(std::cmp_less(row, 0) || std::cmp_greater_equal(row, num_rows_),
+             "Row index {} out of bounds [0, {}]", row, num_rows_);
+    PANIC_IF(std::cmp_less(col, 0) || std::cmp_greater_equal(col, num_cols_),
+             "Column index {} out of bounds [0, {}]", col, num_cols_);
+    return data_[(static_cast<size_t>(row) * static_cast<size_t>(num_cols_)) +
+                 static_cast<size_t>(col)];
   }
 
   /**
-   * @brief Accesses the element at `(r, c)` by value (read-only). 
+   * @brief Accesses the element at `(row, col)` by reference (read/write).
    */
-  const T& operator()(int r, int c) const {
-    PANIC_IF(r < 0 || r >= rows, "Row index {} out of bounds [0, {}]", r, rows);
-    PANIC_IF(c < 0 || c >= cols, "Column index {} out of bounds [0, {}]", c, cols);
-    return data[r * cols + c];
+  template <typename R, typename C>
+    requires std::is_integral_v<R> && std::is_integral_v<C>
+  auto operator()(R row, C col) -> T& {
+    return const_cast<T&>(std::as_const(*this)(row, col));
   }
 
   /**
-   * @brief Fills the entire matrix with the specified value. 
+   * @brief Fills the entire matrix with the specified value.
    */
-  void fill(T value) {
-    std::fill(data.begin(), data.end(), value);
-  }
+  void fill(T value) { std::ranges::fill(data_, value); }
 };
 
-template<typename T>
-struct CsrRowConstView {
-  std::span<const int> indices;
-  std::span<const T> values;
-
-  int size() const { return static_cast<int>(values.size()); }
-};
-
-template<typename T>
+template <typename T>
 struct CsrRowView {
   std::span<const int> indices;
   std::span<T> values;
 
-  int size() const { return static_cast<int>(values.size()); }
+  [[nodiscard]] auto size() const -> int { return static_cast<int>(values.size()); }
 };
 
 /**
  * @brief A generic Compressed Sparse Row matrix structure.
- * Implements flat 1D vectors for data and offsets to ensure memory continuity and fast, cache-friendly row iteration.
+ * Implements flat 1D vectors for data and offsets to ensure memory continuity and fast,
+ * cache-friendly row iteration.
  */
-template<typename T>
+template <typename T>
 struct CsrMatrix {
-private:
-  std::vector<int> indices;
-  std::vector<T> values;
-  std::vector<int> offsets;
-  bool has_indices;
+ private:
+  std::vector<int> indices_;
+  std::vector<T> values_;
+  std::vector<int> offsets_;
+  bool has_indices_;
 
-public:
+ public:
   /**
    * @brief Constructs a CSR matrix from a dense matrix.
    */
-  CsrMatrix(
-    const Matrix<T>& matrix,
-    int expected_size = 0,
-    bool track_indices = true,
-    T trash_value = 0
-  ) {
-    has_indices = track_indices;
-    if (has_indices) {
-      indices.reserve(expected_size);
+  template <typename S>
+    requires std::is_integral_v<S>
+  CsrMatrix(const Matrix<T>& matrix, S expected_size = 0, bool track_indices = true,
+            T trash_value = T()) {
+    has_indices_ = track_indices;
+    if (has_indices_) {
+      indices_.reserve(static_cast<size_t>(expected_size));
     }
-    values.reserve(expected_size);
-    offsets.assign(matrix.num_rows() + 1, 0);
-    for (int i = 0; i < matrix.num_rows(); ++i) {
+    values_.reserve(static_cast<size_t>(expected_size));
+    offsets_.assign(static_cast<size_t>(matrix.num_rows()) + 1, 0);
+    size_t index = 0;
+    const std::vector<T>& matrix_data = matrix.data();
+    for (size_t i = 0; std::cmp_less(i, matrix.num_rows()); ++i) {
       for (int j = 0; j < matrix.num_cols(); ++j) {
-        T value = matrix(i, j);
-        if (value > trash_value) {
-          if (has_indices) {
-            indices.emplace_back(j);
+        T value = matrix_data[index++];
+        if (value != trash_value) {
+          if (has_indices_) {
+            indices_.emplace_back(j);
           }
-          values.emplace_back(value);
+          values_.emplace_back(value);
         }
       }
-      offsets[i + 1] = values.size();
+      offsets_[i + 1] = static_cast<int>(values_.size());
     }
-    if (has_indices) {
-      indices.shrink_to_fit();
+    if (has_indices_) {
+      indices_.shrink_to_fit();
     }
-    values.shrink_to_fit();
+    values_.shrink_to_fit();
   }
+
+  CsrMatrix(const Matrix<T>& matrix) : CsrMatrix<T>(matrix, 0, true, T()) {}
 
   /**
    * @brief Constructs a CSR matrix from a 2D std::vector (list of lists).
    */
-  CsrMatrix(
-    const std::vector<std::vector<T>>& v,
-    int expected_size = 0,
-    bool track_indices = true
-  ) {
-    has_indices = track_indices;
-    if (has_indices) {
-      indices.reserve(expected_size);
+  template <typename S>
+    requires std::is_integral_v<S>
+  CsrMatrix(const std::vector<std::vector<T>>& list, S expected_size = 0,
+            bool track_indices = true) {
+    has_indices_ = track_indices;
+    if (has_indices_) {
+      indices_.reserve(static_cast<size_t>(expected_size));
     }
-    values.reserve(expected_size);
-    offsets.assign(v.size() + 1, 0);
-    for (int i = 0; i < v.size(); ++i) {
-      for (int j = 0; j < v[i].size(); ++j) {
-        if (has_indices) {
-          indices.emplace_back(j);
+    values_.reserve(static_cast<size_t>(expected_size));
+    offsets_.assign(list.size() + 1, 0);
+    for (size_t i = 0; i < list.size(); ++i) {
+      const std::vector<T>& row = list[i];
+      for (size_t j = 0; j < row.size(); ++j) {
+        if (has_indices_) {
+          indices_.emplace_back(static_cast<int>(j));
         }
-        values.emplace_back(v[i][j]);
+        values_.emplace_back(row[j]);
       }
-      offsets[i + 1] = values.size();
+      offsets_[i + 1] = static_cast<int>(values_.size());
     }
-    if (has_indices) {
-      indices.shrink_to_fit();
+    if (has_indices_) {
+      indices_.shrink_to_fit();
     }
-    values.shrink_to_fit();
+    values_.shrink_to_fit();
   }
 
-  int num_rows() const { return offsets.size() - 1; }
-  int num_elements() const { return values.size(); }
-  const std::vector<int>& get_offsets() const { return offsets; }
+  [[nodiscard]] auto num_rows() const -> int { return static_cast<int>(offsets_.size()) - 1; }
+  [[nodiscard]] auto num_elements() const -> int { return values_.size(); }
+  [[nodiscard]] auto get_offsets() const -> const std::vector<int>& { return offsets_; }
 
   /**
    * @brief Access a specific row of the matrix (read-only).
    * Usage: for (const auto& element : matrix[i]) { ... }
    */
-  const CsrRowConstView<T> operator[](int row_index) const {
-    PANIC_IF(
-      row_index < 0 || row_index >= num_rows(),
-      "Row index {} out of bounds [0, {}]", row_index, num_rows() - 1
-    );
-    const int start = offsets[row_index];
-    const int end   = offsets[row_index + 1];
-    return CsrRowConstView<T> {
-      .indices = has_indices
-        ? std::span<const int>{ indices.begin() + start, indices.begin() + end }
-        : std::span<const int>{},
-      .values = { values.begin() + start, values.begin() + end }
-    };
+  template <typename R>
+    requires std::is_integral_v<R>
+  auto operator[](R row_index) const -> CsrRowView<const T> {
+    PANIC_IF(std::cmp_less(row_index, 0) || std::cmp_greater_equal(row_index, num_rows()),
+             "Row index {} out of bounds [0, {}]", row_index, num_rows() - 1);
+    const auto row = static_cast<size_t>(row_index);
+    const int start = offsets_[row];
+    const int end = offsets_[row + 1];
+    return CsrRowView<const T>{
+        .indices = has_indices_
+                       ? std::span<const int>{indices_.begin() + start, indices_.begin() + end}
+                       : std::span<const int>{},
+        .values = {values_.begin() + start, values_.begin() + end}};
   }
 
   /**
    * @brief Access a specific row of the matrix (read-write).
    */
-  CsrRowView<T> operator[](int row_index) {
-    PANIC_IF(
-      row_index < 0 || row_index >= num_rows(),
-      "Row index {} out of bounds [0, {}]", row_index, num_rows() - 1
-    );
-    const int start = offsets[row_index];
-    const int end   = offsets[row_index + 1];
-    return CsrRowView<T> {
-      .indices = has_indices
-        ? std::span<const int>{ indices.begin() + start, indices.begin() + end }
-        : std::span<const int>{},
-      .values = { values.begin() + start, values.begin() + end }
-    };
+  template <typename R>
+    requires std::is_integral_v<R>
+  auto operator[](R row_index) -> CsrRowView<T> {
+    CsrRowView<const T> const_view = std::as_const(*this)[row_index];
+    return CsrRowView<T>{
+        .indices = const_view.indices,
+        .values = std::span<T>{const_cast<T*>(const_view.values.data()), const_view.values.size()}};
   }
 };
 
-} // namespace utils
+}  // namespace utils

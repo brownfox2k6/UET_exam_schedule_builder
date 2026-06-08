@@ -6,7 +6,7 @@ import collections.abc
 import typing
 __all__: list[str] = ['AcoParams', 'AntColony', 'EvalParams', 'Exam', 'ExamSection', 'Hyperparams', 'LsParams', 'Room', 'Solution']
 class AcoParams:
-    def __init__(self, num_iters: typing.SupportsInt | typing.SupportsIndex = 100, num_ants: typing.SupportsInt | typing.SupportsIndex = 10, alpha: typing.SupportsFloat | typing.SupportsIndex = 1.0, beta: typing.SupportsFloat | typing.SupportsIndex = 2.0, rho: typing.SupportsFloat | typing.SupportsIndex = 0.1, tau_min: typing.SupportsFloat | typing.SupportsIndex = 0.01, tau_max: typing.SupportsFloat | typing.SupportsIndex = 1.0) -> None:
+    def __init__(self) -> None:
         ...
     def set_tau_bounds(self, tau_min: typing.SupportsFloat | typing.SupportsIndex, tau_max: typing.SupportsFloat | typing.SupportsIndex) -> None:
         ...
@@ -21,6 +21,12 @@ class AcoParams:
         ...
     @beta.setter
     def beta(self, arg1: typing.SupportsFloat | typing.SupportsIndex) -> None:
+        ...
+    @property
+    def max_retries(self) -> int:
+        ...
+    @max_retries.setter
+    def max_retries(self, arg1: typing.SupportsInt | typing.SupportsIndex) -> None:
         ...
     @property
     def num_ants(self) -> int:
@@ -66,7 +72,7 @@ class AntColony:
     def global_best_schedule(self) -> list[int]:
         ...
 class EvalParams:
-    def __init__(self, penalty_decay_base: typing.SupportsFloat | typing.SupportsIndex = 2.0) -> None:
+    def __init__(self) -> None:
         ...
     @property
     def penalty_decay_base(self) -> float:
@@ -128,7 +134,7 @@ class Hyperparams:
     def __init__(self, _eval: EvalParams = ..., _aco: AcoParams = ..., _ls: LsParams = ...) -> None:
         ...
 class LsParams:
-    def __init__(self, prob_1_move: typing.SupportsFloat | typing.SupportsIndex = 0.5, max_improvements: typing.SupportsInt | typing.SupportsIndex = 10, patience: typing.SupportsInt | typing.SupportsIndex = 100) -> None:
+    def __init__(self) -> None:
         ...
     @property
     def max_improvements(self) -> int:

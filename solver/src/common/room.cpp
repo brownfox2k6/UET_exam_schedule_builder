@@ -1,14 +1,10 @@
 #include "common/room.hpp"
+
 #include "utils/assert.hpp"
 
 namespace common {
 
-Room::Room(
-  std::string code,
-  int capacity,
-  std::string location,
-  std::string type
-) {
+Room::Room(std::string code, int capacity, std::string location, std::string type) {
   set_code(std::move(code));
   set_capacity(capacity);
   set_location(std::move(location));
@@ -35,4 +31,4 @@ void Room::set_type(std::string type) {
   type_ = std::move(type);
 }
 
-} // namespace common
+}  // namespace common

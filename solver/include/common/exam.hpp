@@ -13,17 +13,17 @@ namespace common {
 struct ExamSection {
   ExamSection(std::string code, std::vector<std::string> students);
 
-  const std::string& code() const { return code_; }
-  int student_count() const { return students_.size(); }
-  const std::vector<std::string>& students() const { return students_; }
+  [[nodiscard]] auto code() const -> const std::string& { return code_; }
+  [[nodiscard]] auto student_count() const -> int { return static_cast<int>(students_.size()); }
+  [[nodiscard]] auto students() const -> const std::vector<std::string>& { return students_; }
 
   void set_code(std::string code);
   void set_students(std::vector<std::string> students);
 
-private:
+ private:
   std::string code_;
   std::vector<std::string> students_;
-}; // struct ExamSection
+};  // struct ExamSection
 
 /**
  * @brief Represents an exam entity in the Examination Timetabling Problem.
@@ -32,21 +32,16 @@ private:
  * feasible slots and feasible rooms that can be used by its sections.
  */
 struct Exam {
-  Exam(
-    std::string code,
-    int credits,
-    std::vector<ExamSection> sections,
-    std::vector<int> feasible_slots,
-    std::vector<int> feasible_rooms
-  );
+  Exam(std::string code, int credits, std::vector<ExamSection> sections,
+       std::vector<int> feasible_slots, std::vector<int> feasible_rooms);
 
-  const std::string& code() const { return code_; }
-  int credits() const { return credits_; }
-  const std::vector<ExamSection>& sections() const { return sections_; }
-  const std::vector<int>& feasible_slots() const { return feasible_slots_; }
-  const std::vector<int>& feasible_rooms() const { return feasible_rooms_; }
-  int section_count() const { return sections_.size(); }
-  int student_count() const { return student_count_; }
+  [[nodiscard]] auto code() const -> const std::string& { return code_; }
+  [[nodiscard]] auto credits() const -> int { return credits_; }
+  [[nodiscard]] auto sections() const -> const std::vector<ExamSection>& { return sections_; }
+  [[nodiscard]] auto feasible_slots() const -> const std::vector<int>& { return feasible_slots_; }
+  [[nodiscard]] auto feasible_rooms() const -> const std::vector<int>& { return feasible_rooms_; }
+  [[nodiscard]] auto section_count() const -> int { return static_cast<int>(sections_.size()); }
+  [[nodiscard]] auto student_count() const -> int { return student_count_; }
 
   void set_code(std::string code);
   void set_credits(int credits);
@@ -54,7 +49,7 @@ struct Exam {
   void set_feasible_slots(std::vector<int> feasible_slots);
   void set_feasible_rooms(std::vector<int> feasible_rooms);
 
-private:
+ private:
   // --- Heuristic Weights & Metadata ---
   std::string code_;
   int credits_;
@@ -64,6 +59,6 @@ private:
   std::vector<ExamSection> sections_;
   std::vector<int> feasible_slots_;
   std::vector<int> feasible_rooms_;
-}; // struct Exam
+};  // struct Exam
 
-} // namespace common
+}  // namespace common
