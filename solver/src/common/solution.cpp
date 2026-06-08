@@ -18,8 +18,6 @@ Solution::Solution(const ProblemData& exams)
       feasible_rooms(exams.feasible_rooms, exams.num_rooms),
       fitness(0.0) {}
 
-auto Solution::operator<(const Solution& other) const -> bool { return fitness < other.fitness; }
-
 void Solution::reset() {
   fitness = 0.0;
   feasible_slots.reset();
@@ -36,7 +34,7 @@ auto Solution::get_next_exam(const ProblemData& problem_data) const -> int {
     if (assigned_slots[exam] != -1) {
       continue;
     }
-    int degree = feasible_slots.get_forbidden_count(static_cast<int>(exam));
+    int degree = feasible_slots.get_forbidden_count(exam);
     int conflict = problem_data.weighted_conflict_degrees[exam];
     if (std::tie(degree, conflict) > std::tie(max_degree, max_conflict)) {
       max_degree = degree;

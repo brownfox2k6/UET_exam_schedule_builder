@@ -4,11 +4,13 @@
 #include <pybind11/gil.h>
 #include <pybind11/pybind11.h>
 
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <utility>
 
 #include "common/room.hpp"
+#include "common/solution.hpp"
 
 namespace aco {
 
@@ -60,7 +62,7 @@ auto AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) -> bool 
     // For each feasible slot, calculate penalty if we assign this exam to that slot
     double total_weight = 0.0;
     for (size_t j = 0; j < count_feasible; ++j) {
-      const int slot = ant.feasible_slots(exam, static_cast<int>(j));
+      const int slot = ant.feasible_slots(exam, j);
       delta_soft[j] = evaluator.calculate_delta_penalty(ant.assigned_slots, exam, slot);
       const double eta = 1.0 / (1.0 + delta_soft[j]);
       const double tau = pheromone(exam, slot);
@@ -81,7 +83,7 @@ auto AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) -> bool 
       }
     }
 
-    const int slot = ant.feasible_slots(exam, static_cast<int>(chosen_j));
+    const int slot = ant.feasible_slots(exam, chosen_j);
     const double penalty = delta_soft[chosen_j];
     ant.assign_exam(exam, slot, problem_data.conflicts_csrmatrix);
     ant.fitness += penalty;
@@ -113,7 +115,8 @@ auto AntColony::run_one_iteration() -> double {
     }
   }
 
-  const common::Solution& iter_best = *std::min_element(ants.begin(), ants.end());
+  const common::Solution& iter_best =
+      *std::ranges::min_element(ants, {}, &common::Solution::fitness);
   if (iter_best.fitness >= HARD_CONSTRAINT_PENALTY) {
     return iter_best.fitness;
   }

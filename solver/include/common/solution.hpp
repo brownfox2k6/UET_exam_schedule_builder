@@ -36,15 +36,6 @@ struct Solution {
   Solution(const ProblemData& exams);
 
   /**
-   * @brief Overloads the less-than operator for Ant comparison.
-   * * Used by standard algorithms like std::min_element or std::sort.
-   * An ant is considered "less than" another if it has a lower penalty score (fitness).
-   * * @param other The ant to compare with.
-   * @return true if this ant's fitness is strictly less than the other's.
-   */
-  auto operator<(const Solution& other) const -> bool;
-
-  /**
    * @brief Resets the ant's memory, schedule, and conflict states to prepare for a new iteration.
    */
   void reset();
