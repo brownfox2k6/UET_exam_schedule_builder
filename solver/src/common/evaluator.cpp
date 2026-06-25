@@ -22,7 +22,7 @@ auto Evaluator::build_proximity_penalties(const ProblemData& problem_data,
                                           const Hyperparams::Evaluation& hyperparams)
     -> utils::Matrix<double> {
   const auto& slot_timestamps = problem_data.slot_timestamps;
-  const auto num_slots = static_cast<size_t>(problem_data.num_slots);
+  const auto num_slots = size_t(problem_data.num_slots);
   utils::Matrix<double> penalties(num_slots, num_slots, std::numeric_limits<double>::infinity());
   for (size_t i = 0; i < num_slots; ++i) {
     const int64_t slot_i = slot_timestamps[i];
@@ -44,13 +44,13 @@ auto Evaluator::calculate_delta_penalty(const std::vector<int>& schedule, int ex
   PANIC_IF(exam < 0 || exam >= problem_data.num_exams, "exam index out of bounds: {}", exam);
   PANIC_IF(new_slot < 0 || new_slot >= problem_data.num_slots, "new_slot out of bounds: {}",
            new_slot);
-  const int cur_slot = schedule[static_cast<size_t>(exam)];
+  const int cur_slot = schedule[size_t(exam)];
   const auto& credits = problem_data.exam_credits;
-  const int exam_credits = credits[static_cast<size_t>(exam)];
+  const int exam_credits = credits[size_t(exam)];
   double delta = 0.0;
   const auto [conflict_exams, conflict_counts] = problem_data.conflicts_csrmatrix[exam];
   for (size_t i = 0; i < conflict_counts.size(); ++i) {
-    const auto conflict_exam = static_cast<size_t>(conflict_exams[i]);
+    const auto conflict_exam = size_t(conflict_exams[i]);
     const int conflict_slot = schedule[conflict_exam];
     if (std::cmp_equal(conflict_exam, ignore_exam) || conflict_slot == -1) {
       continue;

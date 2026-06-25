@@ -18,7 +18,7 @@ auto AntColony::go_1_move(common::Solution& ant, std::mt19937& rng) -> bool {
 
   // Pick a random feasible slot and ensure it's not the current slot
   int new_slot = ant.feasible_slots.get_random(exam, rng);
-  if (new_slot == ant.assigned_slots[static_cast<size_t>(exam)]) {
+  if (new_slot == ant.assigned_slots[size_t(exam)]) {
     return false;
   }
 
@@ -39,8 +39,8 @@ auto AntColony::go_2_swap(common::Solution& ant, std::mt19937& rng) -> bool {
   // Pick two random exams, ensure their assigned slots are different and can be swapped
   const int exam1 = std::uniform_int_distribution<int>(0, problem_data.num_exams - 1)(rng);
   const int exam2 = std::uniform_int_distribution<int>(0, problem_data.num_exams - 1)(rng);
-  const int slot1 = ant.assigned_slots[static_cast<size_t>(exam1)];
-  const int slot2 = ant.assigned_slots[static_cast<size_t>(exam2)];
+  const int slot1 = ant.assigned_slots[size_t(exam1)];
+  const int slot2 = ant.assigned_slots[size_t(exam2)];
   if (exam1 == exam2 || slot1 == slot2) {
     return false;
   }
@@ -82,13 +82,13 @@ void AntColony::local_search(common::Solution& ant, std::mt19937& rng) {
 
   while (improvements < hyperparams.ls.max_improvements() &&
          consecutive_fails < hyperparams.ls.patience()) {
-    double random = std::uniform_real_distribution<double>(0.0, 1.0)(rng);
-    bool is_accepted;
-    if (random < hyperparams.ls.prob_1_move()) {
-      is_accepted = go_1_move(ant, rng);
-    } else {
-      is_accepted = go_2_swap(ant, rng);
-    }
+    const auto is_accepted = [&]() -> bool {
+      double random = std::uniform_real_distribution<double>(0.0, 1.0)(rng);
+      if (random < hyperparams.ls.prob_1_move()) {
+        return go_1_move(ant, rng);
+      }
+      return go_2_swap(ant, rng);
+    }();
 
     if (is_accepted) {
       ++improvements;

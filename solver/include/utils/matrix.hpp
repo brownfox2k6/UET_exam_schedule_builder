@@ -31,9 +31,9 @@ struct Matrix {
   Matrix(R rows, C cols, T value = T()) {
     PANIC_IF(std::cmp_less_equal(rows, 0), "Matrix rows must be positive (got: {})", rows);
     PANIC_IF(std::cmp_less_equal(cols, 0), "Matrix columns must be positive (got: {})", cols);
-    num_rows_ = static_cast<int>(rows);
-    num_cols_ = static_cast<int>(cols);
-    data_.assign(static_cast<size_t>(rows) * static_cast<size_t>(cols), value);
+    num_rows_ = int(rows);
+    num_cols_ = int(cols);
+    data_.assign(size_t(rows) * size_t(cols), value);
   }
 
   /**
@@ -59,7 +59,7 @@ struct Matrix {
   [[nodiscard]] auto data() const -> const std::vector<T>& { return data_; }
   [[nodiscard]] auto num_rows() const -> int { return num_rows_; }
   [[nodiscard]] auto num_cols() const -> int { return num_cols_; }
-  [[nodiscard]] auto num_elements() const -> int { return static_cast<int>(data_.size()); }
+  [[nodiscard]] auto num_elements() const -> int { return int(data_.size()); }
 
   /**
    * @brief Accesses the element at `(row, col)` by value (read-only).
@@ -71,8 +71,7 @@ struct Matrix {
              "Row index {} out of bounds [0, {}]", row, num_rows_);
     PANIC_IF(std::cmp_less(col, 0) || std::cmp_greater_equal(col, num_cols_),
              "Column index {} out of bounds [0, {}]", col, num_cols_);
-    return data_[(static_cast<size_t>(row) * static_cast<size_t>(num_cols_)) +
-                 static_cast<size_t>(col)];
+    return data_[(size_t(row) * size_t(num_cols_)) + size_t(col)];
   }
 
   /**
@@ -92,10 +91,10 @@ struct Matrix {
 
 template <typename T>
 struct CsrRowView {
-  std::span<const int> indices;
-  std::span<T> values;
+  std::span<const int> indices;  // NOLINT(misc-non-private-member-variables-in-classes)
+  std::span<T> values;           // NOLINT(misc-non-private-member-variables-in-classes)
 
-  [[nodiscard]] auto size() const -> int { return static_cast<int>(values.size()); }
+  [[nodiscard]] auto size() const -> int { return int(values.size()); }
 };
 
 /**
@@ -118,13 +117,13 @@ struct CsrMatrix {
   template <typename S>
     requires std::is_integral_v<S>
   CsrMatrix(const Matrix<T>& matrix, S expected_size = 0, bool track_indices = true,
-            T trash_value = T()) {
-    has_indices_ = track_indices;
+            T trash_value = T())
+      : has_indices_(track_indices) {
     if (has_indices_) {
-      indices_.reserve(static_cast<size_t>(expected_size));
+      indices_.reserve(size_t(expected_size));
     }
-    values_.reserve(static_cast<size_t>(expected_size));
-    offsets_.assign(static_cast<size_t>(matrix.num_rows()) + 1, 0);
+    values_.reserve(size_t(expected_size));
+    offsets_.assign(size_t(matrix.num_rows()) + 1, 0);
     size_t index = 0;
     const std::vector<T>& matrix_data = matrix.data();
     for (size_t i = 0; std::cmp_less(i, matrix.num_rows()); ++i) {
@@ -137,7 +136,7 @@ struct CsrMatrix {
           values_.emplace_back(value);
         }
       }
-      offsets_[i + 1] = static_cast<int>(values_.size());
+      offsets_[i + 1] = int(values_.size());
     }
     if (has_indices_) {
       indices_.shrink_to_fit();
@@ -152,23 +151,22 @@ struct CsrMatrix {
    */
   template <typename S>
     requires std::is_integral_v<S>
-  CsrMatrix(const std::vector<std::vector<T>>& list, S expected_size = 0,
-            bool track_indices = true) {
-    has_indices_ = track_indices;
+  CsrMatrix(const std::vector<std::vector<T>>& list, S expected_size = 0, bool track_indices = true)
+      : has_indices_(track_indices) {
     if (has_indices_) {
-      indices_.reserve(static_cast<size_t>(expected_size));
+      indices_.reserve(size_t(expected_size));
     }
-    values_.reserve(static_cast<size_t>(expected_size));
+    values_.reserve(size_t(expected_size));
     offsets_.assign(list.size() + 1, 0);
     for (size_t i = 0; i < list.size(); ++i) {
       const std::vector<T>& row = list[i];
       for (size_t j = 0; j < row.size(); ++j) {
         if (has_indices_) {
-          indices_.emplace_back(static_cast<int>(j));
+          indices_.emplace_back(int(j));
         }
         values_.emplace_back(row[j]);
       }
-      offsets_[i + 1] = static_cast<int>(values_.size());
+      offsets_[i + 1] = int(values_.size());
     }
     if (has_indices_) {
       indices_.shrink_to_fit();
@@ -176,7 +174,7 @@ struct CsrMatrix {
     values_.shrink_to_fit();
   }
 
-  [[nodiscard]] auto num_rows() const -> int { return static_cast<int>(offsets_.size()) - 1; }
+  [[nodiscard]] auto num_rows() const -> int { return int(offsets_.size()) - 1; }
   [[nodiscard]] auto num_elements() const -> int { return values_.size(); }
   [[nodiscard]] auto get_offsets() const -> const std::vector<int>& { return offsets_; }
 
@@ -189,7 +187,7 @@ struct CsrMatrix {
   auto operator[](R row_index) const -> CsrRowView<const T> {
     PANIC_IF(std::cmp_less(row_index, 0) || std::cmp_greater_equal(row_index, num_rows()),
              "Row index {} out of bounds [0, {}]", row_index, num_rows() - 1);
-    const auto row = static_cast<size_t>(row_index);
+    const auto row = size_t(row_index);
     const int start = offsets_[row];
     const int end = offsets_[row + 1];
     return CsrRowView<const T>{

@@ -24,17 +24,17 @@ AntColony::AntColony(common::Hyperparams _hyperparams, const std::vector<common:
       evaluator(problem_data, hyperparams),
       base_seed(_base_seed),
       pheromone(problem_data.num_exams, problem_data.num_slots, hyperparams.aco.tau_max()),
-      global_best_schedule(static_cast<size_t>(problem_data.num_exams), -1),
+      global_best_schedule(size_t(problem_data.num_exams), -1),
       global_best_fitness(std::numeric_limits<double>::infinity()) {
-  const auto num_ants = static_cast<size_t>(hyperparams.aco.num_ants());
+  const auto num_ants = size_t(hyperparams.aco.num_ants());
   rngs.reserve(num_ants);
   ants.reserve(num_ants);
   for (size_t i = 0; i < num_ants; ++i) {
     std::seed_seq seq{
-        static_cast<uint32_t>(base_seed),
-        static_cast<uint32_t>(base_seed >> 32),  // NOLINT(readability-magic-numbers)
-        static_cast<uint32_t>(i),                // Differentiates parallel random streams
-        0x9e3779b9U  // NOLINT(readability-magic-numbers) Golden-ratio constant for seed mixing
+        uint32_t(base_seed),
+        uint32_t(base_seed >> 32),  // NOLINT(*-magic-numbers)
+        uint32_t(i),                // Differentiates parallel random streams
+        0x9e3779b9U                 // NOLINT(*-magic-numbers) Golden-ratio constant for seed mixing
     };
     rngs.emplace_back(seq);
     ants.emplace_back(problem_data);
@@ -46,8 +46,8 @@ auto AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) -> bool 
   static thread_local std::vector<double> delta_soft;
   ant.reset();
 
-  const auto num_exams = static_cast<size_t>(problem_data.num_exams);
-  const auto num_slots = static_cast<size_t>(problem_data.num_slots);
+  const auto num_exams = size_t(problem_data.num_exams);
+  const auto num_slots = size_t(problem_data.num_slots);
   weights.resize(num_slots);
   delta_soft.resize(num_slots);
 
@@ -55,7 +55,7 @@ auto AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) -> bool 
     const int exam = ant.get_next_exam(problem_data);
 
     // Check if the solution is infeasible --> ant die now
-    const auto count_feasible = static_cast<size_t>(ant.feasible_slots.get_feasible_count(exam));
+    const auto count_feasible = size_t(ant.feasible_slots.get_feasible_count(exam));
     if (count_feasible == 0) {
       ant.fitness = std::numeric_limits<double>::infinity();
       return false;
@@ -73,7 +73,7 @@ auto AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) -> bool 
     }
 
     // Choose a random slot using Stochastic Propotional Rule (roulette wheel)
-    total_weight = std::max(total_weight, 1e-9);  // NOLINT(readability-magic-numbers)
+    total_weight = std::max(total_weight, 1e-9);  // NOLINT(*-magic-numbers)
     const double threshold = std::uniform_real_distribution<double>(0.0, total_weight)(rng);
     double cumulative = 0.0;
     size_t chosen_j = count_feasible - 1;
@@ -107,7 +107,7 @@ void AntColony::update_pheromone(const std::vector<int>& best_schedule) {
 
 auto AntColony::run_one_iteration() -> double {
 #pragma omp parallel for schedule(dynamic)
-  for (size_t i = 0; i < static_cast<size_t>(hyperparams.aco.num_ants()); ++i) {
+  for (size_t i = 0; i < size_t(hyperparams.aco.num_ants()); ++i) {
     bool is_feasible = false;
     for (int j = 0; !is_feasible && j < hyperparams.aco.max_retries(); ++j) {
       is_feasible = construct_ant(ants[i], rngs[i]);

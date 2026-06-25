@@ -20,11 +20,11 @@ namespace aco {
  */
 class AntColony {
  private:
-  const common::Hyperparams hyperparams;
-  const common::ProblemData problem_data;
-  const common::Evaluator evaluator;
+  const common::Hyperparams hyperparams;   // NOLINT(*const-or-ref-data-members*)
+  const common::ProblemData problem_data;  // NOLINT(*const-or-ref-data-members*)
+  const common::Evaluator evaluator;       // NOLINT(*const-or-ref-data-members*)
 
-  const uint64_t base_seed;
+  const uint64_t base_seed;  // NOLINT(*const-or-ref-data-members*)
   std::vector<std::mt19937> rngs;
 
   // Pheromone matrix representing learned experience for exam-to-slot assignments
@@ -74,8 +74,8 @@ class AntColony {
             uint64_t _base_seed = BASE_SEED_DEFAULT);
 
   // The best solution found since the start of the algorithm
-  std::vector<int> global_best_schedule;
-  double global_best_fitness;
+  std::vector<int> global_best_schedule;  // NOLINT(*non-private-member-variables*)
+  double global_best_fitness;             // NOLINT(*non-private-member-variables*)
 
   /**
    * @brief Executes a single iteration of the Ant Colony Optimization algorithm.
