@@ -29,7 +29,7 @@ struct Hyperparams {
    private:
     // Base for the exponential decay of time-gap penalties (base ^ -delta_days).
     // Controls how fast the penalty drops: 2.0 halves the penalty each day.
-    double penalty_decay_base_{2.0};  // NOLINT(readability-magic-numbers)
+    double penalty_decay_base_{2.0};  // NOLINT(*-magic-numbers)
   };  // struct Evaluation
 
   /**
@@ -103,7 +103,7 @@ struct Hyperparams {
     }
 
    private:
-    // NOLINTBEGIN(readability-magic-numbers)
+    // NOLINTBEGIN(*-magic-numbers)
     int num_iters_{100};    // Number of iterations
     int num_ants_{10};      // Number of ants used in each iteration
     double alpha_{1.0};     // Pheromone importance in selection probability (tau ^ alpha)
@@ -112,7 +112,7 @@ struct Hyperparams {
     double tau_min_{0.01};  // Minimum pheromone trail limit
     double tau_max_{1.0};   // Maximum pheromone trail limit
     int max_retries_{100};  // Maximum retries allowed to generate a feasible solution
-    // NOLINTEND(readability-magic-numbers)
+    // NOLINTEND(*-magic-numbers)
   };  // struct ACO
 
   /**
@@ -141,16 +141,18 @@ struct Hyperparams {
     }
 
    private:
-    // NOLINTBEGIN(readability-magic-numbers)
+    // NOLINTBEGIN(*-magic-numbers)
     double prob_1_move_{0.5};   // Probability of applying 1-move operator instead of 2-swap
     int max_improvements_{10};  // Maximum number of actual successful moves (downhill steps)
     int patience_{100};         // Stop early after this many consecutive non-improving attempts
-    // NOLINTEND(readability-magic-numbers)
+    // NOLINTEND(*-magic-numbers)
   };  // struct LS
 
+  // NOLINTBEGIN(misc-non-private-member-variables-in-classes)
   Evaluation eval;
   ACO aco;
   LS ls;
+  // NOLINTEND(misc-non-private-member-variables-in-classes)
 
   explicit Hyperparams(Evaluation _eval = Evaluation(), ACO _aco = ACO(), LS _ls = LS())
       : eval(_eval), aco(_aco), ls(_ls) {}

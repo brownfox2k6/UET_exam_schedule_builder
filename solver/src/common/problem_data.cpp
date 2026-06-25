@@ -18,9 +18,9 @@ namespace common {
 
 ProblemData::ProblemData(const std::vector<Exam>& _exams, std::vector<int64_t> _slot_timestamps,
                          const std::vector<Room>& _rooms)
-    : num_exams(static_cast<int>(_exams.size())),
-      num_slots(static_cast<int>(_slot_timestamps.size())),
-      num_rooms(static_cast<int>(_rooms.size())),
+    : num_exams(int(_exams.size())),
+      num_slots(int(_slot_timestamps.size())),
+      num_rooms(int(_rooms.size())),
       num_sections(extract_num_sections(_exams)),
       num_enrollments(extract_num_enrollments(_exams)),
 
@@ -82,7 +82,7 @@ auto ProblemData::extract_num_enrollments(const std::vector<Exam>& exams) -> int
 auto ProblemData::build_id_to_student(const std::vector<Exam>& exams, int num_enrollments)
     -> std::vector<std::string> {
   std::vector<std::string_view> temp_views;
-  temp_views.reserve(static_cast<size_t>(num_enrollments));
+  temp_views.reserve(size_t(num_enrollments));
   for (const Exam& exam : exams) {
     for (const ExamSection& section : exam.sections()) {
       for (const std::string_view student : section.students()) {
@@ -133,7 +133,7 @@ auto ProblemData::extract_exam_credits(const std::vector<Exam>& exams) -> std::v
 auto ProblemData::extract_section_codes(const std::vector<Exam>& exams, int num_sections)
     -> std::vector<std::string> {
   std::vector<std::string> section_codes;
-  section_codes.reserve(static_cast<size_t>(num_sections));
+  section_codes.reserve(size_t(num_sections));
   for (const Exam& exam : exams) {
     for (const ExamSection& section : exam.sections()) {
       section_codes.emplace_back(section.code());
@@ -147,11 +147,11 @@ auto ProblemData::extract_section_students(
     int num_sections, int num_enrollments)  // NOLINT(bugprone-easily-swappable-parameters)
     -> utils::CsrMatrix<int> {
   std::vector<std::vector<int>> section_students;
-  section_students.reserve(static_cast<size_t>(num_sections));
+  section_students.reserve(size_t(num_sections));
   for (const Exam& exam : exams) {
     for (const ExamSection& section : exam.sections()) {
       std::vector<int> students;
-      students.reserve(static_cast<size_t>(section.student_count()));
+      students.reserve(size_t(section.student_count()));
       for (const std::string_view student : section.students()) {
         students.emplace_back(student_to_id.at(student));
       }
@@ -163,7 +163,7 @@ auto ProblemData::extract_section_students(
 
 auto ProblemData::extract_section_student_counts(const std::vector<Exam>& exams, int num_sections)
     -> std::vector<int> {
-  std::vector<int> sections_student_counts(static_cast<size_t>(num_sections));
+  std::vector<int> sections_student_counts((size_t(num_sections)));
   size_t section_index = 0;
   for (const Exam& exam : exams) {
     for (const ExamSection& section : exam.sections()) {
@@ -195,12 +195,12 @@ auto ProblemData::build_exam_to_sections(const std::vector<Exam>& exams) -> std:
 
 auto ProblemData::build_section_to_exam(const std::vector<Exam>& exams, int num_sections)
     -> std::vector<int> {
-  std::vector<int> section_to_exam(static_cast<size_t>(num_sections));
+  std::vector<int> section_to_exam((size_t(num_sections)));
   size_t section_index = 0;
   for (size_t exam_index = 0; exam_index < exams.size(); ++exam_index) {
     const int num_sections_in_exam = exams[exam_index].section_count();
     for (int i = 0; i < num_sections_in_exam; ++i) {
-      section_to_exam[section_index++] = static_cast<int>(exam_index);
+      section_to_exam[section_index++] = int(exam_index);
     }
   }
   return section_to_exam;
@@ -251,7 +251,7 @@ auto ProblemData::build_conflicts_matrix(
   for (const Exam& exam : exams) {
     for (const ExamSection& section : exam.sections()) {
       for (const std::string_view student : section.students()) {
-        const auto student_id = static_cast<size_t>(student_to_id.at(student));
+        const auto student_id = size_t(student_to_id.at(student));
         exams_by_student[student_id].emplace_back(exam_index);
       }
     }
@@ -275,7 +275,7 @@ auto ProblemData::build_conflicts_matrix(
 
 auto ProblemData::build_weighted_conflict_degrees(const utils::CsrMatrix<int>& conflicts_csrmatrix)
     -> std::vector<int> {
-  const auto num_exams = static_cast<size_t>(conflicts_csrmatrix.num_rows());
+  const auto num_exams = size_t(conflicts_csrmatrix.num_rows());
   std::vector<int> total_conflicts(num_exams);
   for (size_t exam = 0; exam < num_exams; ++exam) {
     const auto row = conflicts_csrmatrix[exam].values;

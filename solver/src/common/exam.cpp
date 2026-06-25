@@ -69,7 +69,7 @@ void Exam::set_sections(std::vector<ExamSection> sections) {
   std::unordered_set<std::string_view> unique_section_checker;
   unique_section_checker.reserve(sections.size());
   std::unordered_map<std::string_view, std::string_view> unique_student_checker;
-  unique_student_checker.reserve(static_cast<size_t>(student_count_));
+  unique_student_checker.reserve(size_t(student_count_));
   for (const ExamSection& section : sections) {
     const std::string_view section_code = section.code();
     PANIC_IF(!unique_section_checker.emplace(section_code).second,

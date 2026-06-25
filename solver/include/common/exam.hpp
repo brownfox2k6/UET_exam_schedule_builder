@@ -14,7 +14,7 @@ struct ExamSection {
   ExamSection(std::string code, std::vector<std::string> students);
 
   [[nodiscard]] auto code() const -> const std::string& { return code_; }
-  [[nodiscard]] auto student_count() const -> int { return static_cast<int>(students_.size()); }
+  [[nodiscard]] auto student_count() const -> int { return int(students_.size()); }
   [[nodiscard]] auto students() const -> const std::vector<std::string>& { return students_; }
 
   void set_code(std::string code);
@@ -40,7 +40,7 @@ struct Exam {
   [[nodiscard]] auto sections() const -> const std::vector<ExamSection>& { return sections_; }
   [[nodiscard]] auto feasible_slots() const -> const std::vector<int>& { return feasible_slots_; }
   [[nodiscard]] auto feasible_rooms() const -> const std::vector<int>& { return feasible_rooms_; }
-  [[nodiscard]] auto section_count() const -> int { return static_cast<int>(sections_.size()); }
+  [[nodiscard]] auto section_count() const -> int { return int(sections_.size()); }
   [[nodiscard]] auto student_count() const -> int { return student_count_; }
 
   void set_code(std::string code);
@@ -52,8 +52,8 @@ struct Exam {
  private:
   // --- Heuristic Weights & Metadata ---
   std::string code_;
-  int credits_;
-  int student_count_;
+  int credits_ = 0;
+  int student_count_ = 0;
 
   // --- Core Operational Constraints ---
   std::vector<ExamSection> sections_;

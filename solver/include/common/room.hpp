@@ -20,7 +20,7 @@ struct Room {
 
  private:
   std::string code_;
-  int capacity_;
+  int capacity_ = 0;
   std::string location_;
   std::string type_;
 };  // struct Room

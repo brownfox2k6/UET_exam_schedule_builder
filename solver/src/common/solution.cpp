@@ -15,7 +15,7 @@ namespace common {
 
 Solution::Solution(const ProblemData& exams)
     : conflicting_exams_count(exams.num_exams, exams.num_slots, 0),
-      assigned_slots(static_cast<size_t>(exams.num_exams), -1),
+      assigned_slots(size_t(exams.num_exams), -1),
       feasible_slots(exams.feasible_slots, exams.num_slots),
       feasible_rooms(exams.feasible_rooms, exams.num_rooms),
       fitness(0.0) {}
@@ -44,7 +44,7 @@ auto Solution::get_next_exam(const ProblemData& problem_data) const -> int {
     if (std::make_tuple(degree, -conflict) < std::make_tuple(best_degree, -best_conflict)) {
       best_degree = degree;
       best_conflict = conflict;
-      best_exam = static_cast<int>(exam);
+      best_exam = int(exam);
     }
   }
   return best_exam;
@@ -55,7 +55,7 @@ void Solution::assign_exam(int exam, int slot, const utils::CsrMatrix<int>& conf
            "Exam index {} out of bounds [0, {}]", exam, assigned_slots.size() - 1);
   PANIC_IF(slot < 0 || std::cmp_greater_equal(slot, conflicting_exams_count.num_cols()),
            "Slot index {} out of bounds [0, {}]", exam, conflicting_exams_count.num_cols() - 1);
-  int& current_slot = assigned_slots[static_cast<size_t>(exam)];
+  int& current_slot = assigned_slots[size_t(exam)];
   PANIC_IF(current_slot != -1,
            "Exam {} is already scheduled at slot {}, failed to assign to slot {}", exam,
            current_slot, slot);
@@ -73,7 +73,7 @@ void Solution::assign_exam(int exam, int slot, const utils::CsrMatrix<int>& conf
 void Solution::unassign_exam(int exam, const utils::CsrMatrix<int>& conflicts_csrmatrix) {
   PANIC_IF(exam < 0 || std::cmp_greater_equal(exam, assigned_slots.size()),
            "Exam index {} out of bounds [0, {}]", exam, assigned_slots.size() - 1);
-  int& current_slot = assigned_slots[static_cast<size_t>(exam)];
+  int& current_slot = assigned_slots[size_t(exam)];
   PANIC_IF(current_slot == -1, "Exam {} is not scheduled yet", exam);
   for (int conflict_exam : conflicts_csrmatrix[exam].indices) {
     int& count = conflicting_exams_count(conflict_exam, current_slot);

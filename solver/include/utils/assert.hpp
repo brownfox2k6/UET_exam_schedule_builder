@@ -17,8 +17,8 @@
  * @throws std::runtime_error Containing the formatted error message.
  */
 #define PANIC_IF(condition, fmt, ...)                                                  \
-  do {                                                                                 \
-    if (static_cast<bool>(condition)) {                                                \
+  if (true) {                                                                          \
+    if (bool(condition)) {                                                             \
       std::string error_msg = std::format(                                             \
           "\n[Validation Error]\n"                                                     \
           "  Location: {}:{}\n"                                                        \
@@ -27,12 +27,11 @@
           __FILE__, __LINE__, __func__, std::format((fmt)__VA_OPT__(, ) __VA_ARGS__)); \
       throw std::runtime_error(error_msg);                                             \
     }                                                                                  \
-  } while (false)
+  } else                                                                               \
+    (void)0
 
 #else
 
-#define PANIC_IF(condition, fmt, ...) \
-  do {                                \
-  } while (false)
+#define PANIC_IF(condition, fmt, ...) (void)0
 
 #endif  // NDEBUG

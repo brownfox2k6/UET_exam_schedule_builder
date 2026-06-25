@@ -13,6 +13,8 @@ namespace common {
  * The fitness tracks soft constraint violations (lower is better).
  */
 struct Solution {
+  // NOLINTBEGIN(*-non-private-*)
+
   // `conflicting_exams_count(i, j)` tells how many exams `k` that
   // have conflict with exam `i` and have been assigned to slot `j`.
   // If this value is > 0, slot `j` is strictly forbidden for exam `i`.
@@ -29,6 +31,8 @@ struct Solution {
 
   // The total soft constraint penalty score of the current schedule (lower is better).
   double fitness;
+
+  // NOLINTEND(*-non-private-*)
 
   /**
    * @brief Initializes an ant with empty schedule and default tracking matrices.

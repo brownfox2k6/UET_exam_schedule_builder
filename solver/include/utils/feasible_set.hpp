@@ -17,7 +17,7 @@ namespace utils {
 struct FeasibleSet {
  private:
   // Tells how many different values in options
-  const int num_options;
+  int num_options;
 
   // row = item, col = list of current feasible options
   CsrMatrix<int> options;
@@ -60,8 +60,7 @@ struct FeasibleSet {
   [[nodiscard]] auto get_feasible_count(T item) const -> int {
     PANIC_IF(std::cmp_less(item, 0) || std::cmp_greater_equal(item, options.num_rows()),
              "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
-    const auto item_u = static_cast<size_t>(item);
-    return active_ends[item_u + 1] - options.get_offsets()[item_u];
+    return active_ends[size_t(item + 1)] - options.get_offsets()[size_t(item)];
   }
 
   /**
@@ -72,8 +71,7 @@ struct FeasibleSet {
   [[nodiscard]] auto get_forbidden_count(T item) const -> int {
     PANIC_IF(std::cmp_less(item, 0) || std::cmp_greater_equal(item, options.num_rows()),
              "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
-    const auto size = static_cast<int>(options[item].values.size());
-    return size - get_feasible_count(item);
+    return int(options[item].values.size()) - get_feasible_count(item);
   }
 
   /**
@@ -114,7 +112,7 @@ struct FeasibleSet {
     const int count = get_feasible_count(item);
     PANIC_IF(count == 0, "Item {}: No feasible options left to pick from", item);
     std::uniform_int_distribution<int> dist(0, count - 1);
-    return options[item].values[static_cast<size_t>(dist(rng))];
+    return options[item].values[size_t(dist(rng))];
   }
 
   /**
@@ -127,14 +125,16 @@ struct FeasibleSet {
              "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
     PANIC_IF(std::cmp_less(option, 0) || std::cmp_greater_equal(option, num_options),
              "Option {} out of bounds [0, {}]", option, num_options - 1);
-    const int count = get_feasible_count(item);
-    const int index = pos(item, option);
-    PANIC_IF(index < 0, "Item {} does not contain {} in its initial feasible set", item, option);
-    PANIC_IF(index >= count, "Item {}: Option {} is already inactive", item, option);
+    const auto count = size_t(get_feasible_count(item));
+    const auto index = size_t(pos(item, option));
+    PANIC_IF(std::cmp_less(index, 0), "Item {} does not contain {} in its initial feasible set",
+             item, option);
+    PANIC_IF(std::cmp_greater_equal(index, count), "Item {}: Option {} is already inactive", item,
+             option);
     auto row = options[item].values;
-    std::swap(pos(item, option), pos(item, row[static_cast<size_t>(count - 1)]));
-    std::swap(row[static_cast<size_t>(index)], row[static_cast<size_t>(count - 1)]);
-    --active_ends[static_cast<size_t>(item + 1)];
+    std::swap(pos(item, option), pos(item, row[count - 1]));
+    std::swap(row[index], row[count - 1]);
+    --active_ends[size_t(item + 1)];
   }
 
   /**
@@ -147,14 +147,14 @@ struct FeasibleSet {
              "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
     PANIC_IF(std::cmp_less(option, 0) || std::cmp_greater_equal(option, num_options),
              "Option {} out of bounds [0, {}]", option, num_options - 1);
-    const int count = get_feasible_count(item);
-    const int index = pos(item, option);
+    const auto count = size_t(get_feasible_count(item));
+    const auto index = size_t(pos(item, option));
     PANIC_IF(index < 0, "Item {} does not contain {} in its initial feasible set", item, option);
     PANIC_IF(index < count, "Item {}: Option {} is already active", item, option);
     auto row = options[item].values;
-    std::swap(pos(item, option), pos(item, row[static_cast<size_t>(count)]));
-    std::swap(row[static_cast<size_t>(index)], row[static_cast<size_t>(count)]);
-    ++active_ends[static_cast<size_t>(item) + 1];
+    std::swap(pos(item, option), pos(item, row[count]));
+    std::swap(row[index], row[count]);
+    ++active_ends[size_t(item + 1)];
   }
 
   /**
@@ -165,7 +165,7 @@ struct FeasibleSet {
   auto operator()(T1 item, T2 index) const -> int {
     PANIC_IF(std::cmp_less(item, 0) || std::cmp_greater_equal(index, get_feasible_count(item)),
              "Item {}: Index {} out of feasible range", item, index);
-    return options[static_cast<size_t>(item)].values[static_cast<size_t>(index)];
+    return options[item].values[size_t(index)];
   }
 
   template <typename T>

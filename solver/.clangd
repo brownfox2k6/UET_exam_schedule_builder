@@ -6,7 +6,10 @@ CompileFlags:
     -Wconversion,
     -Wsign-conversion,
     -Wshadow,
-    -Wshorten-64-to-32,
+    -Wold-style-cast,
+    -Wnon-virtual-dtor,
+    -Wuninitialized,
+    -Werror,
   ]
 
 Diagnostics:
@@ -18,5 +21,7 @@ Diagnostics:
       modernize-*, 
       concurrency-*, 
       portability-*,
-      tautological-*
+      tautological-*,
+      cppcoreguidelines-*,
+      misc-*,
     ]

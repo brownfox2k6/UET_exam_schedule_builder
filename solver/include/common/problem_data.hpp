@@ -24,6 +24,7 @@ namespace common {
  * thread mutates it.
  */
 struct ProblemData {
+  // NOLINTBEGIN(*-non-private-member-*, *-const-*)
   // --- Problem dimensions ---
   const int num_exams;
   const int num_slots;
@@ -87,6 +88,7 @@ struct ProblemData {
 
   // `feasible_rooms[i]` tells the rooms that are set to can be chosen for exam `i`
   const utils::CsrMatrix<int> feasible_rooms;
+  // NOLINTEND(*-non-private-member-*, *-const-*)
 
   ProblemData(const std::vector<Exam>& _exams, std::vector<int64_t> _slot_timestamps,
               const std::vector<Room>& _rooms);
