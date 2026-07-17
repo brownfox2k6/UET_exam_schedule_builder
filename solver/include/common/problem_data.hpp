@@ -74,10 +74,10 @@ struct ProblemData {
   const utils::CsrMatrix<int> conflicts_csrmatrix;
 
   /**
-   * @brief The total weighted conflict degree for each exam.
-   * * For each exam `i`, this stores the sum of weights (students) across all its neighbors in the
-   * conflict graph: `sum(conflicts_csrmatrix[i].values)`. Used as a heuristic to identify "heavy"
-   * exams that are harder to schedule.
+   * @brief Weighted conflict degree for each exam.
+   * * `weighted_conflict_degrees[i]` = sum of shared students counts between exam `i` and each
+   * conflicting exam `j` (i.e., sum of all entries in row `i` of the `conflicts_matrix`).
+   * Used as ordering criterion (3) in `Solution::get_next_exam()`.
    */
   const std::vector<int> weighted_conflict_degrees;
 

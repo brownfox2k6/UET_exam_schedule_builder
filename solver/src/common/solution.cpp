@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <cstddef>
-#include <limits>
 #include <tuple>
 #include <utility>
 
@@ -29,22 +28,32 @@ void Solution::reset() {
 }
 
 auto Solution::get_next_exam(const ProblemData& problem_data) const -> int {
+  /**
+   * Implementation based on "Multi-Neighbourhood Simulated Annealing for the ITC-2007 Capacitated
+   * Examination Timetabling Problem" by David van Bulck et al. (2025)
+   * @see 10.1007/s10951-023-00799-1
+   *
+   * The following ordering criteria are applied in sequence:
+   * (1) Saturation degree - number of feasible slots remaining (fewest first, dynamically updated
+   *     after each assignment).
+   * (2) Conflict degree - number of conflicting exams (largest first).
+   * (3) Weighted conflict degree - total shared students with conflicting exams (largest first).
+   * (4) Student count - number of enrolled students (largest first).
+   */
   int best_exam = -1;
-  int best_degree = std::numeric_limits<int>::max();
-  int best_conflict = std::numeric_limits<int>::min();
+  std::tuple<int, int, int, int> best_key;
   for (size_t exam = 0; exam < assigned_slots.size(); ++exam) {
     if (assigned_slots[exam] != -1) {
       continue;
     }
-    int degree = feasible_slots.get_feasible_count(exam);
-    int conflict = problem_data.weighted_conflict_degrees[exam];
-    // Ranked by:
-    //   1. Lower degree (feasible slots count)
-    //   2. Higher conflict (weighted conflict degrees)
-    if (std::make_tuple(degree, -conflict) < std::make_tuple(best_degree, -best_conflict)) {
-      best_degree = degree;
-      best_conflict = conflict;
+    const int saturation_degree = feasible_slots.get_feasible_count(exam);
+    const int degree = problem_data.conflicts_csrmatrix[exam].size();
+    const int weighted_degree = problem_data.weighted_conflict_degrees[exam];
+    const int student_count = problem_data.exam_student_counts[exam];
+    std::tuple key = {-saturation_degree, degree, weighted_degree, student_count};
+    if (best_exam == -1 || key > best_key) {
       best_exam = int(exam);
+      best_key = key;
     }
   }
   return best_exam;

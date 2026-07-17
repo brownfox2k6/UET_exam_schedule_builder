@@ -20,13 +20,13 @@ struct Solution {
   // If this value is > 0, slot `j` is strictly forbidden for exam `i`.
   utils::Matrix<int> conflicting_exams_count;
 
-  // `assigned_slots[i]` tells the assigned slot for exam `i`
+  // `assigned_slots[i]` tells the assigned slot for exam `i`.
   std::vector<int> assigned_slots;
 
   // Tracks available slot IDs for each exam.
   utils::FeasibleSet feasible_slots;
 
-  // Tracks available room IDs for each exam;
+  // Tracks available room IDs per (exam, slot) pair.
   utils::FeasibleSet feasible_rooms;
 
   // The total soft constraint penalty score of the current schedule (lower is better).
@@ -45,10 +45,7 @@ struct Solution {
   void reset();
 
   /**
-   * Heuristic: Exam scheduling order
-   * Find the next exam to schedule based on the Saturation Degree heuristic.
-   * Prioritize the exam with the fewest feasible slots. If there is a tie, select the exam with the
-   * highest total conflict degree (against all other exams).
+   * @brief Selects the next unscheduled exam using a constructive heuristic.
    */
   [[nodiscard]] auto get_next_exam(const ProblemData& problem_data) const -> int;
 
