@@ -105,13 +105,14 @@ void AntColony::update_pheromone(const std::vector<int>& best_schedule) {
 
 auto AntColony::run_one_iteration_impl() -> double {
 #pragma omp parallel for schedule(dynamic)
-  for (size_t i = 0; i < size_t(hyperparams.aco.num_ants()); ++i) {
+  for (int i = 0; i < hyperparams.aco.num_ants(); ++i) {
+    const auto ant_index = size_t(i);
     bool is_feasible = false;
     for (int j = 0; !is_feasible && j < hyperparams.aco.max_retries(); ++j) {
-      is_feasible = construct_ant(ants[i], rngs[i]);
+      is_feasible = construct_ant(ants[ant_index], rngs[ant_index]);
     }
     if (is_feasible) {
-      local_search(ants[i], rngs[i]);
+      local_search(ants[ant_index], rngs[ant_index]);
     }
   }
 
