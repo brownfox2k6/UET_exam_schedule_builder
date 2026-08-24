@@ -17,7 +17,7 @@ namespace utils {
 struct FeasibleSet {
  private:
   // Tells how many different values in options
-  int num_options;
+  [[maybe_unused]] int num_options;
 
   // row = item, col = list of current feasible options
   CsrMatrix<int> options;
@@ -29,10 +29,10 @@ struct FeasibleSet {
   std::vector<int> active_ends;
 
  public:
-  FeasibleSet(const CsrMatrix<int>& feasible_original, int num_options)
-      : num_options(num_options),
+  FeasibleSet(const CsrMatrix<int>& feasible_original, int num_options_count)
+      : num_options(num_options_count),
         options(feasible_original),
-        pos(feasible_original.num_rows(), num_options) {
+        pos(feasible_original.num_rows(), num_options_count) {
     reset();
   }
 
@@ -171,6 +171,9 @@ struct FeasibleSet {
     return options[item].values[size_t(index)];
   }
 
+  /**
+   * @brief Accesses the feasible options of an item as a span (read-only).
+   */
   template <typename T>
     requires std::is_integral_v<T>
   auto operator[](T item) const -> std::span<const int> {

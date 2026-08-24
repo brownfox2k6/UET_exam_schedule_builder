@@ -65,14 +65,24 @@ struct Matrix {
   /**
    * @brief Accesses the element at `[row, col]`.
    */
-  template <typename Self, typename R, typename C>
+  template <typename R, typename C>
     requires std::is_integral_v<R> && std::is_integral_v<C>
-  auto operator[](this Self& self, R row, C col) -> decltype(auto) {
-    PANIC_IF(std::cmp_less(row, 0) || std::cmp_greater_equal(row, self.num_rows_),
-             "Row index {} out of bounds [0, {}]", row, self.num_rows_);
-    PANIC_IF(std::cmp_less(col, 0) || std::cmp_greater_equal(col, self.num_cols_),
-             "Column index {} out of bounds [0, {}]", col, self.num_cols_);
-    return self.data_[(size_t(row) * size_t(self.num_cols_)) + size_t(col)];
+  auto operator[](R row, C col) -> T& {
+    PANIC_IF(std::cmp_less(row, 0) || std::cmp_greater_equal(row, num_rows_),
+             "Row index {} out of bounds [0, {}]", row, num_rows_);
+    PANIC_IF(std::cmp_less(col, 0) || std::cmp_greater_equal(col, num_cols_),
+             "Column index {} out of bounds [0, {}]", col, num_cols_);
+    return data_[(size_t(row) * size_t(num_cols_)) + size_t(col)];
+  }
+
+  template <typename R, typename C>
+    requires std::is_integral_v<R> && std::is_integral_v<C>
+  auto operator[](R row, C col) const -> const T& {
+    PANIC_IF(std::cmp_less(row, 0) || std::cmp_greater_equal(row, num_rows_),
+             "Row index {} out of bounds [0, {}]", row, num_rows_);
+    PANIC_IF(std::cmp_less(col, 0) || std::cmp_greater_equal(col, num_cols_),
+             "Column index {} out of bounds [0, {}]", col, num_cols_);
+    return data_[(size_t(row) * size_t(num_cols_)) + size_t(col)];
   }
 
   /**
@@ -178,21 +188,34 @@ struct CsrMatrix {
   /**
    * @brief Access a specific row of the matrix.
    */
-  template <typename Self, typename R>
+  template <typename R>
     requires std::is_integral_v<R>
-  auto operator[](this Self& self, R row_index) {
-    PANIC_IF(std::cmp_less(row_index, 0) || std::cmp_greater_equal(row_index, self.num_rows()),
-             "Row index {} out of bounds [0, {}]", row_index, self.num_rows() - 1);
+  auto operator[](R row_index) -> CsrRowView<T> {
+    PANIC_IF(std::cmp_less(row_index, 0) || std::cmp_greater_equal(row_index, num_rows()),
+             "Row index {} out of bounds [0, {}]", row_index, num_rows() - 1);
     const auto row = size_t(row_index);
-    const int start = self.offsets_[row];
-    const int end = self.offsets_[row + 1];
-    using ValueType =
-        std::conditional_t<std::is_const_v<std::remove_reference_t<Self>>, const T, T>;
-    return CsrRowView<ValueType>{
-        .indices = self.has_indices_ ? std::span<const int>{self.indices_.data() + start,
-                                                            self.indices_.data() + end}
-                                     : std::span<const int>{},
-        .values = std::span<ValueType>{self.values_.data() + start, self.values_.data() + end}};
+    const int start = offsets_[row];
+    const int end = offsets_[row + 1];
+    return CsrRowView<T>{
+        .indices = has_indices_
+                       ? std::span<const int>{indices_}.subspan(size_t(start), size_t(end - start))
+                       : std::span<const int>{},
+        .values = std::span<T>{values_}.subspan(size_t(start), size_t(end - start))};
+  }
+
+  template <typename R>
+    requires std::is_integral_v<R>
+  auto operator[](R row_index) const -> CsrRowView<const T> {
+    PANIC_IF(std::cmp_less(row_index, 0) || std::cmp_greater_equal(row_index, num_rows()),
+             "Row index {} out of bounds [0, {}]", row_index, num_rows() - 1);
+    const auto row = size_t(row_index);
+    const int start = offsets_[row];
+    const int end = offsets_[row + 1];
+    return CsrRowView<const T>{
+        .indices = has_indices_
+                       ? std::span<const int>{indices_}.subspan(size_t(start), size_t(end - start))
+                       : std::span<const int>{},
+        .values = std::span<const T>{values_}.subspan(size_t(start), size_t(end - start))};
   }
 };
 
