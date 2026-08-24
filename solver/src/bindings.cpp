@@ -7,7 +7,6 @@
 #include <pybind11/stl.h>
 
 #include <cstdint>
-#include <memory>
 
 #include "aco/ant_colony.hpp"
 #include "common/exam.hpp"
@@ -98,17 +97,14 @@ PYBIND11_MODULE(aco_solver, m) {  // NOLINT(readability-identifier-length)
       .def_readonly("fitness", &common::Solution::fitness);
 
   py::class_<aco::AntColony>(m, "AntColony")
-      .def(py::init([](common::Hyperparams hyperparams, const std::vector<common::Exam>& exams,
-                       std::vector<int64_t> slot_timestamps, const std::vector<common::Room>& rooms,
-                       int64_t base_seed) -> std::unique_ptr<aco::AntColony> {
-             return std::make_unique<aco::AntColony>(hyperparams, exams, std::move(slot_timestamps),
-                                                     rooms, base_seed);
-           }),
+      .def(py::init<common::Hyperparams, const std::vector<common::Exam>&, std::vector<int64_t>,
+                    const std::vector<common::Room>&, uint64_t>(),
            py::arg("hyperparams"), py::arg("exams"), py::arg("slot_timestamps"), py::arg("rooms"),
            py::arg("base_seed") = 42)  // NOLINT(*-magic-numbers)
       .def("run_one_iteration", &aco::AntColony::run_one_iteration,
            py::call_guard<py::gil_scoped_release>())
-      .def("run", &aco::AntColony::run, py::arg("callback") = py::none())
+      .def("run", &aco::AntColony::run, py::arg("callback") = py::none(),
+           py::call_guard<py::gil_scoped_release>())
       .def_readonly("global_best_schedule", &aco::AntColony::global_best_schedule)
       .def_readonly("global_best_fitness", &aco::AntColony::global_best_fitness);
 }

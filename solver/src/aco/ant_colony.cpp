@@ -1,8 +1,6 @@
 #include "aco/ant_colony.hpp"
 
 #include <omp.h>
-#include <pybind11/gil.h>
-#include <pybind11/pybind11.h>
 
 #include <algorithm>
 #include <cmath>
@@ -137,11 +135,9 @@ auto AntColony::run_one_iteration() -> double {
 
 void AntColony::run(const std::function<void(int, double)>& callback) {
   const std::scoped_lock lock(execution_mutex);
-  pybind11::gil_scoped_release release;
   for (int iter = 1; iter <= hyperparams.aco.num_iters(); ++iter) {
     const double iter_best_cost = run_one_iteration_impl();
     if (callback) {
-      pybind11::gil_scoped_acquire acquire;
       callback(iter, iter_best_cost);
     }
   }

@@ -150,7 +150,7 @@ struct FeasibleSet {
     const int count = get_feasible_count(item);
     const int index = pos[item, option];
     PANIC_IF(std::cmp_less(index, 0), "Item {} does not contain {} in its initial feasible set",
-         item, option);
+             item, option);
     PANIC_IF(index < count, "Item {}: Option {} is already active", item, option);
     auto row = options[item].values;
     std::swap(pos[item, option], pos[item, row[size_t(count)]]);
