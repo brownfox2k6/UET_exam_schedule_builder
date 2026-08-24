@@ -47,7 +47,7 @@ struct FeasibleSet {
       for (int option : options[item].values) {
         PANIC_IF(option < 0 || option >= num_options, "Option value {} out of bounds [0, {}]",
                  option, num_options - 1);
-        pos(item, option) = index++;
+        pos[item, option] = index++;
       }
     }
   }
@@ -84,7 +84,7 @@ struct FeasibleSet {
              "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
     PANIC_IF(std::cmp_less(option, 0) || std::cmp_greater_equal(option, num_options),
              "Option {} out of bounds [0, {}]", option, num_options - 1);
-    return pos(item, option) != -1;
+    return pos[item, option] != -1;
   }
 
   /**
@@ -97,7 +97,7 @@ struct FeasibleSet {
              "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
     PANIC_IF(std::cmp_less(option, 0) || std::cmp_greater_equal(option, num_options),
              "Option {} out of bounds [0, {}]", option, num_options - 1);
-    const int index = pos(item, option);
+    const int index = pos[item, option];
     return index >= 0 && index < get_feasible_count(item);
   }
 
@@ -125,15 +125,15 @@ struct FeasibleSet {
              "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
     PANIC_IF(std::cmp_less(option, 0) || std::cmp_greater_equal(option, num_options),
              "Option {} out of bounds [0, {}]", option, num_options - 1);
-    const auto count = size_t(get_feasible_count(item));
-    const auto index = size_t(pos(item, option));
+    const int count = get_feasible_count(item);
+    const int index = pos[item, option];
     PANIC_IF(std::cmp_less(index, 0), "Item {} does not contain {} in its initial feasible set",
              item, option);
     PANIC_IF(std::cmp_greater_equal(index, count), "Item {}: Option {} is already inactive", item,
              option);
     auto row = options[item].values;
-    std::swap(pos(item, option), pos(item, row[count - 1]));
-    std::swap(row[index], row[count - 1]);
+    std::swap(pos[item, option], pos[item, row[size_t(count - 1)]]);
+    std::swap(row[size_t(index)], row[size_t(count - 1)]);
     --active_ends[size_t(item + 1)];
   }
 
@@ -147,23 +147,26 @@ struct FeasibleSet {
              "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
     PANIC_IF(std::cmp_less(option, 0) || std::cmp_greater_equal(option, num_options),
              "Option {} out of bounds [0, {}]", option, num_options - 1);
-    const auto count = size_t(get_feasible_count(item));
-    const auto index = size_t(pos(item, option));
-    PANIC_IF(index < 0, "Item {} does not contain {} in its initial feasible set", item, option);
+    const int count = get_feasible_count(item);
+    const int index = pos[item, option];
+    PANIC_IF(std::cmp_less(index, 0), "Item {} does not contain {} in its initial feasible set",
+         item, option);
     PANIC_IF(index < count, "Item {}: Option {} is already active", item, option);
     auto row = options[item].values;
-    std::swap(pos(item, option), pos(item, row[count]));
-    std::swap(row[index], row[count]);
+    std::swap(pos[item, option], pos[item, row[size_t(count)]]);
+    std::swap(row[size_t(index)], row[size_t(count)]);
     ++active_ends[size_t(item + 1)];
   }
 
   /**
-   * @brief Accesses the element at `(item, index)` by value (read-only).
+   * @brief Accesses the element at `[item, index]` by value (read-only).
    */
   template <typename T1, typename T2>
     requires std::is_integral_v<T1> && std::is_integral_v<T2>
-  auto operator()(T1 item, T2 index) const -> int {
-    PANIC_IF(std::cmp_less(item, 0) || std::cmp_greater_equal(index, get_feasible_count(item)),
+  auto operator[](T1 item, T2 index) const -> int {
+    PANIC_IF(std::cmp_less(item, 0) || std::cmp_greater_equal(item, options.num_rows()),
+             "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
+    PANIC_IF(std::cmp_less(index, 0) || std::cmp_greater_equal(index, get_feasible_count(item)),
              "Item {}: Index {} out of feasible range", item, index);
     return options[item].values[size_t(index)];
   }
@@ -171,8 +174,8 @@ struct FeasibleSet {
   template <typename T>
     requires std::is_integral_v<T>
   auto operator[](T item) const -> std::span<const int> {
-    PANIC_IF(std::cmp_less(item, 0) || std::cmp_greater_equal(index, get_feasible_count(item)),
-             "Item {}: Index {} out of feasible range", item, index);
+    PANIC_IF(std::cmp_less(item, 0) || std::cmp_greater_equal(item, options.num_rows()),
+             "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
     const auto row = options[item].values;
     const int count = get_feasible_count(item);
     return row.subspan(0, count);

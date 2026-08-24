@@ -50,9 +50,9 @@ auto AntColony::go_2_swap(common::Solution& ant, std::mt19937& rng) -> bool {
   }
 
   // Check for hard constraint violation if we swap their slots
-  int conflicts_in_slot1 = ant.conflicting_exams_count(exam2, slot1);
-  int conflicts_in_slot2 = ant.conflicting_exams_count(exam1, slot2);
-  if (problem_data.conflicts_matrix(exam1, exam2) > 0) {
+  int conflicts_in_slot1 = ant.conflicting_exams_count[exam2, slot1];
+  int conflicts_in_slot2 = ant.conflicting_exams_count[exam1, slot2];
+  if (problem_data.conflicts_matrix[exam1, exam2] > 0) {
     --conflicts_in_slot1;
     --conflicts_in_slot2;
   }

@@ -105,7 +105,7 @@ PYBIND11_MODULE(aco_solver, m) {  // NOLINT(readability-identifier-length)
                                                      rooms, base_seed);
            }),
            py::arg("hyperparams"), py::arg("exams"), py::arg("slot_timestamps"), py::arg("rooms"),
-           py::arg("base_seed") = 42)  // NOLINT(readability-magic-numbers)
+           py::arg("base_seed") = 42)  // NOLINT(*-magic-numbers)
       .def("run_one_iteration", &aco::AntColony::run_one_iteration,
            py::call_guard<py::gil_scoped_release>())
       .def("run", &aco::AntColony::run, py::arg("callback") = py::none())

@@ -64,10 +64,10 @@ auto AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) -> bool 
     // For each feasible slot, calculate penalty if we assign this exam to that slot
     double total_weight = 0.0;
     for (size_t j = 0; j < count_feasible; ++j) {
-      const int slot = ant.feasible_slots(exam, j);
+      const int slot = ant.feasible_slots[exam, j];
       delta_soft[j] = evaluator.calculate_delta_penalty(ant.assigned_slots, exam, slot);
       const double eta = 1.0 / (1.0 + delta_soft[j]);
-      const double tau = pheromone(exam, slot);
+      const double tau = pheromone[exam, slot];
       weights[j] = std::pow(tau, hyperparams.aco.alpha()) * std::pow(eta, hyperparams.aco.beta());
       total_weight += weights[j];
     }
@@ -85,7 +85,7 @@ auto AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) -> bool 
       }
     }
 
-    const int slot = ant.feasible_slots(exam, chosen_j);
+    const int slot = ant.feasible_slots[exam, chosen_j];
     const double penalty = delta_soft[chosen_j];
     ant.assign_exam(exam, slot, problem_data.conflicts_csrmatrix);
     ant.fitness += penalty;
@@ -100,12 +100,12 @@ void AntColony::update_pheromone(const std::vector<int>& best_schedule) {
       const double delta_tau = slot == assigned_slot
                                    ? hyperparams.aco.rho() * hyperparams.aco.tau_max()
                                    : hyperparams.aco.rho() * hyperparams.aco.tau_min();
-      pheromone(exam, slot) = ((1.0 - hyperparams.aco.rho()) * pheromone(exam, slot)) + delta_tau;
+      pheromone[exam, slot] = ((1.0 - hyperparams.aco.rho()) * pheromone[exam, slot]) + delta_tau;
     }
   }
 }
 
-auto AntColony::run_one_iteration() -> double {
+auto AntColony::run_one_iteration_impl() -> double {
 #pragma omp parallel for schedule(dynamic)
   for (size_t i = 0; i < size_t(hyperparams.aco.num_ants()); ++i) {
     bool is_feasible = false;
@@ -130,10 +130,16 @@ auto AntColony::run_one_iteration() -> double {
   return iter_best.fitness;
 }
 
+auto AntColony::run_one_iteration() -> double {
+  const std::scoped_lock lock(execution_mutex);
+  return run_one_iteration_impl();
+}
+
 void AntColony::run(const std::function<void(int, double)>& callback) {
+  const std::scoped_lock lock(execution_mutex);
   pybind11::gil_scoped_release release;
   for (int iter = 1; iter <= hyperparams.aco.num_iters(); ++iter) {
-    const double iter_best_cost = run_one_iteration();
+    const double iter_best_cost = run_one_iteration_impl();
     if (callback) {
       pybind11::gil_scoped_acquire acquire;
       callback(iter, iter_best_cost);

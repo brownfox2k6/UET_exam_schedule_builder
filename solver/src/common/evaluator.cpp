@@ -1,5 +1,6 @@
 #include "common/evaluator.hpp"
 
+#include <cmath>
 #include <cstddef>
 #include <cstdint>
 #include <limits>
@@ -12,6 +13,12 @@
 namespace common {
 
 constexpr double SECONDS_PER_DAY = 86400.0;
+
+namespace {
+auto timestamp_distance(int64_t first, int64_t second) -> uint64_t {
+  return first >= second ? uint64_t(first) - uint64_t(second) : uint64_t(second) - uint64_t(first);
+}
+}  // namespace
 
 Evaluator::Evaluator(const ProblemData& _problem_data, const Hyperparams& _hyperparams)
     : problem_data(_problem_data),
@@ -28,9 +35,9 @@ auto Evaluator::build_proximity_penalties(const ProblemData& problem_data,
     const int64_t slot_i = slot_timestamps[i];
     for (size_t j = i + 1; j < num_slots; ++j) {
       const int64_t slot_j = slot_timestamps[j];
-      const double diff_days = std::fabs(slot_i - slot_j) / SECONDS_PER_DAY;
+      const double diff_days = double(timestamp_distance(slot_i, slot_j)) / SECONDS_PER_DAY;
       const double value = std::pow(hyperparams.penalty_decay_base(), -diff_days);
-      penalties(i, j) = penalties(j, i) = value;
+      penalties[i, j] = penalties[j, i] = value;
     }
   }
   return penalties;
@@ -56,9 +63,9 @@ auto Evaluator::calculate_delta_penalty(const std::vector<int>& schedule, int ex
       continue;
     }
     const int weight = conflict_counts[i] * (exam_credits + credits[conflict_exam]);
-    delta += weight * proximity_penalties(new_slot, conflict_slot);
+    delta += weight * proximity_penalties[new_slot, conflict_slot];
     if (cur_slot != -1) {
-      delta -= weight * proximity_penalties(cur_slot, conflict_slot);
+      delta -= weight * proximity_penalties[cur_slot, conflict_slot];
     }
   }
   return delta;

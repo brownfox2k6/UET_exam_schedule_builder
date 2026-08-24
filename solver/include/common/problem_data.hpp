@@ -93,6 +93,12 @@ struct ProblemData {
   ProblemData(const std::vector<Exam>& _exams, std::vector<int64_t> _slot_timestamps,
               const std::vector<Room>& _rooms);
 
+  ~ProblemData() = default;
+  ProblemData(const ProblemData&) = delete;
+  auto operator=(const ProblemData&) -> ProblemData& = delete;
+  ProblemData(ProblemData&&) = delete;
+  auto operator=(ProblemData&&) -> ProblemData& = delete;
+
  private:
   static auto extract_num_sections(const std::vector<Exam>& exams) -> int;
   static auto extract_num_enrollments(const std::vector<Exam>& exams) -> int;

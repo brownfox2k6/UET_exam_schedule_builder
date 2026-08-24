@@ -265,8 +265,8 @@ auto ProblemData::build_conflicts_matrix(
       const int exam_i = student_exams[i];
       for (size_t j = i + 1; j < num_exams_by_student; ++j) {
         const int exam_j = student_exams[j];
-        ++conflicts_matrix(exam_i, exam_j);
-        ++conflicts_matrix(exam_j, exam_i);
+        ++conflicts_matrix[exam_i, exam_j];
+        ++conflicts_matrix[exam_j, exam_i];
       }
     }
   }
@@ -294,9 +294,10 @@ auto ProblemData::build_feasible_slots(const std::vector<Exam>& exams, int num_s
     const auto& feasible = exam.feasible_slots();
     feasible_count += feasible.size();
     for (int slot : feasible) {
-      PANIC_IF(slot >= num_slots, "Exam {}: 'feasible_slots' has value {} out of bounds [0, {}]",
+      PANIC_IF(slot < 0 || slot >= num_slots,
+           "Exam {}: 'feasible_slots' has value {} out of bounds [0, {}]",
                exam.code(), slot, num_slots - 1);
-      feasible_slots(exam_index, slot) = slot;
+      feasible_slots[exam_index, slot] = slot;
     }
     ++exam_index;
   }
@@ -313,9 +314,10 @@ auto ProblemData::build_feasible_rooms(const std::vector<Exam>& exams, int num_r
     const auto& feasible = exam.feasible_rooms();
     feasible_count += feasible.size();
     for (int room : feasible) {
-      PANIC_IF(room >= num_rooms, "Exam {}: 'feasible_rooms' has value {} out of bounds [0, {}]",
+      PANIC_IF(room < 0 || room >= num_rooms,
+           "Exam {}: 'feasible_rooms' has value {} out of bounds [0, {}]",
                exam.code(), room, num_rooms - 1);
-      feasible_rooms(exam_index, room) = room;
+      feasible_rooms[exam_index, room] = room;
     }
     ++exam_index;
   }

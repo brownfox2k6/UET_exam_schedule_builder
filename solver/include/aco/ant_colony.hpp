@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <functional>
+#include <mutex>
 #include <random>
 #include <vector>
 
@@ -63,6 +64,9 @@ class AntColony {
    * ant.
    */
   void update_pheromone(const std::vector<int>& best_schedule);
+  auto run_one_iteration_impl() -> double;
+
+  std::mutex execution_mutex;
 
  public:
   /**
