@@ -4,24 +4,26 @@ project(aco_solver CXX)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(OpenMP REQUIRED)
-find_package(Python3 3.8 REQUIRED COMPONENTS Interpreter Development.Module)
+find_package(Python 3.9 REQUIRED COMPONENTS Interpreter Development.Module)
 
 include(FetchContent)
-set(PYBIND11_FINDPYTHON ON)
-find_package(pybind11 CONFIG QUIET)
-if(NOT pybind11_FOUND)
+find_package(nanobind CONFIG QUIET)
+if(NOT nanobind_FOUND)
   FetchContent_Declare(
-    pybind11
-    GIT_REPOSITORY https://github.com/pybind/pybind11.git
-    GIT_TAG        v3.1.0
+    nanobind
+    GIT_REPOSITORY https://github.com/wjakob/nanobind.git
+    GIT_TAG        v3.0.0
     GIT_SHALLOW    TRUE
   )
-  FetchContent_MakeAvailable(pybind11)
+  FetchContent_MakeAvailable(nanobind)
 endif()
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 
-pybind11_add_module(aco_solver ${SOURCES})
+nanobind_add_module(aco_solver ${SOURCES})
+set_target_properties(nanobind-static PROPERTIES
+  INTERFACE_SYSTEM_INCLUDE_DIRECTORIES $<TARGET_PROPERTY:nanobind-static,INTERFACE_INCLUDE_DIRECTORIES>
+)
 
 target_include_directories(aco_solver PRIVATE include)
 target_compile_features(aco_solver PRIVATE cxx_std_23)
@@ -51,7 +53,7 @@ endif()
 set_target_properties(aco_solver PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 
 execute_process(
-  COMMAND "${Python3_EXECUTABLE}" -c "import pybind11_stubgen"
+  COMMAND "${Python3_EXECUTABLE}" -c "import nanobind.stubgen"
   RESULT_VARIABLE STUBGEN_IMPORT_RESULT
   OUTPUT_QUIET
   ERROR_QUIET
@@ -60,10 +62,10 @@ execute_process(
 if(STUBGEN_IMPORT_RESULT EQUAL 0)
   add_custom_command(TARGET aco_solver POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E env "PYTHONPATH=$<TARGET_FILE_DIR:aco_solver>"
-            ${Python3_EXECUTABLE} -m pybind11_stubgen aco_solver --out $<TARGET_FILE_DIR:aco_solver>
-    COMMENT "Generating Python stubs using Python ${Python3_VERSION}..."
+            ${Python3_EXECUTABLE} -m nanobind.stubgen -m aco_solver -o $<TARGET_FILE_DIR:aco_solver>
+    COMMENT "Generating Python stubs using nanobind.stubgen..."
     VERBATIM
   )
 else()
-  message(STATUS "Optional pybind11-stubgen is not installed; Python stubs will not be generated.")
+  message(STATUS "nanobind.stubgen is not available; Python stubs will not be generated.")
 endif()
