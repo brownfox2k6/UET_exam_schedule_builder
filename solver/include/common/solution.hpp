@@ -30,7 +30,7 @@ struct Solution {
   utils::FeasibleSet feasible_rooms;
 
   // The total soft constraint penalty score of the current schedule (lower is better).
-  double fitness;
+  double penalty;
 
   // NOLINTEND(*-non-private-*)
 

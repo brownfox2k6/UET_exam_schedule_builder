@@ -1,6 +1,8 @@
 #pragma once
 
+#ifndef NDEBUG
 #include <cmath>
+#endif  // NDEBUG
 
 #include "utils/assert.hpp"
 
@@ -86,6 +88,7 @@ struct Hyperparams {
                tau_min_);
       tau_max_ = tau_max;
     }
+    // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
     void set_tau_bounds(double tau_min, double tau_max) {
       PANIC_IF(!std::isfinite(tau_min) || tau_min <= 0.0,
                "ACO.tau_min must be finite and positive (got: {})", tau_min);

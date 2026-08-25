@@ -29,7 +29,7 @@ auto AntColony::go_1_move(common::Solution& ant, std::mt19937& rng) -> bool {
   // Accept if cost reduces (or may be unchanged)
   ant.unassign_exam(exam, problem_data.conflicts_csrmatrix);
   ant.assign_exam(exam, new_slot, problem_data.conflicts_csrmatrix);
-  ant.fitness += delta;
+  ant.penalty += delta;
   return true;
 }
 
@@ -70,7 +70,7 @@ auto AntColony::go_2_swap(common::Solution& ant, std::mt19937& rng) -> bool {
   ant.unassign_exam(exam2, problem_data.conflicts_csrmatrix);
   ant.assign_exam(exam1, slot2, problem_data.conflicts_csrmatrix);
   ant.assign_exam(exam2, slot1, problem_data.conflicts_csrmatrix);
-  ant.fitness += delta;
+  ant.penalty += delta;
   return true;
 }
 

@@ -79,7 +79,7 @@ class AntColony {
 
   // The best solution found since the start of the algorithm
   std::vector<int> global_best_schedule;  // NOLINT(*non-private-member-variables*)
-  double global_best_fitness;             // NOLINT(*non-private-member-variables*)
+  double global_best_penalty;             // NOLINT(*non-private-member-variables*)
 
   /**
    * @brief Executes a single iteration of the Ant Colony Optimization algorithm.

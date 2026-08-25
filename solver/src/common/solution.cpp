@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <cstddef>
 #include <tuple>
-#include <utility>
 
 #include "common/problem_data.hpp"
 #include "utils/assert.hpp"
@@ -17,10 +16,10 @@ Solution::Solution(const ProblemData& exams)
       assigned_slots(size_t(exams.num_exams), -1),
       feasible_slots(exams.feasible_slots, exams.num_slots),
       feasible_rooms(exams.feasible_rooms, exams.num_rooms),
-      fitness(0.0) {}
+      penalty(0.0) {}
 
 void Solution::reset() {
-  fitness = 0.0;
+  penalty = 0.0;
   feasible_slots.reset();
   feasible_rooms.reset();
   std::ranges::fill(assigned_slots, -1);
@@ -59,6 +58,7 @@ auto Solution::get_next_exam(const ProblemData& problem_data) const -> int {
   return best_exam;
 }
 
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
 void Solution::assign_exam(int exam, int slot, const utils::CsrMatrix<int>& conflicts_csrmatrix) {
   PANIC_IF(exam < 0 || std::cmp_greater_equal(exam, assigned_slots.size()),
            "Exam index {} out of bounds [0, {}]", exam, assigned_slots.size() - 1);

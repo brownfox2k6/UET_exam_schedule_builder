@@ -7,12 +7,15 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
-#include <unordered_set>
 
 #include "common/exam.hpp"
 #include "common/room.hpp"
 #include "utils/assert.hpp"
 #include "utils/matrix.hpp"
+
+#ifndef NDEBUG
+#include <unordered_set>
+#endif  // NDEBUG
 
 namespace common {
 

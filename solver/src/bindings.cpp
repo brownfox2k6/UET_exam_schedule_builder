@@ -90,7 +90,7 @@ NB_MODULE(aco_solver, m) {
 
   nb::class_<common::Solution>(m, "Solution")
       .def_ro("schedule", &common::Solution::assigned_slots)
-      .def_ro("fitness", &common::Solution::fitness);
+      .def_ro("penalty", &common::Solution::penalty);
 
   nb::class_<aco::AntColony>(m, "AntColony")
       .def(nb::init<common::Hyperparams, const std::vector<common::Exam>&, std::vector<int64_t>,
@@ -102,5 +102,5 @@ NB_MODULE(aco_solver, m) {
       .def("run", &aco::AntColony::run, nb::arg("callback") = nb::none(),
            nb::call_guard<nb::gil_scoped_release>())
       .def_ro("global_best_schedule", &aco::AntColony::global_best_schedule)
-      .def_ro("global_best_fitness", &aco::AntColony::global_best_fitness);
+      .def_ro("global_best_penalty", &aco::AntColony::global_best_penalty);
 }

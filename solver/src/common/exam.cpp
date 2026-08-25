@@ -1,9 +1,10 @@
-#include "common/exam.hpp"
-
+#ifndef NDEBUG
 #include <string_view>
 #include <unordered_map>
 #include <unordered_set>
+#endif  // NDEBUG
 
+#include "common/exam.hpp"
 #include "utils/assert.hpp"
 
 namespace common {
