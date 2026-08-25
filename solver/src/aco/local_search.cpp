@@ -1,5 +1,3 @@
-#include <omp.h>
-
 #include <cstddef>
 
 #include "aco/ant_colony.hpp"

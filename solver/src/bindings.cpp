@@ -12,7 +12,8 @@
 
 namespace nb = nanobind;
 
-NB_MODULE(aco_solver, m) {  // NOLINT(readability-identifier-length)
+// NOLINTNEXTLINE(readability-identifier-length, performance-unnecessary-value-param)
+NB_MODULE(aco_solver, m) {
   m.doc() =
       "Solver for University Examination Timetabling "
       "using Ant Colony Optimization and Local Search";
@@ -82,8 +83,7 @@ NB_MODULE(aco_solver, m) {  // NOLINT(readability-identifier-length)
       .def(nb::init<common::Hyperparams::Evaluation, common::Hyperparams::ACO,
                     common::Hyperparams::LS>(),
            nb::arg("_eval") = common::Hyperparams::Evaluation(),
-           nb::arg("_aco") = common::Hyperparams::ACO(),
-           nb::arg("_ls") = common::Hyperparams::LS())
+           nb::arg("_aco") = common::Hyperparams::ACO(), nb::arg("_ls") = common::Hyperparams::LS())
       .def_rw("eval", &common::Hyperparams::eval)
       .def_rw("aco", &common::Hyperparams::aco)
       .def_rw("ls", &common::Hyperparams::ls);
