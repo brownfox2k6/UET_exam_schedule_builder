@@ -8,7 +8,7 @@ namespace common {
 
 struct Evaluator {
  public:
-  Evaluator(const ProblemData& _problem_data, const Hyperparams& _hyperparams);
+  Evaluator(const ProblemData& _problem_data, const Hyperparams::Evaluation& _hyperparams);
 
   [[nodiscard]] auto calculate_delta_penalty(const std::vector<int>& schedule, int exam,
                                              int new_slot, int ignore_exam = -1) const -> double;

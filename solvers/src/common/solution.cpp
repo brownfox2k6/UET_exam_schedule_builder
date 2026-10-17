@@ -15,13 +15,11 @@ Solution::Solution(const ProblemData& exams)
     : conflicting_exams_count(exams.num_exams, exams.num_slots, 0),
       assigned_slots(size_t(exams.num_exams), -1),
       feasible_slots(exams.feasible_slots, exams.num_slots),
-      feasible_rooms(exams.feasible_rooms, exams.num_rooms),
       penalty(0.0) {}
 
 void Solution::reset() {
   penalty = 0.0;
   feasible_slots.reset();
-  feasible_rooms.reset();
   std::ranges::fill(assigned_slots, -1);
   conflicting_exams_count.fill(0);
 }

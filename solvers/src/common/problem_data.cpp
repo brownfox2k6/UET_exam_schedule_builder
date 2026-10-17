@@ -54,7 +54,7 @@ ProblemData::ProblemData(const std::vector<Exam>& _exams, std::vector<int64_t> _
       weighted_conflict_degrees(build_weighted_conflict_degrees(conflicts_csrmatrix)),
 
       feasible_slots(build_feasible_slots(_exams, num_slots)),
-      feasible_rooms(build_feasible_rooms(_exams, num_rooms)) {
+      feasible_rooms(build_feasible_rooms(_exams, num_rooms, num_sections)) {
 #ifndef NDEBUG
   PANIC_IF(num_slots == 0, "'_slot_timestamps' is empty");
   PANIC_IF(num_rooms == 0, "'_rooms' is empty");
@@ -307,22 +307,23 @@ auto ProblemData::build_feasible_slots(const std::vector<Exam>& exams, int num_s
   return {feasible_slots, feasible_count, false, -1};
 }
 
-auto ProblemData::build_feasible_rooms(const std::vector<Exam>& exams, int num_rooms)
-    -> utils::CsrMatrix<int> {
-  const size_t num_exams = exams.size();
-  utils::Matrix<int> feasible_rooms(num_exams, num_rooms, -1);
+auto ProblemData::build_feasible_rooms(const std::vector<Exam>& exams, int num_rooms,
+                                       int num_sections) -> utils::CsrMatrix<int> {
+  utils::Matrix<int> feasible_rooms(size_t(num_sections), num_rooms, -1);
   size_t feasible_count = 0;
-  int exam_index = 0;
+  int section_index = 0;
   for (const Exam& exam : exams) {
-    const auto& feasible = exam.feasible_rooms();
-    feasible_count += feasible.size();
-    for (int room : feasible) {
-      PANIC_IF(room < 0 || room >= num_rooms,
-               "Exam {}: 'feasible_rooms' has value {} out of bounds [0, {}]", exam.code(), room,
-               num_rooms - 1);
-      feasible_rooms[exam_index, room] = room;
+    for (const ExamSection& section : exam.sections()) {
+      const auto& feasible = section.feasible_rooms();
+      feasible_count += feasible.size();
+      for (int room : feasible) {
+        PANIC_IF(room < 0 || room >= num_rooms,
+                 "Section {}: 'feasible_rooms' has value {} out of bounds [0, {}]",
+                 section.code(), room, num_rooms - 1);
+        feasible_rooms[section_index, room] = room;
+      }
+      ++section_index;
     }
-    ++exam_index;
   }
   return {feasible_rooms, feasible_count, false, -1};
 }

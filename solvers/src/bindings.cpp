@@ -9,33 +9,32 @@
 #include "common/hyperparameters.hpp"
 #include "common/room.hpp"
 #include "common/solution.hpp"
+#include "ls/local_search.hpp"
 
 namespace nb = nanobind;
 
 // NOLINTNEXTLINE(readability-identifier-length, performance-unnecessary-value-param)
-NB_MODULE(aco_solver, m) {
+NB_MODULE(cetp_solvers, m) {
   m.doc() =
-      "Solver for University Examination Timetabling "
-      "using Ant Colony Optimization and Local Search";
+      "Some metaheuristic approaches for the Capacitated Examination Timetabling Problem (CETP).";
 
   nb::class_<common::ExamSection>(m, "ExamSection")
-      .def(nb::init<std::string, std::vector<std::string>>(), nb::arg("code"), nb::arg("students"))
+      .def(nb::init<std::string, std::vector<std::string>, std::vector<int>>(), nb::arg("code"),
+           nb::arg("students"), nb::arg("feasible_rooms"))
       .def_prop_rw("code", &common::ExamSection::code, &common::ExamSection::set_code)
       .def_prop_rw("students", &common::ExamSection::students, &common::ExamSection::set_students)
+      .def_prop_rw("feasible_rooms", &common::ExamSection::feasible_rooms,
+                   &common::ExamSection::set_feasible_rooms)
       .def_prop_ro("student_count", &common::ExamSection::student_count);
 
   nb::class_<common::Exam>(m, "Exam")
-      .def(nb::init<std::string, int, std::vector<common::ExamSection>, std::vector<int>,
-                    std::vector<int>>(),
-           nb::arg("code"), nb::arg("credits"), nb::arg("sections"), nb::arg("feasible_slots"),
-           nb::arg("feasible_rooms"))
+      .def(nb::init<std::string, int, std::vector<common::ExamSection>, std::vector<int>>(),
+           nb::arg("code"), nb::arg("credits"), nb::arg("sections"), nb::arg("feasible_slots"))
       .def_prop_rw("code", &common::Exam::code, &common::Exam::set_code)
       .def_prop_rw("credits", &common::Exam::credits, &common::Exam::set_credits)
       .def_prop_rw("sections", &common::Exam::sections, &common::Exam::set_sections)
       .def_prop_rw("feasible_slots", &common::Exam::feasible_slots,
                    &common::Exam::set_feasible_slots)
-      .def_prop_rw("feasible_rooms", &common::Exam::feasible_rooms,
-                   &common::Exam::set_feasible_rooms)
       .def_prop_ro("section_count", &common::Exam::section_count)
       .def_prop_ro("student_count", &common::Exam::student_count);
 
@@ -103,4 +102,14 @@ NB_MODULE(aco_solver, m) {
            nb::call_guard<nb::gil_scoped_release>())
       .def_ro("global_best_schedule", &aco::AntColony::global_best_schedule)
       .def_ro("global_best_penalty", &aco::AntColony::global_best_penalty);
+
+  nb::class_<ls::LocalSearch>(m, "LocalSearch")
+      .def(nb::init<common::Hyperparams::Evaluation, common::Hyperparams::LS,
+                    const std::vector<common::Exam>&, std::vector<int64_t>,
+                    const std::vector<common::Room>&, uint64_t>(),
+           nb::arg("eval_params"), nb::arg("ls_params"), nb::arg("exams"),
+           nb::arg("slot_timestamps"), nb::arg("rooms"),
+           nb::arg("base_seed") = 42)  // NOLINT(*-magic-numbers)
+      .def("run", &ls::LocalSearch::run, nb::arg("initial_schedule"),
+           nb::call_guard<nb::gil_scoped_release>());
 }

@@ -86,7 +86,7 @@ struct ProblemData {
   // `feasible_slots[i]` tells the slots that are set to can be chosen for exam `i`
   const utils::CsrMatrix<int> feasible_slots;
 
-  // `feasible_rooms[i]` tells the rooms that are set to can be chosen for exam `i`
+  // `feasible_rooms[i]` contains room IDs eligible for section `i`.
   const utils::CsrMatrix<int> feasible_rooms;
   // NOLINTEND(*-non-private-member-*, *-const-*)
 
@@ -131,7 +131,7 @@ struct ProblemData {
       -> std::vector<int>;
   static auto build_feasible_slots(const std::vector<Exam>& exams, int num_slots)
       -> utils::CsrMatrix<int>;
-  static auto build_feasible_rooms(const std::vector<Exam>& exams, int num_rooms)
+  static auto build_feasible_rooms(const std::vector<Exam>& exams, int num_rooms, int num_sections)
       -> utils::CsrMatrix<int>;
 
 };  // struct ProblemData

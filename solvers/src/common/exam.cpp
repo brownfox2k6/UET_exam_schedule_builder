@@ -13,9 +13,11 @@ namespace common {
 // ---------- ExamSection ----------
 // ---------------------------------
 
-ExamSection::ExamSection(std::string code, std::vector<std::string> students) {
+ExamSection::ExamSection(std::string code, std::vector<std::string> students,
+                         std::vector<int> feasible_rooms) {
   set_code(std::move(code));
   set_students(std::move(students));
+  set_feasible_rooms(std::move(feasible_rooms));
 }
 
 void ExamSection::set_code(std::string code) {
@@ -37,17 +39,29 @@ void ExamSection::set_students(std::vector<std::string> students) {
   students_ = std::move(students);
 }
 
+void ExamSection::set_feasible_rooms(std::vector<int> feasible_rooms) {
+#ifndef NDEBUG
+  PANIC_IF(feasible_rooms.empty(), "Section '{}': 'feasible_rooms' is empty", code_);
+  std::unordered_set<int> unique_checker;
+  for (int room : feasible_rooms) {
+    PANIC_IF(room < 0, "Section '{}': 'feasible_rooms' has a negative value ({})", code_, room);
+    PANIC_IF(!unique_checker.emplace(room).second,
+             "Section '{}': 'feasible_rooms' has duplicate value ({})", code_, room);
+  }
+#endif  // NDEBUG
+  feasible_rooms_ = std::move(feasible_rooms);
+}
+
 // --------------------------
 // ---------- Exam ----------
 // --------------------------
 
 Exam::Exam(std::string code, int credits, std::vector<ExamSection> sections,
-           std::vector<int> feasible_slots, std::vector<int> feasible_rooms) {
+           std::vector<int> feasible_slots) {
   set_code(std::move(code));
   set_credits(credits);
   set_sections(std::move(sections));
   set_feasible_slots(std::move(feasible_slots));
-  set_feasible_rooms(std::move(feasible_rooms));
 }
 
 void Exam::set_code(std::string code) {
@@ -96,19 +110,6 @@ void Exam::set_feasible_slots(std::vector<int> feasible_slots) {
   }
 #endif  // NDEBUG
   feasible_slots_ = std::move(feasible_slots);
-}
-
-void Exam::set_feasible_rooms(std::vector<int> feasible_rooms) {
-#ifndef NDEBUG
-  PANIC_IF(feasible_rooms.empty(), "Exam '{}': 'feasible_rooms' is empty", code_);
-  std::unordered_set<int> unique_checker;
-  for (int room : feasible_rooms) {
-    PANIC_IF(room < 0, "Exam '{}': 'feasible_rooms' has a negative value ({})", code_, room);
-    PANIC_IF(!unique_checker.emplace(room).second,
-             "Exam '{}': 'feasible_rooms' has duplicate value ({})", code_, room);
-  }
-#endif  // NDEBUG
-  feasible_rooms_ = std::move(feasible_rooms);
 }
 
 }  // namespace common

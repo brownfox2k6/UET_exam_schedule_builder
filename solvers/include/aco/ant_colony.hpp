@@ -24,8 +24,7 @@ class AntColony {
   const common::Hyperparams hyperparams;   // NOLINT(*const-or-ref-data-members*)
   const common::ProblemData problem_data;  // NOLINT(*const-or-ref-data-members*)
   const common::Evaluator evaluator;       // NOLINT(*const-or-ref-data-members*)
-
-  const uint64_t base_seed;  // NOLINT(*const-or-ref-data-members*)
+  const uint64_t base_seed;                // NOLINT(*const-or-ref-data-members*)
   std::vector<std::mt19937> rngs;
 
   // Pheromone matrix representing learned experience for exam-to-slot assignments
@@ -37,27 +36,9 @@ class AntColony {
   /**
    * @brief Constructs a complete timetable for a single ant using pheromone and heuristic
    * probabilities.
-   * @return True if a feasible schedule is fully constructed, false if it gets stuck.
+   * @return `true` if a feasible schedule is fully constructed, `false` if it gets stuck.
    */
   auto construct_ant(common::Solution& ant, std::mt19937& rng) -> bool;
-
-  /**
-   * @brief Local search operator: Attempts to move a single exam to a different feasible slot.
-   * @return True if the move is successfully applied (downhill or neutral step).
-   */
-  auto go_1_move(common::Solution& ant, std::mt19937& rng) -> bool;
-
-  /**
-   * @brief Local search operator: Attempts to swap the slots of two assigned exams.
-   * @return True if the swap is successfully applied and maintains feasibility.
-   */
-  auto go_2_swap(common::Solution& ant, std::mt19937& rng) -> bool;
-
-  /**
-   * @brief Applies a series of 1-move and 2-swap operators to refine an ant's fully constructed
-   * schedule.
-   */
-  void local_search(common::Solution& ant, std::mt19937& rng);
 
   /**
    * @brief Evaporates existing pheromones and deposits new pheromones based on the iteration's best
@@ -83,9 +64,8 @@ class AntColony {
 
   /**
    * @brief Executes a single iteration of the Ant Colony Optimization algorithm.
-   * This involves constructing solutions for all ants in parallel, applying local search, finding
-   * the best ant of the generation, updating the global best solution, and updating the pheromone
-   * matrix.
+   * This involves constructing solutions for all ants in parallel, finding the best ant of the
+   * generation, updating the global best solution, and updating the pheromone matrix.
    * @return double The best cost (fitness) found by the ants in this iteration.
    */
   auto run_one_iteration() -> double;

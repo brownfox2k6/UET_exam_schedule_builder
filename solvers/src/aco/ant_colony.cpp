@@ -19,7 +19,7 @@ AntColony::AntColony(common::Hyperparams _hyperparams, const std::vector<common:
                      uint64_t _base_seed)
     : hyperparams(_hyperparams),
       problem_data(_exams, std::move(_slot_timestamps), _rooms),
-      evaluator(problem_data, hyperparams),
+      evaluator(problem_data, hyperparams.eval),
       base_seed(_base_seed),
       pheromone(problem_data.num_exams, problem_data.num_slots, hyperparams.aco.tau_max()),
       global_best_schedule(size_t(problem_data.num_exams), -1),
@@ -110,9 +110,6 @@ auto AntColony::run_one_iteration_impl() -> double {
     bool is_feasible = false;
     for (int j = 0; !is_feasible && j < hyperparams.aco.max_retries(); ++j) {
       is_feasible = construct_ant(ants[ant_index], rngs[ant_index]);
-    }
-    if (is_feasible) {
-      local_search(ants[ant_index], rngs[ant_index]);
     }
   }
 

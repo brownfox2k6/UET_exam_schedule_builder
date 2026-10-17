@@ -7,10 +7,10 @@
 namespace common {
 
 /**
- * @brief Represents an individual ant constructing an exam timetable.
+ * @brief Mutable candidate timetable state shared by solver algorithms.
  * The schedule acts as a direct mapping: the vector index represents the Exam ID,
  * and the stored value represents the assigned Timeslot ID (-1 for unassigned).
- * The fitness tracks soft constraint violations (lower is better).
+ * The penalty tracks soft constraint violations (lower is better).
  */
 struct Solution {
   // NOLINTBEGIN(*-non-private-*)
@@ -26,21 +26,18 @@ struct Solution {
   // Tracks available slot IDs for each exam.
   utils::FeasibleSet feasible_slots;
 
-  // Tracks available room IDs per (exam, slot) pair.
-  utils::FeasibleSet feasible_rooms;
-
   // The total soft constraint penalty score of the current schedule (lower is better).
   double penalty;
 
   // NOLINTEND(*-non-private-*)
 
   /**
-   * @brief Initializes an ant with empty schedule and default tracking matrices.
+   * @brief Initializes an empty schedule and default tracking matrices.
    */
   Solution(const ProblemData& exams);
 
   /**
-   * @brief Resets the ant's memory, schedule, and conflict states to prepare for a new iteration.
+   * @brief Resets the schedule and conflict states to prepare for reuse.
    */
   void reset();
 

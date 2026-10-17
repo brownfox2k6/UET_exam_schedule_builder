@@ -20,9 +20,9 @@ auto timestamp_distance(int64_t first, int64_t second) -> uint64_t {
 }
 }  // namespace
 
-Evaluator::Evaluator(const ProblemData& _problem_data, const Hyperparams& _hyperparams)
+Evaluator::Evaluator(const ProblemData& _problem_data, const Hyperparams::Evaluation& _hyperparams)
     : problem_data(_problem_data),
-      hyperparams(_hyperparams.eval),
+      hyperparams(_hyperparams),
       proximity_penalties(build_proximity_penalties(problem_data, hyperparams)) {}
 
 auto Evaluator::build_proximity_penalties(const ProblemData& problem_data,
