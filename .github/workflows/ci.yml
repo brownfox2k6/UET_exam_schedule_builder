@@ -2,7 +2,6 @@ name: Build solvers
 
 on:
   push:
-    branches: [main]
   pull_request:
 
 permissions:
