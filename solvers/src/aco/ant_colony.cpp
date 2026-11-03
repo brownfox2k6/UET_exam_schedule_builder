@@ -53,7 +53,7 @@ auto AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) -> bool 
     const int exam = ant.get_next_exam(problem_data);
 
     // Check if the solution is infeasible --> ant die now
-    const auto count_feasible = size_t(ant.feasible_slots.get_feasible_count(exam));
+    const auto count_feasible = size_t(ant.available_slots.get_available_count(exam));
     if (count_feasible == 0) {
       ant.penalty = std::numeric_limits<double>::infinity();
       return false;
@@ -62,7 +62,7 @@ auto AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) -> bool 
     // For each feasible slot, calculate penalty if we assign this exam to that slot
     double total_weight = 0.0;
     for (size_t j = 0; j < count_feasible; ++j) {
-      const int slot = ant.feasible_slots[exam, j];
+      const int slot = ant.available_slots[exam, j];
       delta_soft[j] = evaluator.calculate_delta_penalty(ant.assigned_slots, exam, slot);
       const double eta = 1.0 / (1.0 + delta_soft[j]);
       const double tau = pheromone[exam, slot];
@@ -83,7 +83,7 @@ auto AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) -> bool 
       }
     }
 
-    const int slot = ant.feasible_slots[exam, chosen_j];
+    const int slot = ant.available_slots[exam, chosen_j];
     const double penalty = delta_soft[chosen_j];
     ant.assign_exam(exam, slot, problem_data.conflicts_csrmatrix);
     ant.penalty += penalty;

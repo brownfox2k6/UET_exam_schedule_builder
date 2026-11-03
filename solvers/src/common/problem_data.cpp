@@ -318,8 +318,8 @@ auto ProblemData::build_feasible_rooms(const std::vector<Exam>& exams, int num_r
       feasible_count += feasible.size();
       for (int room : feasible) {
         PANIC_IF(room < 0 || room >= num_rooms,
-                 "Section {}: 'feasible_rooms' has value {} out of bounds [0, {}]",
-                 section.code(), room, num_rooms - 1);
+                 "Section {}: 'feasible_rooms' has value {} out of bounds [0, {}]", section.code(),
+                 room, num_rooms - 1);
         feasible_rooms[section_index, room] = room;
       }
       ++section_index;

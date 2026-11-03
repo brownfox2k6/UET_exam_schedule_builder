@@ -5,51 +5,28 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(Python 3.11 REQUIRED COMPONENTS Interpreter Development.Module)
 
-set(NANOBIND_LOCAL_PYTHON_PATH "${CMAKE_BINARY_DIR}/_python")
-set(NANOBIND_PYTHONPATH "${NANOBIND_LOCAL_PYTHON_PATH}")
-if(DEFINED ENV{PYTHONPATH} AND NOT "$ENV{PYTHONPATH}" STREQUAL "")
-  if(WIN32)
-    string(APPEND NANOBIND_PYTHONPATH ";$ENV{PYTHONPATH}")
-  else()
-    string(APPEND NANOBIND_PYTHONPATH ":$ENV{PYTHONPATH}")
-  endif()
-endif()
-set(NANOBIND_PYTHON_COMMAND
-  "${CMAKE_COMMAND}" -E env "PYTHONPATH=${NANOBIND_PYTHONPATH}" "${Python_EXECUTABLE}"
-)
-
-message(STATUS "Installing the latest nanobind into ${NANOBIND_LOCAL_PYTHON_PATH}")
 execute_process(
-  COMMAND "${Python_EXECUTABLE}" -m pip install --disable-pip-version-check --upgrade
-          --target "${NANOBIND_LOCAL_PYTHON_PATH}" nanobind
-  RESULT_VARIABLE NANOBIND_INSTALL_RESULT
-  OUTPUT_VARIABLE NANOBIND_INSTALL_OUTPUT
-  ERROR_VARIABLE NANOBIND_INSTALL_ERROR
-)
-if(NOT NANOBIND_INSTALL_RESULT EQUAL 0)
-  message(FATAL_ERROR
-    "Could not install the latest nanobind into the build directory.\n"
-    "Command: ${Python_EXECUTABLE} -m pip install --upgrade "
-    "--target ${NANOBIND_LOCAL_PYTHON_PATH} nanobind\n"
-    "${NANOBIND_INSTALL_OUTPUT}${NANOBIND_INSTALL_ERROR}"
-  )
-endif()
-
-execute_process(
-  COMMAND ${NANOBIND_PYTHON_COMMAND} -m nanobind --cmake_dir
+  COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
   OUTPUT_VARIABLE NANOBIND_CMAKE_DIR
   RESULT_VARIABLE NANOBIND_CMAKE_DIR_RESULT
   OUTPUT_STRIP_TRAILING_WHITESPACE
+  ERROR_VARIABLE NANOBIND_CMAKE_DIR_ERROR
 )
 if(NOT NANOBIND_CMAKE_DIR_RESULT EQUAL 0 OR NOT IS_DIRECTORY "${NANOBIND_CMAKE_DIR}")
   message(FATAL_ERROR
-    "The latest nanobind was installed but its CMake package directory could not be found "
-    "using ${Python_EXECUTABLE}."
+    "nanobind is not installed for the Python interpreter selected by CMake:\n"
+    "  ${Python_EXECUTABLE}\n"
+    "Install the project's Python build dependencies before configuring, for example:\n"
+    "  ${Python_EXECUTABLE} -m pip install -r "
+    "${CMAKE_CURRENT_SOURCE_DIR}/requirements.txt\n"
+    "${NANOBIND_CMAKE_DIR_ERROR}"
   )
 endif()
 
-list(PREPEND CMAKE_PREFIX_PATH "${NANOBIND_CMAKE_DIR}")
-find_package(nanobind CONFIG REQUIRED)
+find_package(nanobind CONFIG REQUIRED
+  PATHS "${NANOBIND_CMAKE_DIR}"
+  NO_DEFAULT_PATH
+)
 
 # AppleClang does not search Homebrew's libomp prefix by default.
 if(APPLE AND NOT OpenMP_ROOT)
@@ -82,7 +59,27 @@ if(TARGET nanobind-static)
   endif()
 endif()
 
-find_package(OpenMP REQUIRED)
+find_package(OpenMP QUIET COMPONENTS CXX)
+if(NOT OpenMP_CXX_FOUND)
+  if(APPLE)
+    set(OPENMP_INSTALL_HINT
+      "Install the OpenMP runtime for AppleClang (for example, 'brew install libomp'), "
+      "then configure again."
+    )
+  elseif(MSVC)
+    set(OPENMP_INSTALL_HINT
+      "Use a compiler/toolset with OpenMP support enabled, then configure again."
+    )
+  else()
+    set(OPENMP_INSTALL_HINT
+      "Install the OpenMP development/runtime package for your compiler, then configure again."
+    )
+  endif()
+  message(FATAL_ERROR
+    "OpenMP for C++ was not found for compiler '${CMAKE_CXX_COMPILER_ID}'.\n"
+    "${OPENMP_INSTALL_HINT}"
+  )
+endif()
 target_link_libraries(cetp_solvers PRIVATE OpenMP::OpenMP_CXX)
 
 if(MSVC)
@@ -109,14 +106,14 @@ set_target_properties(cetp_solvers PROPERTIES
 )
 
 execute_process(
-  COMMAND ${NANOBIND_PYTHON_COMMAND} -c "import nanobind.stubgen"
+  COMMAND "${Python_EXECUTABLE}" -c "import nanobind.stubgen"
   RESULT_VARIABLE STUBGEN_IMPORT_RESULT
   OUTPUT_QUIET
   ERROR_QUIET
 )
 if(STUBGEN_IMPORT_RESULT EQUAL 0)
   add_custom_command(TARGET cetp_solvers POST_BUILD
-    COMMAND ${NANOBIND_PYTHON_COMMAND} -m nanobind.stubgen
+    COMMAND "${Python_EXECUTABLE}" -m nanobind.stubgen
             --import "$<TARGET_FILE_DIR:cetp_solvers>"
             --module cetp_solvers
             --output-file "${CMAKE_CURRENT_SOURCE_DIR}/cetp_solvers.pyi"

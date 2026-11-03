@@ -6,7 +6,7 @@
 
 #include "common/problem_data.hpp"
 #include "utils/assert.hpp"
-#include "utils/feasible_set.hpp"
+#include "utils/available_set.hpp"
 #include "utils/matrix.hpp"
 
 namespace common {
@@ -14,12 +14,12 @@ namespace common {
 Solution::Solution(const ProblemData& exams)
     : conflicting_exams_count(exams.num_exams, exams.num_slots, 0),
       assigned_slots(size_t(exams.num_exams), -1),
-      feasible_slots(exams.feasible_slots, exams.num_slots),
+      available_slots(exams.feasible_slots, exams.num_slots),
       penalty(0.0) {}
 
 void Solution::reset() {
   penalty = 0.0;
-  feasible_slots.reset();
+  available_slots.reset();
   std::ranges::fill(assigned_slots, -1);
   conflicting_exams_count.fill(0);
 }
@@ -43,7 +43,7 @@ auto Solution::get_next_exam(const ProblemData& problem_data) const -> int {
     if (assigned_slots[exam] != -1) {
       continue;
     }
-    const int saturation_degree = feasible_slots.get_feasible_count(exam);
+    const int saturation_degree = available_slots.get_available_count(exam);
     const int degree = problem_data.conflicts_csrmatrix[exam].size();
     const int weighted_degree = problem_data.weighted_conflict_degrees[exam];
     const int student_count = problem_data.exam_student_counts[exam];
@@ -66,12 +66,12 @@ void Solution::assign_exam(int exam, int slot, const utils::CsrMatrix<int>& conf
   PANIC_IF(current_slot != -1,
            "Exam {} is already scheduled at slot {}, failed to assign to slot {}", exam,
            current_slot, slot);
-  PANIC_IF(!feasible_slots.is_active(exam, slot),
+  PANIC_IF(!available_slots.is_available(exam, slot),
            "Exam {} cannot be assigned to inactive/infeasible slot {}", exam, slot);
   for (int conflict_exam : conflicts_csrmatrix[exam].indices) {
     int& count = conflicting_exams_count[conflict_exam, slot];
-    if (count++ == 0 && feasible_slots.has_option(conflict_exam, slot)) {
-      feasible_slots.remove(conflict_exam, slot);
+    if (count++ == 0 && available_slots.has_option(conflict_exam, slot)) {
+      available_slots.remove(conflict_exam, slot);
     }
   }
   current_slot = slot;
@@ -86,8 +86,8 @@ void Solution::unassign_exam(int exam, const utils::CsrMatrix<int>& conflicts_cs
     int& count = conflicting_exams_count[conflict_exam, current_slot];
     PANIC_IF(count <= 0, "Invalid conflict count for exam {} at slot {}: {}", exam, current_slot,
              count);
-    if (--count == 0 && feasible_slots.has_option(conflict_exam, current_slot)) {
-      feasible_slots.restore(conflict_exam, current_slot);
+    if (--count == 0 && available_slots.has_option(conflict_exam, current_slot)) {
+      available_slots.restore(conflict_exam, current_slot);
     }
   }
   current_slot = -1;

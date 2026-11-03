@@ -31,7 +31,7 @@ void LocalSearch::initialize_solution(const std::vector<int>& initial_schedule) 
     const int slot = initial_schedule[size_t(exam)];
     PANIC_IF(slot < 0 || slot >= problem_data_.num_slots,
              "Initial schedule has invalid slot {} for exam {}", slot, exam);
-    PANIC_IF(!solution_.feasible_slots.is_active(exam, slot),
+    PANIC_IF(!solution_.available_slots.is_available(exam, slot),
              "Initial schedule violates a hard constraint for exam {} at slot {}", exam, slot);
 
     solution_.penalty += evaluator_.calculate_delta_penalty(solution_.assigned_slots, exam, slot);
@@ -41,12 +41,12 @@ void LocalSearch::initialize_solution(const std::vector<int>& initial_schedule) 
 
 auto LocalSearch::go_1_move() -> bool {
   const int exam = std::uniform_int_distribution<int>(0, problem_data_.num_exams - 1)(rng_);
-  const int count_feasible = solution_.feasible_slots.get_feasible_count(exam);
+  const int count_feasible = solution_.available_slots.get_available_count(exam);
   if (count_feasible == 0) {
     return false;
   }
 
-  const int new_slot = solution_.feasible_slots.get_random(exam, rng_);
+  const int new_slot = solution_.available_slots.get_random(exam, rng_);
   if (new_slot == solution_.assigned_slots[size_t(exam)]) {
     return false;
   }
@@ -70,8 +70,8 @@ auto LocalSearch::go_2_swap() -> bool {
   if (exam1 == exam2 || slot1 == slot2) {
     return false;
   }
-  if (!solution_.feasible_slots.has_option(exam1, slot2) ||
-      !solution_.feasible_slots.has_option(exam2, slot1)) {
+  if (!solution_.available_slots.has_option(exam1, slot2) ||
+      !solution_.available_slots.has_option(exam2, slot1)) {
     return false;
   }
 

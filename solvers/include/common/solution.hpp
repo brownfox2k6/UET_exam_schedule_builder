@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common/problem_data.hpp"
-#include "utils/feasible_set.hpp"
+#include "utils/available_set.hpp"
 #include "utils/matrix.hpp"
 
 namespace common {
@@ -24,7 +24,7 @@ struct Solution {
   std::vector<int> assigned_slots;
 
   // Tracks available slot IDs for each exam.
-  utils::FeasibleSet feasible_slots;
+  utils::AvailableSet available_slots;
 
   // The total soft constraint penalty score of the current schedule (lower is better).
   double penalty;
