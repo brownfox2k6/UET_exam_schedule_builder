@@ -53,8 +53,8 @@ ProblemData::ProblemData(const std::vector<Exam>& _exams, std::vector<int64_t> _
       conflicts_csrmatrix(conflicts_matrix),
       weighted_conflict_degrees(build_weighted_conflict_degrees(conflicts_csrmatrix)),
 
-      feasible_slots(build_feasible_slots(_exams, num_slots)),
-      feasible_rooms(build_feasible_rooms(_exams, num_rooms, num_sections)) {
+      feasible_slots_by_exam(build_feasible_slots_by_exam(_exams, num_slots)),
+      feasible_rooms_by_section(build_feasible_rooms_by_section(_exams, num_rooms, num_sections)) {
 #ifndef NDEBUG
   PANIC_IF(num_slots == 0, "'_slot_timestamps' is empty");
   PANIC_IF(num_rooms == 0, "'_rooms' is empty");
@@ -287,7 +287,7 @@ auto ProblemData::build_weighted_conflict_degrees(const utils::CsrMatrix<int>& c
   return total_conflicts;
 }
 
-auto ProblemData::build_feasible_slots(const std::vector<Exam>& exams, int num_slots)
+auto ProblemData::build_feasible_slots_by_exam(const std::vector<Exam>& exams, int num_slots)
     -> utils::CsrMatrix<int> {
   const size_t num_exams = exams.size();
   utils::Matrix<int> feasible_slots(num_exams, num_slots, -1);
@@ -307,9 +307,9 @@ auto ProblemData::build_feasible_slots(const std::vector<Exam>& exams, int num_s
   return {feasible_slots, feasible_count, false, -1};
 }
 
-auto ProblemData::build_feasible_rooms(const std::vector<Exam>& exams, int num_rooms,
-                                       int num_sections) -> utils::CsrMatrix<int> {
-  utils::Matrix<int> feasible_rooms(size_t(num_sections), num_rooms, -1);
+auto ProblemData::build_feasible_rooms_by_section(const std::vector<Exam>& exams, int num_rooms,
+                                                  int num_sections) -> utils::CsrMatrix<int> {
+  utils::Matrix<int> feasible_rooms(num_sections, num_rooms, -1);
   size_t feasible_count = 0;
   int section_index = 0;
   for (const Exam& exam : exams) {

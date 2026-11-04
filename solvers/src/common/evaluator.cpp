@@ -3,7 +3,6 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
-#include <limits>
 #include <utility>
 
 #include "common/hyperparameters.hpp"
@@ -30,7 +29,7 @@ auto Evaluator::build_proximity_penalties(const ProblemData& problem_data,
     -> utils::Matrix<double> {
   const auto& slot_timestamps = problem_data.slot_timestamps;
   const auto num_slots = size_t(problem_data.num_slots);
-  utils::Matrix<double> penalties(num_slots, num_slots, std::numeric_limits<double>::infinity());
+  utils::Matrix<double> penalties(num_slots, num_slots, INFINITY);
   for (size_t i = 0; i < num_slots; ++i) {
     const int64_t slot_i = slot_timestamps[i];
     for (size_t j = i + 1; j < num_slots; ++j) {

@@ -2,8 +2,9 @@
 
 #include <algorithm>
 #include <cstddef>
-#include <tuple>
+#include <utility>
 
+#include "common/exam_priority.hpp"
 #include "common/problem_data.hpp"
 #include "utils/assert.hpp"
 #include "utils/available_set.hpp"
@@ -14,7 +15,7 @@ namespace common {
 Solution::Solution(const ProblemData& exams)
     : conflicting_exams_count(exams.num_exams, exams.num_slots, 0),
       assigned_slots(size_t(exams.num_exams), -1),
-      available_slots(exams.feasible_slots, exams.num_slots),
+      available_slots(exams.feasible_slots_by_exam, exams.num_slots),
       penalty(0.0) {}
 
 void Solution::reset() {
@@ -25,30 +26,19 @@ void Solution::reset() {
 }
 
 auto Solution::get_next_exam(const ProblemData& problem_data) const -> int {
-  /**
-   * Implementation based on "Multi-Neighbourhood Simulated Annealing for the ITC-2007 Capacitated
-   * Examination Timetabling Problem" by David van Bulck et al. (2025)
-   * @see 10.1007/s10951-023-00799-1
-   *
-   * The following ordering criteria are applied in sequence:
-   * (1) Saturation degree - number of feasible slots remaining (fewest first, dynamically updated
-   *     after each assignment).
-   * (2) Conflict degree - number of conflicting exams (largest first).
-   * (3) Weighted conflict degree - total shared students with conflicting exams (largest first).
-   * (4) Student count - number of enrolled students (largest first).
-   */
   int best_exam = -1;
-  std::tuple<int, int, int, int> best_key;
+  ExamPriority best_key{};
   for (size_t exam = 0; exam < assigned_slots.size(); ++exam) {
     if (assigned_slots[exam] != -1) {
       continue;
     }
-    const int saturation_degree = available_slots.get_available_count(exam);
-    const int degree = problem_data.conflicts_csrmatrix[exam].size();
-    const int weighted_degree = problem_data.weighted_conflict_degrees[exam];
-    const int student_count = problem_data.exam_student_counts[exam];
-    std::tuple key = {-saturation_degree, degree, weighted_degree, student_count};
-    if (best_exam == -1 || key > best_key) {
+    ExamPriority key{
+        .saturation_degree = -available_slots.get_available_count(exam),
+        .conflict_degree = problem_data.conflicts_csrmatrix[exam].size(),
+        .weighted_conflict_degree = problem_data.weighted_conflict_degrees[exam],
+        .student_count = problem_data.exam_student_counts[exam],
+    };
+    if (key > best_key) {
       best_exam = int(exam);
       best_key = key;
     }

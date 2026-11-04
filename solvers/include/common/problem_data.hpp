@@ -83,11 +83,11 @@ struct ProblemData {
 
   // --- Initial exam feasibility constraints ---
 
-  // `feasible_slots[i]` tells the slots that are set to can be chosen for exam `i`
-  const utils::CsrMatrix<int> feasible_slots;
+  // `feasible_slots_by_exam[i]` tells the slots that are set to can be chosen for exam `i`
+  const utils::CsrMatrix<int> feasible_slots_by_exam;
 
-  // `feasible_rooms[i]` contains room IDs eligible for section `i`.
-  const utils::CsrMatrix<int> feasible_rooms;
+  // `feasible_rooms_by_section[i]` contains room IDs eligible for section `i`.
+  const utils::CsrMatrix<int> feasible_rooms_by_section;
   // NOLINTEND(*-non-private-member-*, *-const-*)
 
   ProblemData(const std::vector<Exam>& _exams, std::vector<int64_t> _slot_timestamps,
@@ -129,10 +129,10 @@ struct ProblemData {
       -> utils::Matrix<int>;
   static auto build_weighted_conflict_degrees(const utils::CsrMatrix<int>& conflicts_csrmatrix)
       -> std::vector<int>;
-  static auto build_feasible_slots(const std::vector<Exam>& exams, int num_slots)
+  static auto build_feasible_slots_by_exam(const std::vector<Exam>& exams, int num_slots)
       -> utils::CsrMatrix<int>;
-  static auto build_feasible_rooms(const std::vector<Exam>& exams, int num_rooms, int num_sections)
-      -> utils::CsrMatrix<int>;
+  static auto build_feasible_rooms_by_section(const std::vector<Exam>& exams, int num_rooms,
+                                              int num_sections) -> utils::CsrMatrix<int>;
 
 };  // struct ProblemData
 

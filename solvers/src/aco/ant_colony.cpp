@@ -6,7 +6,6 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
-#include <limits>
 #include <utility>
 
 #include "common/room.hpp"
@@ -23,7 +22,7 @@ AntColony::AntColony(common::Hyperparams _hyperparams, const std::vector<common:
       base_seed(_base_seed),
       pheromone(problem_data.num_exams, problem_data.num_slots, hyperparams.aco.tau_max()),
       global_best_schedule(size_t(problem_data.num_exams), -1),
-      global_best_penalty(std::numeric_limits<double>::infinity()) {
+      global_best_penalty(INFINITY) {
   const auto num_ants = size_t(hyperparams.aco.num_ants());
   rngs.reserve(num_ants);
   ants.reserve(num_ants);
@@ -55,7 +54,7 @@ auto AntColony::construct_ant(common::Solution& ant, std::mt19937& rng) -> bool 
     // Check if the solution is infeasible --> ant die now
     const auto count_feasible = size_t(ant.available_slots.get_available_count(exam));
     if (count_feasible == 0) {
-      ant.penalty = std::numeric_limits<double>::infinity();
+      ant.penalty = INFINITY;
       return false;
     }
 
@@ -116,7 +115,7 @@ auto AntColony::run_one_iteration_impl() -> double {
   const common::Solution& iter_best =
       *std::ranges::min_element(ants, {}, &common::Solution::penalty);
   if (std::isinf(iter_best.penalty)) {
-    return std::numeric_limits<double>::infinity();
+    return INFINITY;
   }
   if (iter_best.penalty < global_best_penalty) {
     global_best_penalty = iter_best.penalty;
