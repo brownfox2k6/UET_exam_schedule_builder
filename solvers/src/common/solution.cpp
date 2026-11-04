@@ -1,86 +1,18 @@
 #include "common/solution.hpp"
 
-#include <algorithm>
 #include <cstddef>
-#include <utility>
 
-#include "common/exam_priority.hpp"
 #include "common/problem_data.hpp"
-#include "utils/assert.hpp"
-#include "utils/available_set.hpp"
-#include "utils/matrix.hpp"
 
 namespace common {
 
-Solution::Solution(const ProblemData& exams)
-    : conflicting_exams_count(exams.num_exams, exams.num_slots, 0),
-      assigned_slots(size_t(exams.num_exams), -1),
-      available_slots(exams.feasible_slots_by_exam, exams.num_slots),
-      penalty(0.0) {}
+Solution::Solution(const ProblemData& problem_data)
+    : slot_assignment(problem_data), room_assignment(problem_data) {}
 
 void Solution::reset() {
+  slot_assignment.reset();
+  room_assignment.reset();
   penalty = 0.0;
-  available_slots.reset();
-  std::ranges::fill(assigned_slots, -1);
-  conflicting_exams_count.fill(0);
-}
-
-auto Solution::get_next_exam(const ProblemData& problem_data) const -> int {
-  int best_exam = -1;
-  ExamPriority best_key{};
-  for (size_t exam = 0; exam < assigned_slots.size(); ++exam) {
-    if (assigned_slots[exam] != -1) {
-      continue;
-    }
-    ExamPriority key{
-        .saturation_degree = -available_slots.get_available_count(exam),
-        .conflict_degree = problem_data.conflicts_csrmatrix[exam].size(),
-        .weighted_conflict_degree = problem_data.weighted_conflict_degrees[exam],
-        .student_count = problem_data.exam_student_counts[exam],
-    };
-    if (key > best_key) {
-      best_exam = int(exam);
-      best_key = key;
-    }
-  }
-  return best_exam;
-}
-
-// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
-void Solution::assign_exam(int exam, int slot, const utils::CsrMatrix<int>& conflicts_csrmatrix) {
-  PANIC_IF(exam < 0 || std::cmp_greater_equal(exam, assigned_slots.size()),
-           "Exam index {} out of bounds [0, {}]", exam, assigned_slots.size() - 1);
-  PANIC_IF(slot < 0 || std::cmp_greater_equal(slot, conflicting_exams_count.num_cols()),
-           "Slot index {} out of bounds [0, {}]", slot, conflicting_exams_count.num_cols() - 1);
-  int& current_slot = assigned_slots[size_t(exam)];
-  PANIC_IF(current_slot != -1,
-           "Exam {} is already scheduled at slot {}, failed to assign to slot {}", exam,
-           current_slot, slot);
-  PANIC_IF(!available_slots.is_available(exam, slot),
-           "Exam {} cannot be assigned to inactive/infeasible slot {}", exam, slot);
-  for (int conflict_exam : conflicts_csrmatrix[exam].indices) {
-    int& count = conflicting_exams_count[conflict_exam, slot];
-    if (count++ == 0 && available_slots.has_option(conflict_exam, slot)) {
-      available_slots.remove(conflict_exam, slot);
-    }
-  }
-  current_slot = slot;
-}
-
-void Solution::unassign_exam(int exam, const utils::CsrMatrix<int>& conflicts_csrmatrix) {
-  PANIC_IF(exam < 0 || std::cmp_greater_equal(exam, assigned_slots.size()),
-           "Exam index {} out of bounds [0, {}]", exam, assigned_slots.size() - 1);
-  int& current_slot = assigned_slots[size_t(exam)];
-  PANIC_IF(current_slot == -1, "Exam {} is not scheduled yet", exam);
-  for (int conflict_exam : conflicts_csrmatrix[exam].indices) {
-    int& count = conflicting_exams_count[conflict_exam, current_slot];
-    PANIC_IF(count <= 0, "Invalid conflict count for exam {} at slot {}: {}", exam, current_slot,
-             count);
-    if (--count == 0 && available_slots.has_option(conflict_exam, current_slot)) {
-      available_slots.restore(conflict_exam, current_slot);
-    }
-  }
-  current_slot = -1;
 }
 
 }  // namespace common

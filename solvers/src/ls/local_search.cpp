@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <utility>
 
+#include "common/slot_assignment.hpp"
 #include "utils/assert.hpp"
 
 namespace ls {
@@ -27,56 +28,61 @@ void LocalSearch::initialize_solution(const std::vector<int>& initial_schedule) 
            problem_data_.num_exams);
 
   solution_.reset();
+  common::SlotAssignment& slot_assignment = solution_.slot_assignment;
   for (int exam = 0; exam < problem_data_.num_exams; ++exam) {
     const int slot = initial_schedule[size_t(exam)];
     PANIC_IF(slot < 0 || slot >= problem_data_.num_slots,
              "Initial schedule has invalid slot {} for exam {}", slot, exam);
-    PANIC_IF(!solution_.available_slots.is_available(exam, slot),
+    PANIC_IF(!slot_assignment.available_slots_by_exam.is_available(exam, slot),
              "Initial schedule violates a hard constraint for exam {} at slot {}", exam, slot);
 
-    solution_.penalty += evaluator_.calculate_delta_penalty(solution_.assigned_slots, exam, slot);
-    solution_.assign_exam(exam, slot, problem_data_.conflicts_csrmatrix);
+    solution_.penalty +=
+        evaluator_.calculate_delta_penalty(slot_assignment.assigned_slots, exam, slot);
+    slot_assignment.assign_exam(exam, slot, problem_data_.conflicts_csrmatrix);
   }
 }
 
 auto LocalSearch::go_1_move() -> bool {
+  common::SlotAssignment& slot_assignment = solution_.slot_assignment;
   const int exam = std::uniform_int_distribution<int>(0, problem_data_.num_exams - 1)(rng_);
-  const int count_feasible = solution_.available_slots.get_available_count(exam);
-  if (count_feasible == 0) {
+  const int count_available = slot_assignment.available_slots_by_exam.get_available_count(exam);
+  if (count_available == 0) {
     return false;
   }
 
-  const int new_slot = solution_.available_slots.get_random(exam, rng_);
-  if (new_slot == solution_.assigned_slots[size_t(exam)]) {
+  const int new_slot = slot_assignment.available_slots_by_exam.get_random(exam, rng_);
+  if (new_slot == slot_assignment.assigned_slots[size_t(exam)]) {
     return false;
   }
 
-  const double delta = evaluator_.calculate_delta_penalty(solution_.assigned_slots, exam, new_slot);
+  const double delta =
+      evaluator_.calculate_delta_penalty(slot_assignment.assigned_slots, exam, new_slot);
   if (delta > 0.0) {
     return false;
   }
 
-  solution_.unassign_exam(exam, problem_data_.conflicts_csrmatrix);
-  solution_.assign_exam(exam, new_slot, problem_data_.conflicts_csrmatrix);
+  slot_assignment.unassign_exam(exam, problem_data_.conflicts_csrmatrix);
+  slot_assignment.assign_exam(exam, new_slot, problem_data_.conflicts_csrmatrix);
   solution_.penalty += delta;
   return true;
 }
 
 auto LocalSearch::go_2_swap() -> bool {
+  common::SlotAssignment& slot_assignment = solution_.slot_assignment;
   const int exam1 = std::uniform_int_distribution<int>(0, problem_data_.num_exams - 1)(rng_);
   const int exam2 = std::uniform_int_distribution<int>(0, problem_data_.num_exams - 1)(rng_);
-  const int slot1 = solution_.assigned_slots[size_t(exam1)];
-  const int slot2 = solution_.assigned_slots[size_t(exam2)];
+  const int slot1 = slot_assignment.assigned_slots[size_t(exam1)];
+  const int slot2 = slot_assignment.assigned_slots[size_t(exam2)];
   if (exam1 == exam2 || slot1 == slot2) {
     return false;
   }
-  if (!solution_.available_slots.has_option(exam1, slot2) ||
-      !solution_.available_slots.has_option(exam2, slot1)) {
+  if (!slot_assignment.available_slots_by_exam.has_option(exam1, slot2) ||
+      !slot_assignment.available_slots_by_exam.has_option(exam2, slot1)) {
     return false;
   }
 
-  int conflicts_in_slot1 = solution_.conflicting_exams_count[exam2, slot1];
-  int conflicts_in_slot2 = solution_.conflicting_exams_count[exam1, slot2];
+  int conflicts_in_slot1 = slot_assignment.conflicting_exams_count[exam2, slot1];
+  int conflicts_in_slot2 = slot_assignment.conflicting_exams_count[exam1, slot2];
   if (problem_data_.conflicts_matrix[exam1, exam2] > 0) {
     --conflicts_in_slot1;
     --conflicts_in_slot2;
@@ -86,16 +92,16 @@ auto LocalSearch::go_2_swap() -> bool {
   }
 
   const double delta =
-      evaluator_.calculate_delta_penalty(solution_.assigned_slots, exam1, slot2, exam2) +
-      evaluator_.calculate_delta_penalty(solution_.assigned_slots, exam2, slot1, exam1);
+      evaluator_.calculate_delta_penalty(slot_assignment.assigned_slots, exam1, slot2, exam2) +
+      evaluator_.calculate_delta_penalty(slot_assignment.assigned_slots, exam2, slot1, exam1);
   if (delta > 0.0) {
     return false;
   }
 
-  solution_.unassign_exam(exam1, problem_data_.conflicts_csrmatrix);
-  solution_.unassign_exam(exam2, problem_data_.conflicts_csrmatrix);
-  solution_.assign_exam(exam1, slot2, problem_data_.conflicts_csrmatrix);
-  solution_.assign_exam(exam2, slot1, problem_data_.conflicts_csrmatrix);
+  slot_assignment.unassign_exam(exam1, problem_data_.conflicts_csrmatrix);
+  slot_assignment.unassign_exam(exam2, problem_data_.conflicts_csrmatrix);
+  slot_assignment.assign_exam(exam1, slot2, problem_data_.conflicts_csrmatrix);
+  slot_assignment.assign_exam(exam2, slot1, problem_data_.conflicts_csrmatrix);
   solution_.penalty += delta;
   return true;
 }

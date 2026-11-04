@@ -88,7 +88,10 @@ NB_MODULE(cetp_solvers, m) {
       .def_rw("ls", &common::Hyperparams::ls);
 
   nb::class_<common::Solution>(m, "Solution")
-      .def_ro("schedule", &common::Solution::assigned_slots)
+      .def_prop_ro("schedule",
+                   [](const common::Solution& solution) -> std::vector<int> {
+                     return solution.slot_assignment.assigned_slots;
+                   })
       .def_ro("penalty", &common::Solution::penalty);
 
   nb::class_<aco::AntColony>(m, "AntColony")
