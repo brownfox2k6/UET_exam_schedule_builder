@@ -78,14 +78,21 @@ NB_MODULE(cetp_solvers, m) {
       .def_prop_rw("patience", &common::Hyperparams::LS::patience,
                    &common::Hyperparams::LS::set_patience);
 
+  nb::class_<common::Hyperparams::RoomAssignment>(m, "RoomAssignmentParams")
+      .def(nb::init<>())
+      .def_prop_rw("max_attempts", &common::Hyperparams::RoomAssignment::max_attempts,
+                   &common::Hyperparams::RoomAssignment::set_max_attempts);
+
   nb::class_<common::Hyperparams>(m, "Hyperparams")
       .def(nb::init<common::Hyperparams::Evaluation, common::Hyperparams::ACO,
-                    common::Hyperparams::LS>(),
+                    common::Hyperparams::LS, common::Hyperparams::RoomAssignment>(),
            nb::arg("_eval") = common::Hyperparams::Evaluation(),
-           nb::arg("_aco") = common::Hyperparams::ACO(), nb::arg("_ls") = common::Hyperparams::LS())
+           nb::arg("_aco") = common::Hyperparams::ACO(), nb::arg("_ls") = common::Hyperparams::LS(),
+           nb::arg("_room_assignment") = common::Hyperparams::RoomAssignment())
       .def_rw("eval", &common::Hyperparams::eval)
       .def_rw("aco", &common::Hyperparams::aco)
-      .def_rw("ls", &common::Hyperparams::ls);
+      .def_rw("ls", &common::Hyperparams::ls)
+      .def_rw("room_assignment", &common::Hyperparams::room_assignment);
 
   nb::class_<common::Solution>(m, "Solution")
       .def_prop_ro("schedule",

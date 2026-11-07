@@ -151,18 +151,39 @@ struct Hyperparams {
     // NOLINTEND(*-magic-numbers)
   };  // struct LS
 
+  struct RoomAssignment {
+    RoomAssignment();
+
+    [[nodiscard]] auto max_attempts() const -> int { return max_attempts_; }
+
+    void set_max_attempts(int max_attempts) {
+      PANIC_IF(max_attempts <= 0, "RoomAssignment.max_attempts must be positive (got: {})",
+               max_attempts);
+      max_attempts_ = max_attempts;
+    }
+
+   private:
+    // NOLINTBEGIN(*-magic-numbers)
+    int max_attempts_{
+        100};  // Maximum number of attempts to find a feasible room assignment for a given schedule
+    // NOLINTEND(*-magic-numbers)
+  };  // struct RoomAssignment
+
   // NOLINTBEGIN(misc-non-private-member-variables-in-classes)
   Evaluation eval;
   ACO aco;
   LS ls;
+  RoomAssignment room_assignment;
   // NOLINTEND(misc-non-private-member-variables-in-classes)
 
-  explicit Hyperparams(Evaluation _eval = Evaluation(), ACO _aco = ACO(), LS _ls = LS())
-      : eval(_eval), aco(_aco), ls(_ls) {}
+  explicit Hyperparams(Evaluation _eval = Evaluation(), ACO _aco = ACO(), LS _ls = LS(),
+                       RoomAssignment _room_assignment = RoomAssignment())
+      : eval(_eval), aco(_aco), ls(_ls), room_assignment(_room_assignment) {}
 };  // struct Hyperparams
 
 inline Hyperparams::Evaluation::Evaluation() = default;
 inline Hyperparams::ACO::ACO() = default;
 inline Hyperparams::LS::LS() = default;
+inline Hyperparams::RoomAssignment::RoomAssignment() = default;
 
 }  // namespace common
