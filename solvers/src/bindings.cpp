@@ -3,6 +3,8 @@
 #include <nanobind/stl/vector.h>
 
 #include <cstdint>
+#include <new>
+#include <utility>
 
 #include "aco/ant_colony.hpp"
 #include "common/exam.hpp"
@@ -13,28 +15,78 @@
 
 namespace nb = nanobind;
 
+namespace {
+
+template <typename T>
+auto to_vector(const std::vector<T>& values) -> Vector<T> {
+  return {values.begin(), values.end()};
+}
+
+template <typename T>
+auto to_std_vector(const Vector<T>& values) -> std::vector<T> {
+  return {values.begin(), values.end()};
+}
+
+}  // namespace
+
 // NOLINTNEXTLINE(readability-identifier-length, performance-unnecessary-value-param)
 NB_MODULE(cetp_solvers, m) {
   m.doc() =
       "Some metaheuristic approaches for the Capacitated Examination Timetabling Problem (CETP).";
 
   nb::class_<common::ExamSection>(m, "ExamSection")
-      .def(nb::init<std::string, std::vector<std::string>, std::vector<int>>(), nb::arg("code"),
-           nb::arg("students"), nb::arg("feasible_rooms"))
+      .def(
+          "__init__",
+          [](common::ExamSection* self, std::string code, const std::vector<std::string>& students,
+             const std::vector<int>& feasible_rooms) -> void {
+            new (self) common::ExamSection(std::move(code), to_vector(students),
+                                           to_vector(feasible_rooms));
+          },
+          nb::arg("code"), nb::arg("students"), nb::arg("feasible_rooms"))
       .def_prop_rw("code", &common::ExamSection::code, &common::ExamSection::set_code)
-      .def_prop_rw("students", &common::ExamSection::students, &common::ExamSection::set_students)
-      .def_prop_rw("feasible_rooms", &common::ExamSection::feasible_rooms,
-                   &common::ExamSection::set_feasible_rooms)
+      .def_prop_rw(
+          "students",
+          [](const common::ExamSection& section) -> std::vector<std::string> {
+            return to_std_vector(section.students());
+          },
+          [](common::ExamSection& section, const std::vector<std::string>& students) -> void {
+            section.set_students(to_vector(students));
+          })
+      .def_prop_rw(
+          "feasible_rooms",
+          [](const common::ExamSection& section) -> std::vector<int> {
+            return to_std_vector(section.feasible_rooms());
+          },
+          [](common::ExamSection& section, const std::vector<int>& feasible_rooms) -> void {
+            section.set_feasible_rooms(to_vector(feasible_rooms));
+          })
       .def_prop_ro("student_count", &common::ExamSection::student_count);
 
   nb::class_<common::Exam>(m, "Exam")
-      .def(nb::init<std::string, int, std::vector<common::ExamSection>, std::vector<int>>(),
-           nb::arg("code"), nb::arg("credits"), nb::arg("sections"), nb::arg("feasible_slots"))
+      .def(
+          "__init__",
+          [](common::Exam* self, std::string code, int credits,
+             const std::vector<common::ExamSection>& sections,
+             const std::vector<int>& feasible_slots) -> void {
+            new (self) common::Exam(std::move(code), credits, to_vector(sections),
+                                    to_vector(feasible_slots));
+          },
+          nb::arg("code"), nb::arg("credits"), nb::arg("sections"), nb::arg("feasible_slots"))
       .def_prop_rw("code", &common::Exam::code, &common::Exam::set_code)
       .def_prop_rw("credits", &common::Exam::credits, &common::Exam::set_credits)
-      .def_prop_rw("sections", &common::Exam::sections, &common::Exam::set_sections)
-      .def_prop_rw("feasible_slots", &common::Exam::feasible_slots,
-                   &common::Exam::set_feasible_slots)
+      .def_prop_rw(
+          "sections", [](const common::Exam& exam) { return to_std_vector(exam.sections()); },
+          [](common::Exam& exam, const std::vector<common::ExamSection>& sections) -> void {
+            exam.set_sections(to_vector(sections));
+          })
+      .def_prop_rw(
+          "feasible_slots",
+          [](const common::Exam& exam) -> std::vector<int> {
+            return to_std_vector(exam.feasible_slots());
+          },
+          [](common::Exam& exam, const std::vector<int>& feasible_slots) -> void {
+            exam.set_feasible_slots(to_vector(feasible_slots));
+          })
       .def_prop_ro("section_count", &common::Exam::section_count)
       .def_prop_ro("student_count", &common::Exam::student_count);
 
@@ -96,30 +148,47 @@ NB_MODULE(cetp_solvers, m) {
 
   nb::class_<common::Solution>(m, "Solution")
       .def_prop_ro("schedule",
-                   [](const common::Solution& solution) -> std::vector<int> {
-                     return solution.slot_assignment.assigned_slots;
+                   [](const common::Solution& solution) {
+                     return to_std_vector(solution.slot_assignment.assigned_slots);
                    })
       .def_ro("penalty", &common::Solution::penalty);
 
   nb::class_<aco::AntColony>(m, "AntColony")
-      .def(nb::init<common::Hyperparams, const std::vector<common::Exam>&, std::vector<int64_t>,
-                    const std::vector<common::Room>&, uint64_t>(),
-           nb::arg("hyperparams"), nb::arg("exams"), nb::arg("slot_timestamps"), nb::arg("rooms"),
-           nb::arg("base_seed") = 42)  // NOLINT(*-magic-numbers)
+      .def(
+          "__init__",
+          [](aco::AntColony* self, common::Hyperparams hyperparams,
+             const std::vector<common::Exam>& exams, const std::vector<int64_t>& slot_timestamps,
+             const std::vector<common::Room>& rooms, uint64_t base_seed) {
+            new (self) aco::AntColony(hyperparams, to_vector(exams), to_vector(slot_timestamps),
+                                      to_vector(rooms), base_seed);
+          },
+          nb::arg("hyperparams"), nb::arg("exams"), nb::arg("slot_timestamps"), nb::arg("rooms"),
+          nb::arg("base_seed") = 42)  // NOLINT(*-magic-numbers)
       .def("run_one_iteration", &aco::AntColony::run_one_iteration,
            nb::call_guard<nb::gil_scoped_release>())
       .def("run", &aco::AntColony::run, nb::arg("callback") = nb::none(),
            nb::call_guard<nb::gil_scoped_release>())
-      .def_ro("global_best_schedule", &aco::AntColony::global_best_schedule)
+      .def_prop_ro(
+          "global_best_schedule",
+          [](const aco::AntColony& colony) { return to_std_vector(colony.global_best_schedule); })
       .def_ro("global_best_penalty", &aco::AntColony::global_best_penalty);
 
   nb::class_<ls::LocalSearch>(m, "LocalSearch")
-      .def(nb::init<common::Hyperparams::Evaluation, common::Hyperparams::LS,
-                    const std::vector<common::Exam>&, std::vector<int64_t>,
-                    const std::vector<common::Room>&, uint64_t>(),
-           nb::arg("eval_params"), nb::arg("ls_params"), nb::arg("exams"),
-           nb::arg("slot_timestamps"), nb::arg("rooms"),
-           nb::arg("base_seed") = 42)  // NOLINT(*-magic-numbers)
-      .def("run", &ls::LocalSearch::run, nb::arg("initial_schedule"),
-           nb::call_guard<nb::gil_scoped_release>());
+      .def(
+          "__init__",
+          [](ls::LocalSearch* self, common::Hyperparams::Evaluation eval_params,
+             common::Hyperparams::LS ls_params, const std::vector<common::Exam>& exams,
+             const std::vector<int64_t>& slot_timestamps, const std::vector<common::Room>& rooms,
+             uint64_t base_seed) -> void {
+            new (self) ls::LocalSearch(eval_params, ls_params, to_vector(exams),
+                                       to_vector(slot_timestamps), to_vector(rooms), base_seed);
+          },
+          nb::arg("eval_params"), nb::arg("ls_params"), nb::arg("exams"),
+          nb::arg("slot_timestamps"), nb::arg("rooms"),
+          nb::arg("base_seed") = 42)  // NOLINT(*-magic-numbers)
+      .def(
+          "run",
+          [](ls::LocalSearch& search, const std::vector<int>& initial_schedule)
+              -> common::Solution { return search.run(to_vector(initial_schedule)); },
+          nb::arg("initial_schedule"), nb::call_guard<nb::gil_scoped_release>());
 }

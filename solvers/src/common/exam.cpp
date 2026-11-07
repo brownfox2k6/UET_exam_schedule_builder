@@ -13,8 +13,8 @@ namespace common {
 // ---------- ExamSection ----------
 // ---------------------------------
 
-ExamSection::ExamSection(std::string code, std::vector<std::string> students,
-                         std::vector<int> feasible_rooms) {
+ExamSection::ExamSection(std::string code, Vector<std::string> students,
+                         Vector<int> feasible_rooms) {
   set_code(std::move(code));
   set_students(std::move(students));
   set_feasible_rooms(std::move(feasible_rooms));
@@ -25,11 +25,11 @@ void ExamSection::set_code(std::string code) {
   code_ = std::move(code);
 }
 
-void ExamSection::set_students(std::vector<std::string> students) {
+void ExamSection::set_students(Vector<std::string> students) {
 #ifndef NDEBUG
   PANIC_IF(students.empty(), "Section '{}': No registered students", code_);
   std::unordered_set<std::string_view> unique_checker;
-  unique_checker.reserve(students.size());
+  unique_checker.reserve(size_t(students.size()));
   for (const std::string& student : students) {
     PANIC_IF(student.empty(), "Section '{}': 'students' contains an empty ID", code_);
     PANIC_IF(!unique_checker.emplace(student).second,
@@ -39,7 +39,7 @@ void ExamSection::set_students(std::vector<std::string> students) {
   students_ = std::move(students);
 }
 
-void ExamSection::set_feasible_rooms(std::vector<int> feasible_rooms) {
+void ExamSection::set_feasible_rooms(Vector<int> feasible_rooms) {
 #ifndef NDEBUG
   PANIC_IF(feasible_rooms.empty(), "Section '{}': 'feasible_rooms' is empty", code_);
   std::unordered_set<int> unique_checker;
@@ -56,8 +56,8 @@ void ExamSection::set_feasible_rooms(std::vector<int> feasible_rooms) {
 // ---------- Exam ----------
 // --------------------------
 
-Exam::Exam(std::string code, int credits, std::vector<ExamSection> sections,
-           std::vector<int> feasible_slots) {
+Exam::Exam(std::string code, int credits, Vector<ExamSection> sections,
+           Vector<int> feasible_slots) {
   set_code(std::move(code));
   set_credits(credits);
   set_sections(std::move(sections));
@@ -74,7 +74,7 @@ void Exam::set_credits(int credits) {
   credits_ = credits;
 }
 
-void Exam::set_sections(std::vector<ExamSection> sections) {
+void Exam::set_sections(Vector<ExamSection> sections) {
   student_count_ = 0;
   for (const ExamSection& section : sections) {
     student_count_ += section.student_count();
@@ -82,7 +82,7 @@ void Exam::set_sections(std::vector<ExamSection> sections) {
 #ifndef NDEBUG
   PANIC_IF(sections.empty(), "Exam '{}': 'sections' is empty", code_);
   std::unordered_set<std::string_view> unique_section_checker;
-  unique_section_checker.reserve(sections.size());
+  unique_section_checker.reserve(size_t(sections.size()));
   std::unordered_map<std::string_view, std::string_view> unique_student_checker;
   unique_student_checker.reserve(size_t(student_count_));
   for (const ExamSection& section : sections) {
@@ -99,7 +99,7 @@ void Exam::set_sections(std::vector<ExamSection> sections) {
   sections_ = std::move(sections);
 }
 
-void Exam::set_feasible_slots(std::vector<int> feasible_slots) {
+void Exam::set_feasible_slots(Vector<int> feasible_slots) {
 #ifndef NDEBUG
   PANIC_IF(feasible_slots.empty(), "Exam '{}': 'feasible_slots' is empty", code_);
   std::unordered_set<int> unique_checker;

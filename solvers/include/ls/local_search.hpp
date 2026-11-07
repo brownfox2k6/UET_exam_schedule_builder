@@ -3,12 +3,12 @@
 #include <cstdint>
 #include <mutex>
 #include <random>
-#include <vector>
 
 #include "common/evaluator.hpp"
 #include "common/hyperparameters.hpp"
 #include "common/problem_data.hpp"
 #include "common/solution.hpp"
+#include "utils/vector.hpp"
 
 namespace ls {
 
@@ -21,12 +21,12 @@ namespace ls {
 class LocalSearch {
  public:
   LocalSearch(common::Hyperparams::Evaluation evaluation_params,
-              common::Hyperparams::LS hyperparams, const std::vector<common::Exam>& exams,
-              std::vector<int64_t> slot_timestamps, const std::vector<common::Room>& rooms,
+              common::Hyperparams::LS hyperparams, const Vector<common::Exam>& exams,
+              Vector<int64_t> slot_timestamps, const Vector<common::Room>& rooms,
               uint64_t base_seed = 42);  // NOLINT(*-magic-numbers)
 
   /** @brief Improves a feasible initial schedule and returns its final schedule and penalty. */
-  auto run(const std::vector<int>& initial_schedule) -> common::Solution;
+  auto run(const Vector<int>& initial_schedule) -> common::Solution;
 
  private:
   const common::Hyperparams::Evaluation evaluation_params_;
@@ -37,7 +37,7 @@ class LocalSearch {
   std::mt19937 rng_;
   std::mutex execution_mutex_;
 
-  void initialize_solution(const std::vector<int>& initial_schedule);
+  void initialize_solution(const Vector<int>& initial_schedule);
   auto go_1_move() -> bool;
   auto go_2_swap() -> bool;
 };

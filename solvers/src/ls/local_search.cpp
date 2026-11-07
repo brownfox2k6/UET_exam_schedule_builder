@@ -9,10 +9,9 @@
 namespace ls {
 
 LocalSearch::LocalSearch(common::Hyperparams::Evaluation evaluation_params,
-                         common::Hyperparams::LS hyperparams,
-                         const std::vector<common::Exam>& exams,
-                         std::vector<int64_t> slot_timestamps,
-                         const std::vector<common::Room>& rooms, uint64_t base_seed)
+                         common::Hyperparams::LS hyperparams, const Vector<common::Exam>& exams,
+                         Vector<int64_t> slot_timestamps, const Vector<common::Room>& rooms,
+                         uint64_t base_seed)
     : evaluation_params_(evaluation_params),
       hyperparams_(hyperparams),
       problem_data_(exams, std::move(slot_timestamps), rooms),
@@ -22,15 +21,15 @@ LocalSearch::LocalSearch(common::Hyperparams::Evaluation evaluation_params,
   rng_.seed(seed);
 }
 
-void LocalSearch::initialize_solution(const std::vector<int>& initial_schedule) {
-  PANIC_IF(initial_schedule.size() != size_t(problem_data_.num_exams),
+void LocalSearch::initialize_solution(const Vector<int>& initial_schedule) {
+  PANIC_IF(initial_schedule.size() != problem_data_.num_exams,
            "Initial schedule size mismatch: got {}, expected {}", initial_schedule.size(),
            problem_data_.num_exams);
 
   solution_.reset();
   common::SlotAssignment& slot_assignment = solution_.slot_assignment;
   for (int exam = 0; exam < problem_data_.num_exams; ++exam) {
-    const int slot = initial_schedule[size_t(exam)];
+    const int slot = initial_schedule[exam];
     PANIC_IF(slot < 0 || slot >= problem_data_.num_slots,
              "Initial schedule has invalid slot {} for exam {}", slot, exam);
     PANIC_IF(!slot_assignment.available_slots_by_exam.is_available(exam, slot),
@@ -51,7 +50,7 @@ auto LocalSearch::go_1_move() -> bool {
   }
 
   const int new_slot = slot_assignment.available_slots_by_exam.get_random(exam, rng_);
-  if (new_slot == slot_assignment.assigned_slots[size_t(exam)]) {
+  if (new_slot == slot_assignment.assigned_slots[exam]) {
     return false;
   }
 
@@ -71,8 +70,8 @@ auto LocalSearch::go_2_swap() -> bool {
   common::SlotAssignment& slot_assignment = solution_.slot_assignment;
   const int exam1 = std::uniform_int_distribution<int>(0, problem_data_.num_exams - 1)(rng_);
   const int exam2 = std::uniform_int_distribution<int>(0, problem_data_.num_exams - 1)(rng_);
-  const int slot1 = slot_assignment.assigned_slots[size_t(exam1)];
-  const int slot2 = slot_assignment.assigned_slots[size_t(exam2)];
+  const int slot1 = slot_assignment.assigned_slots[exam1];
+  const int slot2 = slot_assignment.assigned_slots[exam2];
   if (exam1 == exam2 || slot1 == slot2) {
     return false;
   }
@@ -106,7 +105,7 @@ auto LocalSearch::go_2_swap() -> bool {
   return true;
 }
 
-auto LocalSearch::run(const std::vector<int>& initial_schedule) -> common::Solution {
+auto LocalSearch::run(const Vector<int>& initial_schedule) -> common::Solution {
   const std::scoped_lock lock(execution_mutex_);
   initialize_solution(initial_schedule);
 

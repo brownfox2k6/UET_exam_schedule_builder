@@ -5,13 +5,13 @@
 #include <functional>
 #include <mutex>
 #include <random>
-#include <vector>
 
 #include "common/evaluator.hpp"
 #include "common/hyperparameters.hpp"
 #include "common/problem_data.hpp"
 #include "common/solution.hpp"
 #include "utils/matrix.hpp"
+#include "utils/vector.hpp"
 
 constexpr int BASE_SEED_DEFAULT = 42;
 
@@ -26,13 +26,13 @@ class AntColony {
    * @brief Initializes the Ant Colony algorithm, precomputes conflict structures, and sets up the
    * population.
    */
-  AntColony(common::Hyperparams _hyperparams, const std::vector<common::Exam>& _exams,
-            std::vector<int64_t> _slot_timestamps, const std::vector<common::Room>& _rooms,
+  AntColony(common::Hyperparams _hyperparams, const Vector<common::Exam>& _exams,
+            Vector<int64_t> _slot_timestamps, const Vector<common::Room>& _rooms,
             uint64_t _base_seed = BASE_SEED_DEFAULT);
 
   // The best solution found since the start of the algorithm
-  std::vector<int> global_best_schedule;  // NOLINT(*non-private-member-variables*)
-  double global_best_penalty{INFINITY};   // NOLINT(*non-private-member-variables*)
+  Vector<int> global_best_schedule;      // NOLINT(*non-private-member-variables*)
+  double global_best_penalty{INFINITY};  // NOLINT(*non-private-member-variables*)
 
   /**
    * @brief Executes a single iteration of the Ant Colony Optimization algorithm.
@@ -56,13 +56,13 @@ class AntColony {
   const common::ProblemData problem_data_;  // NOLINT(*const-or-ref-data-members*)
   const common::Evaluator evaluator_;       // NOLINT(*const-or-ref-data-members*)
   const uint64_t base_seed_;                // NOLINT(*const-or-ref-data-members*)
-  std::vector<std::mt19937> rngs_;
+  Vector<std::mt19937> rngs_;
 
   // Pheromone matrix representing learned experience for exam-to-slot assignments
-  utils::Matrix<double> pheromone_;
+  Matrix<double> pheromone_;
 
   // Current population of ants used to construct solutions in each iteration
-  std::vector<common::Solution> ants_;
+  Vector<common::Solution> ants_;
 
   std::mutex execution_mutex_;
 
@@ -77,7 +77,7 @@ class AntColony {
    * @brief Evaporates existing pheromones and deposits new pheromones based on the iteration's best
    * ant.
    */
-  void update_pheromone(const std::vector<int>& best_schedule);
+  void update_pheromone(const Vector<int>& best_schedule);
 
   auto run_one_iteration_impl() -> double;
 };

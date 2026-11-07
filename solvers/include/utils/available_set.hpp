@@ -7,8 +7,6 @@
 #include "utils/assert.hpp"
 #include "utils/matrix.hpp"
 
-namespace utils {
-
 /**
  * @brief A data structure to manage a set of available options for multiple items.
  * * It provides O(1) random access and efficient addition/removal of options using the
@@ -26,7 +24,7 @@ struct AvailableSet {
   Matrix<int> pos;
 
   // Current number of available options for item i: `active_ends[i+1] - options.offsets[i]`
-  std::vector<int> active_ends;
+  Vector<int> active_ends;
 
  public:
   AvailableSet(const CsrMatrix<int>& available_original, int num_options_count)
@@ -55,48 +53,40 @@ struct AvailableSet {
   /**
    * @brief Gets the number of currently available options for an item.
    */
-  template <typename T>
-    requires std::is_integral_v<T>
-  [[nodiscard]] auto get_available_count(T item) const -> int {
-    PANIC_IF(std::cmp_less(item, 0) || std::cmp_greater_equal(item, options.num_rows()),
-             "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
-    return active_ends[size_t(item + 1)] - options.get_offsets()[size_t(item)];
+  [[nodiscard]] auto get_available_count(int item) const -> int {
+    PANIC_IF(item < 0 || item >= options.num_rows(), "Item index {} out of bounds [0, {}]", item,
+             options.num_rows() - 1);
+    return active_ends[item + 1] - options.get_offsets()[item];
   }
 
   /**
    * @brief Gets the number of currently unavailable options for an item.
    */
-  template <typename T>
-    requires std::is_integral_v<T>
-  [[nodiscard]] auto get_unavailable_count(T item) const -> int {
-    PANIC_IF(std::cmp_less(item, 0) || std::cmp_greater_equal(item, options.num_rows()),
-             "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
+  [[nodiscard]] auto get_unavailable_count(int item) const -> int {
+    PANIC_IF(item < 0 || item >= options.num_rows(), "Item index {} out of bounds [0, {}]", item,
+             options.num_rows() - 1);
     return int(options[item].values.size()) - get_available_count(item);
   }
 
   /**
    * @brief Checks if `option` is in `item` 's initial available set
    */
-  template <typename T1, typename T2>
-    requires std::is_integral_v<T1> && std::is_integral_v<T2>
-  [[nodiscard]] auto has_option(T1 item, T2 option) const -> bool {
-    PANIC_IF(std::cmp_less(item, 0) || std::cmp_greater_equal(item, options.num_rows()),
-             "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
-    PANIC_IF(std::cmp_less(option, 0) || std::cmp_greater_equal(option, num_options),
-             "Option {} out of bounds [0, {}]", option, num_options - 1);
+  [[nodiscard]] auto has_option(int item, int option) const -> bool {
+    PANIC_IF(item < 0 || item >= options.num_rows(), "Item index {} out of bounds [0, {}]", item,
+             options.num_rows() - 1);
+    PANIC_IF(option < 0 || option >= num_options, "Option {} out of bounds [0, {}]", option,
+             num_options - 1);
     return pos[item, option] != -1;
   }
 
   /**
    * @brief Checks if `option` of `item` is currently available
    */
-  template <typename T1, typename T2>
-    requires std::is_integral_v<T1> && std::is_integral_v<T2>
-  [[nodiscard]] auto is_available(T1 item, T2 option) const -> bool {
-    PANIC_IF(std::cmp_less(item, 0) || std::cmp_greater_equal(item, options.num_rows()),
-             "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
-    PANIC_IF(std::cmp_less(option, 0) || std::cmp_greater_equal(option, num_options),
-             "Option {} out of bounds [0, {}]", option, num_options - 1);
+  [[nodiscard]] auto is_available(int item, int option) const -> bool {
+    PANIC_IF(item < 0 || item >= options.num_rows(), "Item index {} out of bounds [0, {}]", item,
+             options.num_rows() - 1);
+    PANIC_IF(option < 0 || option >= num_options, "Option {} out of bounds [0, {}]", option,
+             num_options - 1);
     const int index = pos[item, option];
     return index >= 0 && index < get_available_count(item);
   }
@@ -104,11 +94,9 @@ struct AvailableSet {
   /**
    * @brief Selects a random available option for an item in O(1).
    */
-  template <typename T>
-    requires std::is_integral_v<T>
-  [[nodiscard]] auto get_random(T item, std::mt19937& rng) const -> int {
-    PANIC_IF(std::cmp_less(item, 0) || std::cmp_greater_equal(item, options.num_rows()),
-             "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
+  [[nodiscard]] auto get_random(int item, std::mt19937& rng) const -> int {
+    PANIC_IF(item < 0 || item >= options.num_rows(), "Item index {} out of bounds [0, {}]", item,
+             options.num_rows() - 1);
     const int count = get_available_count(item);
     PANIC_IF(count == 0, "Item {}: No available options left to pick from", item);
     std::uniform_int_distribution<int> dist(0, count - 1);
@@ -118,55 +106,46 @@ struct AvailableSet {
   /**
    * @brief Removes an option from the available set of an item in O(1).
    */
-  template <typename T1, typename T2>
-    requires std::is_integral_v<T1> && std::is_integral_v<T2>
-  void remove(T1 item, T2 option) {
-    PANIC_IF(std::cmp_less(item, 0) || std::cmp_greater_equal(item, options.num_rows()),
-             "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
-    PANIC_IF(std::cmp_less(option, 0) || std::cmp_greater_equal(option, num_options),
-             "Option {} out of bounds [0, {}]", option, num_options - 1);
+  void remove(int item, int option) {
+    PANIC_IF(item < 0 || item >= options.num_rows(), "Item index {} out of bounds [0, {}]", item,
+             options.num_rows() - 1);
+    PANIC_IF(option < 0 || option >= num_options, "Option {} out of bounds [0, {}]", option,
+             num_options - 1);
     const int count = get_available_count(item);
     const int index = pos[item, option];
-    PANIC_IF(std::cmp_less(index, 0), "Item {} does not contain {} in its initial available set",
-             item, option);
-    PANIC_IF(std::cmp_greater_equal(index, count), "Item {}: Option {} is already inactive", item,
-             option);
+    PANIC_IF(index < 0, "Item {} does not contain {} in its initial available set", item, option);
+    PANIC_IF(index >= count, "Item {}: Option {} is already inactive", item, option);
     auto row = options[item].values;
     std::swap(pos[item, option], pos[item, row[size_t(count - 1)]]);
     std::swap(row[size_t(index)], row[size_t(count - 1)]);
-    --active_ends[size_t(item + 1)];
+    --active_ends[item + 1];
   }
 
   /**
    * @brief Restores an option to the available set of an item in O(1).
    */
-  template <typename T1, typename T2>
-    requires std::is_integral_v<T1> && std::is_integral_v<T2>
-  void restore(T1 item, T2 option) {
-    PANIC_IF(std::cmp_less(item, 0) || std::cmp_greater_equal(item, options.num_rows()),
-             "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
-    PANIC_IF(std::cmp_less(option, 0) || std::cmp_greater_equal(option, num_options),
-             "Option {} out of bounds [0, {}]", option, num_options - 1);
+  void restore(int item, int option) {
+    PANIC_IF(item < 0 || item >= options.num_rows(), "Item index {} out of bounds [0, {}]", item,
+             options.num_rows() - 1);
+    PANIC_IF(option < 0 || option >= num_options, "Option {} out of bounds [0, {}]", option,
+             num_options - 1);
     const int count = get_available_count(item);
     const int index = pos[item, option];
-    PANIC_IF(std::cmp_less(index, 0), "Item {} does not contain {} in its initial available set",
-             item, option);
+    PANIC_IF(index < 0, "Item {} does not contain {} in its initial available set", item, option);
     PANIC_IF(index < count, "Item {}: Option {} is already active", item, option);
     auto row = options[item].values;
     std::swap(pos[item, option], pos[item, row[size_t(count)]]);
     std::swap(row[size_t(index)], row[size_t(count)]);
-    ++active_ends[size_t(item + 1)];
+    ++active_ends[item + 1];
   }
 
   /**
    * @brief Accesses the element at `[item, index]` by value (read-only).
    */
-  template <typename T1, typename T2>
-    requires std::is_integral_v<T1> && std::is_integral_v<T2>
-  auto operator[](T1 item, T2 index) const -> int {
-    PANIC_IF(std::cmp_less(item, 0) || std::cmp_greater_equal(item, options.num_rows()),
-             "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
-    PANIC_IF(std::cmp_less(index, 0) || std::cmp_greater_equal(index, get_available_count(item)),
+  auto operator[](int item, int index) const -> int {
+    PANIC_IF(item < 0 || item >= options.num_rows(), "Item index {} out of bounds [0, {}]", item,
+             options.num_rows() - 1);
+    PANIC_IF(index < 0 || index >= get_available_count(item),
              "Item {}: Index {} out of available range", item, index);
     return options[item].values[size_t(index)];
   }
@@ -174,15 +153,11 @@ struct AvailableSet {
   /**
    * @brief Accesses the available options of an item as a span (read-only).
    */
-  template <typename T>
-    requires std::is_integral_v<T>
-  auto operator[](T item) const -> std::span<const int> {
-    PANIC_IF(std::cmp_less(item, 0) || std::cmp_greater_equal(item, options.num_rows()),
-             "Item index {} out of bounds [0, {}]", item, options.num_rows() - 1);
+  auto operator[](int item) const -> std::span<const int> {
+    PANIC_IF(item < 0 || item >= options.num_rows(), "Item index {} out of bounds [0, {}]", item,
+             options.num_rows() - 1);
     const auto row = options[item].values;
     const int count = get_available_count(item);
-    return row.subspan(0, count);
+    return row.subspan(0, size_t(count));
   }
 };
-
-}  // namespace utils

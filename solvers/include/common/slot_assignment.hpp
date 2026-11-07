@@ -12,13 +12,13 @@ struct SlotAssignment {
   // `conflicting_exams_count(i, j)` tells how many exams `k` that
   // have conflict with exam `i` and have been assigned to slot `j`.
   // If this value is > 0, slot `j` is strictly forbidden for exam `i`.
-  utils::Matrix<int> conflicting_exams_count;
+  Matrix<int> conflicting_exams_count;
 
   // `assigned_slots[i]` tells the assigned slot for exam `i`.
-  std::vector<int> assigned_slots;
+  Vector<int> assigned_slots;
 
   // `available_slots_by_exam[i]` tells the currently available slots for exam `i`.
-  utils::AvailableSet available_slots_by_exam;
+  AvailableSet available_slots_by_exam;
 
   // NOLINTEND(*-non-private-*)
 
@@ -32,13 +32,13 @@ struct SlotAssignment {
   /**
    * @brief Assigns an exam to a slot and updates conflict/availability states for neighbors.
    */
-  void assign_exam(int exam, int slot, const utils::CsrMatrix<int>& conflicts_csrmatrix);
+  void assign_exam(int exam, int slot, const CsrMatrix<int>& conflicts_csrmatrix);
 
   /**
    * @brief Removes an exam from its current slot,
    * and restores the conflict/availability states for neighbors.
    */
-  void unassign_exam(int exam, const utils::CsrMatrix<int>& conflicts_csrmatrix);
+  void unassign_exam(int exam, const CsrMatrix<int>& conflicts_csrmatrix);
 
   /**
    * @brief Resets the schedule and conflict states to prepare for reuse.

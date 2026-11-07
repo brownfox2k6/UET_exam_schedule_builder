@@ -12,16 +12,16 @@ struct RoomAssignment {
 
   // `assigned_room_ids[offsets[i] + j]` is the ID of the j-th room assigned to section `i`.
   // `offsets` come from `ProblemData::feasible_rooms_by_section`.
-  std::vector<int> assigned_room_ids;
+  Vector<int> assigned_room_ids;
 
   // `assigned_room_counts[i]` is the number of rooms currently assigned to section `i`.
-  std::vector<int> assigned_room_counts;
+  Vector<int> assigned_room_counts;
 
   // `assigned_room_capacity[i]` is the sum of the full capacities of rooms assigned to section `i`.
-  std::vector<int> assigned_room_capacity;
+  Vector<int> assigned_room_capacity;
 
   // `available_rooms_by_slot[i]` contains rooms not yet assigned to any section in slot `i`.
-  utils::AvailableSet available_rooms_by_slot;
+  AvailableSet available_rooms_by_slot;
 
   // NOLINTEND(*-non-private-*)
 
@@ -45,8 +45,7 @@ struct RoomAssignment {
   void reset();
 
  private:
-  static auto build_available_rooms_by_slot(const ProblemData& problem_data)
-      -> utils::CsrMatrix<int>;
+  static auto build_available_rooms_by_slot(const ProblemData& problem_data) -> CsrMatrix<int>;
 
 };  // struct RoomAssignment
 

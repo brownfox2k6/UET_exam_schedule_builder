@@ -1,7 +1,8 @@
 #pragma once
 
 #include <string>
-#include <vector>
+
+#include "utils/vector.hpp"
 
 namespace common {
 
@@ -11,21 +12,21 @@ namespace common {
  * the same Exam are scheduled in the same time slot.
  */
 struct ExamSection {
-  ExamSection(std::string code, std::vector<std::string> students, std::vector<int> feasible_rooms);
+  ExamSection(std::string code, Vector<std::string> students, Vector<int> feasible_rooms);
 
   [[nodiscard]] auto code() const -> const std::string& { return code_; }
-  [[nodiscard]] auto student_count() const -> int { return int(students_.size()); }
-  [[nodiscard]] auto students() const -> const std::vector<std::string>& { return students_; }
-  [[nodiscard]] auto feasible_rooms() const -> const std::vector<int>& { return feasible_rooms_; }
+  [[nodiscard]] auto student_count() const -> int { return students_.size(); }
+  [[nodiscard]] auto students() const -> const Vector<std::string>& { return students_; }
+  [[nodiscard]] auto feasible_rooms() const -> const Vector<int>& { return feasible_rooms_; }
 
   void set_code(std::string code);
-  void set_students(std::vector<std::string> students);
-  void set_feasible_rooms(std::vector<int> feasible_rooms);
+  void set_students(Vector<std::string> students);
+  void set_feasible_rooms(Vector<int> feasible_rooms);
 
  private:
   std::string code_;
-  std::vector<std::string> students_;
-  std::vector<int> feasible_rooms_;
+  Vector<std::string> students_;
+  Vector<int> feasible_rooms_;
 };  // struct ExamSection
 
 /**
@@ -35,20 +36,19 @@ struct ExamSection {
  * time slots, while each section defines its own feasible rooms.
  */
 struct Exam {
-  Exam(std::string code, int credits, std::vector<ExamSection> sections,
-       std::vector<int> feasible_slots);
+  Exam(std::string code, int credits, Vector<ExamSection> sections, Vector<int> feasible_slots);
 
   [[nodiscard]] auto code() const -> const std::string& { return code_; }
   [[nodiscard]] auto credits() const -> int { return credits_; }
-  [[nodiscard]] auto sections() const -> const std::vector<ExamSection>& { return sections_; }
-  [[nodiscard]] auto feasible_slots() const -> const std::vector<int>& { return feasible_slots_; }
-  [[nodiscard]] auto section_count() const -> int { return int(sections_.size()); }
+  [[nodiscard]] auto sections() const -> const Vector<ExamSection>& { return sections_; }
+  [[nodiscard]] auto feasible_slots() const -> const Vector<int>& { return feasible_slots_; }
+  [[nodiscard]] auto section_count() const -> int { return sections_.size(); }
   [[nodiscard]] auto student_count() const -> int { return student_count_; }
 
   void set_code(std::string code);
   void set_credits(int credits);
-  void set_sections(std::vector<ExamSection> sections);
-  void set_feasible_slots(std::vector<int> feasible_slots);
+  void set_sections(Vector<ExamSection> sections);
+  void set_feasible_slots(Vector<int> feasible_slots);
 
  private:
   // --- Heuristic Weights & Metadata ---
@@ -57,8 +57,8 @@ struct Exam {
   int student_count_ = 0;
 
   // --- Core Operational Constraints ---
-  std::vector<ExamSection> sections_;
-  std::vector<int> feasible_slots_;
+  Vector<ExamSection> sections_;
+  Vector<int> feasible_slots_;
 };  // struct Exam
 
 }  // namespace common
