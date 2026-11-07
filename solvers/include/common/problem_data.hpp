@@ -99,6 +99,9 @@ struct ProblemData {
   ProblemData(ProblemData&&) = delete;
   auto operator=(ProblemData&&) -> ProblemData& = delete;
 
+  // returns [first, last)
+  [[nodiscard]] auto sections_of_exam(size_t exam) const -> std::pair<size_t, size_t>;
+
  private:
   static auto extract_num_sections(const std::vector<Exam>& exams) -> int;
   static auto extract_num_enrollments(const std::vector<Exam>& exams) -> int;

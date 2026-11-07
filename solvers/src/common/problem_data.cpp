@@ -65,6 +65,14 @@ ProblemData::ProblemData(const std::vector<Exam>& _exams, std::vector<int64_t> _
 #endif  // NDEBUG
 }
 
+auto ProblemData::sections_of_exam(size_t exam) const -> std::pair<size_t, size_t> {
+  PANIC_IF(std::cmp_less(exam, 0) || std::cmp_greater_equal(exam, num_exams),
+           "Exam index out of bounds: {}", exam);
+  const int begin = exam_to_sections[exam];
+  const int end = std::cmp_equal(exam, num_exams - 1) ? num_sections : exam_to_sections[exam + 1];
+  return {size_t(begin), size_t(end)};
+}
+
 auto ProblemData::extract_num_sections(const std::vector<Exam>& exams) -> int {
   PANIC_IF(exams.empty(), "'_exams' is empty");
   int num_sections = 0;
