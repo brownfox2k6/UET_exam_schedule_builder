@@ -91,24 +91,24 @@ FetchContent_Declare(
   GIT_TAG "stable"
   GIT_SHALLOW TRUE
 )
+
+# OR-Tools needs its C++ dependencies (Abseil, protobuf, ZLIB, BZip2, and
+# others) when no system package manager provides them. Build that dependency
+# bundle so configuration is portable across the CI runners.
+set(BUILD_DEPS ON CACHE BOOL "" FORCE)
+set(BUILD_PYTHON OFF CACHE BOOL "" FORCE)
+set(BUILD_JAVA OFF CACHE BOOL "" FORCE)
+set(BUILD_DOTNET OFF CACHE BOOL "" FORCE)
+set(BUILD_SAMPLES OFF CACHE BOOL "" FORCE)
+set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(BUILD_DOC OFF CACHE BOOL "" FORCE)
+
 FetchContent_MakeAvailable(ortools)
 
 if(NOT TARGET ortools::ortools)
   message(FATAL_ERROR "OR-Tools did not provide the ortools::ortools target")
 endif()
 
-# Some installed OR-Tools packages export optional MathOpt object targets without
-# exporting the targets themselves. The shared OR-Tools library already contains
-# the solver implementation, so discard only the broken optional object list.
-if(NOT TARGET ortools_math_opt_core)
-  set_property(TARGET ortools::ortools PROPERTY INTERFACE_SOURCES "")
-  if(TARGET ortools::ortools_math_opt)
-    set_property(TARGET ortools::ortools_math_opt PROPERTY INTERFACE_SOURCES "")
-  endif()
-  if(TARGET ortools::ortools_math_opt_constraints)
-    set_property(TARGET ortools::ortools_math_opt_constraints PROPERTY INTERFACE_SOURCES "")
-  endif()
-endif()
 target_link_libraries(cetp_solvers PRIVATE ortools::ortools)
 
 if(MSVC)
