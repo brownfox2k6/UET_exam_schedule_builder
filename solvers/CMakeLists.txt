@@ -3,6 +3,9 @@ project(cetp_solvers CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(CMAKE_CXX_STANDARD 23)
+include(FetchContent)
+
 find_package(Python 3.11 REQUIRED COMPONENTS Interpreter Development.Module)
 
 execute_process(
@@ -82,8 +85,19 @@ if(NOT OpenMP_CXX_FOUND)
 endif()
 target_link_libraries(cetp_solvers PRIVATE OpenMP::OpenMP_CXX)
 
-find_package(ortools CONFIG REQUIRED)
-# Some Homebrew OR-Tools packages export optional MathOpt object targets without
+FetchContent_Declare(
+  ortools
+  GIT_REPOSITORY https://github.com/google/or-tools.git
+  GIT_TAG "stable"
+  GIT_SHALLOW TRUE
+)
+FetchContent_MakeAvailable(ortools)
+
+if(NOT TARGET ortools::ortools)
+  message(FATAL_ERROR "OR-Tools did not provide the ortools::ortools target")
+endif()
+
+# Some installed OR-Tools packages export optional MathOpt object targets without
 # exporting the targets themselves. The shared OR-Tools library already contains
 # the solver implementation, so discard only the broken optional object list.
 if(NOT TARGET ortools_math_opt_core)
