@@ -82,6 +82,21 @@ if(NOT OpenMP_CXX_FOUND)
 endif()
 target_link_libraries(cetp_solvers PRIVATE OpenMP::OpenMP_CXX)
 
+find_package(ortools CONFIG REQUIRED)
+# Some Homebrew OR-Tools packages export optional MathOpt object targets without
+# exporting the targets themselves. The shared OR-Tools library already contains
+# the solver implementation, so discard only the broken optional object list.
+if(NOT TARGET ortools_math_opt_core)
+  set_property(TARGET ortools::ortools PROPERTY INTERFACE_SOURCES "")
+  if(TARGET ortools::ortools_math_opt)
+    set_property(TARGET ortools::ortools_math_opt PROPERTY INTERFACE_SOURCES "")
+  endif()
+  if(TARGET ortools::ortools_math_opt_constraints)
+    set_property(TARGET ortools::ortools_math_opt_constraints PROPERTY INTERFACE_SOURCES "")
+  endif()
+endif()
+target_link_libraries(cetp_solvers PRIVATE ortools::ortools)
+
 if(MSVC)
   target_compile_options(cetp_solvers PRIVATE /W4)
 else()
