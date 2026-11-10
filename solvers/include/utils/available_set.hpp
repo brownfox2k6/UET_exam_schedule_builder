@@ -1,11 +1,11 @@
 #pragma once
 
-#include <cstddef>
 #include <random>
 #include <utility>
 
 #include "utils/assert.hpp"
 #include "utils/matrix.hpp"
+#include "utils/span.hpp"
 
 /**
  * @brief A data structure to manage a set of available options for multiple items.
@@ -65,7 +65,7 @@ struct AvailableSet {
   [[nodiscard]] auto get_unavailable_count(int item) const -> int {
     PANIC_IF(item < 0 || item >= options.num_rows(), "Item index {} out of bounds [0, {}]", item,
              options.num_rows() - 1);
-    return int(options[item].values.size()) - get_available_count(item);
+    return options[item].values.size() - get_available_count(item);
   }
 
   /**
@@ -100,7 +100,7 @@ struct AvailableSet {
     const int count = get_available_count(item);
     PANIC_IF(count == 0, "Item {}: No available options left to pick from", item);
     std::uniform_int_distribution<int> dist(0, count - 1);
-    return options[item].values[size_t(dist(rng))];
+    return options[item].values[dist(rng)];
   }
 
   /**
@@ -116,8 +116,8 @@ struct AvailableSet {
     PANIC_IF(index < 0, "Item {} does not contain {} in its initial available set", item, option);
     PANIC_IF(index >= count, "Item {}: Option {} is already inactive", item, option);
     auto row = options[item].values;
-    std::swap(pos[item, option], pos[item, row[size_t(count - 1)]]);
-    std::swap(row[size_t(index)], row[size_t(count - 1)]);
+    std::swap(pos[item, option], pos[item, row[count - 1]]);
+    std::swap(row[index], row[count - 1]);
     --active_ends[item + 1];
   }
 
@@ -134,8 +134,8 @@ struct AvailableSet {
     PANIC_IF(index < 0, "Item {} does not contain {} in its initial available set", item, option);
     PANIC_IF(index < count, "Item {}: Option {} is already active", item, option);
     auto row = options[item].values;
-    std::swap(pos[item, option], pos[item, row[size_t(count)]]);
-    std::swap(row[size_t(index)], row[size_t(count)]);
+    std::swap(pos[item, option], pos[item, row[count]]);
+    std::swap(row[index], row[count]);
     ++active_ends[item + 1];
   }
 
@@ -147,17 +147,17 @@ struct AvailableSet {
              options.num_rows() - 1);
     PANIC_IF(index < 0 || index >= get_available_count(item),
              "Item {}: Index {} out of available range", item, index);
-    return options[item].values[size_t(index)];
+    return options[item].values[index];
   }
 
   /**
    * @brief Accesses the available options of an item as a span (read-only).
    */
-  auto operator[](int item) const -> std::span<const int> {
+  auto operator[](int item) const -> Span<const int> {
     PANIC_IF(item < 0 || item >= options.num_rows(), "Item index {} out of bounds [0, {}]", item,
              options.num_rows() - 1);
     const auto row = options[item].values;
     const int count = get_available_count(item);
-    return row.subspan(0, size_t(count));
+    return row.subspan(0, count);
   }
 };

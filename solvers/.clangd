@@ -25,3 +25,5 @@ Diagnostics:
       cppcoreguidelines-*,
       misc-*,
     ]
+    CheckOptions:
+      bugprone-easily-swappable-parameters.MinimumLength: '3'

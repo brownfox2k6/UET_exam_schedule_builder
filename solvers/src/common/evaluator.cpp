@@ -8,24 +8,19 @@
 #include "common/problem_data.hpp"
 #include "utils/matrix.hpp"
 
-namespace common {
+namespace {
+
+using ProblemData = common::ProblemData;
+using Hyperparams = common::Hyperparams;
 
 constexpr double SECONDS_PER_DAY = 86400.0;
 
-namespace {
 auto timestamp_distance(int64_t first, int64_t second) -> uint64_t {
   return first >= second ? uint64_t(first) - uint64_t(second) : uint64_t(second) - uint64_t(first);
 }
-}  // namespace
 
-Evaluator::Evaluator(const ProblemData& _problem_data, const Hyperparams::Evaluation& _hyperparams)
-    : problem_data(_problem_data),
-      hyperparams(_hyperparams),
-      proximity_penalties(build_proximity_penalties(problem_data, hyperparams)) {}
-
-auto Evaluator::build_proximity_penalties(const ProblemData& problem_data,
-                                          const Hyperparams::Evaluation& hyperparams)
-    -> Matrix<double> {
+auto build_proximity_penalties(const ProblemData& problem_data,
+                               const Hyperparams::Evaluation& hyperparams) -> Matrix<double> {
   const auto& slot_timestamps = problem_data.slot_timestamps;
   const int num_slots = problem_data.num_slots;
   Matrix<double> penalties(num_slots, num_slots, INFINITY);
@@ -41,6 +36,15 @@ auto Evaluator::build_proximity_penalties(const ProblemData& problem_data,
   return penalties;
 }
 
+}  // namespace
+
+namespace common {
+
+Evaluator::Evaluator(const ProblemData& _problem_data, const Hyperparams::Evaluation& _hyperparams)
+    : problem_data(_problem_data),
+      hyperparams(_hyperparams),
+      proximity_penalties(build_proximity_penalties(problem_data, hyperparams)) {}
+
 // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
 auto Evaluator::calculate_delta_penalty(const Vector<int>& schedule, int exam, int new_slot,
                                         int ignore_exam) const -> double {
@@ -54,7 +58,7 @@ auto Evaluator::calculate_delta_penalty(const Vector<int>& schedule, int exam, i
   const int exam_credits = credits[exam];
   double delta = 0.0;
   const auto [conflict_exams, conflict_counts] = problem_data.conflicts_csrmatrix[exam];
-  for (size_t i = 0; i < conflict_counts.size(); ++i) {
+  for (int i = 0; i < conflict_counts.size(); ++i) {
     const int conflict_exam = conflict_exams[i];
     const int conflict_slot = schedule[conflict_exam];
     if (conflict_exam == ignore_exam || conflict_slot == -1) {

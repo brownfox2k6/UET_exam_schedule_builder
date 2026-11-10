@@ -1,10 +1,9 @@
 #pragma once
 
 #include <algorithm>
-#include <cstddef>
-#include <span>
 
 #include "utils/assert.hpp"
+#include "utils/span.hpp"
 #include "utils/vector.hpp"
 
 /**
@@ -77,8 +76,8 @@ struct Matrix {
 
 template <typename T>
 struct CsrRowView {
-  std::span<const int> indices;  // NOLINT(misc-non-private-member-variables-in-classes)
-  std::span<T> values;           // NOLINT(misc-non-private-member-variables-in-classes)
+  Span<const int> indices;  // NOLINT(misc-non-private-member-variables-in-classes)
+  Span<T> values;           // NOLINT(misc-non-private-member-variables-in-classes)
 
   [[nodiscard]] auto size() const -> int { return int(values.size()); }
 };
@@ -176,11 +175,10 @@ struct CsrMatrix {
              row_index, num_rows() - 1);
     const int start = offsets_[row_index];
     const int end = offsets_[row_index + 1];
-    return CsrRowView<T>{
-        .indices = has_indices_
-                       ? std::span<const int>{indices_}.subspan(size_t(start), size_t(end - start))
-                       : std::span<const int>{},
-        .values = std::span<T>{values_}.subspan(size_t(start), size_t(end - start))};
+    return CsrRowView<T>{.indices = has_indices_
+                                        ? Span<const int>{indices_}.subspan(start, end - start)
+                                        : Span<const int>{},
+                         .values = Span<T>{values_}.subspan(start, end - start)};
   }
 
   auto operator[](int row_index) const -> CsrRowView<const T> {
@@ -189,9 +187,8 @@ struct CsrMatrix {
     const int start = offsets_[row_index];
     const int end = offsets_[row_index + 1];
     return CsrRowView<const T>{
-        .indices = has_indices_
-                       ? std::span<const int>{indices_}.subspan(size_t(start), size_t(end - start))
-                       : std::span<const int>{},
-        .values = std::span<const T>{values_}.subspan(size_t(start), size_t(end - start))};
+        .indices = has_indices_ ? Span<const int>{indices_}.subspan(start, end - start)
+                                : Span<const int>{},
+        .values = Span<const T>{values_}.subspan(start, end - start)};
   }
 };

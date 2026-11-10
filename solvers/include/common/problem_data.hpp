@@ -102,39 +102,6 @@ struct ProblemData {
   // returns [first, last)
   [[nodiscard]] auto sections_of_exam(int exam) const -> std::pair<int, int>;
 
- private:
-  static auto extract_num_sections(const Vector<Exam>& exams) -> int;
-  static auto extract_num_enrollments(const Vector<Exam>& exams) -> int;
-  static auto build_id_to_student(const Vector<Exam>& exams, int num_enrollments)
-      -> Vector<std::string>;
-  static auto build_student_to_id(const Vector<std::string>& id_to_student)
-      -> std::unordered_map<std::string_view, int>;
-  static auto extract_exam_codes(const Vector<Exam>& exams) -> Vector<std::string>;
-  static auto extract_exam_credits(const Vector<Exam>& exams) -> Vector<int>;
-  static auto extract_section_codes(const Vector<Exam>& exams, int num_sections)
-      -> Vector<std::string>;
-  static auto extract_section_students(
-      const Vector<Exam>& exams, const std::unordered_map<std::string_view, int>& student_to_id,
-      int num_sections, int num_enrollments) -> CsrMatrix<int>;
-  static auto extract_section_student_counts(const Vector<Exam>& exams, int num_sections)
-      -> Vector<int>;
-  static auto extract_exam_student_counts(const Vector<Exam>& exams) -> Vector<int>;
-  static auto build_exam_to_sections(const Vector<Exam>& exams) -> Vector<int>;
-  static auto build_section_to_exam(const Vector<Exam>& exams, int num_sections) -> Vector<int>;
-  static auto extract_room_codes(const Vector<Room>& rooms) -> Vector<std::string>;
-  static auto extract_room_capacities(const Vector<Room>& rooms) -> Vector<int>;
-  static auto extract_room_locations(const Vector<Room>& rooms) -> Vector<std::string>;
-  static auto extract_room_types(const Vector<Room>& rooms) -> Vector<std::string>;
-  static auto build_conflicts_matrix(const Vector<Exam>& exams,
-                                     const std::unordered_map<std::string_view, int>& student_to_id)
-      -> Matrix<int>;
-  static auto build_weighted_conflict_degrees(const CsrMatrix<int>& conflicts_csrmatrix)
-      -> Vector<int>;
-  static auto build_feasible_slots_by_exam(const Vector<Exam>& exams, int num_slots)
-      -> CsrMatrix<int>;
-  static auto build_feasible_rooms_by_section(const Vector<Exam>& exams, int num_rooms,
-                                              int num_sections) -> CsrMatrix<int>;
-
 };  // struct ProblemData
 
 }  // namespace common

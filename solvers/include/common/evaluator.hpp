@@ -24,10 +24,6 @@ struct Evaluator {
    */
   const Matrix<double> proximity_penalties;  // NOLINT(*const-or-ref-data-members*)
 
-  static auto build_proximity_penalties(const ProblemData& problem_data,
-                                        const Hyperparams::Evaluation& hyperparams)
-      -> Matrix<double>;
-
 };  // struct Evaluator
 
 }  // namespace common
