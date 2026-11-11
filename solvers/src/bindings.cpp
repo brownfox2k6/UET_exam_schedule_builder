@@ -77,7 +77,10 @@ NB_MODULE(cetp_solvers, m) {
       .def_prop_rw("code", &common::Exam::code, &common::Exam::set_code)
       .def_prop_rw("credits", &common::Exam::credits, &common::Exam::set_credits)
       .def_prop_rw(
-          "sections", [](const common::Exam& exam) { return to_std_vector(exam.sections()); },
+          "sections",
+          [](const common::Exam& exam) -> std::vector<common::ExamSection> {
+            return to_std_vector(exam.sections());
+          },
           [](common::Exam& exam, const std::vector<common::ExamSection>& sections) -> void {
             exam.set_sections(to_vector(sections));
           })
@@ -150,7 +153,7 @@ NB_MODULE(cetp_solvers, m) {
 
   nb::class_<common::Solution>(m, "Solution")
       .def_prop_ro("schedule",
-                   [](const common::Solution& solution) {
+                   [](const common::Solution& solution) -> std::vector<int> {
                      return to_std_vector(solution.slot_assignment.assigned_slots);
                    })
       .def_ro("penalty", &common::Solution::penalty);
@@ -165,14 +168,15 @@ NB_MODULE(cetp_solvers, m) {
                                       to_vector(rooms), base_seed);
           },
           nb::arg("hyperparams"), nb::arg("exams"), nb::arg("slot_timestamps"), nb::arg("rooms"),
-          nb::arg("base_seed") = 42)  // NOLINT(*-magic-numbers)
+          nb::arg("base_seed") = BASE_SEED_DEFAULT)
       .def("run_one_iteration", &aco::AntColony::run_one_iteration,
            nb::call_guard<nb::gil_scoped_release>())
       .def("run", &aco::AntColony::run, nb::arg("callback") = nb::none(),
            nb::call_guard<nb::gil_scoped_release>())
-      .def_prop_ro(
-          "global_best_schedule",
-          [](const aco::AntColony& colony) { return to_std_vector(colony.global_best_schedule); })
+      .def_prop_ro("global_best_schedule",
+                   [](const aco::AntColony& colony) -> std::vector<int> {
+                     return to_std_vector(colony.global_best_schedule);
+                   })
       .def_ro("global_best_penalty", &aco::AntColony::global_best_penalty);
 
   nb::class_<ls::LocalSearch>(m, "LocalSearch")
