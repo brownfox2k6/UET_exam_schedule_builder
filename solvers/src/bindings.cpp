@@ -17,6 +17,8 @@ namespace nb = nanobind;
 
 namespace {
 
+constexpr const int BASE_SEED_DEFAULT = 42;
+
 template <typename T>
 auto to_vector(const std::vector<T>& values) -> Vector<T> {
   return {values.begin(), values.end()};
@@ -184,8 +186,7 @@ NB_MODULE(cetp_solvers, m) {
                                        to_vector(slot_timestamps), to_vector(rooms), base_seed);
           },
           nb::arg("eval_params"), nb::arg("ls_params"), nb::arg("exams"),
-          nb::arg("slot_timestamps"), nb::arg("rooms"),
-          nb::arg("base_seed") = 42)  // NOLINT(*-magic-numbers)
+          nb::arg("slot_timestamps"), nb::arg("rooms"), nb::arg("base_seed") = BASE_SEED_DEFAULT)
       .def(
           "run",
           [](ls::LocalSearch& search, const std::vector<int>& initial_schedule)

@@ -13,8 +13,6 @@
 #include "utils/matrix.hpp"
 #include "utils/vector.hpp"
 
-constexpr int BASE_SEED_DEFAULT = 42;
-
 namespace aco {
 
 /*
@@ -28,7 +26,7 @@ class AntColony {
    */
   AntColony(common::Hyperparams _hyperparams, const Vector<common::Exam>& _exams,
             Vector<int64_t> _slot_timestamps, const Vector<common::Room>& _rooms,
-            uint64_t _base_seed = BASE_SEED_DEFAULT);
+            uint64_t _base_seed);
 
   // The best solution found since the start of the algorithm
   Vector<int> global_best_schedule;      // NOLINT(*non-private-member-variables*)
