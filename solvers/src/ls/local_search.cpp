@@ -68,8 +68,9 @@ auto LocalSearch::go_1_move() -> bool {
 
 auto LocalSearch::go_2_swap() -> bool {
   common::SlotAssignment& slot_assignment = solution_.slot_assignment;
-  const int exam1 = std::uniform_int_distribution<int>(0, problem_data_.num_exams - 1)(rng_);
-  const int exam2 = std::uniform_int_distribution<int>(0, problem_data_.num_exams - 1)(rng_);
+  std::uniform_int_distribution<int> dist(0, problem_data_.num_exams - 1);
+  const int exam1 = dist(rng_);
+  const int exam2 = dist(rng_);
   const int slot1 = slot_assignment.assigned_slots[exam1];
   const int slot2 = slot_assignment.assigned_slots[exam2];
   if (exam1 == exam2 || slot1 == slot2) {
