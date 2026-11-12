@@ -16,22 +16,19 @@ struct Matrix {
   /**
    * @brief Initializes a matrix of size r x c with a default value.
    */
-  Matrix(int rows, int cols, T value = T()) {
+  Matrix(int rows, int cols, T value = T()) : num_rows_(rows), num_cols_(cols) {
     PANIC_IF(rows <= 0, "Matrix rows must be positive (got: {})", rows);
     PANIC_IF(cols <= 0, "Matrix columns must be positive (got: {})", cols);
-    num_rows_ = rows;
-    num_cols_ = cols;
     data_.assign(num_rows_ * num_cols_, value);
   }
 
   /**
    * @brief Constructs a matrix from a 2D Vector (list of lists).
    */
-  Matrix(const Vector<Vector<T>>& list) {
+  Matrix(const Vector<Vector<T>>& list)
+      : num_rows_(list.size()), num_cols_(list.empty() ? 0 : list.front().size()) {
     PANIC_IF(list.empty(), "Matrix list must not be empty");
     PANIC_IF(list[0].empty(), "Matrix list rows must not be empty");
-    num_rows_ = list.size();
-    num_cols_ = list[0].size();
     data_.assign(num_rows_ * num_cols_, T());
     int element_index = 0;
     for (int row_index = 0; row_index < num_rows_; ++row_index) {
