@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <utility>
 
 #include "utils/assert.hpp"
 #include "utils/span.hpp"
@@ -161,6 +162,17 @@ struct CsrMatrix {
       indices_.shrink_to_fit();
     }
     values_.shrink_to_fit();
+  }
+
+  /**
+   * @brief Constructs rows from flat values and CSR offsets with empty column-index spans.
+   * Offsets must be nondecreasing, start at zero, and end at values.size().
+   */
+  CsrMatrix(Vector<T> values, Vector<int> row_offsets)
+      : values_(std::move(values)), offsets_(std::move(row_offsets)), has_indices_(false) {
+    PANIC_IF(offsets_.empty() || offsets_.front() != 0 || offsets_.back() != values_.size() ||
+                 !std::ranges::is_sorted(offsets_),
+             "Invalid CSR row offsets");
   }
 
   [[nodiscard]] auto num_rows() const -> int { return offsets_.size() - 1; }
