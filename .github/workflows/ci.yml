@@ -85,3 +85,6 @@ jobs:
 
       - name: Build solvers
         run: cmake --build solvers/build-ci --config Release --parallel
+
+      - name: Run all tests
+        run: python -m pytest app -q
