@@ -1,10 +1,8 @@
 #pragma once
 
-#ifndef NDEBUG
 #include <cmath>
-#endif  // NDEBUG
-
-#include "utils/assert.hpp"
+#include <format>
+#include <stdexcept>
 
 namespace common {
 
@@ -18,20 +16,24 @@ struct Hyperparams {
   struct Evaluation {
     Evaluation();
 
-    [[nodiscard]] auto penalty_decay_base() const -> double { return penalty_decay_base_; }
+    [[nodiscard]] auto penalty_decay_base() const noexcept -> double { return penalty_decay_base_; }
 
     void set_penalty_decay_base(double penalty_decay_base) {
-      PANIC_IF(!std::isfinite(penalty_decay_base) || penalty_decay_base <= 1.0,
-               "Evaluation.penalty_decay_base must be finite and greater than 1.0 for decay "
-               "behavior (got: {})",
-               penalty_decay_base);
+      if (!std::isfinite(penalty_decay_base) || penalty_decay_base <= 1.0) {
+        throw std::invalid_argument(std::format(
+            "Evaluation.penalty_decay_base must be finite and greater than 1.0 (got: {})",
+            penalty_decay_base));
+      }
       penalty_decay_base_ = penalty_decay_base;
     }
 
    private:
+    // NOLINTBEGIN(*-magic-numbers)
+
     // Base for the exponential decay of time-gap penalties (base ^ -delta_days).
     // Controls how fast the penalty drops: 2.0 halves the penalty each day.
-    double penalty_decay_base_{2.0};  // NOLINT(*-magic-numbers)
+    double penalty_decay_base_{2.0};
+    // NOLINTEND(*-magic-numbers)
   };  // struct Evaluation
 
   /**
@@ -40,68 +42,88 @@ struct Hyperparams {
   struct ACO {
     ACO();
 
-    [[nodiscard]] auto num_iters() const -> int { return num_iters_; }
-    [[nodiscard]] auto num_ants() const -> int { return num_ants_; }
-    [[nodiscard]] auto alpha() const -> double { return alpha_; }
-    [[nodiscard]] auto beta() const -> double { return beta_; }
-    [[nodiscard]] auto rho() const -> double { return rho_; }
-    [[nodiscard]] auto tau_min() const -> double { return tau_min_; }
-    [[nodiscard]] auto tau_max() const -> double { return tau_max_; }
-    [[nodiscard]] auto max_retries() const -> int { return max_retries_; }
+    [[nodiscard]] auto num_iters() const noexcept -> int { return num_iters_; }
+    [[nodiscard]] auto num_ants() const noexcept -> int { return num_ants_; }
+    [[nodiscard]] auto alpha() const noexcept -> double { return alpha_; }
+    [[nodiscard]] auto beta() const noexcept -> double { return beta_; }
+    [[nodiscard]] auto rho() const noexcept -> double { return rho_; }
+    [[nodiscard]] auto tau_min() const noexcept -> double { return tau_min_; }
+    [[nodiscard]] auto tau_max() const noexcept -> double { return tau_max_; }
+    [[nodiscard]] auto max_retries() const noexcept -> int { return max_retries_; }
 
     void set_num_iters(int num_iters) {
-      PANIC_IF(num_iters <= 0, "ACO.num_iters must be positive (got: {})", num_iters);
+      if (num_iters <= 0) {
+        throw std::invalid_argument(
+            std::format("ACO.num_iters must be positive (got: {})", num_iters));
+      }
       num_iters_ = num_iters;
     }
+
     void set_num_ants(int num_ants) {
-      PANIC_IF(num_ants <= 0, "ACO.num_ants must be positive (got: {})", num_ants);
+      if (num_ants <= 0) {
+        throw std::invalid_argument(
+            std::format("ACO.num_ants must be positive (got: {})", num_ants));
+      }
       num_ants_ = num_ants;
     }
+
     void set_alpha(double alpha) {
-      PANIC_IF(!std::isfinite(alpha) || alpha < 0.0,
-               "ACO.alpha must be finite and non-negative (got: {})", alpha);
+      if (!std::isfinite(alpha) || alpha < 0.0) {
+        throw std::invalid_argument(
+            std::format("ACO.alpha must be finite and non-negative (got: {})", alpha));
+      }
       alpha_ = alpha;
     }
+
     void set_beta(double beta) {
-      PANIC_IF(!std::isfinite(beta) || beta < 0.0,
-               "ACO.beta must be finite and non-negative (got: {})", beta);
+      if (!std::isfinite(beta) || beta < 0.0) {
+        throw std::invalid_argument(
+            std::format("ACO.beta must be finite and non-negative (got: {})", beta));
+      }
       beta_ = beta;
     }
+
     void set_rho(double rho) {
-      PANIC_IF(!std::isfinite(rho) || rho < 0.0 || rho > 1.0,
-               "ACO.rho must be finite and in [0, 1] (got: {})", rho);
+      if (!std::isfinite(rho) || rho < 0.0 || rho > 1.0) {
+        throw std::invalid_argument(
+            std::format("ACO.rho must be finite and in [0, 1] (got: {})", rho));
+      }
       rho_ = rho;
     }
+
     void set_tau_min(double tau_min) {
-      PANIC_IF(!std::isfinite(tau_min) || tau_min <= 0.0,
-               "ACO.tau_min must be finite and positive (got: {})", tau_min);
-      PANIC_IF(tau_min >= tau_max_,
-               "ACO.tau_min < ACO.tau_max must hold (got: tau_min={}, while tau_max={})", tau_min,
-               tau_max_);
+      if (!std::isfinite(tau_min) || tau_min <= 0.0 || tau_min >= tau_max_) {
+        throw std::invalid_argument(std::format(
+            "ACO.tau_min must be finite, positive, and below tau_max (got: {}, tau_max: {})",
+            tau_min, tau_max_));
+      }
       tau_min_ = tau_min;
     }
+
     void set_tau_max(double tau_max) {
-      PANIC_IF(!std::isfinite(tau_max) || tau_max <= 0.0,
-               "ACO.tau_max must be finite and positive (got: {})", tau_max);
-      PANIC_IF(tau_min_ >= tau_max,
-               "ACO.tau_min < ACO.tau_max must hold (got: tau_max={}, while tau_min={})", tau_max,
-               tau_min_);
+      if (!std::isfinite(tau_max) || tau_max <= tau_min_) {
+        throw std::invalid_argument(std::format(
+            "ACO.tau_max must be finite, positive, and above tau_min (got: {}, tau_min: {})",
+            tau_max, tau_min_));
+      }
       tau_max_ = tau_max;
     }
 
     void set_tau_bounds(double tau_min, double tau_max) {
-      PANIC_IF(!std::isfinite(tau_min) || tau_min <= 0.0,
-               "ACO.tau_min must be finite and positive (got: {})", tau_min);
-      PANIC_IF(!std::isfinite(tau_max) || tau_max <= 0.0,
-               "ACO.tau_max must be finite and positive (got: {})", tau_max);
-      PANIC_IF(tau_min >= tau_max,
-               "ACO.tau_min < ACO.tau_max must hold (got: tau_min={}, tau_max={})", tau_min,
-               tau_max);
+      if (!std::isfinite(tau_max) || !std::isfinite(tau_min) || tau_min <= 0.0 ||
+          tau_min >= tau_max) {
+        throw std::invalid_argument(std::format(
+            "ACO bounds satisfy 0 < tau_min < tau_max < inf (got: {}, {})", tau_min, tau_max));
+      }
       tau_min_ = tau_min;
       tau_max_ = tau_max;
     }
+
     void set_max_retries(int max_retries) {
-      PANIC_IF(max_retries <= 0, "ACO.max_retries must be positive (got: {})", max_retries);
+      if (max_retries <= 0) {
+        throw std::invalid_argument(
+            std::format("ACO.max_retries must be positive (got: {})", max_retries));
+      }
       max_retries_ = max_retries;
     }
 
@@ -124,22 +146,31 @@ struct Hyperparams {
   struct LS {
     LS();
 
-    [[nodiscard]] auto prob_1_move() const -> double { return prob_1_move_; }
-    [[nodiscard]] auto max_improvements() const -> int { return max_improvements_; }
-    [[nodiscard]] auto patience() const -> int { return patience_; }
+    [[nodiscard]] auto prob_1_move() const noexcept -> double { return prob_1_move_; }
+    [[nodiscard]] auto max_improvements() const noexcept -> int { return max_improvements_; }
+    [[nodiscard]] auto patience() const noexcept -> int { return patience_; }
 
     void set_prob_1_move(double prob_1_move) {
-      PANIC_IF(!std::isfinite(prob_1_move) || prob_1_move < 0.0 || prob_1_move > 1.0,
-               "LS.prob_1_move must be finite and in [0, 1] (got: {})", prob_1_move);
+      if (!std::isfinite(prob_1_move) || prob_1_move < 0.0 || prob_1_move > 1.0) {
+        throw std::invalid_argument(
+            std::format("LS.prob_1_move must be finite and in [0, 1] (got: {})", prob_1_move));
+      }
       prob_1_move_ = prob_1_move;
     }
+
     void set_max_improvements(int max_improvements) {
-      PANIC_IF(max_improvements < 0, "LS.max_improvements must be non-negative (got: {})",
-               max_improvements);
+      if (max_improvements < 0) {
+        throw std::invalid_argument(
+            std::format("LS.max_improvements must be non-negative (got: {})", max_improvements));
+      }
       max_improvements_ = max_improvements;
     }
+
     void set_patience(int patience) {
-      PANIC_IF(patience < 0, "LS.patience must be non-negative (got: {})", patience);
+      if (patience < 0) {
+        throw std::invalid_argument(
+            std::format("LS.patience must be non-negative (got: {})", patience));
+      }
       patience_ = patience;
     }
 
@@ -154,18 +185,39 @@ struct Hyperparams {
   struct RoomAssignment {
     RoomAssignment();
 
-    [[nodiscard]] auto max_attempts() const -> int { return max_attempts_; }
+    [[nodiscard]] auto max_time_seconds() const noexcept -> double { return max_time_seconds_; }
+    [[nodiscard]] auto num_workers() const noexcept -> int { return num_workers_; }
+    [[nodiscard]] auto random_seed() const noexcept -> int { return random_seed_; }
 
-    void set_max_attempts(int max_attempts) {
-      PANIC_IF(max_attempts <= 0, "RoomAssignment.max_attempts must be positive (got: {})",
-               max_attempts);
-      max_attempts_ = max_attempts;
+    void set_max_time_seconds(double seconds) {
+      if (!std::isfinite(seconds) || seconds <= 0.0) {
+        throw std::invalid_argument(std::format(
+            "RoomAssignment.max_time_seconds must be finite and positive (got: {})", seconds));
+      }
+      max_time_seconds_ = seconds;
+    }
+
+    void set_num_workers(int workers) {
+      if (workers <= 0) {
+        throw std::invalid_argument(
+            std::format("RoomAssignment.num_workers must be positive (got: {})", workers));
+      }
+      num_workers_ = workers;
+    }
+
+    void set_random_seed(int seed) {
+      if (seed < 0) {
+        throw std::invalid_argument(
+            std::format("RoomAssignment.random_seed must be non-negative (got: {})", seed));
+      }
+      random_seed_ = seed;
     }
 
    private:
     // NOLINTBEGIN(*-magic-numbers)
-    int max_attempts_{
-        100};  // Maximum number of attempts to find a feasible room assignment for a given schedule
+    double max_time_seconds_{30.0};  // Shared budget for both lexicographic optimization phases.
+    int num_workers_{1};
+    int random_seed_{42};
     // NOLINTEND(*-magic-numbers)
   };  // struct RoomAssignment
 
