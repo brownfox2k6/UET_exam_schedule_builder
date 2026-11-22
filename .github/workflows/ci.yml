@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   build-and-test:
-    name: Build & Test (${{ matrix.os }}, Python ${{ matrix.python-version }})
+    name: Build & Test (${{ matrix.os }}, Python ${{ matrix.python-version }}, ${{ matrix.build-type }})
     runs-on: ${{ matrix.os }}
     env:
       GH_TOKEN: ${{ github.token }}
@@ -22,21 +22,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - ubuntu-24.04
-          - macos-latest
-          - windows-latest
-        python-version:
-          - "3.14"
+        os: [macos-latest, windows-latest, ubuntu-latest]
+        python-version: ["3.14"]
+        build-type: [Release]
         include:
-          - os: ubuntu-24.04
-            python-version: "3.11"
-          - os: ubuntu-24.04
-            python-version: "3.12"
-          - os: ubuntu-24.04
-            python-version: "3.13"
-          - os: ubuntu-24.04
-            python-version: "3.15"
+          - { os: ubuntu-latest, python-version: "3.14", build-type: Debug }
+          - { os: ubuntu-latest, python-version: "3.11", build-type: Release }
+          - { os: ubuntu-latest, python-version: "3.12", build-type: Release }
+          - { os: ubuntu-latest, python-version: "3.13", build-type: Release }
+          - { os: ubuntu-latest, python-version: "3.15", build-type: Release }
 
     steps:
       - name: Check out repository
@@ -63,12 +57,12 @@ jobs:
         run: |
           if [[ "$RUNNER_OS" == "Linux" ]]; then
             . /etc/os-release
-            regex="^or-tools_amd64_ubuntu-${VERSION_ID//./\\\\.}_cpp_.*\\\\.tar\\\\.gz$"
+            asset_expr='[.assets[].name | capture("^(?<name>or-tools_amd64_ubuntu-(?<ver>[0-9]+\\.[0-9]+)_cpp_.*\\.tar\\.gz)$") | select((.ver | split(".") | map(tonumber)) <= ("'"$VERSION_ID"'" | split(".") | map(tonumber)))] | sort_by(.ver | split(".") | map(tonumber)) | (last // error("No matching OR-Tools asset")).name'
           else
-            regex='^or-tools_x64_VisualStudio.*_cpp_.*\\.zip$'
+            asset_expr='[.assets[].name | select(test("^or-tools_x64_VisualStudio.*_cpp_.*\\.zip$"))] | sort | last // error("No matching OR-Tools asset")'
           fi
           gh release view --repo google/or-tools --json tagName,assets \
-            --jq '"tag=\(.tagName)\nasset=\([.assets[].name | select(test("'"$regex"'"))] | sort | last // error("No matching OR-Tools asset"))"' \
+            --jq '"tag=\(.tagName)\nasset=\('"$asset_expr"')"' \
             | tr -d '\r' >> "$GITHUB_OUTPUT"
 
       - name: Cache OR-Tools
@@ -104,7 +98,7 @@ jobs:
           cmake_args=(
             -S solvers
             -B solvers/build-ci
-            -DCMAKE_BUILD_TYPE=Release
+            -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}
             "-DPython_EXECUTABLE=$python_exe"
           )
           if [[ "$RUNNER_OS" == "macOS" ]]; then
@@ -117,7 +111,7 @@ jobs:
           cmake "${cmake_args[@]}"
 
       - name: Build solvers
-        run: cmake --build solvers/build-ci --config Release --parallel
+        run: cmake --build solvers/build-ci --config ${{ matrix.build-type }} --parallel
 
       - name: Run all tests
         run: python -m pytest tests -q
