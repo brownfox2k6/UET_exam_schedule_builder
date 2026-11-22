@@ -1,49 +1,117 @@
-name: Build solver
+name: CI
 
 on:
   push:
-    branches: [main]
   pull_request:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 jobs:
-  build:
-    name: Build (${{ matrix.os }})
+  build-and-test:
+    name: Build & Test (${{ matrix.os }}, Python ${{ matrix.python-version }}, ${{ matrix.build-type }})
     runs-on: ${{ matrix.os }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+      HOMEBREW_NO_INSTALL_CLEANUP: "1"
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - ubuntu-latest
-          - macos-latest
-          - windows-latest
+        os: [macos-latest, windows-latest, ubuntu-latest]
+        python-version: ["3.14"]
+        build-type: [Release]
+        include:
+          - { os: ubuntu-latest, python-version: "3.14", build-type: Debug }
+          - { os: ubuntu-latest, python-version: "3.11", build-type: Release }
+          - { os: ubuntu-latest, python-version: "3.12", build-type: Release }
+          - { os: ubuntu-latest, python-version: "3.13", build-type: Release }
+          - { os: ubuntu-latest, python-version: "3.15", build-type: Release }
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
-          python-version: "3.13"
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements.txt
 
-      - name: Install macOS OpenMP
+      - name: Install Python dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Install OpenMP and OR-Tools on macOS
         if: runner.os == 'macOS'
-        run: brew install libomp
+        run: brew install libomp or-tools
 
-      - name: Install Python build dependencies
-        run: python -m pip install --upgrade pip nanobind
+      - name: Resolve latest OR-Tools release
+        id: ortools_release
+        if: runner.os != 'macOS'
+        shell: bash
+        run: |
+          if [[ "$RUNNER_OS" == "Linux" ]]; then
+            . /etc/os-release
+            asset_expr='[.assets[].name | capture("^(?<name>or-tools_amd64_ubuntu-(?<ver>[0-9]+\\.[0-9]+)_cpp_.*\\.tar\\.gz)$") | select((.ver | split(".") | map(tonumber)) <= ("'"$VERSION_ID"'" | split(".") | map(tonumber)))] | sort_by(.ver | split(".") | map(tonumber)) | (last // error("No matching OR-Tools asset")).name'
+          else
+            asset_expr='[.assets[].name | select(test("^or-tools_x64_VisualStudio.*_cpp_.*\\.zip$"))] | sort | last // error("No matching OR-Tools asset")'
+          fi
+          gh release view --repo google/or-tools --json tagName,assets \
+            --jq '"tag=\(.tagName)\nasset=\('"$asset_expr"')"' \
+            | tr -d '\r' >> "$GITHUB_OUTPUT"
+
+      - name: Cache OR-Tools
+        id: ortools_cache
+        if: runner.os != 'macOS'
+        uses: actions/cache@v6
+        with:
+          path: ${{ runner.temp }}/or-tools
+          key: ortools-${{ matrix.os }}-${{ steps.ortools_release.outputs.asset }}
+
+      - name: Install OR-Tools
+        if: runner.os != 'macOS' && steps.ortools_cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          root="$RUNNER_TEMP/or-tools"
+          asset="${{ steps.ortools_release.outputs.asset }}"
+          mkdir --parents "$root"
+          gh release download "${{ steps.ortools_release.outputs.tag }}" \
+            --repo google/or-tools \
+            --pattern "$asset" \
+            --dir "$root"
+          if [[ "$RUNNER_OS" == "Linux" ]]; then
+            tar --extract --gzip --file "$root/$asset" --directory "$root"
+          else
+            unzip -q "$root/$asset" -d "$root"
+          fi
+          rm -f "$root/$asset"
 
       - name: Configure CMake
         shell: bash
         run: |
-          cmake_args=(-S solver -B solver/build-ci -DCMAKE_BUILD_TYPE=Release)
+          python_exe="$(python -c 'import sys; sys.stdout.write(sys.executable)')"
+          cmake_args=(
+            -S solvers
+            -B solvers/build-ci
+            -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}
+            "-DPython_EXECUTABLE=$python_exe"
+          )
           if [[ "$RUNNER_OS" == "macOS" ]]; then
             cmake_args+=("-DOpenMP_ROOT=$(brew --prefix libomp)")
+            cmake_args+=("-DCMAKE_PREFIX_PATH=$(brew --prefix or-tools)")
+          else
+            ortools_root="$(find "$RUNNER_TEMP/or-tools" -mindepth 1 -maxdepth 1 -type d -print -quit)"
+            cmake_args+=("-DCMAKE_PREFIX_PATH=$ortools_root")
           fi
           cmake "${cmake_args[@]}"
 
-      - name: Build solver
-        run: cmake --build solver/build-ci --config Release --parallel
+      - name: Build solvers
+        run: cmake --build solvers/build-ci --config ${{ matrix.build-type }} --parallel
+
+      - name: Run all tests
+        run: python -m pytest tests -q

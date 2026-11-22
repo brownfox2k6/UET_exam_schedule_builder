@@ -1,5 +1,6 @@
 # CMake outputs
 build/
+build-ci/
 out/
 bin/
 
@@ -22,10 +23,11 @@ junk/
 *.out
 *.app
 
-# pybind11 outputs
+# Native extension & runtime library outputs
 *.so
 *.dylib
 *.pyd
+*.dll
 
 # clangd
 .cache/

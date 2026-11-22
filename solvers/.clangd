@@ -1,0 +1,30 @@
+CompileFlags:
+  Add: [
+    -Wall,
+    -Wextra,
+    -Wpedantic,
+    -Wconversion,
+    -Wsign-conversion,
+    -Wshadow,
+    -Wold-style-cast,
+    -Wnon-virtual-dtor,
+    -Wuninitialized,
+    -Werror,
+  ]
+
+Diagnostics:
+  UnusedIncludes: Strict
+  MissingIncludes: Strict
+  ClangTidy:
+    Add: [
+      bugprone-*, 
+      performance-*, 
+      readability-*, 
+      modernize-*, 
+      concurrency-*, 
+      portability-*,
+      cppcoreguidelines-*,
+      misc-*,
+    ]
+    CheckOptions:
+      bugprone-easily-swappable-parameters.MinimumLength: '3'
