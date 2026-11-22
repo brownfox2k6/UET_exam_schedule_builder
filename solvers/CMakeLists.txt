@@ -19,8 +19,7 @@ if(NOT NANOBIND_CMAKE_DIR_RESULT EQUAL 0 OR NOT IS_DIRECTORY "${NANOBIND_CMAKE_D
     "nanobind is not installed for the Python interpreter selected by CMake:\n"
     "  ${Python_EXECUTABLE}\n"
     "Install the project's Python build dependencies before configuring, for example:\n"
-    "  ${Python_EXECUTABLE} -m pip install -r "
-    "${CMAKE_CURRENT_SOURCE_DIR}/requirements.txt\n"
+    "  ${Python_EXECUTABLE} -m pip install -r requirements.txt\n"
     "${NANOBIND_CMAKE_DIR_ERROR}"
   )
 endif()
@@ -51,7 +50,7 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 
 nanobind_add_module(cetp_solvers ${SOURCES})
 
-target_include_directories(cetp_solvers PRIVATE include)
+target_include_directories(cetp_solvers PRIVATE src)
 target_compile_features(cetp_solvers PRIVATE cxx_std_23)
 
 if(TARGET nanobind-static)
