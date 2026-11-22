@@ -131,6 +131,38 @@ set_target_properties(cetp_solvers PROPERTIES
   ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
 )
 
+if(WIN32)
+  # Python 3.8+ on Windows ignores PATH when loading extension DLL dependencies.
+  # Copy OR-Tools and target runtime DLLs beside cetp_solvers.pyd before stubgen runs.
+  set(_ortools_dlls "")
+  foreach(_rel_bin "../../bin" "../../../bin")
+    get_filename_component(_candidate_bin "${ortools_DIR}/${_rel_bin}" ABSOLUTE)
+    if(IS_DIRECTORY "${_candidate_bin}")
+      file(GLOB _found_dlls "${_candidate_bin}/*.dll")
+      list(APPEND _ortools_dlls ${_found_dlls})
+    endif()
+  endforeach()
+  list(REMOVE_DUPLICATES _ortools_dlls)
+  if(_ortools_dlls)
+    add_custom_command(TARGET cetp_solvers POST_BUILD
+      COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+              ${_ortools_dlls}
+              "$<TARGET_FILE_DIR:cetp_solvers>"
+      COMMENT "Copying OR-Tools runtime DLLs beside cetp_solvers"
+      VERBATIM
+    )
+  endif()
+  add_custom_command(TARGET cetp_solvers POST_BUILD
+    COMMAND "${CMAKE_COMMAND}" -E
+            $<IF:$<BOOL:$<TARGET_RUNTIME_DLLS:cetp_solvers>>,copy_if_different,true>
+            $<TARGET_RUNTIME_DLLS:cetp_solvers>
+            $<$<BOOL:$<TARGET_RUNTIME_DLLS:cetp_solvers>>:$<TARGET_FILE_DIR:cetp_solvers>>
+    COMMAND_EXPAND_LISTS
+    VERBATIM
+    COMMENT "Copying target runtime DLLs beside cetp_solvers"
+  )
+endif()
+
 execute_process(
   COMMAND "${Python_EXECUTABLE}" -c "import nanobind.stubgen"
   RESULT_VARIABLE STUBGEN_IMPORT_RESULT
