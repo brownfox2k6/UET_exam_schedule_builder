@@ -101,7 +101,15 @@ endif()
 target_link_libraries(cetp_solvers PRIVATE ortools::ortools)
 
 if(MSVC)
-  target_compile_options(cetp_solvers PRIVATE /W4)
+  # Silence third-party header warnings; /wd4702 is also needed because MSVC's
+  # optimizer emits C4702 from inlined Abseil/OR-Tools templates in Release builds
+  # even under /external:W0.
+  target_compile_options(cetp_solvers PRIVATE
+    /W4
+    /external:anglebrackets
+    /external:W0
+    /wd4702
+  )
 else()
   target_compile_options(cetp_solvers PRIVATE
     -Wall
