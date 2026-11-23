@@ -3,6 +3,11 @@
 #include <cmath>
 #include <cstdint>
 
+#include "problem_data.hpp"
+#include "slots/eval_params.hpp"
+#include "utils/matrix.hpp"
+#include "utils/vector.hpp"
+
 namespace {
 
 constexpr double SECONDS_PER_DAY = 86400.0;

@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <cassert>
 
-#include "utils/span.hpp"
 #include "utils/vector.hpp"
 
 /**
@@ -23,24 +22,6 @@ public:
         num_cols_(cols) {
     assert(rows > 0 && cols > 0);
     data_.assign(num_rows_ * num_cols_, value);
-  }
-
-  /**
-   * @brief Constructs a matrix from a 2D Vector (list of lists).
-   */
-  Matrix(const Vector<Vector<T>>& list)
-      : num_rows_(list.size()),
-        num_cols_(list.empty() ? 0 : list.front().size()) {
-    assert(num_rows_ > 0 && num_cols_ > 0);
-    data_.assign(num_rows_ * num_cols_, T());
-    int element_index = 0;
-    for (int row_index = 0; row_index < num_rows_; ++row_index) {
-      const Vector<T>& row = list[row_index];
-      assert(row.size() == num_cols_);
-      for (const T& element : row) {
-        data_[element_index++] = element;
-      }
-    }
   }
 
   [[nodiscard]] auto data() const noexcept -> const Vector<T>& { return data_; }
@@ -72,12 +53,4 @@ private:
   Vector<T> data_;
   int num_rows_ = 0;
   int num_cols_ = 0;
-};
-
-template <typename T>
-struct CsrRowView {
-  Span<const int> indices;  // NOLINT(misc-non-private-member-variables-in-classes)
-  Span<T> values;           // NOLINT(misc-non-private-member-variables-in-classes)
-
-  [[nodiscard]] auto size() const noexcept -> int { return int(values.size()); }
 };

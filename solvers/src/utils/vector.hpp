@@ -10,6 +10,7 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
+#include <version>
 
 /**
  * std::vector wrapper with int sizes, counts, and indices. Targets C++23.
@@ -140,18 +141,14 @@ public:
     return data_.get_allocator();
   }
 
-  [[nodiscard]] constexpr auto size() const noexcept -> int {
-    return static_cast<int>(data_.size());
-  }
+  [[nodiscard]] constexpr auto size() const noexcept -> int { return int(data_.size()); }
 
-  [[nodiscard]] constexpr auto capacity() const noexcept -> int {
-    return static_cast<int>(data_.capacity());
-  }
+  [[nodiscard]] constexpr auto capacity() const noexcept -> int { return int(data_.capacity()); }
 
   [[nodiscard]] constexpr auto max_size() const noexcept -> int {
     // Report the wrapper's int limit, without adding growth-time checks.
     constexpr auto limit = static_cast<storage_size_type>(std::numeric_limits<int>::max());
-    return static_cast<int>(std::min(data_.max_size(), limit));
+    return int(std::min(data_.max_size(), limit));
   }
 
   [[nodiscard]] constexpr auto empty() const noexcept -> bool { return data_.empty(); }
@@ -327,10 +324,10 @@ constexpr auto swap(Vector<T, Allocator>& lhs, Vector<T, Allocator>& rhs) noexce
 // ADL equivalents of std::erase / std::erase_if, returning int.
 template <typename T, typename Allocator, typename U>
 constexpr auto erase(Vector<T, Allocator>& values, const U& value) -> int {
-  return static_cast<int>(std::erase(values.std_vector(), value));
+  return int(std::erase(values.std_vector(), value));
 }
 
 template <typename T, typename Allocator, typename Predicate>
 constexpr auto erase_if(Vector<T, Allocator>& values, Predicate pred) -> int {
-  return static_cast<int>(std::erase_if(values.std_vector(), std::move(pred)));
+  return int(std::erase_if(values.std_vector(), std::move(pred)));
 }

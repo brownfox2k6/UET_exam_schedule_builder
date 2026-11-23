@@ -38,14 +38,14 @@ public:
     requires std::convertible_to<std::iter_reference_t<It>, reference>
   constexpr Span(It first, Sentinel last)
       : data_(std::to_address(first)),
-        size_(static_cast<int>(last - first)) {}
+        size_(int(last - first)) {}
 
   template <std::ranges::contiguous_range R>
     requires std::ranges::sized_range<R>
                  && std::convertible_to<std::ranges::range_reference_t<R>, reference>
   constexpr Span(R&& range)
       : data_(std::ranges::data(std::forward<R>(range))),
-        size_(static_cast<int>(std::ranges::size(std::forward<R>(range)))) {}
+        size_(int(std::ranges::size(std::forward<R>(range)))) {}
 
   template <typename U>
     requires std::convertible_to<U*, pointer>

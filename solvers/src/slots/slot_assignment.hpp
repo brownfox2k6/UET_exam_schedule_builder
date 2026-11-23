@@ -2,7 +2,9 @@
 
 #include "problem_data.hpp"
 #include "utils/available_set.hpp"
+#include "utils/csr_matrix.hpp"
 #include "utils/matrix.hpp"
+#include "utils/vector.hpp"
 
 namespace cetp::slots {
 

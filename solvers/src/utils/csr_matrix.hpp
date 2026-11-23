@@ -8,6 +8,14 @@
 #include "utils/span.hpp"
 #include "utils/vector.hpp"
 
+template <typename T>
+struct CsrRowView {
+  Span<const int> indices;  // NOLINT(misc-non-private-member-variables-in-classes)
+  Span<T> values;           // NOLINT(misc-non-private-member-variables-in-classes)
+
+  [[nodiscard]] auto size() const noexcept -> int { return values.size(); }
+};
+
 /**
  * @brief A generic Compressed Sparse Row matrix structure.
  * Implements flat 1D vectors for data and offsets to ensure memory continuity and fast,
@@ -91,6 +99,13 @@ public:
   }
 
   void append_row(std::initializer_list<T> row) {
+    for (const T& value : row) {
+      append(value);
+    }
+    finish_row();
+  }
+
+  void append_row(Span<const T> row) {
     for (const T& value : row) {
       append(value);
     }
