@@ -6,7 +6,8 @@
 
 namespace cetp::slots {
 
-struct EvalParams {
+class EvalParams {
+public:
   [[nodiscard]] auto penalty_decay_base() const noexcept -> double { return penalty_decay_base_; }
 
   void set_penalty_decay_base(double penalty_decay_base) {

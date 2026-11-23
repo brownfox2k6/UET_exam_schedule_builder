@@ -6,7 +6,8 @@
 
 namespace cetp::slots::aco {
 
-struct Params {
+class Params {
+public:
   [[nodiscard]] auto num_iters() const noexcept -> int { return num_iters_; }
   [[nodiscard]] auto num_ants() const noexcept -> int { return num_ants_; }
   [[nodiscard]] auto alpha() const noexcept -> double { return alpha_; }
