@@ -45,7 +45,7 @@ private:
 
   template <std::integral Integer>
   [[nodiscard]] static constexpr auto to_storage_size(Integer value) noexcept -> storage_size_type {
-    return static_cast<storage_size_type>(value);
+    return storage_size_type(value);
   }
 
 public:
@@ -147,7 +147,7 @@ public:
 
   [[nodiscard]] constexpr auto max_size() const noexcept -> int {
     // Report the wrapper's int limit, without adding growth-time checks.
-    constexpr auto limit = static_cast<storage_size_type>(std::numeric_limits<int>::max());
+    constexpr auto limit = storage_size_type(std::numeric_limits<int>::max());
     return int(std::min(data_.max_size(), limit));
   }
 
