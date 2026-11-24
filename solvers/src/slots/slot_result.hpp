@@ -2,32 +2,23 @@
 
 #include <cmath>
 #include <functional>
-#include <utility>
 
 #include "utils/vector.hpp"
 
 namespace cetp::slots {
 
-/** Reports an iteration and the best penalty so far, initially positive infinity. */
+/** Reports a one-based iteration index and the best penalty so far (initially +INFINITY). */
 using SlotProgressCallback = std::function<void(int, double)>;
 
-class SlotResult {
-public:
-  SlotResult(Vector<int> schedule, double penalty)
-      : schedule_(std::move(schedule)),
-        penalty_(penalty) {}
+/** Output of a slot-scheduling search or local-search improvement run. */
+struct SlotResult {
+  // NOLINTBEGIN(*-non-private-*)
+  Vector<int> schedule;
+  double penalty = INFINITY;
+  // NOLINTEND(*-non-private-*)
 
   /** Returns true if a valid schedule was found. */
-  [[nodiscard]] auto found() const noexcept -> bool { return !std::isinf(penalty_); }
-
-  /** Access the schedule when found() is true. */
-  [[nodiscard]] auto schedule() const noexcept -> const Vector<int>& { return schedule_; }
-
-  [[nodiscard]] auto penalty() const noexcept -> double { return penalty_; }
-
-private:
-  Vector<int> schedule_;
-  double penalty_;
-};
+  [[nodiscard]] auto found() const noexcept -> bool { return !std::isinf(penalty); }
+};  // struct SlotResult
 
 }  // namespace cetp::slots

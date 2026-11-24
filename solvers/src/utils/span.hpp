@@ -61,6 +61,11 @@ public:
     return *std::ranges::next(data_, index);
   }
 
+  [[nodiscard]] constexpr auto front() const noexcept -> reference { return *data_; }
+  [[nodiscard]] constexpr auto back() const noexcept -> reference {
+    return *std::ranges::next(data_, size_ - 1);
+  }
+
   [[nodiscard]] constexpr auto begin() const noexcept -> iterator { return data_; }
   [[nodiscard]] constexpr auto end() const noexcept -> iterator {
     return std::ranges::next(data_, size_);
