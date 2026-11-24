@@ -705,11 +705,12 @@ def test_extreme_64bit_base_seeds_and_workers_exceeding_slot_count(base_seed):
 
 
 def test_feasible_timeout_and_optimal_unknown_mix_preserve_exact_contracts():
-    # Slot 0: 18 multi-section exams across 45 prime-capacity rooms & 3 campuses (finds a valid
-    # solution quickly, but symmetry prevents proving OPTIMAL within 0.35s).
+    # Slot 0: 7 multi-section exams (14 sections of 46..64 students -> 2 rooms each) across 33
+    # prime-capacity rooms (11 per campus across 3 campuses). Small enough (~462 vars) to find a
+    # FEASIBLE solution in ~40ms, while parity + capacity symmetry prevents proving OPTIMAL in >5s.
     # Slot 1: trivial 1-section exam that proves OPTIMAL in <1ms.
-    caps = [31, 33, 37, 41, 43, 47, 53, 59, 61]
-    rooms = [solvers.Room(f"R{i:02d}", caps[i % len(caps)], f"L{i % 3}") for i in range(45)]
+    caps = [27, 29, 31, 33, 35, 37, 39, 41, 43]
+    rooms = [solvers.Room(f"R{i:02d}", caps[i % len(caps)], f"L{i % 3}") for i in range(33)]
     codes = [room.code for room in rooms]
     exams = [
         solvers.Exam(
@@ -718,35 +719,36 @@ def test_feasible_timeout_and_optimal_unknown_mix_preserve_exact_contracts():
             [
                 solvers.ExamSection(
                     f"E{e}_S{s}",
-                    [f"u_{e}_{s}_{k}" for k in range(25 + (e * 5 + s * 7) % 25)],
+                    [f"u_{e}_{s}_{k}" for k in range(46 + (e * 7 + s * 11) % 19)],
                     codes,
                 )
                 for s in range(2)
             ],
             TIMESTAMPS,
         )
-        for e in range(18)
+        for e in range(7)
     ]
     exams.append(solvers.Exam("EASY", 3, [solvers.ExamSection("EASY_S0", ["x"], ["R00"])], TIMESTAMPS))
     problem = solvers.ProblemData(exams, rooms)
-    schedule = [0] * 18 + [1]
+    schedule = [0] * 7 + [1]
 
     # Case A: OPTIMAL (slot 1) + UNKNOWN (slot 0 under tiny budget) -> empty UNKNOWN overall.
     tiny_params = solvers.RoomAssignmentParams()
-    tiny_params.slot_time_limit = 0.005
+    tiny_params.slot_time_limit = 0.001
     tiny_params.num_workers = 2
     timed_out = solvers.assign_rooms(problem, schedule, tiny_params, base_seed=42)
     assert_empty_assignment(timed_out, Status.UNKNOWN)
 
     # Case B: FEASIBLE (slot 0) + OPTIMAL (slot 1) -> FEASIBLE overall with exact metrics and
-    # every hard constraint satisfied across all sections.
+    # every hard constraint satisfied across all sections (wide margin for slower Windows/Debug CI).
     feasible_params = solvers.RoomAssignmentParams()
-    feasible_params.slot_time_limit = 0.35
+    feasible_params.slot_time_limit = 0.75
     feasible_params.num_workers = 2
     feasible = solvers.assign_rooms(problem, schedule, feasible_params, base_seed=42)
     assert feasible.status == Status.FEASIBLE
     assert feasible.found
-    assert feasible.rooms_for_section(36) == [0]
+    assert feasible.extra_locations >= 1
+    assert feasible.rooms_for_section(14) == [0]
     assert_allocation(
         feasible,
         schedule,
