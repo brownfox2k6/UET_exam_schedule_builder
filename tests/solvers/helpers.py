@@ -82,6 +82,7 @@ def compute_exact_penalty(problem, exams, schedule, decay_base):
 def assert_empty_assignment(assignment, num_sections, status):
     assert assignment.status == status
     assert assignment.room_count == 0
+    assert assignment.extra_locations == 0
     assert assignment.unused_capacity == 0
     assert all(assignment.rooms_for_section(i) == [] for i in range(num_sections))
 

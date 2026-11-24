@@ -237,18 +237,21 @@ NB_MODULE(cetp_solvers, m) {
   nb::class_<rooms::RoomAssignment>(m, "RoomAssignment")
       .def_ro("status", &rooms::RoomAssignment::status)
       .def_prop_ro(
-          "room_count",
-          [](const rooms::RoomAssignment& assignment) -> int {
-            return assignment.rooms_by_section.num_elements();
+          "slot_statuses",
+          [](const rooms::RoomAssignment& assignment) -> std::vector<rooms::RoomAssignmentStatus> {
+            return to_std_vector(assignment.slot_statuses);
           }
       )
+      .def_prop_ro("found", &rooms::RoomAssignment::found)
+      .def_prop_ro("room_count", &rooms::RoomAssignment::room_count)
+      .def_ro("extra_locations", &rooms::RoomAssignment::extra_locations)
       .def_ro("unused_capacity", &rooms::RoomAssignment::unused_capacity)
       .def(
           "rooms_for_section",
           [](const rooms::RoomAssignment& assignment, int section) -> std::vector<int> {
             const auto rooms = assignment.rooms_for_section(section);
             std::vector<int> result;
-            result.reserve(static_cast<size_t>(rooms.size()));
+            result.reserve(size_t(rooms.size()));
             for (int room : rooms) {
               result.push_back(room);
             }

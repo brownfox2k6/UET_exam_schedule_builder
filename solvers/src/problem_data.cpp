@@ -185,11 +185,29 @@ void populate_rooms(ProblemData& data, const Vector<Room>& rooms) {
   data.room_locations.reserve(data.num_rooms);
   data.room_types.reserve(data.num_rooms);
 
+  Vector<std::string_view> unique_locations;
+  unique_locations.reserve(data.num_rooms);
   for (const Room& room : rooms) {
     data.room_codes.emplace_back(room.code());
     data.room_capacities.push_back(room.capacity());
     data.room_locations.emplace_back(room.location());
     data.room_types.emplace_back(room.type());
+    unique_locations.push_back(room.location());
+  }
+
+  std::ranges::sort(unique_locations);
+  const auto unique_end = std::ranges::unique(unique_locations).begin();
+  data.num_locations = int(unique_end - unique_locations.begin());
+  data.location_names.reserve(data.num_locations);
+  for (std::string_view location : std::ranges::subrange(unique_locations.begin(), unique_end)) {
+    data.location_names.emplace_back(location);
+  }
+
+  data.room_location_ids.reserve(data.num_rooms);
+  for (std::string_view location : data.room_locations) {
+    const auto location_iterator = std::ranges::lower_bound(data.location_names, location);
+    assert(location_iterator != data.location_names.end() && *location_iterator == location);
+    data.room_location_ids.push_back(int(location_iterator - data.location_names.begin()));
   }
 }
 

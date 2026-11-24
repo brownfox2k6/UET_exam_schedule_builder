@@ -6,6 +6,7 @@
 
 #include "utils/csr_matrix.hpp"
 #include "utils/matrix.hpp"
+#include "utils/random.hpp"
 #include "utils/span.hpp"
 #include "utils/vector.hpp"
 
@@ -79,11 +80,11 @@ public:
   /**
    * @brief Selects a random available option for an item in O(1).
    */
-  [[nodiscard]] auto get_random(int item, std::mt19937& rng) const -> int {
+  [[nodiscard]] auto get_random(int item, std::mt19937& random_engine) const -> int {
     const int count = get_available_count(item);
     assert(count > 0);
-    std::uniform_int_distribution<int> dist(0, count - 1);
-    return options[item].values[dist(rng)];
+    const int index = random_int(random_engine, 0, count);
+    return options[item].values[index];
   }
 
   /**

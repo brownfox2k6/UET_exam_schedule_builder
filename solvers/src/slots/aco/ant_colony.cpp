@@ -14,15 +14,12 @@
 #include "slots/slot_assignment.hpp"
 #include "slots/slot_result.hpp"
 #include "utils/matrix.hpp"
+#include "utils/random.hpp"
 #include "utils/span.hpp"
 #include "utils/vector.hpp"
 
 namespace cetp::slots::aco {
 namespace {
-
-constexpr uint32_t HIGH_BITS_SHIFT = 32;
-// Golden-ratio constant mixed into each ant's seed sequence to differentiate parallel streams.
-constexpr uint32_t SEED_MIX_CONSTANT = 0x9e3779b9;
 
 // Per-ant mutable state and reusable scratch buffers so OpenMP threads never share or reallocate
 // per-slot weight arrays across iterations.
@@ -42,8 +39,7 @@ public:
 
   // Selects an available slot in proportion to its normalized weight in `slot_weights`.
   [[nodiscard]] auto sample_slot(Span<const int> available_slots, double total_weight) -> int {
-    std::uniform_real_distribution<double> distribution(0.0, total_weight);
-    const double threshold = distribution(random_engine_);
+    const double threshold = random_double(random_engine_, 0.0, total_weight);
     double cumulative = 0.0;
     for (int slot : available_slots) {
       cumulative += slot_weights[slot];
@@ -56,16 +52,6 @@ public:
 
 private:
   std::mt19937 random_engine_;
-
-  [[nodiscard]] static auto make_random_engine(uint64_t base_seed, int ant) -> std::mt19937 {
-    std::seed_seq seed_sequence{
-        uint32_t(base_seed),
-        uint32_t(base_seed >> HIGH_BITS_SHIFT),
-        uint32_t(ant),
-        SEED_MIX_CONSTANT
-    };
-    return std::mt19937(seed_sequence);
-  }
 };
 
 class AntColony {

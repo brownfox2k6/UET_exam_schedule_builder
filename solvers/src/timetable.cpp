@@ -26,7 +26,7 @@ auto complete_timetable(
   if (!slot_result.found()) {
     return {.slots = std::move(slot_result), .rooms = std::nullopt};
   }
-  auto room_assignment = rooms::assign_rooms(problem, slot_result.schedule(), room_params);
+  auto room_assignment = rooms::assign_rooms(problem, slot_result.schedule, room_params);
   return {.slots = std::move(slot_result), .rooms = std::move(room_assignment)};
 }
 
@@ -41,7 +41,7 @@ auto solve_timetable(
   if (slot_result.found()) {
     slot_result = slots::local_search::improve(
         problem,
-        slot_result.schedule(),
+        slot_result.schedule,
         hyperparams.ls,
         hyperparams.eval,
         base_seed

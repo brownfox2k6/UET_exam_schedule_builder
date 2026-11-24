@@ -8,21 +8,24 @@
 namespace cetp::slots {
 
 struct CalculateDeltaPenaltyParams {
-  // NOLINTBEGIN(cppcoreguidelines-avoid-const-or-ref-data-members)
+  // NOLINTBEGIN(*-non-private-*, cppcoreguidelines-avoid-const-or-ref-data-members)
   const ProblemData& problem;
   const Matrix<double>& proximity_penalties;
   const Vector<int>& schedule;
 
-  const int exam = -1;
-  const int new_slot = -1;
-  const int ignore_exam = -1;
-  // NOLINTEND(cppcoreguidelines-avoid-const-or-ref-data-members)
+  int exam = -1;
+  int new_slot = -1;
+  int ignore_exam = -1;
+  // NOLINTEND(*-non-private-*, cppcoreguidelines-avoid-const-or-ref-data-members)
 };
 
-[[nodiscard]] auto build_proximity_penalties(const ProblemData& problem, const EvalParams& params)
-    -> Matrix<double>;
+/** Precomputes pairwise time-proximity penalties between every pair of slots. */
+[[nodiscard]] auto build_proximity_penalties(
+    const ProblemData& problem,
+    const EvalParams& eval_params
+) -> Matrix<double>;
 
-/** Scores an assignment or move using the table built for this problem. */
+/** Scores an assignment or move using the proximity penalty table built for this problem. */
 [[nodiscard]] auto calculate_delta_penalty(const CalculateDeltaPenaltyParams& params) -> double;
 
 }  // namespace cetp::slots

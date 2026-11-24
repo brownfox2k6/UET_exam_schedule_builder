@@ -6,7 +6,8 @@
 
 namespace cetp::slots::local_search {
 
-struct Params {
+class Params {
+public:
   [[nodiscard]] auto prob_1_move() const noexcept -> double { return prob_1_move_; }
   [[nodiscard]] auto max_improvements() const noexcept -> int { return max_improvements_; }
   [[nodiscard]] auto patience() const noexcept -> int { return patience_; }

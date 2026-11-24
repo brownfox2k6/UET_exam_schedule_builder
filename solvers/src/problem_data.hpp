@@ -29,6 +29,7 @@ struct ProblemData {
   int num_exams = 0;
   int num_slots = 0;
   int num_rooms = 0;
+  int num_locations = 0;
   int num_sections = 0;
   int num_students = 0;
   int num_enrollments = 0;
@@ -60,6 +61,8 @@ struct ProblemData {
   Vector<std::string> room_codes;
   Vector<int> room_capacities;
   Vector<std::string> room_locations;
+  Vector<std::string> location_names;
+  Vector<int> room_location_ids;
   Vector<std::string> room_types;
 
   // --- Conflict graph ---

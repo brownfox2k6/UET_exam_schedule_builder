@@ -1,199 +1,175 @@
 #include "rooms/room_allocator.hpp"
 
 #include <algorithm>
+#include <atomic>
 #include <chrono>
 #include <cstdint>
-#include <tuple>
 #include <utility>
-
-#include <ortools/sat/cp_model.h>
-#include <ortools/sat/cp_model.pb.h>
-#include <ortools/sat/cp_model_solver.h>
-#include <ortools/sat/model.h>
-#include <ortools/sat/sat_parameters.pb.h>
 
 #include "problem_data.hpp"
 #include "rooms/params.hpp"
 #include "rooms/room_assignment.hpp"
+#include "rooms/slot_solver.hpp"
 #include "timetable.hpp"
 #include "utils/csr_matrix.hpp"
+#include "utils/span.hpp"
 #include "utils/vector.hpp"
 
 namespace cetp::rooms {
 namespace {
 
-namespace sat = operations_research::sat;
-using Clock = std::chrono::steady_clock;
 using Status = RoomAssignmentStatus;
 
-struct RoomUse {
-  int slot;
-  int room;
-  int choice;
-};
-
-// Sparse grouping by (slot, room) avoids a slots x rooms x sections structure.
-void add_exclusive_room_constraints(
-    sat::CpModelBuilder& model,
-    const Vector<sat::BoolVar>& choices,
-    Vector<RoomUse>& uses
-) {
-  std::ranges::sort(uses, [](const RoomUse& left, const RoomUse& right) -> bool {
-    return std::tie(left.slot, left.room, left.choice)
-           < std::tie(right.slot, right.room, right.choice);
-  });
-  Vector<sat::BoolVar> group;
-  for (int begin = 0; begin < uses.size();) {
-    int end = begin;
-    group.clear();
-    while (end < uses.size() && uses[end].slot == uses[begin].slot
-           && uses[end].room == uses[begin].room) {
-      group.push_back(choices[uses[end].choice]);
-      ++end;
-    }
-    if (group.size() > 1) {
-      model.AddAtMostOne(group.std_vector());
-    }
-    begin = end;
-  }
+auto elapsed_seconds(SteadyClock::time_point start_time) -> double {
+  return std::chrono::duration<double>(SteadyClock::now() - start_time).count();
 }
 
-auto read_assignment(
-    const ProblemData& problem_data,
-    const Vector<sat::BoolVar>& choices,
-    const sat::CpSolverResponse& response,
-    Status status
+// Groups exams by their assigned time slot in a flat CSR matrix so every slot can be solved
+// independently without nested heap allocations.
+auto group_exams_by_slot(const ProblemData& problem, const Vector<int>& schedule)
+    -> CsrMatrix<int> {
+  Vector<int> offsets(problem.num_slots + 1, 0);
+  for (int exam : problem.exams()) {
+    ++offsets[schedule[exam] + 1];
+  }
+  for (int slot : problem.slots()) {
+    offsets[slot + 1] += offsets[slot];
+  }
+  Vector<int> values(problem.num_exams);
+  Vector<int> cursor = offsets;
+  for (int exam : problem.exams()) {
+    values[cursor[schedule[exam]]++] = exam;
+  }
+  return {std::move(values), std::move(offsets)};
+}
+
+auto collect_active_slots(const ProblemData& problem, const CsrMatrix<int>& exams_by_slot)
+    -> Vector<int> {
+  Vector<int> active_slots;
+  active_slots.reserve(problem.num_slots);
+  for (int slot : problem.slots()) {
+    if (!exams_by_slot[slot].values.empty()) {
+      active_slots.push_back(slot);
+    }
+  }
+  return active_slots;
+}
+
+// Combines per-slot results into the final global RoomAssignment, enforcing all-or-nothing when
+// any slot fails while preserving per-slot diagnostic statuses.
+auto assemble_room_assignment(
+    const ProblemData& problem,
+    const CsrMatrix<int>& exams_by_slot,
+    const Vector<int>& active_slots,
+    const Vector<SlotSolution>& slot_solutions
 ) -> RoomAssignment {
-  CsrMatrix<int> rooms_by_section;
-  rooms_by_section.reserve_num_rows(problem_data.num_sections);
-  rooms_by_section.reserve_num_elements(problem_data.feasible_rooms_by_section.num_elements());
-  int64_t unused_capacity = 0;
-  int choice_index = 0;
-  for (int section : problem_data.sections()) {
-    for (int room : problem_data.feasible_rooms_by_section[section].values) {
-      if (sat::SolutionBooleanValue(response, choices[choice_index])) {
-        rooms_by_section.append(room);
-        unused_capacity += problem_data.room_capacities[room];
+  Vector<Status> slot_statuses(problem.num_slots, Status::OPTIMAL);
+  Status overall_status = Status::OPTIMAL;
+  for (int slot : problem.slots()) {
+    slot_statuses[slot] = slot_solutions[slot].status;
+    overall_status = worse_status(overall_status, slot_statuses[slot]);
+  }
+
+  if (overall_status != Status::OPTIMAL && overall_status != Status::FEASIBLE) {
+    return RoomAssignment::empty(problem.num_sections, overall_status, std::move(slot_statuses));
+  }
+
+  // Scatter per-slot CSR views back into global section index order [0, num_sections).
+  Vector<Span<const int>> rooms_by_section_spans(problem.num_sections);
+  int total_rooms = 0;
+  int64_t total_extra_locations = 0;
+  int64_t total_unused_capacity = 0;
+
+  for (int slot : active_slots) {
+    const SlotSolution& solution = slot_solutions[slot];
+    total_extra_locations += solution.extra_locations;
+    total_unused_capacity += solution.unused_capacity;
+    int local_section_index = 0;
+    for (int exam : exams_by_slot[slot].values) {
+      for (int section : problem.sections_of_exam(exam)) {
+        const Span<const int> assigned_rooms =
+            solution.rooms_by_local_section[local_section_index++].values;
+        rooms_by_section_spans[section] = assigned_rooms;
+        total_rooms += assigned_rooms.size();
       }
-      ++choice_index;
     }
-    unused_capacity -= problem_data.section_student_counts[section];
-    rooms_by_section.finish_row();
   }
-  return {
-      .status = status,
-      .rooms_by_section = std::move(rooms_by_section),
-      .unused_capacity = unused_capacity
-  };
-}
 
-auto empty_assignment(int num_sections, Status status) -> RoomAssignment {
   CsrMatrix<int> rooms_by_section;
-  rooms_by_section.reserve_num_rows(num_sections);
-  for (int i = 0; i < num_sections; ++i) {
-    rooms_by_section.append_row({});
+  rooms_by_section.reserve_num_rows(problem.num_sections);
+  rooms_by_section.reserve_num_elements(total_rooms);
+  for (int section : problem.sections()) {
+    rooms_by_section.append_row(rooms_by_section_spans[section]);
   }
-  return {.status = status, .rooms_by_section = std::move(rooms_by_section), .unused_capacity = 0};
-}
 
-auto has_solution(const sat::CpSolverResponse& response) -> bool {
-  return response.status() == sat::CpSolverStatus::OPTIMAL
-         || response.status() == sat::CpSolverStatus::FEASIBLE;
-}
-
-auto failure_status(const sat::CpSolverResponse& response) -> Status {
-  switch (response.status()) {
-  case sat::CpSolverStatus::INFEASIBLE:
-    return Status::INFEASIBLE;
-  case sat::CpSolverStatus::MODEL_INVALID:
-    return Status::MODEL_INVALID;
-  default:
-    return Status::UNKNOWN;
-  }
+  return {
+      .status = overall_status,
+      .rooms_by_section = std::move(rooms_by_section),
+      .slot_statuses = std::move(slot_statuses),
+      .extra_locations = total_extra_locations,
+      .unused_capacity = total_unused_capacity
+  };
 }
 
 }  // namespace
 
 auto assign_rooms(const ProblemData& problem_data, const Vector<int>& schedule, Params params)
     -> RoomAssignment {
-  const auto started = Clock::now();
+  const auto global_started = SteadyClock::now();
   validate_schedule(problem_data, schedule);
 
-  sat::CpModelBuilder model;
-  Vector<sat::BoolVar> choices;
-  Vector<RoomUse> uses;
-  const int num_choices = problem_data.feasible_rooms_by_section.num_elements();
-  choices.reserve(num_choices);
-  uses.reserve(num_choices);
-  sat::LinearExpr room_count;
-  sat::LinearExpr total_capacity;
+  // Decompose by time slot: exams in different slots never share rooms or constraints, so each
+  // non-empty slot can be solved as an independent CP-SAT model.
+  const CsrMatrix<int> exams_by_slot = group_exams_by_slot(problem_data, schedule);
+  const Vector<int> active_slots = collect_active_slots(problem_data, exams_by_slot);
 
-  // Create variables only for eligible (section, room) pairs, in CSR row order.
-  for (int section : problem_data.sections()) {
-    sat::LinearExpr capacity;
-    const int slot = schedule[problem_data.section_to_exam[section]];
-    for (int room : problem_data.feasible_rooms_by_section[section].values) {
-      const auto choice = model.NewBoolVar();
-      uses.push_back({.slot = slot, .room = room, .choice = choices.size()});
-      choices.push_back(choice);
-      const int seats = problem_data.room_capacities[room];
-      capacity += seats * choice;
-      total_capacity += seats * choice;
-      room_count += choice;
+  Vector<SlotSolution> slot_solutions(problem_data.num_slots);
+  std::atomic<bool> any_slot_failed{false};
+
+  const int active_slot_count = active_slots.size();
+  const int effective_workers = std::min(params.num_workers(), std::max(1, active_slot_count));
+
+  if (effective_workers == 1) {
+    // Sequential mode: divide remaining wall-clock time across remaining slots so easy slots
+    // finishing in milliseconds leave nearly the entire budget for harder slots.
+    for (int index = 0; index < active_slot_count; ++index) {
+      const int slot = active_slots[index];
+      const double remaining = params.max_time_seconds() - elapsed_seconds(global_started);
+      const double per_slot_limit = remaining / double(active_slot_count - index);
+      slot_solutions[slot] = solve_single_slot(
+          {.problem = problem_data,
+           .slot_exams = exams_by_slot[slot].values,
+           .slot = slot,
+           .slot_time_limit = per_slot_limit,
+           .global_started = global_started,
+           .global_time_limit = params.max_time_seconds(),
+           .base_seed = params.random_seed(),
+           .any_slot_failed = any_slot_failed}
+      );
     }
-    model.AddGreaterOrEqual(capacity, problem_data.section_student_counts[section]);
-  }
-
-  add_exclusive_room_constraints(model, choices, uses);
-
-  const auto remaining_time = [&]() -> double {
-    return params.max_time_seconds()
-           - std::chrono::duration<double>(Clock::now() - started).count();
-  };
-  const auto solve = [&]() -> sat::CpSolverResponse {
-    sat::SatParameters solver_params;
-    solver_params.set_max_time_in_seconds(std::max(0.0, remaining_time()));
-    solver_params.set_num_search_workers(params.num_workers());
-    solver_params.set_random_seed(params.random_seed());
-    sat::Model solver;
-    solver.Add(sat::NewSatParameters(solver_params));
-    return sat::SolveCpModel(model.Build(), &solver);
-  };
-
-  model.Minimize(room_count);
-  if (remaining_time() <= 0.0) {
-    return empty_assignment(problem_data.num_sections, Status::UNKNOWN);
-  }
-  auto best = solve();
-  if (!has_solution(best)) {
-    return empty_assignment(problem_data.num_sections, failure_status(best));
-  }
-
-  // Only optimize excess seats once the primary room count is proven minimal.
-  // Two solves avoid large weighted coefficients and preserve exact lexicographic priority.
-  Status status = Status::FEASIBLE;
-  if (best.status() == sat::CpSolverStatus::OPTIMAL && remaining_time() > 0.0) {
-    const int64_t minimum_rooms = sat::SolutionIntegerValue(best, room_count);
-    model.AddEquality(room_count, minimum_rooms);
-    model.Minimize(total_capacity);  // Enrollment is constant, so this minimizes unused seats.
-    for (const auto choice : choices) {
-      model.AddHint(choice, sat::SolutionBooleanValue(best, choice));
+  } else {
+    // Parallel mode: solve independent slots concurrently across OpenMP threads.
+    // Scaling the per-slot cap by `effective_workers / active_slot_count` lets concurrent batches
+    // use the full wall-clock budget while `global_time_limit` bounds total elapsed time.
+    const double per_slot_limit =
+        params.max_time_seconds() * double(effective_workers) / double(active_slot_count);
+#pragma omp parallel for schedule(dynamic) num_threads(effective_workers)
+    for (int index = 0; index < active_slot_count; ++index) {
+      const int slot = active_slots[index];
+      slot_solutions[slot] = solve_single_slot(
+          {.problem = problem_data,
+           .slot_exams = exams_by_slot[slot].values,
+           .slot = slot,
+           .slot_time_limit = per_slot_limit,
+           .global_started = global_started,
+           .global_time_limit = params.max_time_seconds(),
+           .base_seed = params.random_seed(),
+           .any_slot_failed = any_slot_failed}
+      );
     }
-    auto secondary = solve();
-    if (has_solution(secondary)) {
-      status =
-          secondary.status() == sat::CpSolverStatus::OPTIMAL ? Status::OPTIMAL : Status::FEASIBLE;
-      if (sat::SolutionIntegerValue(secondary, total_capacity)
-          <= sat::SolutionIntegerValue(best, total_capacity)) {
-        best = std::move(secondary);
-      }
-    } else if (secondary.status() == sat::CpSolverStatus::MODEL_INVALID) {
-      return empty_assignment(problem_data.num_sections, Status::MODEL_INVALID);
-    }
-    // UNKNOWN in phase two preserves the complete phase-one incumbent as FEASIBLE.
   }
 
-  return read_assignment(problem_data, choices, best, status);
+  return assemble_room_assignment(problem_data, exams_by_slot, active_slots, slot_solutions);
 }
 
 }  // namespace cetp::rooms

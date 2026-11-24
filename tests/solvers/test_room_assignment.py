@@ -259,3 +259,231 @@ def test_matches_exhaustive_lexicographic_optimum(seed):
         assert assignment.status == Status.OPTIMAL
         assert (assignment.room_count, assignment.unused_capacity) == expected
         assert_allocation(assignment, schedule, exams, capacities)
+
+
+def test_section_cannot_split_rooms_across_different_locations():
+    # 65 students cannot combine a 40-seat room at TTT with a 40-seat room at KM.
+    rooms = [
+        solvers.Room("101-T", 40, "Ton That Thuyet"),
+        solvers.Room("103-A", 40, "Kieu Mai"),
+    ]
+    section = solvers.ExamSection("S0", [f"SV{i}" for i in range(65)], ["101-T", "103-A"])
+    exam = solvers.Exam("E0", 3, [section], [TIMESTAMPS[0]])
+    problem = solvers.ProblemData([exam], rooms)
+
+    assignment = solvers.assign_rooms(problem, [0], solvers.RoomAssignmentParams())
+    assert_empty_assignment(assignment, 1, Status.INFEASIBLE)
+    assert assignment.slot_statuses == [Status.INFEASIBLE]
+
+
+def test_section_picks_same_location_rooms_when_splitting():
+    rooms = [
+        solvers.Room("101-T", 40, "Ton That Thuyet"),
+        solvers.Room("102-T", 30, "Ton That Thuyet"),
+        solvers.Room("103-A", 50, "Kieu Mai"),
+    ]
+    section = solvers.ExamSection("S0", [f"SV{i}" for i in range(65)], ["101-T", "102-T", "103-A"])
+    exam = solvers.Exam("E0", 3, [section], [TIMESTAMPS[0]])
+    problem = solvers.ProblemData([exam], rooms)
+
+    assignment = solvers.assign_rooms(problem, [0], solvers.RoomAssignmentParams())
+    assert assignment.status == Status.OPTIMAL
+    assert [problem.room_codes[r] for r in assignment.rooms_for_section(0)] == ["101-T", "102-T"]
+    assert (assignment.room_count, assignment.extra_locations, assignment.unused_capacity) == (
+        2,
+        0,
+        5,
+    )
+
+
+def test_room_count_has_priority_over_exam_location_spread():
+    # Keeping both 60-student sections at TTT needs 3 rooms (60 + 30 + 30), while splitting
+    # across TTT (60) and KM (60) needs only 2 rooms. Room count must win.
+    rooms = [
+        solvers.Room("101-T", 60, "Ton That Thuyet"),
+        solvers.Room("102-T", 30, "Ton That Thuyet"),
+        solvers.Room("103-T", 30, "Ton That Thuyet"),
+        solvers.Room("201-A", 60, "Kieu Mai"),
+    ]
+    all_codes = [room.code for room in rooms]
+    sections = [
+        solvers.ExamSection("S0", [f"A{i}" for i in range(60)], all_codes),
+        solvers.ExamSection("S1", [f"B{i}" for i in range(60)], all_codes),
+    ]
+    problem = solvers.ProblemData([solvers.Exam("E0", 3, sections, [TIMESTAMPS[0]])], rooms)
+
+    assignment = solvers.assign_rooms(problem, [0], solvers.RoomAssignmentParams())
+    assert assignment.status == Status.OPTIMAL
+    assert (assignment.room_count, assignment.extra_locations, assignment.unused_capacity) == (
+        2,
+        1,
+        0,
+    )
+
+
+def test_exam_location_consolidation_has_priority_over_unused_seats():
+    # Both 30-student sections can stay at TTT (50 + 50 seats -> 40 unused, 0 extra locations)
+    # or split to TTT + KM (50 + 30 seats -> 20 unused, 1 extra location). Consolidation must win.
+    rooms = [
+        solvers.Room("101-T", 50, "Ton That Thuyet"),
+        solvers.Room("102-T", 50, "Ton That Thuyet"),
+        solvers.Room("201-A", 30, "Kieu Mai"),
+    ]
+    all_codes = [room.code for room in rooms]
+    sections = [
+        solvers.ExamSection("S0", [f"A{i}" for i in range(30)], all_codes),
+        solvers.ExamSection("S1", [f"B{i}" for i in range(30)], all_codes),
+    ]
+    problem = solvers.ProblemData([solvers.Exam("E0", 3, sections, [TIMESTAMPS[0]])], rooms)
+
+    assignment = solvers.assign_rooms(problem, [0], solvers.RoomAssignmentParams())
+    assert assignment.status == Status.OPTIMAL
+    assert (assignment.room_count, assignment.extra_locations, assignment.unused_capacity) == (
+        2,
+        0,
+        40,
+    )
+
+
+def test_flexible_section_joins_fixed_location_sibling_in_same_exam():
+    # S0 is fixed to TTT (only eligible for 101-T). S1 can use 102-T (50 seats, TTT) or
+    # 201-A (30 seats, KM). S1 should join S0 at TTT to achieve 0 extra locations.
+    rooms = [
+        solvers.Room("101-T", 30, "Ton That Thuyet"),
+        solvers.Room("102-T", 50, "Ton That Thuyet"),
+        solvers.Room("201-A", 30, "Kieu Mai"),
+    ]
+    sections = [
+        solvers.ExamSection("S0", [f"A{i}" for i in range(30)], ["101-T"]),
+        solvers.ExamSection("S1", [f"B{i}" for i in range(30)], ["102-T", "201-A"]),
+    ]
+    problem = solvers.ProblemData([solvers.Exam("E0", 3, sections, [TIMESTAMPS[0]])], rooms)
+
+    assignment = solvers.assign_rooms(problem, [0], solvers.RoomAssignmentParams())
+    assert assignment.status == Status.OPTIMAL
+    assert [problem.room_codes[r] for r in assignment.rooms_for_section(1)] == ["102-T"]
+    assert (assignment.room_count, assignment.extra_locations, assignment.unused_capacity) == (
+        2,
+        0,
+        20,
+    )
+
+
+def test_per_slot_diagnostics_report_all_infeasible_slots_and_empty_slots():
+    # 4 slots: slot 0 feasible, slot 1 empty, slot 2 infeasible, slot 3 infeasible.
+    ts = [1000, 2000, 3000, 4000]
+    exams = [
+        make_exam(0, 5, ["R0"], ts),
+        make_exam(1, 20, ["R0"], ts),  # Too large for R0 (10 seats) -> slot 2 infeasible.
+        make_exam(2, 20, ["R0"], ts),  # Too large for R0 (10 seats) -> slot 3 infeasible.
+    ]
+    problem = make_problem(exams, [10])
+    params = solvers.RoomAssignmentParams()
+    params.num_workers = 2
+
+    assignment = solvers.assign_rooms(problem, [0, 2, 3], params)
+    assert_empty_assignment(assignment, 3, Status.INFEASIBLE)
+    assert len(assignment.slot_statuses) == 4
+    assert assignment.slot_statuses[0] in (Status.OPTIMAL, Status.FEASIBLE)
+    assert assignment.slot_statuses[1] == Status.OPTIMAL
+    assert assignment.slot_statuses[2] == Status.INFEASIBLE
+    assert assignment.slot_statuses[3] == Status.INFEASIBLE
+
+
+def exhaustive_3level_optimum(exam_section_specs, room_capacities, room_locations, schedule):
+    """Brute-force oracle for (room_count, extra_locations, unused_capacity) with hard section loc."""
+    section_alternatives = []
+    for exam_id, sections in enumerate(exam_section_specs):
+        for count, eligible_rooms in sections:
+            choices = []
+            for size in range(1, len(eligible_rooms) + 1):
+                for combo in combinations(eligible_rooms, size):
+                    locs = {room_locations[r] for r in combo}
+                    if len(locs) != 1:
+                        continue
+                    if sum(room_capacities[r] for r in combo) >= count:
+                        choices.append((exam_id, count, combo, next(iter(locs))))
+            section_alternatives.append(choices)
+
+    best = None
+    for assignment in product(*section_alternatives):
+        uses = []
+        exam_locs = {}
+        total_unused = 0
+        for exam_id, count, combo, loc in assignment:
+            slot = schedule[exam_id]
+            for room in combo:
+                uses.append((slot, room))
+            exam_locs.setdefault(exam_id, set()).add(loc)
+            total_unused += sum(room_capacities[r] for r in combo) - count
+        if len(uses) != len(set(uses)):
+            continue
+        extra_locs = sum(len(locs) - 1 for locs in exam_locs.values())
+        objective = (len(uses), extra_locs, total_unused)
+        best = objective if best is None else min(best, objective)
+    return best
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_matches_exhaustive_3level_location_optimum_and_parallel_determinism(seed):
+    rng = random.Random(1000 + seed)
+    num_rooms = 4
+    capacities = [rng.randint(3, 8) for _ in range(num_rooms)]
+    locations = [rng.choice(["TTT", "KM", "XT"]) for _ in range(num_rooms)]
+    rooms = [solvers.Room(room_code(i), capacities[i], locations[i]) for i in range(num_rooms)]
+
+    # 2 exams, each with 1 or 2 sections, placed across 2 slots.
+    exam_section_specs = []
+    exams = []
+    for exam_id in range(2):
+        num_secs = rng.randint(1, 2)
+        sec_specs = []
+        sections = []
+        for sec_idx in range(num_secs):
+            count = rng.randint(1, 9)
+            eligible = sorted(rng.sample(range(num_rooms), rng.randint(1, num_rooms)))
+            sec_specs.append((count, eligible))
+            sections.append(
+                solvers.ExamSection(
+                    f"E{exam_id}_S{sec_idx}",
+                    [f"E{exam_id}_S{sec_idx}_{k}" for k in range(count)],
+                    [room_code(r) for r in eligible],
+                )
+            )
+        exam_section_specs.append(sec_specs)
+        exams.append(solvers.Exam(f"E{exam_id}", 3, sections, TIMESTAMPS))
+
+    schedule = [rng.randrange(2) for _ in exams]
+    expected = exhaustive_3level_optimum(exam_section_specs, capacities, locations, schedule)
+    problem = solvers.ProblemData(exams, rooms)
+
+    params_seq = solvers.RoomAssignmentParams()
+    params_seq.num_workers = 1
+    params_par = solvers.RoomAssignmentParams()
+    params_par.num_workers = 2
+
+    res_seq = solvers.assign_rooms(problem, schedule, params_seq)
+    res_par = solvers.assign_rooms(problem, schedule, params_par)
+
+    if expected is None:
+        assert_empty_assignment(res_seq, problem.num_sections, Status.INFEASIBLE)
+        assert_empty_assignment(res_par, problem.num_sections, Status.INFEASIBLE)
+        seq_infeasible = [i for i, st in enumerate(res_seq.slot_statuses) if st == Status.INFEASIBLE]
+        par_infeasible = [i for i, st in enumerate(res_par.slot_statuses) if st == Status.INFEASIBLE]
+        assert seq_infeasible == par_infeasible and seq_infeasible
+        for statuses in (res_seq.slot_statuses, res_par.slot_statuses):
+            for i, st in enumerate(statuses):
+                if i not in seq_infeasible:
+                    assert st in (Status.OPTIMAL, Status.FEASIBLE)
+    else:
+        assert res_seq.status == Status.OPTIMAL
+        assert res_par.status == Status.OPTIMAL
+        assert (res_seq.room_count, res_seq.extra_locations, res_seq.unused_capacity) == expected
+        assert (res_par.room_count, res_par.extra_locations, res_par.unused_capacity) == expected
+        assert res_seq.slot_statuses == [Status.OPTIMAL, Status.OPTIMAL]
+        # Verify hard single-location rule per section and exact determinism across 1 vs 2 workers.
+        for sec_id in range(problem.num_sections):
+            chosen = res_seq.rooms_for_section(sec_id)
+            assert chosen == res_par.rooms_for_section(sec_id)
+            assert len({locations[r] for r in chosen}) == 1
+        assert_allocation(res_seq, schedule, exams, capacities)
