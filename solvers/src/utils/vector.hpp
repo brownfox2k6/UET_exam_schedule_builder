@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cassert>
 #include <concepts>
 #include <initializer_list>
 #include <iterator>
@@ -13,14 +14,14 @@
 #include <version>
 
 /**
- * std::vector wrapper with int sizes, counts, and indices. Targets C++23.
+ * std::vector wrapper with `int` (`size_type`) sizes, counts, and indices. Targets C++23.
  *
- * Preconditions: sizes/capacities fit in int; counts are nonnegative; indices
- * passed to unchecked operations are valid. No extra checks are performed.
- * at() retains std::vector::at()'s checked behavior.
- * Iterators and their difference types remain those of std::vector.
+ * Preconditions: sizes and capacities fit in `size_type`; counts are non-negative; indices passed
+ * to unchecked operations are in range (verified with `assert` in Debug builds). `at()` retains
+ * `std::vector::at()`'s `std::out_of_range` checking.
+ * Iterators and their difference types remain those of `std::vector`.
  * Range-container APIs are exposed when the STL supports them
- * (__cpp_lib_containers_ranges >= 202202L).
+ * (`__cpp_lib_containers_ranges >= 202202L`).
  */
 template <typename T, typename Allocator = std::allocator<T>>
 class Vector {
@@ -39,45 +40,44 @@ public:
   using reverse_iterator = typename storage_type::reverse_iterator;
   using const_reverse_iterator = typename storage_type::const_reverse_iterator;
 
-private:
-  using storage_size_type = typename storage_type::size_type;
-  storage_type data_;
-
-  template <std::integral Integer>
-  [[nodiscard]] static constexpr auto to_storage_size(Integer value) noexcept -> storage_size_type {
-    return storage_size_type(value);
-  }
-
-public:
   constexpr Vector() = default;
 
-  constexpr explicit Vector(const allocator_type& alloc) noexcept
-      : data_(alloc) {}
+  constexpr explicit Vector(const allocator_type& allocator) noexcept
+      : data_(allocator) {}
 
-  template <std::integral Integer>
-  constexpr explicit Vector(Integer count, const allocator_type& alloc = allocator_type())
-      : data_(to_storage_size(count), alloc) {}
+  constexpr explicit Vector(size_type count, const allocator_type& allocator = allocator_type())
+      : data_(to_storage_size(count), allocator) {}
 
-  template <std::integral Integer>
-  constexpr Vector(Integer count, const T& value, const allocator_type& alloc = allocator_type())
-      : data_(to_storage_size(count), value, alloc) {}
+  constexpr Vector(
+      size_type count,
+      const T& value,
+      const allocator_type& allocator = allocator_type()
+  )
+      : data_(to_storage_size(count), value, allocator) {}
 
-  template <std::input_iterator InputIt>
-  constexpr Vector(InputIt first, InputIt last, const allocator_type& alloc = allocator_type())
-      : data_(first, last, alloc) {}
+  template <std::input_iterator InputIterator>
+  constexpr Vector(
+      InputIterator first,
+      InputIterator last,
+      const allocator_type& allocator = allocator_type()
+  )
+      : data_(first, last, allocator) {}
 
-  constexpr Vector(std::initializer_list<T> values, const allocator_type& alloc = allocator_type())
-      : data_(values, alloc) {}
+  constexpr Vector(
+      std::initializer_list<T> values,
+      const allocator_type& allocator = allocator_type()
+  )
+      : data_(values, allocator) {}
 
 #if defined(__cpp_lib_containers_ranges) && __cpp_lib_containers_ranges >= 202202L
-  template <std::ranges::input_range R>
-    requires std::convertible_to<std::ranges::range_reference_t<R>, T>
+  template <std::ranges::input_range Range>
+    requires std::convertible_to<std::ranges::range_reference_t<Range>, T>
   constexpr Vector(
       std::from_range_t from_range,
-      R&& values,
-      const allocator_type& alloc = allocator_type()
+      Range&& values,
+      const allocator_type& allocator = allocator_type()
   )
-      : data_(from_range, std::forward<R>(values), alloc) {}
+      : data_(from_range, std::forward<Range>(values), allocator) {}
 #endif
 
   constexpr Vector(const Vector&) = default;
@@ -86,11 +86,11 @@ public:
   constexpr auto operator=(Vector&&) -> Vector& = default;
   constexpr ~Vector() = default;
 
-  constexpr Vector(const Vector& other, const std::type_identity_t<allocator_type>& alloc)
-      : data_(other.data_, alloc) {}
+  constexpr Vector(const Vector& other, const std::type_identity_t<allocator_type>& allocator)
+      : data_(other.data_, allocator) {}
 
-  constexpr Vector(Vector&& other, const std::type_identity_t<allocator_type>& alloc)
-      : data_(std::move(other).data_, alloc) {}
+  constexpr Vector(Vector&& other, const std::type_identity_t<allocator_type>& allocator)
+      : data_(std::move(other).data_, allocator) {}
 
   constexpr explicit Vector(const storage_type& data)
       : data_(data) {}
@@ -105,35 +105,34 @@ public:
     return *this;
   }
 
-  template <std::integral Integer>
-  constexpr auto assign(Integer count, const T& value) -> void {
+  constexpr auto assign(size_type count, const T& value) -> void {
     data_.assign(to_storage_size(count), value);
   }
 
-  template <std::input_iterator InputIt>
-  constexpr auto assign(InputIt first, InputIt last) -> void {
+  template <std::input_iterator InputIterator>
+  constexpr auto assign(InputIterator first, InputIterator last) -> void {
     data_.assign(first, last);
   }
 
   constexpr auto assign(std::initializer_list<T> values) -> void { data_.assign(values); }
 
 #if defined(__cpp_lib_containers_ranges) && __cpp_lib_containers_ranges >= 202202L
-  template <std::ranges::input_range R>
-    requires std::convertible_to<std::ranges::range_reference_t<R>, T>
-  constexpr auto assign_range(R&& values) -> void {
-    data_.assign_range(std::forward<R>(values));
+  template <std::ranges::input_range Range>
+    requires std::convertible_to<std::ranges::range_reference_t<Range>, T>
+  constexpr auto assign_range(Range&& values) -> void {
+    data_.assign_range(std::forward<Range>(values));
   }
 
-  template <std::ranges::input_range R>
-    requires std::convertible_to<std::ranges::range_reference_t<R>, T>
-  constexpr auto append_range(R&& values) -> void {
-    data_.append_range(std::forward<R>(values));
+  template <std::ranges::input_range Range>
+    requires std::convertible_to<std::ranges::range_reference_t<Range>, T>
+  constexpr auto append_range(Range&& values) -> void {
+    data_.append_range(std::forward<Range>(values));
   }
 
-  template <std::ranges::input_range R>
-    requires std::convertible_to<std::ranges::range_reference_t<R>, T>
-  constexpr auto insert_range(const_iterator pos, R&& values) -> iterator {
-    return data_.insert_range(pos, std::forward<R>(values));
+  template <std::ranges::input_range Range>
+    requires std::convertible_to<std::ranges::range_reference_t<Range>, T>
+  constexpr auto insert_range(const_iterator position, Range&& values) -> iterator {
+    return data_.insert_range(position, std::forward<Range>(values));
   }
 #endif
 
@@ -141,58 +140,71 @@ public:
     return data_.get_allocator();
   }
 
-  [[nodiscard]] constexpr auto size() const noexcept -> int { return int(data_.size()); }
+  [[nodiscard]] constexpr auto size() const noexcept -> size_type {
+    return size_type(data_.size());
+  }
 
-  [[nodiscard]] constexpr auto capacity() const noexcept -> int { return int(data_.capacity()); }
+  [[nodiscard]] constexpr auto capacity() const noexcept -> size_type {
+    return size_type(data_.capacity());
+  }
 
-  [[nodiscard]] constexpr auto max_size() const noexcept -> int {
-    // Report the wrapper's int limit, without adding growth-time checks.
-    constexpr auto limit = storage_size_type(std::numeric_limits<int>::max());
-    return int(std::min(data_.max_size(), limit));
+  [[nodiscard]] constexpr auto max_size() const noexcept -> size_type {
+    // Report the wrapper's `size_type` limit without adding growth-time checks.
+    constexpr auto limit = storage_size_type(std::numeric_limits<size_type>::max());
+    return size_type(std::min(data_.max_size(), limit));
   }
 
   [[nodiscard]] constexpr auto empty() const noexcept -> bool { return data_.empty(); }
 
-  template <std::integral Integer>
-  constexpr auto reserve(Integer count) -> void {
-    data_.reserve(to_storage_size(count));
-  }
+  constexpr auto reserve(size_type count) -> void { data_.reserve(to_storage_size(count)); }
 
   constexpr auto shrink_to_fit() -> void { data_.shrink_to_fit(); }
 
-  template <std::integral Integer>
-  [[nodiscard]] constexpr auto operator[](Integer index) noexcept -> reference {
-    return data_[to_storage_size(index)];
+  [[nodiscard]] constexpr auto operator[](size_type index) noexcept -> reference {
+    assert(index >= 0 && index < size());
+    return data_[storage_size_type(index)];
   }
 
-  template <std::integral Integer>
-  [[nodiscard]] constexpr auto operator[](Integer index) const noexcept -> const_reference {
-    return data_[to_storage_size(index)];
+  [[nodiscard]] constexpr auto operator[](size_type index) const noexcept -> const_reference {
+    assert(index >= 0 && index < size());
+    return data_[storage_size_type(index)];
   }
 
-  template <std::integral Integer>
-  [[nodiscard]] constexpr auto at(Integer index) -> reference {
-    return data_.at(to_storage_size(index));
+  [[nodiscard]] constexpr auto at(size_type index) -> reference {
+    return data_.at(storage_size_type(index));
   }
 
-  template <std::integral Integer>
-  [[nodiscard]] constexpr auto at(Integer index) const -> const_reference {
-    return data_.at(to_storage_size(index));
+  [[nodiscard]] constexpr auto at(size_type index) const -> const_reference {
+    return data_.at(storage_size_type(index));
   }
 
-  [[nodiscard]] constexpr auto front() noexcept -> reference { return data_.front(); }
-  [[nodiscard]] constexpr auto front() const noexcept -> const_reference { return data_.front(); }
+  [[nodiscard]] constexpr auto front() noexcept -> reference {
+    assert(!empty());
+    return data_.front();
+  }
 
-  [[nodiscard]] constexpr auto back() noexcept -> reference { return data_.back(); }
-  [[nodiscard]] constexpr auto back() const noexcept -> const_reference { return data_.back(); }
+  [[nodiscard]] constexpr auto front() const noexcept -> const_reference {
+    assert(!empty());
+    return data_.front();
+  }
 
-  [[nodiscard]] constexpr auto data() noexcept -> T*
+  [[nodiscard]] constexpr auto back() noexcept -> reference {
+    assert(!empty());
+    return data_.back();
+  }
+
+  [[nodiscard]] constexpr auto back() const noexcept -> const_reference {
+    assert(!empty());
+    return data_.back();
+  }
+
+  [[nodiscard]] constexpr auto data() noexcept -> pointer
     requires(!std::same_as<T, bool>)
   {
     return data_.data();
   }
 
-  [[nodiscard]] constexpr auto data() const noexcept -> const T*
+  [[nodiscard]] constexpr auto data() const noexcept -> const_pointer
     requires(!std::same_as<T, bool>)
   {
     return data_.data();
@@ -224,34 +236,34 @@ public:
 
   constexpr auto clear() noexcept -> void { data_.clear(); }
 
-  constexpr auto insert(const_iterator pos, const T& value) -> iterator {
-    return data_.insert(pos, value);
+  constexpr auto insert(const_iterator position, const T& value) -> iterator {
+    return data_.insert(position, value);
   }
 
-  constexpr auto insert(const_iterator pos, T&& value) -> iterator {
-    return data_.insert(pos, std::move(value));
+  constexpr auto insert(const_iterator position, T&& value) -> iterator {
+    return data_.insert(position, std::move(value));
   }
 
-  template <std::integral Integer>
-  constexpr auto insert(const_iterator pos, Integer count, const T& value) -> iterator {
-    return data_.insert(pos, to_storage_size(count), value);
+  constexpr auto insert(const_iterator position, size_type count, const T& value) -> iterator {
+    return data_.insert(position, to_storage_size(count), value);
   }
 
-  template <std::input_iterator InputIt>
-  constexpr auto insert(const_iterator pos, InputIt first, InputIt last) -> iterator {
-    return data_.insert(pos, first, last);
+  template <std::input_iterator InputIterator>
+  constexpr auto insert(const_iterator position, InputIterator first, InputIterator last)
+      -> iterator {
+    return data_.insert(position, first, last);
   }
 
-  constexpr auto insert(const_iterator pos, std::initializer_list<T> values) -> iterator {
-    return data_.insert(pos, values);
+  constexpr auto insert(const_iterator position, std::initializer_list<T> values) -> iterator {
+    return data_.insert(position, values);
   }
 
   template <typename... Args>
-  constexpr auto emplace(const_iterator pos, Args&&... args) -> iterator {
-    return data_.emplace(pos, std::forward<Args>(args)...);
+  constexpr auto emplace(const_iterator position, Args&&... args) -> iterator {
+    return data_.emplace(position, std::forward<Args>(args)...);
   }
 
-  constexpr auto erase(const_iterator pos) -> iterator { return data_.erase(pos); }
+  constexpr auto erase(const_iterator position) -> iterator { return data_.erase(position); }
 
   constexpr auto erase(const_iterator first, const_iterator last) -> iterator {
     return data_.erase(first, last);
@@ -265,15 +277,14 @@ public:
     return data_.emplace_back(std::forward<Args>(args)...);
   }
 
-  constexpr auto pop_back() -> void { data_.pop_back(); }
-
-  template <std::integral Integer>
-  constexpr auto resize(Integer count) -> void {
-    data_.resize(to_storage_size(count));
+  constexpr auto pop_back() -> void {
+    assert(!empty());
+    data_.pop_back();
   }
 
-  template <std::integral Integer>
-  constexpr auto resize(Integer count, const T& value) -> void {
+  constexpr auto resize(size_type count) -> void { data_.resize(to_storage_size(count)); }
+
+  constexpr auto resize(size_type count, const T& value) -> void {
     data_.resize(to_storage_size(count), value);
   }
 
@@ -287,47 +298,61 @@ public:
     data_.flip();
   }
 
-  // Explicit access for APIs that specifically require std::vector.
+  // Explicit access for APIs that specifically require `std::vector`.
   [[nodiscard]] constexpr auto std_vector() noexcept -> storage_type& { return data_; }
   [[nodiscard]] constexpr auto std_vector() const noexcept -> const storage_type& { return data_; }
 
   friend constexpr auto operator==(const Vector&, const Vector&) -> bool = default;
 
-  friend constexpr auto operator<=>(const Vector& lhs, const Vector& rhs) -> decltype(auto)
-    requires requires { lhs.data_ <=> rhs.data_; }
+  friend constexpr auto operator<=>(const Vector& left, const Vector& right) -> decltype(auto)
+    requires requires(const storage_type& storage) { storage <=> storage; }
   {
-    return lhs.data_ <=> rhs.data_;
+    return left.data_ <=> right.data_;
+  }
+
+private:
+  using storage_size_type = typename storage_type::size_type;
+  storage_type data_;
+
+  [[nodiscard]] static constexpr auto to_storage_size(size_type count) noexcept
+      -> storage_size_type {
+    assert(count >= 0);
+    return storage_size_type(count);
   }
 };
 
 template <
-    std::input_iterator InputIt,
-    typename T = typename std::iterator_traits<InputIt>::value_type,
+    std::input_iterator InputIterator,
+    typename T = typename std::iterator_traits<InputIterator>::value_type,
     typename Allocator = std::allocator<T>>
-Vector(InputIt, InputIt, Allocator = Allocator()) -> Vector<T, Allocator>;
+Vector(InputIterator, InputIterator, Allocator = Allocator()) -> Vector<T, Allocator>;
 
 #if defined(__cpp_lib_containers_ranges) && __cpp_lib_containers_ranges >= 202202L
 template <
-    std::ranges::input_range R,
-    typename Allocator = std::allocator<std::ranges::range_value_t<R>>>
-Vector(std::from_range_t from_range, R&& values, Allocator alloc = Allocator())
-    -> Vector<std::ranges::range_value_t<R>, Allocator>;
+    std::ranges::input_range Range,
+    typename Allocator = std::allocator<std::ranges::range_value_t<Range>>>
+Vector(std::from_range_t from_range, Range&& values, Allocator allocator = Allocator())
+    -> Vector<std::ranges::range_value_t<Range>, Allocator>;
 #endif
 
 template <typename T, typename Allocator>
-constexpr auto swap(Vector<T, Allocator>& lhs, Vector<T, Allocator>& rhs) noexcept(
-    noexcept(lhs.swap(rhs))
+constexpr auto swap(Vector<T, Allocator>& left, Vector<T, Allocator>& right) noexcept(
+    noexcept(left.swap(right))
 ) -> void {
-  lhs.swap(rhs);
+  left.swap(right);
 }
 
-// ADL equivalents of std::erase / std::erase_if, returning int.
-template <typename T, typename Allocator, typename U>
-constexpr auto erase(Vector<T, Allocator>& values, const U& value) -> int {
-  return int(std::erase(values.std_vector(), value));
+// ADL equivalents of `std::erase` / `std::erase_if`, returning `Vector::size_type`.
+template <typename T, typename Allocator, typename Value>
+constexpr auto erase(Vector<T, Allocator>& values, const Value& value) ->
+    typename Vector<T, Allocator>::size_type {
+  return typename Vector<T, Allocator>::size_type(std::erase(values.std_vector(), value));
 }
 
 template <typename T, typename Allocator, typename Predicate>
-constexpr auto erase_if(Vector<T, Allocator>& values, Predicate pred) -> int {
-  return int(std::erase_if(values.std_vector(), std::move(pred)));
+constexpr auto erase_if(Vector<T, Allocator>& values, Predicate predicate) ->
+    typename Vector<T, Allocator>::size_type {
+  return typename Vector<T, Allocator>::size_type(
+      std::erase_if(values.std_vector(), std::move(predicate))
+  );
 }
