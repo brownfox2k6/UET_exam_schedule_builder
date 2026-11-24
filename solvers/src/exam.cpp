@@ -173,7 +173,7 @@ Exam::Exam(
       sections(std::move(_sections)),
       feasible_timestamps(std::move(_feasible_timestamps)) {
   validate_code(code, "Exam code");
-  validate_credits(code, this->credits);
+  validate_credits(code, credits);
   student_count = sort_and_validate_sections(code, sections);
   sort_and_validate_feasible_timestamps(code, feasible_timestamps);
 }

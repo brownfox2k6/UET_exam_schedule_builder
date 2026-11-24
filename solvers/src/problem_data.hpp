@@ -15,14 +15,11 @@
 namespace cetp {
 
 /**
- * @brief Stores the immutable, preprocessed data of an exam timetabling problem.
- * * ProblemData owns the static input data used by the solver, including exam metadata, room
- * metadata, conflict graphs, and initial feasibility constraints.
- * * The data is stored mostly in a Structure-of-Arrays (SoA) layout to improve cache locality
- * during repeated evaluation and construction of solutions.
- * * Dense matrices and CSR matrices are built once during initialization and are treated as
- * read-only afterward. This makes the object safe to share across OpenMP threads, as long as no
- * thread mutates it.
+ * Stores the immutable, preprocessed data of an exam timetabling problem.
+ *
+ * Uses a Structure-of-Arrays (SoA) layout for cache locality during repeated evaluation and
+ * construction of solutions. All matrices and arrays are built once during initialization and
+ * treated as read-only afterward, making `ProblemData` safe to share across threads.
  */
 struct ProblemData {
   // NOLINTBEGIN(*-non-private-member-*)
@@ -72,18 +69,16 @@ struct ProblemData {
   Matrix<int> conflicts_matrix;
 
   /**
-   * @brief CSR matrix representation of `conflicts_matrix`.
-   * * Accessing row `i` returns a `CsrRowView<int>` providing two spans:
-   * - `indices`: The IDs of exams `j` that share at least one student with exam `i`.
-   * - `values`: The exact number of common students co-registered in both exam `i` and exam `j`.
+   * CSR matrix representation of `conflicts_matrix`.
+   * Accessing row `i` returns a `CsrRowView<int>` providing:
+   * - `indices`: IDs of exams `j` sharing at least one student with exam `i`.
+   * - `values`: exact shared student counts between exam `i` and exam `j`.
    */
   CsrMatrix<int> conflicts_csr;
 
   /**
-   * @brief Weighted conflict degree for each exam.
-   * * `weighted_conflict_degrees[i]` = sum of shared students counts between exam `i` and each
-   * conflicting exam `j` (i.e., sum of all entries in row `i` of the `conflicts_matrix`).
-   * Used to prioritize unscheduled exams.
+   * Weighted conflict degree for each exam: sum of shared student counts between exam `i` and
+   * every conflicting exam `j` (row sum of `conflicts_matrix`), used to prioritize exams.
    */
   Vector<int> weighted_conflict_degrees;
 

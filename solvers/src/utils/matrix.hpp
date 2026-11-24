@@ -5,18 +5,13 @@
 
 #include "utils/vector.hpp"
 
-/**
- * @brief A generic 2D matrix structure.
- * Implements a flat 1D vector back-end to ensure memory continuity.
- */
+/** Generic 2D dense matrix backed by a flat contiguous 1D vector. */
 template <typename T>
 class Matrix {
 public:
   Matrix() = default;
 
-  /**
-   * @brief Initializes a matrix of size r x c with a default value.
-   */
+  /** Initializes a matrix of size `rows` x `cols` with a default value. */
   Matrix(int rows, int cols, T value = T())
       : num_rows_(rows),
         num_cols_(cols) {
@@ -29,24 +24,20 @@ public:
   [[nodiscard]] auto num_cols() const noexcept -> int { return num_cols_; }
   [[nodiscard]] auto num_elements() const noexcept -> int { return data_.size(); }
 
-  /**
-   * @brief Accesses the element at `[row, col]`.
-   */
-  auto operator[](int row, int col) -> T& {
+  /** Accesses the element at `[row, col]`. */
+  [[nodiscard]] auto operator[](int row, int col) -> T& {
     assert(row >= 0 && row < num_rows_);
     assert(col >= 0 && col < num_cols_);
     return data_[(row * num_cols_) + col];
   }
 
-  auto operator[](int row, int col) const -> const T& {
+  [[nodiscard]] auto operator[](int row, int col) const -> const T& {
     assert(row >= 0 && row < num_rows_);
     assert(col >= 0 && col < num_cols_);
     return data_[(row * num_cols_) + col];
   }
 
-  /**
-   * @brief Fills the entire matrix with the specified value.
-   */
+  /** Fills the entire matrix with `value`. */
   void fill(T value) { std::ranges::fill(data_, value); }
 
 private:

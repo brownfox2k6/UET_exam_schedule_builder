@@ -44,9 +44,12 @@ public:
 
 private:
   // NOLINTBEGIN(*-magic-numbers)
-  double max_time_seconds_ = 30.0;  // Shared budget for both lexicographic optimization phases.
+
+  // Shared wall-clock budget across all lexicographic optimization phases.
+  double max_time_seconds_ = 30.0;
   int num_workers_ = 1;
   int random_seed_ = 42;
+
   // NOLINTEND(*-magic-numbers)
 };
 

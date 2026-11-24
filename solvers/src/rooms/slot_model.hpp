@@ -29,7 +29,7 @@ struct SlotModel {
   Vector<operations_research::sat::BoolVar> all_variables;
 
   // Decision variables for eligible (section, room) pairs, ordered by `slot_sections` and each
-  // section's `feasible_rooms_by_section` CSR row. Value 1 means that section uses that room.
+  // section's `feasible_rooms_by_section` row. Value 1 means that section uses that room.
   Vector<operations_research::sat::BoolVar> room_choices;
 
   // LinearExpr is a symbolic linear sum of variables (e.g. `40*x0 + 30*x1 + ...`).

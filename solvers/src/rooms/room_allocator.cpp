@@ -113,17 +113,17 @@ auto assemble_room_assignment(
 
 }  // namespace
 
-auto assign_rooms(const ProblemData& problem_data, const Vector<int>& schedule, Params params)
+auto assign_rooms(const ProblemData& problem, const Vector<int>& schedule, Params params)
     -> RoomAssignment {
   const auto global_started = SteadyClock::now();
-  validate_schedule(problem_data, schedule);
+  validate_schedule(problem, schedule);
 
   // Decompose by time slot: exams in different slots never share rooms or constraints, so each
   // non-empty slot can be solved as an independent CP-SAT model.
-  const JaggedArray<int> exams_by_slot = group_exams_by_slot(problem_data, schedule);
-  const Vector<int> active_slots = collect_active_slots(problem_data, exams_by_slot);
+  const JaggedArray<int> exams_by_slot = group_exams_by_slot(problem, schedule);
+  const Vector<int> active_slots = collect_active_slots(problem, exams_by_slot);
 
-  Vector<SlotSolution> slot_solutions(problem_data.num_slots);
+  Vector<SlotSolution> slot_solutions(problem.num_slots);
   std::atomic<bool> any_slot_failed{false};
 
   const int active_slot_count = active_slots.size();
@@ -137,7 +137,7 @@ auto assign_rooms(const ProblemData& problem_data, const Vector<int>& schedule, 
       const double remaining = params.max_time_seconds() - elapsed_seconds(global_started);
       const double per_slot_limit = remaining / double(active_slot_count - index);
       slot_solutions[slot] = solve_single_slot(
-          {.problem = problem_data,
+          {.problem = problem,
            .slot_exams = exams_by_slot[slot],
            .slot = slot,
            .slot_time_limit = per_slot_limit,
@@ -157,7 +157,7 @@ auto assign_rooms(const ProblemData& problem_data, const Vector<int>& schedule, 
     for (int index = 0; index < active_slot_count; ++index) {
       const int slot = active_slots[index];
       slot_solutions[slot] = solve_single_slot(
-          {.problem = problem_data,
+          {.problem = problem,
            .slot_exams = exams_by_slot[slot],
            .slot = slot,
            .slot_time_limit = per_slot_limit,
@@ -169,7 +169,7 @@ auto assign_rooms(const ProblemData& problem_data, const Vector<int>& schedule, 
     }
   }
 
-  return assemble_room_assignment(problem_data, exams_by_slot, active_slots, slot_solutions);
+  return assemble_room_assignment(problem, exams_by_slot, active_slots, slot_solutions);
 }
 
 }  // namespace cetp::rooms
