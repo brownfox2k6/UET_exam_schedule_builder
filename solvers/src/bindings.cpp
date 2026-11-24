@@ -223,9 +223,11 @@ NB_MODULE(cetp_solvers, m) {
           "schedule",
           [](const slots::SlotResult& result) -> std::vector<int> {
             return to_std_vector(result.schedule());
+            return to_std_vector(result.schedule);
           }
       )
       .def_prop_ro("penalty", &slots::SlotResult::penalty);
+      .def_ro("penalty", &slots::SlotResult::penalty);
 
   nb::enum_<rooms::RoomAssignmentStatus>(m, "RoomAssignmentStatus")
       .value("OPTIMAL", rooms::RoomAssignmentStatus::OPTIMAL)
