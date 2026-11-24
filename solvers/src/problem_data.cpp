@@ -20,9 +20,8 @@
 #include "utils/matrix.hpp"
 #include "utils/vector.hpp"
 
+namespace cetp {
 namespace {
-
-using namespace cetp;
 
 auto validate_input(const Vector<Exam>& exams, const Vector<Room>& rooms)
     -> std::unordered_map<std::string_view, int> {
@@ -84,23 +83,22 @@ void populate_exams(ProblemData& data, const Vector<Exam>& exams) {
 }
 
 void populate_students(ProblemData& data, const Vector<Exam>& exams) {
-  // Push all enrollments inside temp
-  Vector<std::string_view> temp;
-  temp.reserve(data.num_enrollments);
+  Vector<std::string_view> all_enrollments;
+  all_enrollments.reserve(data.num_enrollments);
   for (const Exam& exam : exams) {
     for (const ExamSection& section : exam.sections) {
       for (std::string_view student : section.students) {
-        temp.push_back(student);
+        all_enrollments.push_back(student);
       }
     }
   }
-  // Deduplicate enrollments -> we have unique student IDs
-  std::ranges::sort(temp);
-  const auto unique_end = std::ranges::unique(temp).begin();
-  data.num_students = int(unique_end - temp.begin());
+  // Deduplicate enrollments to build sorted unique student IDs.
+  std::ranges::sort(all_enrollments);
+  const auto unique_end = std::ranges::unique(all_enrollments).begin();
+  data.num_students = int(unique_end - all_enrollments.begin());
   data.student_codes.reserve(data.num_students);
-  for (auto it = temp.begin(); it != unique_end; ++it) {
-    data.student_codes.emplace_back(*it);
+  for (std::string_view student : std::ranges::subrange(all_enrollments.begin(), unique_end)) {
+    data.student_codes.emplace_back(student);
   }
 }
 
@@ -241,9 +239,9 @@ void populate_feasible_slots(ProblemData& data, const Vector<Exam>& exams) {
   data.feasible_slots_by_exam.reserve_num_elements(total_num_feasible_slots);
   for (const Exam& exam : exams) {
     for (int64_t timestamp : exam.feasible_timestamps) {
-      const auto iter = std::ranges::lower_bound(data.slot_timestamps, timestamp);
-      assert(iter != data.slot_timestamps.end() && *iter == timestamp);
-      const int timeslot = int(iter - data.slot_timestamps.begin());
+      const auto slot_iterator = std::ranges::lower_bound(data.slot_timestamps, timestamp);
+      assert(slot_iterator != data.slot_timestamps.end() && *slot_iterator == timestamp);
+      const int timeslot = int(slot_iterator - data.slot_timestamps.begin());
       data.feasible_slots_by_exam.append(timeslot);
     }
     data.feasible_slots_by_exam.finish_row();
@@ -270,9 +268,9 @@ void populate_feasible_rooms(
       section_rooms.clear();
       section_rooms.reserve(section.feasible_rooms.size());
       for (std::string_view room_code : section.feasible_rooms) {
-        const auto iter = room_ids.find(room_code);
-        assert(iter != room_ids.end());
-        section_rooms.push_back(iter->second);
+        const auto room_iterator = room_ids.find(room_code);
+        assert(room_iterator != room_ids.end());
+        section_rooms.push_back(room_iterator->second);
       }
       std::ranges::sort(section_rooms);
       data.feasible_rooms_by_section.append_row(section_rooms);
@@ -281,8 +279,6 @@ void populate_feasible_rooms(
 }
 
 }  // namespace
-
-namespace cetp {
 
 ProblemData::ProblemData(const Vector<Exam>& exams, const Vector<Room>& rooms) {
   const auto room_ids = validate_input(exams, rooms);
@@ -304,9 +300,9 @@ auto ProblemData::sections_of_exam(int exam) const noexcept -> std::ranges::iota
 }
 
 auto ProblemData::find_student_id(std::string_view student) const noexcept -> int {
-  const auto iter = std::ranges::lower_bound(student_codes, student);
-  if (iter != student_codes.end() && *iter == student) {
-    return int(iter - student_codes.begin());
+  const auto student_iterator = std::ranges::lower_bound(student_codes, student);
+  if (student_iterator != student_codes.end() && *student_iterator == student) {
+    return int(student_iterator - student_codes.begin());
   }
   return -1;
 }
