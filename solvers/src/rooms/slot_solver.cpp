@@ -226,7 +226,7 @@ private:
 
     int choice_index = 0;
     for (int section : slot_sections_) {
-      for (int room : request_.problem.feasible_rooms_by_section[section].values) {
+      for (int room : request_.problem.feasible_rooms_by_section[section]) {
         if (sat::SolutionBooleanValue(best_response_, slot_model_.room_choices[choice_index])) {
           solution.rooms_by_local_section.append(room);
           solution.unused_capacity += request_.problem.room_capacities[room];

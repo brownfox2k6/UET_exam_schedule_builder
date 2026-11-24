@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <utility>
 
-#include "utils/csr_matrix.hpp"
+#include "utils/jagged_array.hpp"
 #include "utils/span.hpp"
 #include "utils/vector.hpp"
 
@@ -42,7 +42,7 @@ auto RoomAssignment::rooms_for_section(int section) const -> Span<const int> {
   if (section < 0 || section >= rooms_by_section.num_rows()) {
     throw std::out_of_range("Section index out of range");
   }
-  return rooms_by_section[section].values;
+  return rooms_by_section[section];
 }
 
 auto RoomAssignment::empty(
@@ -50,7 +50,7 @@ auto RoomAssignment::empty(
     RoomAssignmentStatus overall_status,
     Vector<RoomAssignmentStatus> slot_statuses
 ) -> RoomAssignment {
-  CsrMatrix<int> rooms_by_section;
+  JaggedArray<int> rooms_by_section;
   rooms_by_section.reserve_num_rows(num_sections);
   for (int section = 0; section < num_sections; ++section) {
     rooms_by_section.append_row({});

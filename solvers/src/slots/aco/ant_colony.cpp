@@ -150,7 +150,7 @@ private:
     const double retention = 1.0 - params_.rho();
     for (int exam : problem_.exams()) {
       const int assigned_slot = schedule[exam];
-      for (int slot : problem_.feasible_slots_by_exam[exam].values) {
+      for (int slot : problem_.feasible_slots_by_exam[exam]) {
         const double target = slot == assigned_slot ? params_.tau_max() : params_.tau_min();
         const double deposit = params_.rho() * target;
         pheromone_[exam, slot] = (retention * pheromone_[exam, slot]) + deposit;

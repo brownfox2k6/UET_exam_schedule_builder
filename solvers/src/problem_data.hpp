@@ -8,6 +8,7 @@
 #include "exam.hpp"
 #include "room.hpp"
 #include "utils/csr_matrix.hpp"
+#include "utils/jagged_array.hpp"
 #include "utils/matrix.hpp"
 #include "utils/vector.hpp"
 
@@ -51,7 +52,7 @@ struct ProblemData {
 
   // --- Sections metadata ---
   Vector<std::string> section_codes;
-  CsrMatrix<int> section_students;
+  JaggedArray<int> section_students;
   Vector<int> section_student_counts;
 
   // --- Time slots metadata ---
@@ -89,10 +90,10 @@ struct ProblemData {
   // --- Initial exam feasibility constraints ---
 
   // `feasible_slots_by_exam[i]` contains slots IDs eligible for exam `i`
-  CsrMatrix<int> feasible_slots_by_exam;
+  JaggedArray<int> feasible_slots_by_exam;
 
   // `feasible_rooms_by_section[i]` contains room IDs eligible for section `i`.
-  CsrMatrix<int> feasible_rooms_by_section;
+  JaggedArray<int> feasible_rooms_by_section;
 
   // NOLINTEND(*-non-private-member-*)
 

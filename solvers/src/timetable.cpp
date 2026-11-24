@@ -63,7 +63,7 @@ void validate_schedule(const ProblemData& problem, const Vector<int>& schedule) 
 
   for (int exam : problem.exams()) {
     const int slot = schedule[exam];
-    const auto feasible = problem.feasible_slots_by_exam[exam].values;
+    const auto feasible = problem.feasible_slots_by_exam[exam];
     if (!std::ranges::binary_search(feasible, slot)) {
       throw std::invalid_argument(
           std::format(

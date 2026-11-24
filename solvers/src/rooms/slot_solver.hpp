@@ -6,7 +6,7 @@
 
 #include "problem_data.hpp"
 #include "rooms/room_assignment.hpp"
-#include "utils/csr_matrix.hpp"
+#include "utils/jagged_array.hpp"
 #include "utils/span.hpp"
 
 namespace cetp::rooms {
@@ -17,7 +17,7 @@ using SteadyClock = std::chrono::steady_clock;
 struct SlotSolution {
   RoomAssignmentStatus status = RoomAssignmentStatus::OPTIMAL;
   // Local section index -> assigned room IDs (in ascending room ID order).
-  CsrMatrix<int> rooms_by_local_section{};  // NOLINT(readability-redundant-member-init)
+  JaggedArray<int> rooms_by_local_section{};  // NOLINT(readability-redundant-member-init)
   int64_t extra_locations = 0;
   int64_t unused_capacity = 0;
 };

@@ -84,7 +84,7 @@ void add_section_room_constraints(
     Vector<RoomUse>& uses
 ) {
   sat::LinearExpr section_capacity;
-  for (int room : problem.feasible_rooms_by_section[section].values) {
+  for (int room : problem.feasible_rooms_by_section[section]) {
     // NewBoolVar creates a 0/1 variable: 1 means `section` uses `room`.
     const sat::BoolVar choice = slot_model.model.NewBoolVar();
     const int choice_index = slot_model.room_choices.size();
@@ -253,7 +253,7 @@ auto build_slot_model(
 
   int total_choices = 0;
   for (int section : slot_sections) {
-    total_choices += problem.feasible_rooms_by_section[section].values.size();
+    total_choices += problem.feasible_rooms_by_section[section].size();
   }
   slot_model.room_choices.reserve(total_choices);
   slot_model.all_variables.reserve(total_choices);
@@ -265,7 +265,7 @@ auto build_slot_model(
   section_location_variables.reserve(slot_sections.size());
 
   for (int section : slot_sections) {
-    const Span<const int> eligible_rooms = problem.feasible_rooms_by_section[section].values;
+    const Span<const int> eligible_rooms = problem.feasible_rooms_by_section[section];
     const SectionLocationVariables section_location =
         add_section_location_constraint(problem, eligible_rooms, slot_model);
     add_section_room_constraints(problem, section, section_location, slot_model, uses);

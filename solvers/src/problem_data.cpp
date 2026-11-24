@@ -16,6 +16,7 @@
 #include "exam.hpp"
 #include "room.hpp"
 #include "utils/csr_matrix.hpp"
+#include "utils/jagged_array.hpp"
 #include "utils/matrix.hpp"
 #include "utils/vector.hpp"
 
@@ -129,10 +130,10 @@ void populate_sections(ProblemData& data, const Vector<Exam>& exams) {
   data.exam_section_offsets.push_back(data.num_sections);
 }
 
-auto build_exams_by_student(const ProblemData& data) -> CsrMatrix<int> {
+auto build_exams_by_student(const ProblemData& data) -> JaggedArray<int> {
   Vector<int> offsets(data.num_students + 1, 0);
   for (int section : data.sections()) {
-    for (int student : data.section_students[section].values) {
+    for (int student : data.section_students[section]) {
       ++offsets[student + 1];
     }
   }
@@ -143,7 +144,7 @@ auto build_exams_by_student(const ProblemData& data) -> CsrMatrix<int> {
   Vector<int> cursor = offsets;
   for (int exam : data.exams()) {
     for (int section : data.sections_of_exam(exam)) {
-      for (int student : data.section_students[section].values) {
+      for (int student : data.section_students[section]) {
         values[cursor[student]++] = exam;
       }
     }
@@ -152,11 +153,11 @@ auto build_exams_by_student(const ProblemData& data) -> CsrMatrix<int> {
 }
 
 void populate_conflicts(ProblemData& data) {
-  const CsrMatrix<int> exams_by_student = build_exams_by_student(data);
+  const JaggedArray<int> exams_by_student = build_exams_by_student(data);
 
   data.conflicts_matrix = Matrix<int>(data.num_exams, data.num_exams, 0);
   for (int student : data.students()) {
-    const auto exams = exams_by_student[student].values;
+    const auto exams = exams_by_student[student];
     for (int i = 0; i < exams.size(); ++i) {
       for (int j = i + 1; j < exams.size(); ++j) {
         ++data.conflicts_matrix[exams[i], exams[j]];

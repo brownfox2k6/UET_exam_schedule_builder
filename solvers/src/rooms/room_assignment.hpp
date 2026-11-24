@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include "utils/csr_matrix.hpp"
+#include "utils/jagged_array.hpp"
 #include "utils/span.hpp"
 #include "utils/vector.hpp"
 
@@ -18,13 +18,13 @@ enum class RoomAssignmentStatus : std::uint8_t {
 
 /**
  * Room allocation for a fixed schedule.
- * Room IDs are stored as CSR values (including ID zero). `slot_statuses` records the
- * per-slot solver outcome even when overall assignment is cleared on failure.
+ * Room IDs are stored per section in a flat `JaggedArray` (including ID zero). `slot_statuses`
+ * records the per-slot solver outcome even when overall assignment is cleared on failure.
  */
 struct RoomAssignment {
   // NOLINTBEGIN(*-non-private-*)
   RoomAssignmentStatus status{};
-  CsrMatrix<int> rooms_by_section;
+  JaggedArray<int> rooms_by_section;
   Vector<RoomAssignmentStatus> slot_statuses;
   int64_t extra_locations{};
   int64_t unused_capacity{};

@@ -11,7 +11,7 @@
 #include "rooms/room_assignment.hpp"
 #include "rooms/slot_solver.hpp"
 #include "timetable.hpp"
-#include "utils/csr_matrix.hpp"
+#include "utils/jagged_array.hpp"
 #include "utils/span.hpp"
 #include "utils/vector.hpp"
 
@@ -24,10 +24,10 @@ auto elapsed_seconds(SteadyClock::time_point start_time) -> double {
   return std::chrono::duration<double>(SteadyClock::now() - start_time).count();
 }
 
-// Groups exams by their assigned time slot in a flat CSR matrix so every slot can be solved
+// Groups exams by their assigned time slot in a flat JaggedArray so every slot can be solved
 // independently without nested heap allocations.
 auto group_exams_by_slot(const ProblemData& problem, const Vector<int>& schedule)
-    -> CsrMatrix<int> {
+    -> JaggedArray<int> {
   Vector<int> offsets(problem.num_slots + 1, 0);
   for (int exam : problem.exams()) {
     ++offsets[schedule[exam] + 1];
@@ -43,12 +43,12 @@ auto group_exams_by_slot(const ProblemData& problem, const Vector<int>& schedule
   return {std::move(values), std::move(offsets)};
 }
 
-auto collect_active_slots(const ProblemData& problem, const CsrMatrix<int>& exams_by_slot)
+auto collect_active_slots(const ProblemData& problem, const JaggedArray<int>& exams_by_slot)
     -> Vector<int> {
   Vector<int> active_slots;
   active_slots.reserve(problem.num_slots);
   for (int slot : problem.slots()) {
-    if (!exams_by_slot[slot].values.empty()) {
+    if (!exams_by_slot[slot].empty()) {
       active_slots.push_back(slot);
     }
   }
@@ -59,7 +59,7 @@ auto collect_active_slots(const ProblemData& problem, const CsrMatrix<int>& exam
 // any slot fails while preserving per-slot diagnostic statuses.
 auto assemble_room_assignment(
     const ProblemData& problem,
-    const CsrMatrix<int>& exams_by_slot,
+    const JaggedArray<int>& exams_by_slot,
     const Vector<int>& active_slots,
     const Vector<SlotSolution>& slot_solutions
 ) -> RoomAssignment {
@@ -74,7 +74,7 @@ auto assemble_room_assignment(
     return RoomAssignment::empty(problem.num_sections, overall_status, std::move(slot_statuses));
   }
 
-  // Scatter per-slot CSR views back into global section index order [0, num_sections).
+  // Scatter per-slot views back into global section index order [0, num_sections).
   Vector<Span<const int>> rooms_by_section_spans(problem.num_sections);
   int total_rooms = 0;
   int64_t total_extra_locations = 0;
@@ -85,17 +85,17 @@ auto assemble_room_assignment(
     total_extra_locations += solution.extra_locations;
     total_unused_capacity += solution.unused_capacity;
     int local_section_index = 0;
-    for (int exam : exams_by_slot[slot].values) {
+    for (int exam : exams_by_slot[slot]) {
       for (int section : problem.sections_of_exam(exam)) {
         const Span<const int> assigned_rooms =
-            solution.rooms_by_local_section[local_section_index++].values;
+            solution.rooms_by_local_section[local_section_index++];
         rooms_by_section_spans[section] = assigned_rooms;
         total_rooms += assigned_rooms.size();
       }
     }
   }
 
-  CsrMatrix<int> rooms_by_section;
+  JaggedArray<int> rooms_by_section;
   rooms_by_section.reserve_num_rows(problem.num_sections);
   rooms_by_section.reserve_num_elements(total_rooms);
   for (int section : problem.sections()) {
@@ -120,7 +120,7 @@ auto assign_rooms(const ProblemData& problem_data, const Vector<int>& schedule, 
 
   // Decompose by time slot: exams in different slots never share rooms or constraints, so each
   // non-empty slot can be solved as an independent CP-SAT model.
-  const CsrMatrix<int> exams_by_slot = group_exams_by_slot(problem_data, schedule);
+  const JaggedArray<int> exams_by_slot = group_exams_by_slot(problem_data, schedule);
   const Vector<int> active_slots = collect_active_slots(problem_data, exams_by_slot);
 
   Vector<SlotSolution> slot_solutions(problem_data.num_slots);
@@ -138,7 +138,7 @@ auto assign_rooms(const ProblemData& problem_data, const Vector<int>& schedule, 
       const double per_slot_limit = remaining / double(active_slot_count - index);
       slot_solutions[slot] = solve_single_slot(
           {.problem = problem_data,
-           .slot_exams = exams_by_slot[slot].values,
+           .slot_exams = exams_by_slot[slot],
            .slot = slot,
            .slot_time_limit = per_slot_limit,
            .global_started = global_started,
@@ -158,7 +158,7 @@ auto assign_rooms(const ProblemData& problem_data, const Vector<int>& schedule, 
       const int slot = active_slots[index];
       slot_solutions[slot] = solve_single_slot(
           {.problem = problem_data,
-           .slot_exams = exams_by_slot[slot].values,
+           .slot_exams = exams_by_slot[slot],
            .slot = slot,
            .slot_time_limit = per_slot_limit,
            .global_started = global_started,

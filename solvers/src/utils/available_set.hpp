@@ -4,7 +4,7 @@
 #include <random>
 #include <utility>
 
-#include "utils/csr_matrix.hpp"
+#include "utils/jagged_array.hpp"
 #include "utils/matrix.hpp"
 #include "utils/random.hpp"
 #include "utils/span.hpp"
@@ -18,30 +18,30 @@
 struct AvailableSet {
 private:
   // row = item, col = list of current available options
-  CsrMatrix<int> options;
+  JaggedArray<int> options;
 
   // Track position of options: `pos(item, option) = index`
   Matrix<int> pos;
 
-  // Current number of available options for item i: `active_ends[i+1] - options.offsets[i]`
+  // Current number of available options for item i: `active_ends[i+1] - options.offsets()[i]`
   Vector<int> active_ends;
 
 public:
-  AvailableSet(const CsrMatrix<int>& available_original, int num_options_count)
+  AvailableSet(const JaggedArray<int>& available_original, int num_options_count)
       : options(available_original),
         pos(available_original.num_rows(), num_options_count) {
     reset();
   }
 
   /**
-   * @brief Resets all items to their initial available sets from the CSR input.
+   * @brief Resets all items to their initial available sets.
    */
   void reset() {
     pos.fill(-1);
-    active_ends = options.get_offsets();
+    active_ends = options.offsets();
     for (int item = 0; item < options.num_rows(); ++item) {
       int index = 0;
-      for (int option : options[item].values) {
+      for (int option : options[item]) {
         pos[item, option] = index++;
       }
     }
@@ -52,14 +52,14 @@ public:
    */
   [[nodiscard]] auto get_available_count(int item) const -> int {
     assert(item >= 0 && item < options.num_rows());
-    return active_ends[item + 1] - options.get_offsets()[item];
+    return active_ends[item + 1] - options.offsets()[item];
   }
 
   /**
    * @brief Gets the number of currently unavailable options for an item.
    */
   [[nodiscard]] auto get_unavailable_count(int item) const -> int {
-    return options[item].values.size() - get_available_count(item);
+    return options[item].size() - get_available_count(item);
   }
 
   /**
@@ -84,7 +84,7 @@ public:
     const int count = get_available_count(item);
     assert(count > 0);
     const int index = random_int(random_engine, 0, count);
-    return options[item].values[index];
+    return options[item][index];
   }
 
   /**
@@ -94,7 +94,7 @@ public:
     const int count = get_available_count(item);
     const int index = pos[item, option];
     assert(index >= 0 && index < count && "Option must be active before removal");
-    auto row = options[item].values;
+    auto row = options[item];
     std::swap(pos[item, option], pos[item, row[count - 1]]);
     std::swap(row[index], row[count - 1]);
     --active_ends[item + 1];
@@ -107,7 +107,7 @@ public:
     const int count = get_available_count(item);
     const int index = pos[item, option];
     assert(index >= 0 && index >= count && "Option must exist and be inactive before restoration");
-    auto row = options[item].values;
+    auto row = options[item];
     std::swap(pos[item, option], pos[item, row[count]]);
     std::swap(row[index], row[count]);
     ++active_ends[item + 1];
@@ -118,14 +118,14 @@ public:
    */
   auto operator[](int item, int index) const -> int {
     assert(index >= 0 && index < get_available_count(item));
-    return options[item].values[index];
+    return options[item][index];
   }
 
   /**
    * @brief Accesses the available options of an item as a span (read-only).
    */
   auto operator[](int item) const -> Span<const int> {
-    const auto row = options[item].values;
+    const auto row = options[item];
     const int count = get_available_count(item);
     return row.subspan(0, count);
   }
