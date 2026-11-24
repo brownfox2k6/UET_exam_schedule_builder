@@ -8,20 +8,19 @@ namespace cetp::rooms {
 
 class Params {
 public:
-  [[nodiscard]] auto max_time_seconds() const noexcept -> double { return max_time_seconds_; }
+  [[nodiscard]] auto slot_time_limit() const noexcept -> double { return slot_time_limit_; }
   [[nodiscard]] auto num_workers() const noexcept -> int { return num_workers_; }
-  [[nodiscard]] auto random_seed() const noexcept -> int { return random_seed_; }
 
-  void set_max_time_seconds(double seconds) {
+  void set_slot_time_limit(double seconds) {
     if (!std::isfinite(seconds) || seconds <= 0.0) {
       throw std::invalid_argument(
           std::format(
-              "RoomAssignment.max_time_seconds must be finite and positive (got: {})",
+              "RoomAssignment.slot_time_limit must be finite and positive (got: {})",
               seconds
           )
       );
     }
-    max_time_seconds_ = seconds;
+    slot_time_limit_ = seconds;
   }
 
   void set_num_workers(int workers) {
@@ -33,22 +32,12 @@ public:
     num_workers_ = workers;
   }
 
-  void set_random_seed(int seed) {
-    if (seed < 0) {
-      throw std::invalid_argument(
-          std::format("RoomAssignment.random_seed must be non-negative (got: {})", seed)
-      );
-    }
-    random_seed_ = seed;
-  }
-
 private:
   // NOLINTBEGIN(*-magic-numbers)
 
-  // Shared wall-clock budget across all lexicographic optimization phases.
-  double max_time_seconds_ = 30.0;
+  // Time limit (in seconds) for solving each independent time slot.
+  double slot_time_limit_ = 5.0;
   int num_workers_ = 1;
-  int random_seed_ = 42;
 
   // NOLINTEND(*-magic-numbers)
 };

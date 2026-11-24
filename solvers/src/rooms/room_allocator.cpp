@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <atomic>
-#include <chrono>
 #include <cstdint>
 #include <utility>
 
@@ -18,15 +17,11 @@
 namespace cetp::rooms {
 namespace {
 
-using Status = RoomAssignmentStatus;
+// Non-negative 31-bit mask for OR-Tools `SatParameters::random_seed` (int32).
+constexpr uint64_t SEED_MASK = 0x7fffffffULL;
 
-auto elapsed_seconds(SteadyClock::time_point start_time) -> double {
-  return std::chrono::duration<double>(SteadyClock::now() - start_time).count();
-}
-
-// Groups exams by their assigned time slot in a flat JaggedArray so every slot can be solved
-// independently without nested heap allocations.
-auto group_exams_by_slot(const ProblemData& problem, const Vector<int>& schedule)
+// Groups exams by assigned time slot via counting sort into a flat JaggedArray (one row per slot).
+[[nodiscard]] auto group_exams_by_slot(const ProblemData& problem, const Vector<int>& schedule)
     -> JaggedArray<int> {
   Vector<int> offsets(problem.num_slots + 1, 0);
   for (int exam : problem.exams()) {
@@ -35,6 +30,7 @@ auto group_exams_by_slot(const ProblemData& problem, const Vector<int>& schedule
   for (int slot : problem.slots()) {
     offsets[slot + 1] += offsets[slot];
   }
+
   Vector<int> values(problem.num_exams);
   Vector<int> cursor = offsets;
   for (int exam : problem.exams()) {
@@ -43,54 +39,35 @@ auto group_exams_by_slot(const ProblemData& problem, const Vector<int>& schedule
   return {std::move(values), std::move(offsets)};
 }
 
-auto collect_active_slots(const ProblemData& problem, const JaggedArray<int>& exams_by_slot)
-    -> Vector<int> {
-  Vector<int> active_slots;
-  active_slots.reserve(problem.num_slots);
-  for (int slot : problem.slots()) {
-    if (!exams_by_slot[slot].empty()) {
-      active_slots.push_back(slot);
-    }
-  }
-  return active_slots;
-}
-
-// Combines per-slot results into the final global RoomAssignment, enforcing all-or-nothing when
-// any slot fails while preserving per-slot diagnostic statuses.
-auto assemble_room_assignment(
+// Merges independent per-slot solutions back into global section order [0, num_sections).
+// Uses all-or-nothing semantics: if any slot fails, returns an empty RoomAssignment.
+[[nodiscard]] auto assemble_result(
     const ProblemData& problem,
     const JaggedArray<int>& exams_by_slot,
-    const Vector<int>& active_slots,
     const Vector<SlotSolution>& slot_solutions
 ) -> RoomAssignment {
-  Vector<Status> slot_statuses(problem.num_slots, Status::OPTIMAL);
-  Status overall_status = Status::OPTIMAL;
+  auto overall_status = RoomAssignmentStatus::OPTIMAL;
   for (int slot : problem.slots()) {
-    slot_statuses[slot] = slot_solutions[slot].status;
-    overall_status = worse_status(overall_status, slot_statuses[slot]);
+    overall_status = std::max(overall_status, slot_solutions[slot].status);
+  }
+  if (!is_found(overall_status)) {
+    return {.status = overall_status};
   }
 
-  if (overall_status != Status::OPTIMAL && overall_status != Status::FEASIBLE) {
-    return RoomAssignment::empty(problem.num_sections, overall_status, std::move(slot_statuses));
-  }
-
-  // Scatter per-slot views back into global section index order [0, num_sections).
   Vector<Span<const int>> rooms_by_section_spans(problem.num_sections);
   int total_rooms = 0;
   int64_t total_extra_locations = 0;
   int64_t total_unused_capacity = 0;
 
-  for (int slot : active_slots) {
+  for (int slot : problem.slots()) {
     const SlotSolution& solution = slot_solutions[slot];
+    total_rooms += solution.rooms_by_local_section.num_elements();
     total_extra_locations += solution.extra_locations;
     total_unused_capacity += solution.unused_capacity;
-    int local_section_index = 0;
+    int local_section = 0;
     for (int exam : exams_by_slot[slot]) {
       for (int section : problem.sections_of_exam(exam)) {
-        const Span<const int> assigned_rooms =
-            solution.rooms_by_local_section[local_section_index++];
-        rooms_by_section_spans[section] = assigned_rooms;
-        total_rooms += assigned_rooms.size();
+        rooms_by_section_spans[section] = solution.rooms_by_local_section[local_section++];
       }
     }
   }
@@ -105,7 +82,6 @@ auto assemble_room_assignment(
   return {
       .status = overall_status,
       .rooms_by_section = std::move(rooms_by_section),
-      .slot_statuses = std::move(slot_statuses),
       .extra_locations = total_extra_locations,
       .unused_capacity = total_unused_capacity
   };
@@ -113,63 +89,37 @@ auto assemble_room_assignment(
 
 }  // namespace
 
-auto assign_rooms(const ProblemData& problem, const Vector<int>& schedule, Params params)
-    -> RoomAssignment {
-  const auto global_started = SteadyClock::now();
+auto assign_rooms(
+    const ProblemData& problem,
+    const Vector<int>& schedule,
+    Params params,
+    uint64_t base_seed
+) -> RoomAssignment {
   validate_schedule(problem, schedule);
 
-  // Decompose by time slot: exams in different slots never share rooms or constraints, so each
-  // non-empty slot can be solved as an independent CP-SAT model.
+  // Exams in different time slots never share rooms, so each non-empty slot is solved separately.
   const JaggedArray<int> exams_by_slot = group_exams_by_slot(problem, schedule);
-  const Vector<int> active_slots = collect_active_slots(problem, exams_by_slot);
+  const int workers = std::min(params.num_workers(), problem.num_slots);
 
   Vector<SlotSolution> slot_solutions(problem.num_slots);
-  std::atomic<bool> any_slot_failed{false};
+  // Short-circuit only on INFEASIBLE (the most severe status) so mixed UNKNOWN/INFEASIBLE
+  // schedules stay deterministic across worker counts.
+  std::atomic<bool> abort_remaining{false};
 
-  const int active_slot_count = active_slots.size();
-  const int effective_workers = std::min(params.num_workers(), std::max(1, active_slot_count));
-
-  if (effective_workers == 1) {
-    // Sequential mode: divide remaining wall-clock time across remaining slots so easy slots
-    // finishing in milliseconds leave nearly the entire budget for harder slots.
-    for (int index = 0; index < active_slot_count; ++index) {
-      const int slot = active_slots[index];
-      const double remaining = params.max_time_seconds() - elapsed_seconds(global_started);
-      const double per_slot_limit = remaining / double(active_slot_count - index);
-      slot_solutions[slot] = solve_single_slot(
-          {.problem = problem,
-           .slot_exams = exams_by_slot[slot],
-           .slot = slot,
-           .slot_time_limit = per_slot_limit,
-           .global_started = global_started,
-           .global_time_limit = params.max_time_seconds(),
-           .base_seed = params.random_seed(),
-           .any_slot_failed = any_slot_failed}
-      );
+#pragma omp parallel for schedule(dynamic) num_threads(workers)
+  for (int slot = 0; slot < problem.num_slots; ++slot) {
+    if (exams_by_slot[slot].empty() || abort_remaining.load(std::memory_order_relaxed)) {
+      continue;
     }
-  } else {
-    // Parallel mode: solve independent slots concurrently across OpenMP threads.
-    // Scaling the per-slot cap by `effective_workers / active_slot_count` lets concurrent batches
-    // use the full wall-clock budget while `global_time_limit` bounds total elapsed time.
-    const double per_slot_limit =
-        params.max_time_seconds() * double(effective_workers) / double(active_slot_count);
-#pragma omp parallel for schedule(dynamic) num_threads(effective_workers)
-    for (int index = 0; index < active_slot_count; ++index) {
-      const int slot = active_slots[index];
-      slot_solutions[slot] = solve_single_slot(
-          {.problem = problem,
-           .slot_exams = exams_by_slot[slot],
-           .slot = slot,
-           .slot_time_limit = per_slot_limit,
-           .global_started = global_started,
-           .global_time_limit = params.max_time_seconds(),
-           .base_seed = params.random_seed(),
-           .any_slot_failed = any_slot_failed}
-      );
+    const int slot_seed = int((base_seed + uint64_t(slot)) & SEED_MASK);
+    slot_solutions[slot] =
+        solve_slot(problem, exams_by_slot[slot], params.slot_time_limit(), slot_seed);
+    if (slot_solutions[slot].status == RoomAssignmentStatus::INFEASIBLE) {
+      abort_remaining.store(true, std::memory_order_relaxed);
     }
   }
 
-  return assemble_room_assignment(problem, exams_by_slot, active_slots, slot_solutions);
+  return assemble_result(problem, exams_by_slot, slot_solutions);
 }
 
 }  // namespace cetp::rooms

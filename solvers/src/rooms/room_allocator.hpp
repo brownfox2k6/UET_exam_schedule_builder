@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #include "problem_data.hpp"
 #include "rooms/params.hpp"
 #include "rooms/room_assignment.hpp"
@@ -11,7 +13,8 @@ namespace cetp::rooms {
 [[nodiscard]] auto assign_rooms(
     const ProblemData& problem,
     const Vector<int>& schedule,
-    Params params
+    Params params,
+    uint64_t base_seed
 ) -> RoomAssignment;
 
 }  // namespace cetp::rooms

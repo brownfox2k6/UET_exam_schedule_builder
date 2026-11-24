@@ -428,3 +428,153 @@ def test_local_search_respects_budget_limits_and_single_exam_swap_edge_case():
     res_single = solvers.improve_slots(single, [0], ls_swap, eval_p, base_seed=1)
     assert res_single.schedule == [0]
     assert res_single.penalty == 0.0
+
+
+def test_multi_section_shared_students_accumulate_exact_conflict_penalty():
+    # E0 (credits=2) and E1 (credits=4) share 5 distinct students across all 4 section pairs.
+    # Placed 1 day apart with decay_base=2.0 -> exact penalty = 5 * (2 + 4) * 2^(-1) = 15.0.
+    e0 = solvers.Exam(
+        "E0",
+        2,
+        [
+            solvers.ExamSection("E0_S1", ["s1", "s2", "only0"], ["R0"]),
+            solvers.ExamSection("E0_S2", ["s3", "s4", "s5"], ["R0"]),
+        ],
+        [0],
+    )
+    e1 = solvers.Exam(
+        "E1",
+        4,
+        [
+            solvers.ExamSection("E1_S1", ["s1", "s3"], ["R0"]),
+            solvers.ExamSection("E1_S2", ["s2", "s4", "s5", "only1"], ["R0"]),
+        ],
+        [DAY],
+    )
+    problem = solvers.ProblemData([e0, e1], [solvers.Room("R0", 10)])
+    eval_p = solvers.EvalParams()
+
+    aco_p = solvers.AcoParams()
+    aco_p.num_ants = 2
+    aco_p.num_iters = 1
+    aco_res = solvers.solve_slots_aco(problem, aco_p, eval_p, base_seed=1)
+    assert aco_res.schedule == [0, 1]
+    assert aco_res.penalty == pytest.approx(15.0)
+
+    ls_p = solvers.LsParams()
+    ls_p.max_improvements = 0
+    ls_res = solvers.improve_slots(problem, [0, 1], ls_p, eval_p, base_seed=1)
+    assert ls_res.schedule == [0, 1]
+    assert ls_res.penalty == pytest.approx(15.0)
+
+
+def test_penalty_decay_base_steers_local_search_direction():
+    # E_left at t=0 (1 shared student with E_mid), E_right at t=4*DAY (3 shared students with E_mid).
+    # E_mid moves between t=1*DAY and t=2*DAY (all credits=2 -> 4 per shared student):
+    # - decay_base=1.5: P(1) = 4*(2/3 + 8/9) = 56/9 ≈ 6.222 < P(2) = 64/9 ≈ 7.111 -> picks slot 1.
+    # - decay_base=4.0: P(2) = 16/16 = 1.0 < P(1) = 1 + 3/16 = 1.1875 -> picks slot 2.
+    exams = [
+        solvers.Exam("E_LEFT", 2, [solvers.ExamSection("SL", ["u0"], ["R0"])], [0]),
+        solvers.Exam(
+            "E_MID",
+            2,
+            [solvers.ExamSection("SM", ["u0", "u1", "u2", "u3"], ["R0"])],
+            [DAY, 2 * DAY],
+        ),
+        solvers.Exam(
+            "E_RIGHT", 2, [solvers.ExamSection("SR", ["u1", "u2", "u3"], ["R0"])], [4 * DAY]
+        ),
+    ]
+    problem = solvers.ProblemData(exams, [solvers.Room("R0", 10)])
+    ls = solvers.LsParams()
+    ls.prob_1_move = 1.0
+    ls.max_improvements = 10
+    ls.patience = 100
+
+    slow_decay = solvers.EvalParams()
+    slow_decay.penalty_decay_base = 1.5
+    res_slow = solvers.improve_slots(problem, [0, 2, 3], ls, slow_decay, base_seed=42)
+    assert res_slow.schedule == [0, 1, 3]
+    assert res_slow.penalty == pytest.approx(56.0 / 9.0)
+
+    fast_decay = solvers.EvalParams()
+    fast_decay.penalty_decay_base = 4.0
+    res_fast = solvers.improve_slots(problem, [0, 1, 3], ls, fast_decay, base_seed=42)
+    assert res_fast.schedule == [0, 2, 3]
+    assert res_fast.penalty == pytest.approx(1.0)
+
+
+def test_zero_conflict_exams_with_disjoint_windows_score_zero_penalty():
+    exams = [
+        solvers.Exam("E0", 3, [solvers.ExamSection("S0", ["a"], ["R0"])], [-2 * DAY]),
+        solvers.Exam("E1", 2, [solvers.ExamSection("S1", ["b"], ["R0"])], [0]),
+        solvers.Exam("E2", 4, [solvers.ExamSection("S2", ["c"], ["R0"])], [DAY, 2 * DAY]),
+        solvers.Exam("E3", 1, [solvers.ExamSection("S3", ["d"], ["R0"])], [5 * DAY]),
+    ]
+    problem = solvers.ProblemData(exams, [solvers.Room("R0", 10)])
+    eval_p = solvers.EvalParams()
+    aco_p = solvers.AcoParams()
+    aco_p.num_ants = 4
+    aco_p.num_iters = 2
+
+    aco_res = solvers.solve_slots_aco(problem, aco_p, eval_p, base_seed=7)
+    assert aco_res.found
+    assert aco_res.penalty == 0.0
+    assert_valid_schedule(problem, exams, aco_res.schedule)
+
+    ls_res = solvers.improve_slots(problem, aco_res.schedule, solvers.LsParams(), eval_p, base_seed=7)
+    assert ls_res.found
+    assert ls_res.penalty == 0.0
+    assert_valid_schedule(problem, exams, ls_res.schedule)
+
+
+def test_local_search_patience_zero_performs_no_improvements():
+    exams = [
+        solvers.Exam("E0", 3, [solvers.ExamSection("S0", ["shared"], ["R0"])], [0]),
+        solvers.Exam("E1", 3, [solvers.ExamSection("S1", ["shared"], ["R0"])], [DAY, 10 * DAY]),
+    ]
+    problem = solvers.ProblemData(exams, [solvers.Room("R0", 10)])
+    ls = solvers.LsParams()
+    ls.prob_1_move = 1.0
+    ls.max_improvements = 10
+    ls.patience = 0
+    eval_p = solvers.EvalParams()
+
+    res = solvers.improve_slots(problem, [0, 1], ls, eval_p, base_seed=42)
+    assert res.schedule == [0, 1]
+    assert res.penalty == pytest.approx(3.0)
+
+
+@pytest.mark.parametrize("base_seed", [0, 2**64 - 1])
+@pytest.mark.parametrize("alpha,beta,rho", [(0.0, 2.0, 0.0), (2.0, 0.0, 1.0)])
+def test_aco_and_local_search_handle_64bit_boundary_seeds_and_param_extremes(
+    base_seed, alpha, beta, rho
+):
+    exams = [
+        solvers.Exam("E0", 3, [solvers.ExamSection("S0", ["s01", "s02"], ["R0"])], [0, DAY, 3 * DAY]),
+        solvers.Exam("E1", 3, [solvers.ExamSection("S1", ["s01"], ["R0"])], [0, DAY, 3 * DAY]),
+        solvers.Exam("E2", 3, [solvers.ExamSection("S2", ["s02"], ["R0"])], [0, DAY, 3 * DAY]),
+    ]
+    problem = solvers.ProblemData(exams, [solvers.Room("R0", 10)])
+    eval_p = solvers.EvalParams()
+    aco_p = solvers.AcoParams()
+    aco_p.num_ants = 8
+    aco_p.num_iters = 3
+    aco_p.max_retries = 1
+    aco_p.alpha = alpha
+    aco_p.beta = beta
+    aco_p.rho = rho
+
+    first = solvers.solve_slots_aco(problem, aco_p, eval_p, base_seed=base_seed)
+    second = solvers.solve_slots_aco(problem, aco_p, eval_p, base_seed=base_seed)
+    assert first.found and first.schedule == second.schedule and first.penalty == second.penalty
+    assert_valid_schedule(problem, exams, first.schedule)
+    assert first.penalty == pytest.approx(
+        compute_exact_penalty(problem, exams, first.schedule, eval_p.penalty_decay_base)
+    )
+
+    ls_first = solvers.improve_slots(problem, first.schedule, solvers.LsParams(), eval_p, base_seed=base_seed)
+    ls_second = solvers.improve_slots(problem, first.schedule, solvers.LsParams(), eval_p, base_seed=base_seed)
+    assert ls_first.schedule == ls_second.schedule and ls_first.penalty == ls_second.penalty
+    assert ls_first.penalty <= first.penalty + 1e-12
+    assert_valid_schedule(problem, exams, ls_first.schedule)

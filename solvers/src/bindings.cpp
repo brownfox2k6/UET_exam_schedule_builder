@@ -28,9 +28,13 @@
 NAMESPACE_BEGIN(NB_NAMESPACE)
 NAMESPACE_BEGIN(detail)
 
-/** Converts Python sequences/lists directly to and from `Vector` (avoid `std::vector`) */
+/** Converts Python sequences/lists directly to and from `Vector` (avoid `std::vector`). */
 template <typename Type, typename Allocator>
 struct type_caster<Vector<Type, Allocator>> : list_caster<Vector<Type, Allocator>, Type> {};
+
+/** Converts read-only `Span<const Type>` views directly to Python `list[Type]`. */
+template <typename Type>
+struct type_caster<Span<const Type>> : list_caster<Span<const Type>, Type> {};
 
 NAMESPACE_END(detail)
 NAMESPACE_END(NB_NAMESPACE)
@@ -39,7 +43,7 @@ namespace nb = nanobind;
 
 namespace {
 
-constexpr uint64_t DEFAULT_BASE_SEED = 42;
+using nb::literals::operator""_a;
 
 namespace evaluation = cetp::evaluation;
 namespace rooms = cetp::rooms;
@@ -47,13 +51,15 @@ namespace slots = cetp::slots;
 namespace aco = slots::aco;
 namespace local_search = slots::local_search;
 
+constexpr uint64_t DEFAULT_BASE_SEED = 42;
+
 void bind_models(nb::module_& module) {
   nb::class_<cetp::ExamSection>(module, "ExamSection")
       .def(
           nb::init<std::string, Vector<std::string>, Vector<std::string>>(),
-          nb::arg("code"),
-          nb::arg("students"),
-          nb::arg("feasible_rooms")
+          "code"_a,
+          "students"_a,
+          "feasible_rooms"_a
       )
       .def_ro("code", &cetp::ExamSection::code)
       .def_ro("students", &cetp::ExamSection::students)
@@ -62,23 +68,24 @@ void bind_models(nb::module_& module) {
   nb::class_<cetp::Exam>(module, "Exam")
       .def(
           nb::init<std::string, int, Vector<cetp::ExamSection>, Vector<int64_t>>(),
-          nb::arg("code"),
-          nb::arg("credits"),
-          nb::arg("sections"),
-          nb::arg("feasible_timestamps")
+          "code"_a,
+          "credits"_a,
+          "sections"_a,
+          "feasible_timestamps"_a
       )
       .def_ro("code", &cetp::Exam::code)
       .def_ro("credits", &cetp::Exam::credits)
+      .def_ro("student_count", &cetp::Exam::student_count)
       .def_ro("sections", &cetp::Exam::sections)
       .def_ro("feasible_timestamps", &cetp::Exam::feasible_timestamps);
 
   nb::class_<cetp::Room>(module, "Room")
       .def(
           nb::init<std::string, int, std::string, std::string>(),
-          nb::arg("code"),
-          nb::arg("capacity"),
-          nb::arg("location") = "default",
-          nb::arg("type") = "default"
+          "code"_a,
+          "capacity"_a,
+          "location"_a = "default",
+          "type"_a = "default"
       )
       .def_prop_rw("code", &cetp::Room::code, &cetp::Room::set_code)
       .def_prop_rw("capacity", &cetp::Room::capacity, &cetp::Room::set_capacity)
@@ -86,21 +93,21 @@ void bind_models(nb::module_& module) {
       .def_prop_rw("type", &cetp::Room::type, &cetp::Room::set_type);
 
   nb::class_<cetp::ProblemData>(module, "ProblemData")
-      .def(
-          nb::init<const Vector<cetp::Exam>&, const Vector<cetp::Room>&>(),
-          nb::arg("exams"),
-          nb::arg("rooms")
-      )
+      .def(nb::init<const Vector<cetp::Exam>&, const Vector<cetp::Room>&>(), "exams"_a, "rooms"_a)
       .def_ro("num_exams", &cetp::ProblemData::num_exams)
       .def_ro("num_slots", &cetp::ProblemData::num_slots)
       .def_ro("num_rooms", &cetp::ProblemData::num_rooms)
+      .def_ro("num_locations", &cetp::ProblemData::num_locations)
       .def_ro("num_sections", &cetp::ProblemData::num_sections)
       .def_ro("num_students", &cetp::ProblemData::num_students)
       .def_ro("num_enrollments", &cetp::ProblemData::num_enrollments)
       .def_ro("exam_codes", &cetp::ProblemData::exam_codes)
       .def_ro("section_codes", &cetp::ProblemData::section_codes)
       .def_ro("room_codes", &cetp::ProblemData::room_codes)
-      .def_ro("slot_timestamps", &cetp::ProblemData::slot_timestamps);
+      .def_ro("location_names", &cetp::ProblemData::location_names)
+      .def_ro("student_codes", &cetp::ProblemData::student_codes)
+      .def_ro("slot_timestamps", &cetp::ProblemData::slot_timestamps)
+      .def_ro("section_to_exam", &cetp::ProblemData::section_to_exam);
 }
 
 void bind_params(nb::module_& module) {
@@ -122,7 +129,7 @@ void bind_params(nb::module_& module) {
       .def_prop_rw("tau_min", &aco::Params::tau_min, &aco::Params::set_tau_min)
       .def_prop_rw("tau_max", &aco::Params::tau_max, &aco::Params::set_tau_max)
       .def_prop_rw("max_retries", &aco::Params::max_retries, &aco::Params::set_max_retries)
-      .def("set_tau_bounds", &aco::Params::set_tau_bounds, nb::arg("tau_min"), nb::arg("tau_max"));
+      .def("set_tau_bounds", &aco::Params::set_tau_bounds, "tau_min"_a, "tau_max"_a);
 
   nb::class_<local_search::Params>(module, "LsParams")
       .def(nb::init<>())
@@ -145,20 +152,19 @@ void bind_params(nb::module_& module) {
   nb::class_<rooms::Params>(module, "RoomAssignmentParams")
       .def(nb::init<>())
       .def_prop_rw(
-          "max_time_seconds",
-          &rooms::Params::max_time_seconds,
-          &rooms::Params::set_max_time_seconds
+          "slot_time_limit",
+          &rooms::Params::slot_time_limit,
+          &rooms::Params::set_slot_time_limit
       )
-      .def_prop_rw("num_workers", &rooms::Params::num_workers, &rooms::Params::set_num_workers)
-      .def_prop_rw("random_seed", &rooms::Params::random_seed, &rooms::Params::set_random_seed);
+      .def_prop_rw("num_workers", &rooms::Params::num_workers, &rooms::Params::set_num_workers);
 
   nb::class_<cetp::Hyperparams>(module, "Hyperparams")
       .def(
           nb::init<evaluation::Params, aco::Params, local_search::Params, rooms::Params>(),
-          nb::arg("eval") = evaluation::Params(),
-          nb::arg("aco") = aco::Params(),
-          nb::arg("ls") = local_search::Params(),
-          nb::arg("room_assignment") = rooms::Params()
+          "eval"_a = evaluation::Params(),
+          "aco"_a = aco::Params(),
+          "ls"_a = local_search::Params(),
+          "room_assignment"_a = rooms::Params()
       )
       .def_rw("eval", &cetp::Hyperparams::eval)
       .def_rw("aco", &cetp::Hyperparams::aco)
@@ -175,25 +181,16 @@ void bind_results(nb::module_& module) {
   nb::enum_<rooms::RoomAssignmentStatus>(module, "RoomAssignmentStatus")
       .value("OPTIMAL", rooms::RoomAssignmentStatus::OPTIMAL)
       .value("FEASIBLE", rooms::RoomAssignmentStatus::FEASIBLE)
-      .value("INFEASIBLE", rooms::RoomAssignmentStatus::INFEASIBLE)
       .value("UNKNOWN", rooms::RoomAssignmentStatus::UNKNOWN)
-      .value("MODEL_INVALID", rooms::RoomAssignmentStatus::MODEL_INVALID);
+      .value("INFEASIBLE", rooms::RoomAssignmentStatus::INFEASIBLE);
 
   nb::class_<rooms::RoomAssignment>(module, "RoomAssignment")
-      .def_ro("status", &rooms::RoomAssignment::status)
-      .def_ro("slot_statuses", &rooms::RoomAssignment::slot_statuses)
       .def_prop_ro("found", &rooms::RoomAssignment::found)
+      .def_ro("status", &rooms::RoomAssignment::status)
       .def_prop_ro("room_count", &rooms::RoomAssignment::room_count)
       .def_ro("extra_locations", &rooms::RoomAssignment::extra_locations)
       .def_ro("unused_capacity", &rooms::RoomAssignment::unused_capacity)
-      .def(
-          "rooms_for_section",
-          [](const rooms::RoomAssignment& assignment, int section) -> Vector<int> {
-            const Span<const int> section_rooms = assignment.rooms_for_section(section);
-            return {section_rooms.begin(), section_rooms.end()};
-          },
-          nb::arg("section_id")
-      );
+      .def("rooms_for_section", &rooms::RoomAssignment::rooms_for_section, "section_id"_a);
 
   nb::class_<cetp::TimetableResult>(module, "TimetableResult")
       .def_ro("slots", &cetp::TimetableResult::slots)
@@ -204,44 +201,65 @@ void bind_solvers(nb::module_& module) {
   module.def(
       "solve_slots_aco",
       &aco::solve,
-      nb::arg("problem"),
-      nb::arg("aco_params"),
-      nb::arg("eval_params"),
+      "problem"_a,
+      "aco_params"_a,
+      "eval_params"_a,
       nb::kw_only(),
-      nb::arg("base_seed") = DEFAULT_BASE_SEED,
-      nb::arg("callback") = nb::none(),
+      "base_seed"_a = DEFAULT_BASE_SEED,
+      "callback"_a = nb::none(),
       nb::call_guard<nb::gil_scoped_release>()
   );
 
   module.def(
       "improve_slots",
       &local_search::improve,
-      nb::arg("problem"),
-      nb::arg("schedule"),
-      nb::arg("ls_params"),
-      nb::arg("eval_params"),
+      "problem"_a,
+      "schedule"_a,
+      "ls_params"_a,
+      "eval_params"_a,
       nb::kw_only(),
-      nb::arg("base_seed") = DEFAULT_BASE_SEED,
+      "base_seed"_a = DEFAULT_BASE_SEED,
       nb::call_guard<nb::gil_scoped_release>()
   );
 
   module.def(
       "assign_rooms",
       &rooms::assign_rooms,
-      nb::arg("problem"),
-      nb::arg("schedule"),
-      nb::arg("room_params"),
+      "problem"_a,
+      "schedule"_a,
+      "room_params"_a,
+      nb::kw_only(),
+      "base_seed"_a = DEFAULT_BASE_SEED,
+      nb::call_guard<nb::gil_scoped_release>()
+  );
+
+  module.def(
+      "complete_timetable",
+      &cetp::complete_timetable,
+      "problem"_a,
+      "slot_result"_a,
+      "room_params"_a,
+      nb::kw_only(),
+      "base_seed"_a = DEFAULT_BASE_SEED,
       nb::call_guard<nb::gil_scoped_release>()
   );
 
   module.def(
       "solve_timetable",
       &cetp::solve_timetable,
-      nb::arg("problem"),
-      nb::arg("hyperparams"),
+      "problem"_a,
+      "hyperparams"_a,
       nb::kw_only(),
-      nb::arg("base_seed") = DEFAULT_BASE_SEED,
-      nb::arg("callback") = nb::none(),
+      "base_seed"_a = DEFAULT_BASE_SEED,
+      "callback"_a = nb::none(),
+      nb::call_guard<nb::gil_scoped_release>()
+  );
+
+  module.def(
+      "validate_schedule",
+      &cetp::validate_schedule,
+      "problem"_a,
+      "schedule"_a,
       nb::call_guard<nb::gil_scoped_release>()
   );
 }

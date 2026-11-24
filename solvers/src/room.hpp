@@ -6,12 +6,7 @@ namespace cetp {
 
 class Room {
 public:
-  Room(
-      std::string code,
-      int capacity,
-      std::string location = "default",
-      std::string type = "default"
-  );
+  Room(std::string code, int capacity, std::string location, std::string type);
 
   [[nodiscard]] auto code() const noexcept -> const std::string& { return code_; }
   [[nodiscard]] auto capacity() const noexcept -> int { return capacity_; }

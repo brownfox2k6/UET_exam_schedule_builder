@@ -5,6 +5,8 @@ import subprocess
 import sys
 import textwrap
 
+import pytest
+
 import solvers
 
 SECONDS_PER_DAY = 86400.0
@@ -79,25 +81,39 @@ def compute_exact_penalty(problem, exams, schedule, decay_base):
     return total
 
 
-def assert_empty_assignment(assignment, num_sections, status):
+def assert_empty_assignment(assignment, status):
+    assert not assignment.found
     assert assignment.status == status
     assert assignment.room_count == 0
     assert assignment.extra_locations == 0
     assert assignment.unused_capacity == 0
-    assert all(assignment.rooms_for_section(i) == [] for i in range(num_sections))
+    with pytest.raises(IndexError):
+        assignment.rooms_for_section(0)
 
 
-def assert_allocation(assignment, schedule, exams, capacities):
+def assert_allocation(assignment, schedule, exams, capacities, locations=None, room_codes=None):
+    assert assignment.found
+    codes = (
+        room_codes
+        if room_codes is not None
+        else [room_code(i) for i in range(len(capacities))]
+    )
     occupied = set()
     room_count = 0
     unused = 0
+    extra_locations = 0
     section_id = 0
     for exam_id, exam in enumerate(exams):
+        exam_locations = set()
         for section in exam.sections:
             selected = assignment.rooms_for_section(section_id)
             assert selected
             assert len(selected) == len(set(selected))
-            assert {room_code(room) for room in selected} <= set(section.feasible_rooms)
+            assert {codes[room] for room in selected} <= set(section.feasible_rooms)
+            if locations is not None:
+                section_locations = {locations[room] for room in selected}
+                assert len(section_locations) == 1
+                exam_locations.update(section_locations)
             seats = sum(capacities[room] for room in selected)
             assert seats >= len(section.students)
             for room in selected:
@@ -107,7 +123,10 @@ def assert_allocation(assignment, schedule, exams, capacities):
             room_count += len(selected)
             unused += seats - len(section.students)
             section_id += 1
+        if locations is not None:
+            extra_locations += len(exam_locations) - 1
     assert assignment.room_count == room_count
+    assert assignment.extra_locations == extra_locations
     assert assignment.unused_capacity == unused
 
 

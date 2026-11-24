@@ -1,10 +1,8 @@
 #include "rooms/slot_solver.hpp"
 
 #include <algorithm>
-#include <atomic>
-#include <chrono>
+#include <cassert>
 #include <cstdint>
-#include <utility>
 
 #include <ortools/sat/cp_model.h>
 #include <ortools/sat/cp_model.pb.h>
@@ -14,7 +12,7 @@
 
 #include "problem_data.hpp"
 #include "rooms/room_assignment.hpp"
-#include "rooms/slot_model.hpp"
+#include "utils/jagged_array.hpp"
 #include "utils/span.hpp"
 #include "utils/vector.hpp"
 
@@ -22,228 +20,291 @@ namespace cetp::rooms {
 namespace {
 
 namespace sat = operations_research::sat;
-using Status = RoomAssignmentStatus;
 
-// Deterministic 31-bit non-negative mask for OR-Tools SatParameters::random_seed (int32).
-constexpr uint64_t SEED_MASK = 0x7fffffffULL;
+constexpr int SINGLE_SEARCH_WORKER = 1;
+constexpr int FULL_LINEARIZATION_LEVEL = 2;
+constexpr int UNSET_LOCATION = -1;
 
-auto elapsed_seconds(SteadyClock::time_point start_time) -> double {
-  return std::chrono::duration<double>(SteadyClock::now() - start_time).count();
-}
+// Pairs a candidate room ID with the 0/1 variable deciding whether a section uses that room.
+struct RoomUse {
+  int room = 0;
+  sat::BoolVar choice;
+};
 
-auto has_solution(const sat::CpSolverResponse& response) -> bool {
-  return response.status() == sat::CpSolverStatus::OPTIMAL
-         || response.status() == sat::CpSolverStatus::FEASIBLE;
-}
+// Pairs a campus ID with a section's 0/1 indicator that the section is placed at that campus.
+struct LocationIndicator {
+  int location = 0;
+  sat::BoolVar indicator;
+};
 
-auto failure_status(const sat::CpSolverResponse& response) -> Status {
-  switch (response.status()) {
+[[nodiscard]] auto map_solver_status(sat::CpSolverStatus status) noexcept -> RoomAssignmentStatus {
+  switch (status) {
+  case sat::CpSolverStatus::OPTIMAL:
+    return RoomAssignmentStatus::OPTIMAL;
+  case sat::CpSolverStatus::FEASIBLE:
+    return RoomAssignmentStatus::FEASIBLE;
   case sat::CpSolverStatus::INFEASIBLE:
-    return Status::INFEASIBLE;
-  case sat::CpSolverStatus::MODEL_INVALID:
-    return Status::MODEL_INVALID;
+    return RoomAssignmentStatus::INFEASIBLE;
   default:
-    return Status::UNKNOWN;
+    return RoomAssignmentStatus::UNKNOWN;
   }
 }
 
-auto collect_slot_sections(const ProblemData& problem, Span<const int> slot_exams) -> Vector<int> {
-  Vector<int> slot_sections;
-  for (int exam : slot_exams) {
-    for (int section : problem.sections_of_exam(exam)) {
-      slot_sections.push_back(section);
-    }
-  }
-  return slot_sections;
-}
-
-// Encapsulates the 3-phase lexicographic CP-SAT solve for a single time slot.
-// Running separate phases guarantees strict priority without Big-M weights that could overflow
-// or weaken LP relaxations inside CP-SAT.
+// Formulates and solves room allocation for one independent time slot as a 0-1 CP-SAT model:
+// - Hard constraints: enough seats per section, one campus per section, <= 1 section per room.
+// - Lexicographic objective (encoded via exact integer weights):
+//     1. Minimize total opened rooms, 2. Minimize exam campus splits, 3. Minimize unused seats.
 class SlotSolver {
 public:
-  explicit SlotSolver(const SlotSolveRequest& request)
-      : request_(request),
-        slot_sections_(collect_slot_sections(request.problem, request.slot_exams)),
-        slot_model_(build_slot_model(request.problem, request.slot_exams, slot_sections_)),
-        slot_started_(SteadyClock::now()),
-        slot_seed_(int((uint64_t(request.base_seed) + uint64_t(request.slot)) & SEED_MASK)) {}
+  SlotSolver(const ProblemData& problem, Span<const int> slot_exams)
+      : problem_(problem),
+        slot_exams_(slot_exams),
+        section_location_indices_(problem.num_locations, UNSET_LOCATION) {}
 
-  [[nodiscard]] auto solve() -> SlotSolution {
-    // Phase 1: Minimize total number of rooms opened in this slot.
-    slot_model_.model.Minimize(slot_model_.room_count);
-    if (remaining_seconds() <= 0.0) {
-      mark_failed();
-      return {.status = Status::UNKNOWN};
-    }
+  [[nodiscard]] auto solve(double time_limit, int solver_seed) -> SlotSolution {
+    build_model();
 
-    best_response_ = run_phase();
-    if (!has_solution(best_response_)) {
-      mark_failed();
-      return {.status = failure_status(best_response_)};
-    }
+    sat::SatParameters sat_params;
+    sat_params.set_max_time_in_seconds(time_limit);
+    // Use 1 internal worker so CP-SAT stays deterministic; parallelism runs across slots in OpenMP.
+    sat_params.set_num_search_workers(SINGLE_SEARCH_WORKER);
+    // Single-worker CP-SAT defaults to linearization_level=1, which leaves boolean implications
+    // unlinearized in the LP relaxation; level 2 restores a tight LP bound on 0-1 room models.
+    sat_params.set_linearization_level(FULL_LINEARIZATION_LEVEL);
+    sat_params.set_random_seed(solver_seed);
 
-    // If another slot already failed, overall assignment will be cleared; skip phases 2 & 3 so
-    // we still finish reporting every failing slot quickly.
-    if (request_.any_slot_failed.load(std::memory_order_relaxed)) {
-      return {.status = Status::FEASIBLE};
-    }
+    sat::Model solver;
+    solver.Add(sat::NewSatParameters(sat_params));
+    const sat::CpSolverResponse response = sat::SolveCpModel(model_.Build(), &solver);
 
-    const Status final_status = run_secondary_phases();
-    if (final_status == Status::MODEL_INVALID) {
-      mark_failed();
-      return {.status = Status::MODEL_INVALID};
+    assert(response.status() != sat::CpSolverStatus::MODEL_INVALID);
+    const RoomAssignmentStatus status = map_solver_status(response.status());
+    if (!is_found(status)) {
+      return {.status = status};
     }
-    return extract_solution(final_status);
+    return extract_solution(response, status);
   }
 
 private:
-  // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
-  const SlotSolveRequest& request_;
-  Vector<int> slot_sections_;
-  SlotModel slot_model_;
-  SteadyClock::time_point slot_started_;
-  int slot_seed_ = 0;
-  sat::CpSolverResponse best_response_;
-
-  void mark_failed() const noexcept {
-    request_.any_slot_failed.store(true, std::memory_order_relaxed);
+  void build_model() {
+    for (int exam : slot_exams_) {
+      add_exam_constraints(exam);
+    }
+    const int64_t max_slot_capacity = add_exclusive_room_constraints();
+    set_weighted_objective(max_slot_capacity);
   }
 
-  [[nodiscard]] auto remaining_seconds() const -> double {
-    const double global_remaining =
-        request_.global_time_limit - elapsed_seconds(request_.global_started);
-    const double slot_remaining = request_.slot_time_limit - elapsed_seconds(slot_started_);
-    return std::min(global_remaining, slot_remaining);
-  }
-
-  // Feeds the previous phase's solution back into CP-SAT as a "warm start" hint so the next
-  // phase immediately starts from a valid feasible assignment.
-  void set_solution_hints() {
-    slot_model_.model.ClearHints();
-    for (const sat::BoolVar variable : slot_model_.all_variables) {
-      slot_model_.model.AddHint(variable, sat::SolutionBooleanValue(best_response_, variable));
+  // Adds per-section constraints for an exam and, if it has 2+ sections, penalizes campus splits.
+  void add_exam_constraints(int exam) {
+    const auto exam_sections = problem_.sections_of_exam(exam);
+    const int section_count = int(exam_sections.size());
+    const bool multi_section = section_count > 1;
+    if (multi_section) {
+      exam_location_indicators_.clear();
+    }
+    for (int section : exam_sections) {
+      add_section_constraints(section, multi_section);
+    }
+    if (multi_section) {
+      add_exam_location_penalty(section_count);
     }
   }
 
-  // Runs CP-SAT with 1 internal worker and a deterministic per-slot seed so parallel OpenMP
-  // execution across slots produces identical results across runs.
-  [[nodiscard]] auto run_phase() const -> sat::CpSolverResponse {
-    sat::SatParameters solver_parameters;
-    solver_parameters.set_max_time_in_seconds(std::max(0.0, remaining_seconds()));
-    solver_parameters.set_num_search_workers(1);
-    solver_parameters.set_random_seed(slot_seed_);
-    sat::Model solver;
-    solver.Add(sat::NewSatParameters(solver_parameters));
-    return sat::SolveCpModel(slot_model_.model.Build(), &solver);
-  }
+  void add_section_constraints(int section, bool track_exam_locations) {
+    section_location_variables_.clear();
+    std::ranges::fill(section_location_indices_, UNSET_LOCATION);
 
-  [[nodiscard]] auto run_secondary_phases() -> Status {
-    if (best_response_.status() != sat::CpSolverStatus::OPTIMAL || remaining_seconds() <= 0.0) {
-      return Status::FEASIBLE;
-    }
+    sat::LinearExpr section_capacity;
+    sat::LinearExpr section_rooms;
+    int max_room_capacity = 0;
 
-    const Status phase2_status = optimize_extra_locations();
-    if (phase2_status != Status::OPTIMAL) {
-      return phase2_status;
-    }
-    if (request_.any_slot_failed.load(std::memory_order_relaxed) || remaining_seconds() <= 0.0) {
-      return Status::FEASIBLE;
-    }
-    return optimize_unused_capacity();
-  }
+    // Create one 0/1 decision variable per eligible room: `choice == 1` iff this section uses it.
+    for (int room : problem_.feasible_rooms_by_section[section]) {
+      const sat::BoolVar choice = model_.NewBoolVar();
+      room_choices_.push_back(choice);
+      room_uses_.push_back({.room = room, .choice = choice});
 
-  // Phase 2: Lock minimal `room_count`, then minimize `extra_locations` (exam campus splits).
-  [[nodiscard]] auto optimize_extra_locations() -> Status {
-    const int64_t minimum_rooms = sat::SolutionIntegerValue(best_response_, slot_model_.room_count);
-    slot_model_.model.AddEquality(slot_model_.room_count, minimum_rooms);
+      const int seats = problem_.room_capacities[room];
+      max_room_capacity = std::max(max_room_capacity, seats);
+      section_capacity += seats * choice;
+      section_rooms += choice;
+      total_capacity_ += seats * choice;
+      room_count_ += choice;
 
-    const int64_t incumbent_extra_locations =
-        sat::SolutionIntegerValue(best_response_, slot_model_.extra_locations);
-    if (!slot_model_.has_variable_exam_locations
-        || incumbent_extra_locations <= slot_model_.extra_locations_lower_bound) {
-      // Phase 1 already achieved the theoretical lower bound (usually 0): skip phase 2 solve.
-      if (slot_model_.has_variable_exam_locations) {
-        slot_model_.model.AddEquality(slot_model_.extra_locations, incumbent_extra_locations);
+      // Lazily create one 0/1 variable per campus reachable by this section.
+      // `AddImplication(choice, location_variable)` forces the campus flag to 1 when room is used.
+      const int location = problem_.room_location_ids[room];
+      int& location_index = section_location_indices_[location];
+      if (location_index == UNSET_LOCATION) {
+        location_index = section_location_variables_.size();
+        const sat::BoolVar location_variable = model_.NewBoolVar();
+        section_location_variables_.push_back(location_variable);
+        if (track_exam_locations) {
+          exam_location_indicators_.push_back(
+              {.location = location, .indicator = location_variable}
+          );
+        }
       }
-      return Status::OPTIMAL;
+      model_.AddImplication(choice, section_location_variables_[location_index]);
     }
 
-    slot_model_.model.Minimize(slot_model_.extra_locations);
-    set_solution_hints();
-    auto phase2_response = run_phase();
-    if (phase2_response.status() == sat::CpSolverStatus::MODEL_INVALID) {
-      return Status::MODEL_INVALID;
-    }
-    if (!has_solution(phase2_response)) {
-      return Status::FEASIBLE;
-    }
-
-    const bool proved_optimal = phase2_response.status() == sat::CpSolverStatus::OPTIMAL;
-    if (sat::SolutionIntegerValue(phase2_response, slot_model_.extra_locations)
-        <= incumbent_extra_locations) {
-      best_response_ = std::move(phase2_response);
-    }
-    if (!proved_optimal) {
-      return Status::FEASIBLE;
-    }
-
-    const int64_t minimum_extra_locations =
-        sat::SolutionIntegerValue(best_response_, slot_model_.extra_locations);
-    slot_model_.model.AddEquality(slot_model_.extra_locations, minimum_extra_locations);
-    return Status::OPTIMAL;
+    // Hard section constraints:
+    // - AddExactlyOne: sum(campus flags) == 1, keeping all rooms of this section on one campus.
+    // - section_rooms >= ceil(students / max_room_capacity): valid cut tightening LP lower bounds.
+    // - section_capacity >= students: selected rooms must seat every student in the section.
+    const int students = problem_.section_student_counts[section];
+    const int min_rooms = ((students - 1) / max_room_capacity) + 1;
+    model_.AddExactlyOne(section_location_variables_.std_vector());
+    model_.AddGreaterOrEqual(section_rooms, min_rooms);
+    model_.AddGreaterOrEqual(section_capacity, students);
   }
 
-  // Phase 3: Lock minimal `room_count` & `extra_locations`, then minimize `total_capacity`.
-  [[nodiscard]] auto optimize_unused_capacity() -> Status {
-    slot_model_.model.Minimize(slot_model_.total_capacity);
-    set_solution_hints();
-    auto phase3_response = run_phase();
-    if (phase3_response.status() == sat::CpSolverStatus::MODEL_INVALID) {
-      return Status::MODEL_INVALID;
-    }
-    if (!has_solution(phase3_response)) {
-      return Status::FEASIBLE;
+  // Penalizes distinct campuses spanned by a multi-section exam.
+  // For each campus shared by 2+ sections, creates `exam_location` with
+  // `indicator => exam_location` (no reverse implication is needed because minimizing
+  // `used_locations_` drives unused flags to 0). Since each exam uses >= 1 campus, minimizing
+  // `used_locations_` equals minimizing `extra_locations` (= distinct_campuses - 1 per exam).
+  void add_exam_location_penalty(int section_count) {
+    assert(!exam_location_indicators_.empty());
+    std::ranges::stable_sort(exam_location_indicators_, {}, &LocationIndicator::location);
+    if (exam_location_indicators_.front().location == exam_location_indicators_.back().location) {
+      return;
     }
 
-    const Status phase3_status = phase3_response.status() == sat::CpSolverStatus::OPTIMAL
-                                     ? Status::OPTIMAL
-                                     : Status::FEASIBLE;
-    if (sat::SolutionIntegerValue(phase3_response, slot_model_.total_capacity)
-        <= sat::SolutionIntegerValue(best_response_, slot_model_.total_capacity)) {
-      best_response_ = std::move(phase3_response);
+    int eligible_locations = 0;
+    for (int begin = 0; begin < exam_location_indicators_.size();) {
+      const int location = exam_location_indicators_[begin].location;
+      int end = begin + 1;
+      while (end < exam_location_indicators_.size()
+             && exam_location_indicators_[end].location == location) {
+        ++end;
+      }
+      if (end - begin == 1) {
+        // Only one section can use this campus, so its section flag directly serves as exam flag.
+        used_locations_ += exam_location_indicators_[begin].indicator;
+      } else {
+        const sat::BoolVar exam_location = model_.NewBoolVar();
+        for (int index = begin; index < end; ++index) {
+          model_.AddImplication(exam_location_indicators_[index].indicator, exam_location);
+        }
+        used_locations_ += exam_location;
+      }
+      ++eligible_locations;
+      begin = end;
     }
-    return phase3_status;
+    // An exam can span at most `min(section_count, eligible_locations)` campuses (-1 for baseline).
+    max_extra_locations_ += std::min(section_count, eligible_locations) - 1;
   }
 
-  [[nodiscard]] auto extract_solution(Status status) const -> SlotSolution {
+  // Enforces hard room exclusivity: each room serves at most one section in this slot.
+  // Sorting `room_uses_` by room ID groups all sections competing for the same room so we can add
+  // `AddAtMostOne` (`sum(choices) <= 1`). Returns total seat capacity of all candidate rooms.
+  [[nodiscard]] auto add_exclusive_room_constraints() -> int64_t {
+    std::ranges::stable_sort(room_uses_, {}, &RoomUse::room);
+
+    int64_t max_slot_capacity = 0;
+    Vector<sat::BoolVar> room_group;
+    for (int begin = 0; begin < room_uses_.size();) {
+      const int room = room_uses_[begin].room;
+      room_group.clear();
+      int end = begin;
+      while (end < room_uses_.size() && room_uses_[end].room == room) {
+        room_group.push_back(room_uses_[end].choice);
+        ++end;
+      }
+      if (room_group.size() > 1) {
+        model_.AddAtMostOne(room_group.std_vector());
+      }
+      max_slot_capacity += problem_.room_capacities[room];
+      begin = end;
+    }
+    return max_slot_capacity;
+  }
+
+  // Encodes strict 3-level lexicographic priority into one linear objective (like place values):
+  // - `location_weight = max_slot_capacity + 1`: saving 1 campus split beats any seat-waste delta.
+  // - `room_weight = location_weight * (max_extra_locations_ + 1)`: saving 1 room beats the worst
+  //   combined penalty of campus splits and seat capacity.
+  // Minimizing `total_capacity_` is equivalent to minimizing `unused_capacity` (demand is fixed).
+  void set_weighted_objective(int64_t max_slot_capacity) {
+    const int64_t location_weight = max_slot_capacity + 1;
+    const int64_t room_weight = location_weight * (max_extra_locations_ + 1);
+    model_.Minimize(
+        room_count_ * room_weight + used_locations_ * location_weight + total_capacity_
+    );
+  }
+
+  // Reads chosen rooms from `response` in the exact order `room_choices_` was populated
+  // (slot_exams_ -> sections_of_exam -> feasible_rooms_by_section) and recomputes
+  // `extra_locations` and `unused_capacity` directly from chosen rooms (exact even on FEASIBLE).
+  [[nodiscard]] auto extract_solution(
+      const sat::CpSolverResponse& response,
+      RoomAssignmentStatus status
+  ) const -> SlotSolution {
     SlotSolution solution;
     solution.status = status;
-    solution.rooms_by_local_section.reserve_num_rows(slot_sections_.size());
-    solution.rooms_by_local_section.reserve_num_elements(slot_model_.room_choices.size());
-    solution.extra_locations =
-        sat::SolutionIntegerValue(best_response_, slot_model_.extra_locations);
+    // Each room can be opened at most once per slot, bounding total assigned room entries.
+    solution.rooms_by_local_section.reserve_num_elements(
+        std::min(problem_.num_rooms, room_choices_.size())
+    );
 
+    Vector<bool> used_locations(problem_.num_locations);
     int choice_index = 0;
-    for (int section : slot_sections_) {
-      for (int room : request_.problem.feasible_rooms_by_section[section]) {
-        if (sat::SolutionBooleanValue(best_response_, slot_model_.room_choices[choice_index])) {
+    for (int exam : slot_exams_) {
+      std::ranges::fill(used_locations, false);
+      int distinct_locations = 0;
+      for (int section : problem_.sections_of_exam(exam)) {
+        int section_location = -1;
+        for (int room : problem_.feasible_rooms_by_section[section]) {
+          if (!sat::SolutionBooleanValue(response, room_choices_[choice_index++])) {
+            continue;
+          }
           solution.rooms_by_local_section.append(room);
-          solution.unused_capacity += request_.problem.room_capacities[room];
+          solution.unused_capacity += problem_.room_capacities[room];
+          section_location = problem_.room_location_ids[room];
         }
-        ++choice_index;
+        assert(section_location >= 0);
+        solution.unused_capacity -= problem_.section_student_counts[section];
+        solution.rooms_by_local_section.finish_row();
+        if (!used_locations[section_location]) {
+          used_locations[section_location] = true;
+          ++distinct_locations;
+        }
       }
-      solution.unused_capacity -= request_.problem.section_student_counts[section];
-      solution.rooms_by_local_section.finish_row();
+      solution.extra_locations += distinct_locations - 1;
     }
     return solution;
   }
+
+  // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
+  const ProblemData& problem_;
+  Span<const int> slot_exams_;
+  sat::CpModelBuilder model_;
+  // All (section, room) BoolVars in traversal order, read back by `extract_solution`.
+  Vector<sat::BoolVar> room_choices_;
+  Vector<RoomUse> room_uses_;
+
+  // Linear expressions combined into the weighted lexicographic objective.
+  sat::LinearExpr room_count_;
+  sat::LinearExpr total_capacity_;
+  sat::LinearExpr used_locations_;
+  int64_t max_extra_locations_ = 0;
+
+  // Reusable per-section / per-exam scratch buffers to avoid repeated allocations.
+  Vector<int> section_location_indices_;
+  Vector<sat::BoolVar> section_location_variables_;
+  Vector<LocationIndicator> exam_location_indicators_;
 };
 
 }  // namespace
 
-auto solve_single_slot(const SlotSolveRequest& request) -> SlotSolution {
-  return SlotSolver(request).solve();
+auto solve_slot(
+    const ProblemData& problem,
+    Span<const int> slot_exams,
+    double time_limit,
+    int solver_seed
+) -> SlotSolution {
+  return SlotSolver(problem, slot_exams).solve(time_limit, solver_seed);
 }
 
 }  // namespace cetp::rooms

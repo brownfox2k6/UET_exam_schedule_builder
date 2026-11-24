@@ -70,8 +70,8 @@ def test_local_search_rejects_invalid_parameters_without_mutating(field, value):
 
 @pytest.mark.parametrize(
     "field,value",
-    [("max_time_seconds", value) for value in (0, -1, float("nan"), float("inf"))]
-    + [("num_workers", 0), ("num_workers", -1), ("random_seed", -1)],
+    [("slot_time_limit", value) for value in (0, -1, float("nan"), float("inf"))]
+    + [("num_workers", 0), ("num_workers", -1)],
 )
 def test_room_assignment_rejects_invalid_parameters_without_mutating(field, value):
     params = solvers.RoomAssignmentParams()

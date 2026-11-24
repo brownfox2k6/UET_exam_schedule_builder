@@ -157,7 +157,7 @@ def test_pipeline_snapshots_hyperparameters_for_every_stage():
         progress.append((iteration, penalty))
         params.aco.num_iters = 2
         params.eval.penalty_decay_base = 2.0
-        params.room_assignment.max_time_seconds = 1e-300
+        params.room_assignment.slot_time_limit = 1e-300
 
     timetable = solvers.solve_timetable(problem, params, callback=callback)
     assert timetable.slots.schedule == [0, 1]
@@ -169,7 +169,7 @@ def test_pipeline_snapshots_hyperparameters_for_every_stage():
     repeated = solvers.solve_timetable(problem, params)
     assert repeated.slots.schedule == timetable.slots.schedule
     assert repeated.slots.penalty == pytest.approx(6.0 * 2.0 ** (-1.0 / 3.0))
-    assert_empty_assignment(repeated.rooms, 2, Status.UNKNOWN)
+    assert_empty_assignment(repeated.rooms, Status.UNKNOWN)
 
 
 def test_pipeline_reports_room_infeasibility_without_repairing_the_final_slots():
@@ -187,7 +187,7 @@ def test_pipeline_reports_room_infeasibility_without_repairing_the_final_slots()
     # The two sections cannot share their only room, even though it has ten seats.
     assert timetable.slots.schedule == [0, 0]
     assert timetable.slots.penalty == 0.0
-    assert_empty_assignment(timetable.rooms, 2, Status.INFEASIBLE)
+    assert_empty_assignment(timetable.rooms, Status.INFEASIBLE)
 
 
 @pytest.mark.parametrize("probability", [0.0, 1.0])
@@ -263,3 +263,149 @@ def test_sparse_and_negative_timestamps_solve_optimally_through_pipeline():
     )
     # Optimal separation is 3 days: E0 at -DAY (slot 0) and E1 at +2*DAY (slot 2).
     assert timetable.slots.schedule == [0, 2]
+
+
+def test_validate_schedule_accepts_valid_and_rejects_invalid_schedules():
+    e0 = solvers.Exam("E0", 3, [solvers.ExamSection("S0", ["shared"], ["R0"])], [0, DAY])
+    e1 = solvers.Exam("E1", 3, [solvers.ExamSection("S1", ["shared"], ["R0"])], [0])
+    problem = solvers.ProblemData([e0, e1], [solvers.Room("R0", 10)])
+
+    solvers.validate_schedule(problem, [1, 0])
+
+    with pytest.raises(ValueError, match="Schedule length"):
+        solvers.validate_schedule(problem, [1])
+    with pytest.raises(ValueError, match="infeasible slot"):
+        solvers.validate_schedule(problem, [0, 1])
+    with pytest.raises(ValueError, match="conflict"):
+        solvers.validate_schedule(problem, [0, 0])
+
+
+def test_complete_timetable_handles_found_and_not_found_slot_results():
+    e0 = solvers.Exam("E0", 3, [solvers.ExamSection("S0", ["shared"], ["R0"])], [0])
+    e1 = solvers.Exam("E1", 3, [solvers.ExamSection("S1", ["shared"], ["R0"])], [0])
+    infeasible_problem = solvers.ProblemData([e0, e1], [solvers.Room("R0", 10)])
+    params = solvers.Hyperparams()
+    params.aco.num_ants = 2
+    params.aco.num_iters = 1
+
+    unfound_slots = solvers.solve_slots_aco(infeasible_problem, params.aco, params.eval)
+    unfound_tt = solvers.complete_timetable(
+        infeasible_problem, unfound_slots, params.room_assignment
+    )
+    assert not unfound_tt.slots.found
+    assert unfound_tt.rooms is None
+
+    feasible_problem = solvers.ProblemData([e0], [solvers.Room("R0", 10)])
+    found_slots = solvers.solve_slots_aco(feasible_problem, params.aco, params.eval, base_seed=77)
+    found_tt = solvers.complete_timetable(
+        feasible_problem, found_slots, params.room_assignment, base_seed=77
+    )
+    assert found_tt.slots.found
+    assert found_tt.slots.schedule == [0]
+    assert found_tt.rooms is not None
+    assert found_tt.rooms.status == Status.OPTIMAL
+    assert found_tt.rooms.rooms_for_section(0) == [0]
+
+
+def test_solve_timetable_propagates_unified_base_seed_to_room_assignment():
+    # Give enough rooms so every valid schedule is room-feasible with symmetric room choices,
+    # ensuring solve_timetable and the manual 3-stage pipeline produce identical room allocations.
+    rooms = [solvers.Room(f"R{i:02d}", 40) for i in range(12)]
+    room_codes = [room.code for room in rooms]
+    exams = [
+        solvers.Exam(
+            f"E{i}",
+            3,
+            [solvers.ExamSection(f"E{i}_S0", [f"S{i}_{k}" for k in range(20)], room_codes)],
+            TIMESTAMPS,
+        )
+        for i in range(8)
+    ]
+    problem = solvers.ProblemData(exams, rooms)
+    hp = solvers.Hyperparams()
+    hp.aco.num_ants = 6
+    hp.aco.num_iters = 2
+    hp.ls.max_improvements = 10
+    hp.ls.patience = 20
+
+    seed = 2026
+    full = solvers.solve_timetable(problem, hp, base_seed=seed)
+    slots = solvers.solve_slots_aco(problem, hp.aco, hp.eval, base_seed=seed)
+    improved = solvers.improve_slots(problem, slots.schedule, hp.ls, hp.eval, base_seed=seed)
+    completed = solvers.complete_timetable(problem, improved, hp.room_assignment, base_seed=seed)
+
+    assert full.slots.found and completed.slots.found
+    assert full.slots.schedule == completed.slots.schedule
+    assert full.rooms is not None and completed.rooms is not None
+    assert full.rooms.found and completed.rooms.found
+    assert full.rooms.status == completed.rooms.status
+    assert [full.rooms.rooms_for_section(i) for i in range(problem.num_sections)] == [
+        completed.rooms.rooms_for_section(i) for i in range(problem.num_sections)
+    ]
+
+
+def test_complete_timetable_preserves_found_slots_when_rooms_fail_or_time_out():
+    e0 = solvers.Exam("E0", 3, [solvers.ExamSection("S0", [f"a{i}" for i in range(15)], ["R0"])], [0])
+    problem = solvers.ProblemData([e0], [solvers.Room("R0", 10)])
+    params = solvers.Hyperparams()
+    params.aco.num_ants = 2
+    params.aco.num_iters = 1
+
+    slots = solvers.solve_slots_aco(problem, params.aco, params.eval, base_seed=42)
+    assert slots.found and slots.schedule == [0]
+
+    infeasible_tt = solvers.complete_timetable(problem, slots, params.room_assignment)
+    assert infeasible_tt.slots.found and infeasible_tt.slots.schedule == [0]
+    assert infeasible_tt.rooms is not None
+    assert_empty_assignment(infeasible_tt.rooms, Status.INFEASIBLE)
+
+    ok_problem = solvers.ProblemData([e0], [solvers.Room("R0", 20)])
+    ok_slots = solvers.solve_slots_aco(ok_problem, params.aco, params.eval, base_seed=42)
+    tiny_rooms = solvers.RoomAssignmentParams()
+    tiny_rooms.slot_time_limit = 1e-300
+    timeout_tt = solvers.complete_timetable(ok_problem, ok_slots, tiny_rooms)
+    assert timeout_tt.slots.found and timeout_tt.slots.schedule == [0]
+    assert timeout_tt.rooms is not None
+    assert_empty_assignment(timeout_tt.rooms, Status.UNKNOWN)
+
+
+@pytest.mark.parametrize("base_seed", [0, 2**64 - 1])
+def test_solve_timetable_is_deterministic_at_64bit_seed_boundaries(base_seed):
+    rooms = [solvers.Room(f"R{i:02d}", 30, "TTT" if i < 2 else "KM") for i in range(4)]
+    codes = [room.code for room in rooms]
+    exams = [
+        solvers.Exam(
+            f"E{i}",
+            2 + (i % 3),
+            [solvers.ExamSection(f"E{i}_S0", [f"u_{i}_{k}" for k in range(10)] + ["shared"], codes)],
+            [0, DAY, 2 * DAY, 3 * DAY],
+        )
+        for i in range(4)
+    ]
+    problem = solvers.ProblemData(exams, rooms)
+    hp = solvers.Hyperparams()
+    hp.aco.num_ants = 6
+    hp.aco.num_iters = 3
+    hp.ls.max_improvements = 20
+    hp.ls.patience = 40
+
+    first = solvers.solve_timetable(problem, hp, base_seed=base_seed)
+    second = solvers.solve_timetable(problem, hp, base_seed=base_seed)
+
+    assert first.slots.found and second.slots.found
+    assert first.slots.schedule == second.slots.schedule
+    assert first.slots.penalty == second.slots.penalty
+    assert_valid_schedule(problem, exams, first.slots.schedule)
+    assert first.rooms is not None and second.rooms is not None
+    assert first.rooms.status == Status.OPTIMAL
+    assert [first.rooms.rooms_for_section(i) for i in range(4)] == [
+        second.rooms.rooms_for_section(i) for i in range(4)
+    ]
+    assert_allocation(
+        first.rooms,
+        first.slots.schedule,
+        exams,
+        [r.capacity for r in rooms],
+        [r.location for r in rooms],
+        codes,
+    )

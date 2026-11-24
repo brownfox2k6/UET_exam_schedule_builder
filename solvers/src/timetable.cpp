@@ -21,12 +21,14 @@ namespace cetp {
 auto complete_timetable(
     const ProblemData& problem,
     slots::SlotResult slot_result,
-    rooms::Params room_params
+    rooms::Params room_params,
+    uint64_t base_seed
 ) -> TimetableResult {
   if (!slot_result.found()) {
     return {.slots = std::move(slot_result), .rooms = std::nullopt};
   }
-  auto room_assignment = rooms::assign_rooms(problem, slot_result.schedule, room_params);
+  auto room_assignment =
+      rooms::assign_rooms(problem, slot_result.schedule, room_params, base_seed);
   return {.slots = std::move(slot_result), .rooms = std::move(room_assignment)};
 }
 
@@ -47,7 +49,12 @@ auto solve_timetable(
         base_seed
     );
   }
-  return complete_timetable(problem, std::move(slot_result), hyperparams.room_assignment);
+  return complete_timetable(
+      problem,
+      std::move(slot_result),
+      hyperparams.room_assignment,
+      base_seed
+  );
 }
 
 void validate_schedule(const ProblemData& problem, const Vector<int>& schedule) {

@@ -21,6 +21,7 @@ def test_exam_and_section_initialization_and_sorting():
 
     assert exam.code == "CS101"
     assert exam.credits == 3
+    assert exam.student_count == 3
     assert [section.code for section in exam.sections] == ["CS101_1", "CS101_2"]
     assert exam.feasible_timestamps == [1716613200, 1716642000]
 
@@ -68,7 +69,10 @@ def test_hyperparams_default_values():
         aco_p.max_retries,
     ) == (100, 10, 1.0, 2.0, 0.1, 0.01, 1.0, 100)
     assert (ls_p.prob_1_move, ls_p.max_improvements, ls_p.patience) == (0.5, 10, 100)
-    assert (room_p.max_time_seconds, room_p.num_workers, room_p.random_seed) == (30.0, 1, 42)
+    assert (room_p.slot_time_limit, room_p.num_workers) == (5.0, 1)
+    assert not hasattr(room_p, "max_time_seconds")
+    assert not hasattr(room_p, "max_time_per_slot_seconds")
+    assert not hasattr(room_p, "random_seed")
 
 
 def test_hyperparams_nested_and_constructor_updates():
@@ -82,9 +86,8 @@ def test_hyperparams_nested_and_constructor_updates():
     ls_p = solvers.LsParams()
     ls_p.patience = 50
     room_p = solvers.RoomAssignmentParams()
-    room_p.max_time_seconds = 5.0
+    room_p.slot_time_limit = 2.5
     room_p.num_workers = 2
-    room_p.random_seed = 0
 
     hp = solvers.Hyperparams(eval_p, aco_p, ls_p, room_p)
 
@@ -94,10 +97,9 @@ def test_hyperparams_nested_and_constructor_updates():
     assert (hp.aco.tau_min, hp.aco.tau_max) == (0.001, 0.005)
     assert hp.ls.patience == 50
     assert (
-        hp.room_assignment.max_time_seconds,
+        hp.room_assignment.slot_time_limit,
         hp.room_assignment.num_workers,
-        hp.room_assignment.random_seed,
-    ) == (5.0, 2, 0)
+    ) == (2.5, 2)
 
 
 def test_returned_collections_are_defensive_copies():
@@ -117,11 +119,17 @@ def test_returned_collections_are_defensive_copies():
     problem.exam_codes.clear()
     problem.section_codes.clear()
     problem.room_codes.clear()
+    problem.location_names.clear()
+    problem.student_codes.clear()
     problem.slot_timestamps.clear()
+    problem.section_to_exam.clear()
     assert problem.exam_codes == ["E0"]
     assert problem.section_codes == ["S0"]
     assert problem.room_codes == ["R0", "R1"]
+    assert problem.location_names == ["default"]
+    assert problem.student_codes == ["a", "b"]
     assert problem.slot_timestamps == [0, DAY]
+    assert problem.section_to_exam == [0]
 
 
 def test_problem_dimensions_and_reverse_mappings(large_problem_data):
@@ -132,13 +140,18 @@ def test_problem_dimensions_and_reverse_mappings(large_problem_data):
     assert problem.num_exams == 120
     assert problem.num_sections == 120
     assert problem.num_rooms == 8
+    assert problem.num_locations == 2
     assert problem.num_slots == 20
     assert problem.num_students == 12 * 15
     assert problem.num_enrollments == 120 * 15
     assert problem.exam_codes == [exam.code for exam in exams]
     assert problem.section_codes == [f"UET{i:03d}_SEC1" for i in range(120)]
     assert problem.room_codes == [room.code for room in rooms]
+    assert problem.location_names == ["Ton That Thuyet", "Xuan Thuy"]
+    assert len(problem.student_codes) == problem.num_students
+    assert problem.student_codes == sorted(problem.student_codes)
     assert problem.slot_timestamps == timestamps
+    assert problem.section_to_exam == list(range(120))
 
 
 def test_sparse_and_negative_timestamps_build_sorted_union_slots():

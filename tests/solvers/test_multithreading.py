@@ -108,10 +108,10 @@ def test_aco_executes_across_multiple_cpu_threads(shared_problem_and_schedule):
     reason="Requires at least 2 CPUs and OpenMP not forced to 1 thread",
 )
 def test_assign_rooms_executes_across_multiple_cpu_threads():
-    # Balanced schedule across 24 independent active slots (6 exams per slot) gives every slot
+    # Balanced schedule across 48 independent active slots (8 exams per slot) gives every slot
     # identical CP-SAT work, proving OPTIMAL quickly while keeping CPU time well above OS timer
     # granularity (including 15.6ms GetProcessTimes ticks on Windows).
-    num_exams, num_slots, num_rooms = 144, 24, 16
+    num_exams, num_slots, num_rooms = 384, 48, 24
     problem = _build_problem(num_exams=num_exams, num_slots=num_slots, num_rooms=num_rooms)
     schedule = [exam_index % num_slots for exam_index in range(num_exams)]
 
@@ -140,7 +140,7 @@ def test_assign_rooms_executes_across_multiple_cpu_threads():
 
 @pytest.mark.parametrize(
     "binding_name",
-    ["solve_slots_aco", "improve_slots", "assign_rooms", "solve_timetable"],
+    ["solve_slots_aco", "improve_slots", "assign_rooms", "complete_timetable", "solve_timetable"],
 )
 def test_solver_bindings_release_gil(shared_problem_and_schedule, binding_name):
     problem, schedule = shared_problem_and_schedule
@@ -169,13 +169,23 @@ def test_solver_bindings_release_gil(shared_problem_and_schedule, binding_name):
             lambda: solvers.assign_rooms(problem, schedule, room_params)
         )
         assert result.found
+    elif binding_name == "complete_timetable":
+        ls_params = solvers.LsParams()
+        ls_params.max_improvements = 0
+        slot_result = solvers.improve_slots(problem, schedule, ls_params, eval_params, base_seed=42)
+        room_params = solvers.RoomAssignmentParams()
+        room_params.num_workers = 1
+        result, ticks = _measure_background_ticks_during(
+            lambda: solvers.complete_timetable(problem, slot_result, room_params, base_seed=42)
+        )
+        assert result.rooms is not None and result.rooms.found
     else:
         hp = solvers.Hyperparams()
         hp.aco.num_iters = 40
         hp.aco.num_ants = 24
         hp.ls.max_improvements = 200
         hp.ls.patience = 500
-        hp.room_assignment.max_time_seconds = 0.5
+        hp.room_assignment.slot_time_limit = 0.5
         hp.room_assignment.num_workers = min(2, _CPU_COUNT)
         result, ticks = _measure_background_ticks_during(
             lambda: solvers.solve_timetable(problem, hp, base_seed=42)

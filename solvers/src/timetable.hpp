@@ -21,7 +21,8 @@ struct TimetableResult {
 [[nodiscard]] auto complete_timetable(
     const ProblemData& problem,
     slots::SlotResult slot_result,
-    rooms::Params room_params
+    rooms::Params room_params,
+    uint64_t base_seed
 ) -> TimetableResult;
 
 [[nodiscard]] auto solve_timetable(
