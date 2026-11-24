@@ -91,7 +91,7 @@ public:
         || tau_min >= tau_max) {
       throw std::invalid_argument(
           std::format(
-              "ACO bounds satisfy 0 < tau_min < tau_max < INF (got: {}, {})",
+              "ACO bounds must satisfy 0 < tau_min < tau_max < INF (got: {}, {})",
               tau_min,
               tau_max
           )

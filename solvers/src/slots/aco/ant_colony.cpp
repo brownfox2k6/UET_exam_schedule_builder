@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
-#include <functional>
 #include <random>
 #include <utility>
 
@@ -15,164 +14,189 @@
 #include "slots/slot_assignment.hpp"
 #include "slots/slot_result.hpp"
 #include "utils/matrix.hpp"
+#include "utils/span.hpp"
 #include "utils/vector.hpp"
 
 namespace cetp::slots::aco {
 namespace {
 
-class AntColony {
-public:
-  AntColony(const ProblemData& problem, const Params& params, uint64_t base_seed);
+constexpr uint32_t HIGH_BITS_SHIFT = 32;
+// Golden-ratio constant mixed into each ant's seed sequence to differentiate parallel streams.
+constexpr uint32_t SEED_MIX_CONSTANT = 0x9e3779b9;
 
-  auto run(const Matrix<double>& proximity_penalties, const SlotProgressCallback& callback)
-      -> SlotResult;
+// Per-ant mutable state and reusable scratch buffers so OpenMP threads never share or reallocate
+// per-slot weight arrays across iterations.
+class AntWorker {
+public:
+  // NOLINTBEGIN(*-non-private-*)
+  SlotAssignment assignment;
+  Vector<double> slot_weights;
+  Vector<double> slot_delta_penalties;
+  // NOLINTEND(*-non-private-*)
+
+  AntWorker(const ProblemData& problem, uint64_t base_seed, int ant_index)
+      : assignment(problem),
+        slot_weights(problem.num_slots, 0.0),
+        slot_delta_penalties(problem.num_slots, 0.0),
+        random_engine_(make_random_engine(base_seed, ant_index)) {}
+
+  // Selects an available slot in proportion to its normalized weight in `slot_weights`.
+  [[nodiscard]] auto sample_slot(Span<const int> available_slots, double total_weight) -> int {
+    std::uniform_real_distribution<double> weight_distribution(0.0, total_weight);
+    const double threshold = weight_distribution(random_engine_);
+    double cumulative_weight = 0.0;
+    for (int slot : available_slots) {
+      cumulative_weight += slot_weights[slot];
+      if (cumulative_weight > threshold) {
+        return slot;
+      }
+    }
+    return available_slots.back();
+  }
 
 private:
-  std::reference_wrapper<const ProblemData> problem_;
-  Params params_;
-  Vector<std::mt19937> rngs_;
-  Matrix<double> pheromone_;
-  Vector<SlotAssignment> ants_;
-  Vector<int> best_schedule_;
-  double best_penalty_{INFINITY};
+  std::mt19937 random_engine_;
 
-  auto construct_ant(
-      SlotAssignment& ant,
-      std::mt19937& rng,
-      const Matrix<double>& proximity_penalties
-  ) -> bool;
-  void run_one_iteration(const Matrix<double>& proximity_penalties);
-  void update_pheromone(const Vector<int>& best_schedule);
+  [[nodiscard]] static auto make_random_engine(uint64_t base_seed, int ant_index) -> std::mt19937 {
+    std::seed_seq seed_sequence{
+        uint32_t(base_seed),
+        uint32_t(base_seed >> HIGH_BITS_SHIFT),
+        uint32_t(ant_index),
+        SEED_MIX_CONSTANT
+    };
+    return std::mt19937(seed_sequence);
+  }
 };
 
-AntColony::AntColony(const ProblemData& problem, const Params& params, uint64_t base_seed)
-    : problem_(problem),
-      params_(params),
-      pheromone_(problem.num_exams, problem.num_slots, params_.tau_max()) {
-  const int num_ants = params_.num_ants();
-  rngs_.reserve(num_ants);
-  ants_.reserve(num_ants);
-  for (int i = 0; i < num_ants; ++i) {
-    std::seed_seq seq{
-        uint32_t(base_seed),
-        uint32_t(base_seed >> 32),  // NOLINT(*-magic-numbers)
-        uint32_t(i),                // Differentiates parallel random streams
-        0x9e3779b9U                 // NOLINT(*-magic-numbers) Golden-ratio constant for seed mixing
-    };
-    rngs_.emplace_back(seq);
-    ants_.emplace_back(problem);
-  }
-}
-
-auto AntColony::construct_ant(
-    SlotAssignment& ant,
-    std::mt19937& rng,
-    const Matrix<double>& proximity_penalties
-) -> bool {
-  static thread_local Vector<double> weights;
-  static thread_local Vector<double> delta_soft;
-  const ProblemData& problem = problem_.get();
-  ant.reset();
-  weights.resize(problem.num_slots);
-  delta_soft.resize(problem.num_slots);
-
-  for (int i = 0; i < problem.num_exams; ++i) {
-    const int exam = select_next_exam(problem, ant);
-
-    const int count_available = ant.available_slots_by_exam.get_available_count(exam);
-    if (count_available == 0) {
-      ant.penalty = INFINITY;
-      return false;
+class AntColony {
+public:
+  AntColony(
+      const ProblemData& problem,
+      const Params& params,
+      const Matrix<double>& proximity_penalties,
+      uint64_t base_seed
+  )
+      : problem_(problem),
+        proximity_penalties_(proximity_penalties),
+        params_(params),
+        pheromone_(problem.num_exams, problem.num_slots, params_.tau_max()) {
+    const int num_ants = params_.num_ants();
+    workers_.reserve(num_ants);
+    for (int ant_index = 0; ant_index < num_ants; ++ant_index) {
+      workers_.emplace_back(problem_, base_seed, ant_index);
     }
+  }
 
-    // Score each available slot in log-space:
-    //   log(tau^alpha * eta^beta) = alpha * log(tau) + beta * log(eta)
-    auto max_log = double(-INFINITY);
-    for (int j = 0; j < count_available; ++j) {
-      const int slot = ant.available_slots_by_exam[exam, j];
-      delta_soft[j] = calculate_delta_penalty(
-          {.problem = problem,
-           .proximity_penalties = proximity_penalties,
-           .schedule = ant.assigned_slots,
+  [[nodiscard]] auto run(const SlotProgressCallback& callback) -> SlotResult {
+    for (int iteration = 0; iteration < params_.num_iters(); ++iteration) {
+      run_one_iteration();
+      if (callback) {
+        callback(iteration + 1, best_penalty_);
+      }
+    }
+    return {.schedule = std::move(best_schedule_), .penalty = best_penalty_};
+  }
+
+private:
+  // NOLINTBEGIN(cppcoreguidelines-avoid-const-or-ref-data-members)
+  const ProblemData& problem_;
+  const Matrix<double>& proximity_penalties_;
+  // NOLINTEND(cppcoreguidelines-avoid-const-or-ref-data-members)
+  Params params_;
+  Matrix<double> pheromone_;
+  Vector<AntWorker> workers_;
+  Vector<int> best_schedule_;
+  double best_penalty_ = INFINITY;
+
+  // Scores each available slot in log-space (`alpha * log(tau) + beta * log(eta)`) and applies the
+  // log-sum-exp shift before `exp()` to preserve exact probabilities without overflow or underflow.
+  [[nodiscard]] auto score_available_slots(
+      AntWorker& worker,
+      int exam,
+      Span<const int> available_slots
+  ) const -> double {
+    auto max_log_weight = double(-INFINITY);
+    for (int slot : available_slots) {
+      const double delta_penalty = calculate_delta_penalty(
+          {.problem = problem_,
+           .proximity_penalties = proximity_penalties_,
+           .schedule = worker.assignment.assigned_slots,
            .exam = exam,
            .new_slot = slot}
       );
-      const double eta = 1.0 / (1.0 + delta_soft[j]);
-      const double tau = pheromone_[exam, slot];
-      // this is actually just log(weights[j])
-      weights[j] = (params_.alpha() * std::log(tau)) + (params_.beta() * std::log(eta));
-      max_log = std::max(max_log, weights[j]);
+      worker.slot_delta_penalties[slot] = delta_penalty;
+
+      const double eta = 1.0 / (1.0 + delta_penalty);  // heuristic
+      const double tau = pheromone_[exam, slot];       // pheromone
+      const double log_weight =
+          (params_.alpha() * std::log(tau)) + (params_.beta() * std::log(eta));
+      worker.slot_weights[slot] = log_weight;
+      max_log_weight = std::max(max_log_weight, log_weight);
     }
 
-    // Shift by max_log (log-sum-exp trick) before exp() to preserve exact selection
-    // probabilities while preventing overflow and underflow (1 <= total_weight <= count_available).
     double total_weight = 0.0;
-    for (int j = 0; j < count_available; ++j) {
-      weights[j] = std::exp(weights[j] - max_log);
-      total_weight += weights[j];
+    for (int slot : available_slots) {
+      worker.slot_weights[slot] = std::exp(worker.slot_weights[slot] - max_log_weight);
+      total_weight += worker.slot_weights[slot];
     }
+    return total_weight;
+  }
 
-    // Choose a slot in proportion to its weight.
-    const double threshold = std::uniform_real_distribution<double>(0.0, total_weight)(rng);
-    double cumulative = 0.0;
-    int chosen_j = count_available - 1;
-    for (int j = 0; j < count_available; ++j) {
-      cumulative += weights[j];
-      if (cumulative >= threshold) {
-        chosen_j = j;
-        break;
+  [[nodiscard]] auto construct_ant(AntWorker& worker) const -> bool {
+    worker.assignment.reset();
+    for (int step = 0; step < problem_.num_exams; ++step) {
+      const int exam = select_next_exam(problem_, worker.assignment);
+      const Span<const int> available_slots = worker.assignment.available_slots_by_exam[exam];
+      if (available_slots.empty()) {
+        worker.assignment.penalty = INFINITY;
+        return false;
+      }
+
+      const double total_weight = score_available_slots(worker, exam, available_slots);
+      const int chosen_slot = worker.sample_slot(available_slots, total_weight);
+      worker.assignment.assign_exam(exam, chosen_slot, problem_.conflicts_csr);
+      worker.assignment.penalty += worker.slot_delta_penalties[chosen_slot];
+    }
+    return true;
+  }
+
+  void update_pheromone(const Vector<int>& iteration_best_schedule) {
+    const double evaporation_factor = 1.0 - params_.rho();
+    for (int exam : problem_.exams()) {
+      const int assigned_slot = iteration_best_schedule[exam];
+      for (int slot : problem_.feasible_slots_by_exam[exam].values) {
+        const double target_pheromone =
+            slot == assigned_slot ? params_.tau_max() : params_.tau_min();
+        const double pheromone_deposit = params_.rho() * target_pheromone;
+        pheromone_[exam, slot] = (evaporation_factor * pheromone_[exam, slot]) + pheromone_deposit;
+      }
+    }
+  }
+
+  void run_one_iteration() {
+#pragma omp parallel for schedule(dynamic)
+    for (int ant_index = 0; ant_index < params_.num_ants(); ++ant_index) {
+      bool is_feasible = false;
+      for (int retry_index = 0; !is_feasible && retry_index < params_.max_retries();
+           ++retry_index) {
+        is_feasible = construct_ant(workers_[ant_index]);
       }
     }
 
-    const int slot = ant.available_slots_by_exam[exam, chosen_j];
-    ant.assign_exam(exam, slot, problem.conflicts_csr);
-    ant.penalty += delta_soft[chosen_j];
-  }
-  return true;
-}
-
-void AntColony::update_pheromone(const Vector<int>& best_schedule) {
-  const ProblemData& problem = problem_.get();
-  for (int exam : problem.exams()) {
-    const int assigned_slot = best_schedule[exam];
-    for (int slot : problem.slots()) {
-      const double target = slot == assigned_slot ? params_.tau_max() : params_.tau_min();
-      const double delta_tau = params_.rho() * target;
-      pheromone_[exam, slot] = ((1.0 - params_.rho()) * pheromone_[exam, slot]) + delta_tau;
+    const AntWorker& best_worker =
+        *std::ranges::min_element(workers_, {}, [](const AntWorker& worker) -> double {
+          return worker.assignment.penalty;
+        });
+    if (!std::isfinite(best_worker.assignment.penalty)) {
+      return;
     }
-  }
-}
-
-void AntColony::run_one_iteration(const Matrix<double>& proximity_penalties) {
-#pragma omp parallel for schedule(dynamic)
-  for (int i = 0; i < params_.num_ants(); ++i) {
-    bool is_feasible = false;
-    for (int j = 0; !is_feasible && j < params_.max_retries(); ++j) {
-      is_feasible = construct_ant(ants_[i], rngs_[i], proximity_penalties);
+    if (best_worker.assignment.penalty < best_penalty_) {
+      best_penalty_ = best_worker.assignment.penalty;
+      best_schedule_ = best_worker.assignment.assigned_slots;
     }
+    update_pheromone(best_worker.assignment.assigned_slots);
   }
-
-  const SlotAssignment& best_ant = *std::ranges::min_element(ants_, {}, &SlotAssignment::penalty);
-  if (!std::isfinite(best_ant.penalty)) {
-    return;
-  }
-  if (best_ant.penalty < best_penalty_) {
-    best_penalty_ = best_ant.penalty;
-    best_schedule_ = best_ant.assigned_slots;
-  }
-  update_pheromone(best_ant.assigned_slots);
-}
-
-auto AntColony::run(const Matrix<double>& proximity_penalties, const SlotProgressCallback& callback)
-    -> SlotResult {
-  for (int iter = 0; iter < params_.num_iters(); ++iter) {
-    run_one_iteration(proximity_penalties);
-    if (callback) {
-      callback(iter + 1, best_penalty_);
-    }
-  }
-  return {std::move(best_schedule_), best_penalty_};
-}
+};
 
 }  // namespace
 
@@ -184,7 +208,7 @@ auto solve(
     const SlotProgressCallback& callback
 ) -> SlotResult {
   const auto proximity_penalties = build_proximity_penalties(problem, eval_params);
-  return AntColony(problem, params, base_seed).run(proximity_penalties, callback);
+  return AntColony(problem, params, proximity_penalties, base_seed).run(callback);
 }
 
 }  // namespace cetp::slots::aco
