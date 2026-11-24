@@ -4,10 +4,10 @@
 #include <random>
 #include <utility>
 
+#include "evaluation/params.hpp"
+#include "evaluation/scoring.hpp"
 #include "problem_data.hpp"
-#include "slots/eval_params.hpp"
 #include "slots/local_search/params.hpp"
-#include "slots/scoring.hpp"
 #include "slots/slot_assignment.hpp"
 #include "slots/slot_result.hpp"
 #include "timetable.hpp"
@@ -63,7 +63,7 @@ private:
   void initialize_schedule(const Vector<int>& schedule) {
     for (int exam : problem_.exams()) {
       const int slot = schedule[exam];
-      candidate_.penalty += calculate_delta_penalty(
+      candidate_.penalty += evaluation::calculate_delta_penalty(
           {.problem = problem_,
            .proximity_penalties = proximity_penalties_,
            .schedule = candidate_.assigned_slots,
@@ -84,7 +84,7 @@ private:
     if (new_slot == candidate_.assigned_slots[exam]) {
       return false;
     }
-    const double delta = calculate_delta_penalty(
+    const double delta = evaluation::calculate_delta_penalty(
         {.problem = problem_,
          .proximity_penalties = proximity_penalties_,
          .schedule = candidate_.assigned_slots,
@@ -129,7 +129,7 @@ private:
     const int slot_2 = schedule[exam_2];
 
     // Ignore the partner exam on both sides: their mutual time distance is symmetric and unchanged.
-    const double delta_1 = calculate_delta_penalty(
+    const double delta_1 = evaluation::calculate_delta_penalty(
         {.problem = problem_,
          .proximity_penalties = proximity_penalties_,
          .schedule = schedule,
@@ -137,7 +137,7 @@ private:
          .new_slot = slot_2,
          .ignore_exam = exam_2}
     );
-    const double delta_2 = calculate_delta_penalty(
+    const double delta_2 = evaluation::calculate_delta_penalty(
         {.problem = problem_,
          .proximity_penalties = proximity_penalties_,
          .schedule = schedule,
@@ -179,11 +179,11 @@ auto improve(
     const ProblemData& problem,
     const Vector<int>& schedule,
     Params params,
-    EvalParams eval_params,
+    evaluation::Params eval_params,
     uint64_t base_seed
 ) -> SlotResult {
   validate_schedule(problem, schedule);
-  const auto proximity_penalties = build_proximity_penalties(problem, eval_params);
+  const auto proximity_penalties = evaluation::build_proximity_penalties(problem, eval_params);
   return LocalSearch(problem, params, proximity_penalties, base_seed).run(schedule);
 }
 

@@ -4,9 +4,9 @@
 #include <format>
 #include <stdexcept>
 
-namespace cetp::slots {
+namespace cetp::evaluation {
 
-class EvalParams {
+class Params {
 public:
   [[nodiscard]] auto penalty_decay_base() const noexcept -> double { return penalty_decay_base_; }
 
@@ -31,4 +31,4 @@ private:
   // NOLINTEND(*-magic-numbers)
 };
 
-}  // namespace cetp::slots
+}  // namespace cetp::evaluation

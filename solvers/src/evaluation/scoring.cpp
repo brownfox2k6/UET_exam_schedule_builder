@@ -1,14 +1,14 @@
-#include "slots/scoring.hpp"
+#include "evaluation/scoring.hpp"
 
 #include <cmath>
 #include <cstdint>
 
+#include "evaluation/params.hpp"
 #include "problem_data.hpp"
-#include "slots/eval_params.hpp"
 #include "utils/matrix.hpp"
 #include "utils/vector.hpp"
 
-namespace cetp::slots {
+namespace cetp::evaluation {
 namespace {
 
 constexpr double SECONDS_PER_DAY = 86400.0;
@@ -22,11 +22,10 @@ auto timestamp_distance(int64_t timestamp_1, int64_t timestamp_2) -> uint64_t {
 
 // Exponential decay by day gap:
 //   exp(-log(base) * seconds / SECONDS_PER_DAY) = base ^ (-days)
-auto build_proximity_penalties(const ProblemData& problem, const EvalParams& eval_params)
-    -> Matrix<double> {
+auto build_proximity_penalties(const ProblemData& problem, const Params& params) -> Matrix<double> {
   const int num_slots = problem.num_slots;
   const Vector<int64_t>& timestamps = problem.slot_timestamps;
-  const double decay_base = eval_params.penalty_decay_base();
+  const double decay_base = params.penalty_decay_base();
   const double log_decay_rate = -std::log(decay_base) / SECONDS_PER_DAY;
 
   Matrix<double> penalties(num_slots, num_slots, INFINITY);
@@ -43,43 +42,36 @@ auto build_proximity_penalties(const ProblemData& problem, const EvalParams& eva
   return penalties;
 }
 
-auto calculate_delta_penalty(const CalculateDeltaPenaltyParams& params) -> double {
-  const ProblemData& problem = params.problem;
-  const Matrix<double>& proximity_penalties = params.proximity_penalties;
-  const Vector<int>& schedule = params.schedule;
-  const int exam = params.exam;
-  const int new_slot = params.new_slot;
-  const int ignore_exam = params.ignore_exam;
-
-  const int current_slot = schedule[exam];
-  if (new_slot == current_slot) {
+// NOLINTNEXTLINE(readability-identifier-length)
+auto calculate_delta_penalty(const CalculateDeltaPenaltyParams& p) -> double {
+  const int current_slot = p.schedule[p.exam];
+  if (p.new_slot == current_slot) {
     return 0.0;
   }
 
-  const auto exam_credits = double(problem.exam_credits[exam]);
-  const auto [conflict_exams, shared_student_counts] = problem.conflicts_csr[exam];
-  double delta_penalty = 0.0;
+  const auto exam_credits = double(p.problem.exam_credits[p.exam]);
+  const auto [conflict_exams, shared_student_counts] = p.problem.conflicts_csr[p.exam];
+  double delta = 0.0;
 
   for (int neighbor_index = 0; neighbor_index < shared_student_counts.size(); ++neighbor_index) {
     const int conflict_exam = conflict_exams[neighbor_index];
-    if (conflict_exam == ignore_exam) {
+    if (conflict_exam == p.ignore_exam) {
       continue;
     }
-    const int conflict_slot = schedule[conflict_exam];
+    const int conflict_slot = p.schedule[conflict_exam];
     if (conflict_slot == -1) {
       continue;
     }
-
-    const auto conflict_credits = double(problem.exam_credits[conflict_exam]);
+    const auto conflict_credits = double(p.problem.exam_credits[conflict_exam]);
     const double credit_sum = exam_credits + conflict_credits;
     const double conflict_weight = double(shared_student_counts[neighbor_index]) * credit_sum;
-    double penalty_difference = proximity_penalties[new_slot, conflict_slot];
+    double penalty_difference = p.proximity_penalties[p.new_slot, conflict_slot];
     if (current_slot != -1) {
-      penalty_difference -= proximity_penalties[current_slot, conflict_slot];
+      penalty_difference -= p.proximity_penalties[current_slot, conflict_slot];
     }
-    delta_penalty += conflict_weight * penalty_difference;
+    delta += conflict_weight * penalty_difference;
   }
-  return delta_penalty;
+  return delta;
 }
 
-}  // namespace cetp::slots
+}  // namespace cetp::evaluation

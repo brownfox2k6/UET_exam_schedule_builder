@@ -12,6 +12,7 @@
 #include <nanobind/stl/string.h>
 #include <nanobind/stl/vector.h>
 
+#include "evaluation/params.hpp"
 #include "exam.hpp"
 #include "hyperparameters.hpp"
 #include "problem_data.hpp"
@@ -21,7 +22,6 @@
 #include "rooms/room_assignment.hpp"
 #include "slots/aco/ant_colony.hpp"
 #include "slots/aco/params.hpp"
-#include "slots/eval_params.hpp"
 #include "slots/local_search/local_search.hpp"
 #include "slots/local_search/params.hpp"
 #include "slots/slot_result.hpp"
@@ -32,6 +32,7 @@ namespace nb = nanobind;
 
 namespace {
 
+namespace evaluation = cetp::evaluation;
 namespace rooms = cetp::rooms;
 namespace slots = cetp::slots;
 using AcoParams = slots::aco::Params;
@@ -129,12 +130,12 @@ NB_MODULE(cetp_solvers, m) {
       .def_prop_rw("location", &cetp::Room::location, &cetp::Room::set_location)
       .def_prop_rw("type", &cetp::Room::type, &cetp::Room::set_type);
 
-  nb::class_<slots::EvalParams>(m, "EvalParams")
+  nb::class_<evaluation::Params>(m, "EvalParams")
       .def(nb::init<>())
       .def_prop_rw(
           "penalty_decay_base",
-          &slots::EvalParams::penalty_decay_base,
-          &slots::EvalParams::set_penalty_decay_base
+          &evaluation::Params::penalty_decay_base,
+          &evaluation::Params::set_penalty_decay_base
       );
 
   nb::class_<AcoParams>(m, "AcoParams")
@@ -167,8 +168,8 @@ NB_MODULE(cetp_solvers, m) {
 
   nb::class_<cetp::Hyperparams>(m, "Hyperparams")
       .def(
-          nb::init<slots::EvalParams, AcoParams, LsParams, rooms::Params>(),
-          nb::arg("_eval") = slots::EvalParams(),
+          nb::init<evaluation::Params, AcoParams, LsParams, rooms::Params>(),
+          nb::arg("_eval") = evaluation::Params(),
           nb::arg("_aco") = AcoParams(),
           nb::arg("_ls") = LsParams(),
           nb::arg("_room_assignment") = rooms::Params()
@@ -268,7 +269,7 @@ NB_MODULE(cetp_solvers, m) {
       "solve_slots_aco",
       [](const cetp::ProblemData& problem,
          AcoParams aco_params,
-         slots::EvalParams eval_params,
+         evaluation::Params eval_params,
          uint64_t base_seed,
          const slots::SlotProgressCallback& callback) -> slots::SlotResult {
         const nb::gil_scoped_release release;
@@ -287,7 +288,7 @@ NB_MODULE(cetp_solvers, m) {
       [](const cetp::ProblemData& problem,
          std::vector<int> schedule,
          LsParams ls_params,
-         slots::EvalParams eval_params,
+         evaluation::Params eval_params,
          uint64_t base_seed) -> slots::SlotResult {
         const nb::gil_scoped_release release;
         return slots::local_search::improve(

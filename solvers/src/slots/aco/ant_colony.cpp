@@ -6,11 +6,11 @@
 #include <random>
 #include <utility>
 
+#include "evaluation/params.hpp"
+#include "evaluation/scoring.hpp"
 #include "problem_data.hpp"
 #include "slots/aco/params.hpp"
-#include "slots/eval_params.hpp"
 #include "slots/exam_priority.hpp"
-#include "slots/scoring.hpp"
 #include "slots/slot_assignment.hpp"
 #include "slots/slot_result.hpp"
 #include "utils/matrix.hpp"
@@ -103,7 +103,7 @@ private:
   ) const -> double {
     auto max_log_weight = double(-INFINITY);
     for (int slot : available_slots) {
-      const double delta = calculate_delta_penalty(
+      const double delta = evaluation::calculate_delta_penalty(
           {.problem = problem_,
            .proximity_penalties = proximity_penalties_,
            .schedule = worker.assignment.assigned_slots,
@@ -187,11 +187,11 @@ private:
 auto solve(
     const ProblemData& problem,
     Params params,
-    EvalParams eval_params,
+    evaluation::Params eval_params,
     uint64_t base_seed,
     const SlotProgressCallback& callback
 ) -> SlotResult {
-  const auto proximity_penalties = build_proximity_penalties(problem, eval_params);
+  const auto proximity_penalties = evaluation::build_proximity_penalties(problem, eval_params);
   return AntColony(problem, params, proximity_penalties, base_seed).run(callback);
 }
 

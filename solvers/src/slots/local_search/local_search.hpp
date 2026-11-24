@@ -2,8 +2,8 @@
 
 #include <cstdint>
 
+#include "evaluation/params.hpp"
 #include "problem_data.hpp"
-#include "slots/eval_params.hpp"
 #include "slots/local_search/params.hpp"
 #include "slots/slot_result.hpp"
 #include "utils/vector.hpp"
@@ -15,7 +15,7 @@ namespace cetp::slots::local_search {
     const ProblemData& problem,
     const Vector<int>& schedule,
     Params params,
-    EvalParams eval_params,
+    evaluation::Params eval_params,
     uint64_t base_seed
 ) -> SlotResult;
 
